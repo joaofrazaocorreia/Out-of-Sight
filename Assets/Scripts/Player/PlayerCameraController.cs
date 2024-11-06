@@ -8,8 +8,6 @@ public class PlayerCameraController : MonoBehaviour
 
     public void RotateCamera(float angle)
     {
-        print(angle);
-        
         float currentAngle = transform.localEulerAngles.x;
         currentAngle += angle;
         while (currentAngle < -180.0f) currentAngle += 360.0f; 
