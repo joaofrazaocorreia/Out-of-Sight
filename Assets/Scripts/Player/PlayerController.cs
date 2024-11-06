@@ -1,5 +1,4 @@
 using System;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,6 +30,8 @@ public class PlayerController : MonoBehaviour
         _playerCameraController = GetComponentInChildren<PlayerCameraController>();
         _playerInput = GetComponent<PlayerInput>();
         _playerInteraction = GetComponentInChildren<PlayerInteraction>();
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
@@ -7,7 +8,7 @@ using UnityEngine.AI;
 public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] private bool isStatic;
-    [SerializeField] private Transform[] movementTargets;
+    [SerializeField] private List<Transform> movementTargets;
     [SerializeField] private float minMovementCooldown = 5f;
     [SerializeField] private float maxMovementCooldown = 12f;
 
@@ -25,6 +26,12 @@ public class EnemyMovement : MonoBehaviour
         // Forcefully sets the NavMeshAgent to the NPC type if it isn't already one
         if(navMeshAgent.agentTypeID != -1372625422)
             navMeshAgent.agentTypeID = -1372625422;
+
+        // Static enemies with no targets are assigned their position as their sole target
+        if(isStatic && movementTargets.Count() == 0)
+        {
+            movementTargets = new List<Transform>{transform};
+        }
     }
 
     // Update is called once per frame
