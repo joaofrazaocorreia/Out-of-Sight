@@ -9,13 +9,15 @@ public class PlayerCameraController : MonoBehaviour
     public void RotateCamera(float angle)
     {
         print(angle);
-        angle = math.clamp(transform.eulerAngles.x - angle, minRotationAngle, maxRotationAngle);
-
-        angle = (angle > 0) ? angle -transform.eulerAngles.x : angle + transform.eulerAngles.x;
         
-        print(angle + transform.eulerAngles.x);
+        float currentAngle = transform.localEulerAngles.x;
+        currentAngle += angle;
+        while (currentAngle < -180.0f) currentAngle += 360.0f; 
+        while (currentAngle > 180.0f) currentAngle -= 360.0f;
         
-        transform.Rotate(Vector3.right, angle); 
+        currentAngle = math.clamp(currentAngle, minRotationAngle, maxRotationAngle);
+        
+        transform.localRotation = Quaternion.Euler(currentAngle, 0.0f, 0.0f);
     }
     
 }

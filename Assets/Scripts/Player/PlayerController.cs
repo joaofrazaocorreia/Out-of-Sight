@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
     private void Rotate()
     {
         RotatePlayer(_lookVector.x * horizontalLookSensitivity);
-        _playerCameraController.RotateCamera(_lookVector.y * verticalLookSensitivity);
+        _playerCameraController.RotateCamera(-_lookVector.y * verticalLookSensitivity);
     }
 
     private void RotatePlayer(float angle)
