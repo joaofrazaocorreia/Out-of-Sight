@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour
     private PlayerInteraction _playerInteraction;
     
     private Vector3 _movementVector;
-    private Vector3 _inputVector;
     private Vector3 _lookVector;
     
     private float _moveSpeed;
@@ -59,7 +58,7 @@ public class PlayerController : MonoBehaviour
 
     private void GetInput(InputAction action, Action methodToCall)
     {
-        if(action.WasPerformedThisFrame())  methodToCall?.Invoke();
+        if(action.WasPressedThisFrame())  methodToCall?.Invoke();
     }
 
     private Vector2 GetInput(InputAction action)
@@ -75,7 +74,7 @@ public class PlayerController : MonoBehaviour
 
     private void GetMoveVector()
     {
-        _movementVector = transform.forward * _inputVector.y + transform.right * _inputVector.x;
+        _movementVector = transform.forward * _movementVector.y + transform.right * _movementVector.x;
     }
     private void Move()
     {
