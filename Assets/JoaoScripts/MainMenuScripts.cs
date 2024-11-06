@@ -62,6 +62,7 @@ public class MainMenuScripts : MonoBehaviour
     {
         StopAllCoroutines();
         MoveUIToPosition(mainMenu.transform, new Vector3(0, 2000, 0));
+        MoveUIToPosition(background.transform, new Vector3(0, 2000, 0));
         MoveUIToPosition(levelSelectMenu.transform, new Vector3(0, 0, 0));
     }
 
@@ -69,6 +70,7 @@ public class MainMenuScripts : MonoBehaviour
     {
         StopAllCoroutines();
         MoveUIToPosition(mainMenu.transform, new Vector3(3000, 0, 0));
+        MoveUIToPosition(background.transform, new Vector3(3000, 0, 0));
         MoveUIToPosition(settingsMenu.transform, new Vector3(0, 0, 0));
     }
 
@@ -76,6 +78,7 @@ public class MainMenuScripts : MonoBehaviour
     {
         StopAllCoroutines();
         MoveUIToPosition(mainMenu.transform, new Vector3(-3000, 0, 0));
+        MoveUIToPosition(background.transform, new Vector3(-3000, 0, 0));
         MoveUIToPosition(creditsMenu.transform, new Vector3(0, 0, 0));
     }
 
@@ -86,6 +89,7 @@ public class MainMenuScripts : MonoBehaviour
         ReturnUIToOrigin(levelSelectMenu.transform);
         ReturnUIToOrigin(settingsMenu.transform);
         ReturnUIToOrigin(creditsMenu.transform);
+        ReturnUIToOrigin(background.transform);
     }
 
     public void LoadScene(int scene)
