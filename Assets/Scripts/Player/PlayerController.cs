@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _rb;
     private PlayerCameraController _playerCameraController;
     private PlayerInput _playerInput;
+    private PlayerInteraction _playerInteraction;
     
     private Vector3 _movementVector;
     private Vector3 _inputVector;
@@ -30,11 +31,18 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _playerCameraController = GetComponentInChildren<PlayerCameraController>();
         _playerInput = GetComponent<PlayerInput>();
+        _playerInteraction = GetComponentInChildren<PlayerInteraction>();
     }
 
     private void Update()
     {
         GetInputs();
+    }
+
+    private void FixedUpdate()
+    {
+        GetMoveSpeed();
+        GetMoveVector();
         
         Move();
         Rotate();
@@ -42,33 +50,21 @@ public class PlayerController : MonoBehaviour
 
     private void GetInputs()
     {
-        GetLookInput(_playerInput.actions["Look"]); 
-        GetMoveInput(_playerInput.actions["Move"]);
-        GetCrouchInput(_playerInput.actions["Crouch"]);
-        GetRunInput(_playerInput.actions["Run"]);
+        _lookVector = GetInput(_playerInput.actions["Look"]); 
+        _movementVector = GetInput(_playerInput.actions["Move"]);
+        GetInput(_playerInput.actions["Crouch"], ToggleCrouch);
+        GetInput(_playerInput.actions["Run"], ToggleRun);
+        GetInput(_playerInput.actions["Interact"], Interact);
     }
 
-    private void GetMoveInput(InputAction action)
+    private void GetInput(InputAction action, Action methodToCall)
     {
-        _inputVector = action.ReadValue<Vector2>().normalized;
-        
-        GetMoveSpeed();
-        GetMoveVector();
-    }
-    
-    private void GetLookInput(InputAction action)
-    {
-        _lookVector = action.ReadValue<Vector2>();  
+        if(action.WasPerformedThisFrame())  methodToCall?.Invoke();
     }
 
-    private void GetCrouchInput(InputAction action)
+    private Vector2 GetInput(InputAction action)
     {
-        ToggleCrouch();
-    }
-
-    private void GetRunInput(InputAction action)
-    {
-        ToggleRun();
+        return action.ReadValue<Vector2>();
     }
     
 
@@ -100,6 +96,10 @@ public class PlayerController : MonoBehaviour
     private void ToggleRun() => _isRunning = 1 - _isRunning;
     
     private void ToggleCrouch() => _isCrouching = 1 - _isCrouching;
-    
+
+    private void Interact()
+    {
+        _playerInteraction.TryInteraction();
+    }
     
 }
