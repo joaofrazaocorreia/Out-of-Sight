@@ -6,52 +6,138 @@ public class Detection : MonoBehaviour
     [SerializeField] private float detectionRange;
     [SerializeField] private float proximityDetectionRange;
     [SerializeField] [Range(0f, 20f)] private float baseDetectionRate = 1.0f;
+    [SerializeField] private float detectionLimit = 5.0f;
 
-    private GameObject player;
-    //private Alarm alarm;
+    [HideInInspector] public static Vector3 lastPlayerPos;
+    [HideInInspector] public static float globalDetectionMultiplier = 1.0f;
+
+    private Player player;
     private float detectionMeter;
-
-
-    void Start()
+    public float DetectionMeter
     {
-        player = FindAnyObjectByType<PlayerController>().gameObject;
+        get => detectionMeter;
+        set => detectionMeter = Mathf.Clamp(value, 0f, detectionLimit);
+    }
+    public float DetectionLimit {get => detectionLimit;}
+    private bool seesPlayer;
+    public bool SeesPlayer {get => seesPlayer;}
+    private bool tooCloseToPlayer;
+
+
+    private void Start()
+    {
+        player = FindAnyObjectByType<Player>();
+        DetectionMeter = 0;
+        seesPlayer = false;
+        tooCloseToPlayer = false;
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         Vector3 distanceToPlayer = player.transform.position - transform.position;
-        
-        if(distanceToPlayer.magnitude <= proximityDetectionRange)
-        {
-            // look at player
-        }
 
+        
+        // Checks if the player is too close to the NPC
+        tooCloseToPlayer = distanceToPlayer.magnitude <= proximityDetectionRange;
+
+
+        // Checks if the player is within range of this NPC's detection range
         if(distanceToPlayer.magnitude <= detectionRange)
         {
-            // Checks if player is in front of the NPC
+            // Checks if player is within this NPC's field of view
             if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distanceToPlayer) <= detectionMaxAngle)
             {
-                // Sends a raycast towards the player and checks if it's uninterrupted by obstacles
+                // Sends a raycast towards the player and checks if it hits anything
                 RaycastHit hit;
-
                 if (Physics.Raycast(transform.position, distanceToPlayer, out hit, detectionRange))
                 {
+                    // Checks if the raycast hit the player
                     if(hit.transform.tag == "Player")
                     {
+                        seesPlayer = true;
                         Debug.DrawRay(transform.position, distanceToPlayer * hit.distance, Color.red);
-
-                        // Checks if detection should be raised
-
-
-                            // Calculates how much detection is raised
-
-                            
                     }
                     
+                    // If the raycast detects an obstacle between the NPC and the player:
                     else
+                    {
+                        seesPlayer = false;
                         Debug.DrawRay(transform.position, distanceToPlayer * hit.distance, Color.yellow);
+                    }
+                }
+
+                // If the raycast doesn't reach the player:
+                else
+                {
+                    seesPlayer = false;
+                    Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
                 }
             }
+            
+            // If the player is not within the enemy's field of view:
+            else
+            {
+                seesPlayer = false;
+                Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
+            }
         }
+
+        // If the player is too far away to be detected:
+        else
+        {
+            seesPlayer = false;
+            Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
+        }
+
+
+        CheckForPlayer();
+    }
+
+    // Checks if the NPC sees the player or if it's too close to them, and raises/decreases detection accordingly
+    private void CheckForPlayer()
+    {
+        // Multiple sources of detection stack with each other
+        int sourceMultiplier = 0;
+
+        if(seesPlayer || tooCloseToPlayer) // || seesSuspiciousObject);
+        {
+            TrackPlayer();
+
+            if(tooCloseToPlayer)
+                sourceMultiplier++;
+
+            if(seesPlayer && player.status.Contains(Player.Status.Suspicious))
+                sourceMultiplier++;
+
+            if(seesPlayer && player.status.Contains(Player.Status.Trespassing))
+                sourceMultiplier++;
+
+            /*
+            if(seesSuspiciousObject)
+                sourceMultiplier++;
+            */
+
+
+            DetectionMeter += Time.deltaTime * baseDetectionRate * globalDetectionMultiplier * sourceMultiplier;
+        }
+
+        // If there are no sources of detection, it's decreased instead
+        if(sourceMultiplier == 0)
+        {
+            DetectionMeter -= Time.deltaTime;
+        }
+
+        if(DetectionMeter != 0)
+            Debug.Log(transform.parent.name + " - detection %: " + Mathf.Round(DetectionMeter/DetectionLimit * 100));
+    }
+
+    /// <summary>
+    /// Tracks the last seen player position across all enemies.
+    /// </summary>
+    public void TrackPlayer()
+    {
+        lastPlayerPos = player.transform.position;
     }
 }
+
+
