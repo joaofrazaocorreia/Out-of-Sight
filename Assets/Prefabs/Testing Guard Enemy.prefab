@@ -48,6 +48,7 @@ MonoBehaviour:
   detectionRange: 10
   proximityDetectionRange: 2
   baseDetectionRate: 1
+  detectionLimit: 5
 --- !u!1 &3602553000939425444
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,7 +294,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!1 &5892113209513531551
 GameObject:
@@ -304,10 +305,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4718002219197336456}
+  - component: {fileID: 3427036616974600107}
   - component: {fileID: 152042297698266454}
   - component: {fileID: 389275399878950790}
   m_Layer: 7
-  m_Name: Testing Enemy
+  m_Name: Testing Guard Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -330,6 +332,19 @@ Transform:
   - {fileID: 3472195906225914153}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3427036616974600107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5892113209513531551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b3b150dd1393794f859639400c565b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aggroTime: 3
 --- !u!114 &152042297698266454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,9 +358,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isStatic: 0
+  looksAround: 1
   movementTargets: []
-  minMovementCooldown: 5
-  maxMovementCooldown: 12
+  minMovementTime: 5
+  maxMovementTime: 12
+  minturnTime: 2
+  maxturnTime: 5
+  aggroTurnTime: 1.5
+  minSearchTime: 4
+  maxSearchTime: 10
+  searchRadius: 20
+  status: 0
 --- !u!195 &389275399878950790
 NavMeshAgent:
   m_ObjectHideFlags: 0
