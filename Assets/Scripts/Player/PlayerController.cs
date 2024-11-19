@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private PlayerCameraController _playerCameraController;
     private PlayerInput _playerInput;
     private PlayerInteraction _playerInteraction;
+    private PlayerEquipment _playerEquipment;
     
     private Vector3 _movementVector;
     private Vector3 _lookVector;
@@ -23,6 +25,8 @@ public class PlayerController : MonoBehaviour
 
     private int _isRunning;
     private int _isCrouching;
+    
+    private int[] _selectedEquipment;
 
     private void Start()
     {
@@ -30,6 +34,7 @@ public class PlayerController : MonoBehaviour
         _playerCameraController = GetComponentInChildren<PlayerCameraController>();
         _playerInput = GetComponent<PlayerInput>();
         _playerInteraction = GetComponentInChildren<PlayerInteraction>();
+        _selectedEquipment = new int[9];
 
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -37,8 +42,38 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         GetInputs();
+        CheckEquipmentChanged();
+    }
+    
+    private void GetInputs()
+    {
+        _lookVector = GetInput(_playerInput.actions["Look"]); 
+        _movementVector = GetInput(_playerInput.actions["Move"]);
+        GetInput(_playerInput.actions["Crouch"], ToggleCrouch, false);
+        GetInput(_playerInput.actions["Run"], ToggleRun, false);
+        GetInput(_playerInput.actions["Interact"], Interact, true);
+        _selectedEquipment[0] = _playerInput.actions["EquipmentHotbar1"].ReadValue<int>();
+        _selectedEquipment[1] = _playerInput.actions["EquipmentHotbar2"].ReadValue<int>();
+        _selectedEquipment[2] = _playerInput.actions["EquipmentHotbar3"].ReadValue<int>();
+        _selectedEquipment[3] = _playerInput.actions["EquipmentHotbar4"].ReadValue<int>();
+        _selectedEquipment[4] = _playerInput.actions["EquipmentHotbar5"].ReadValue<int>();
+        _selectedEquipment[5] = _playerInput.actions["EquipmentHotbar6"].ReadValue<int>();
+        _selectedEquipment[6] = _playerInput.actions["EquipmentHotbar7"].ReadValue<int>();
+        _selectedEquipment[7] = _playerInput.actions["EquipmentHotbar8"].ReadValue<int>();
+        _selectedEquipment[8] = _playerInput.actions["EquipmentHotbar9"].ReadValue<int>();
     }
 
+    private void CheckEquipmentChanged()
+    {
+        for (int i = 0; i < _selectedEquipment.Length; i++)
+        {
+            if (_selectedEquipment[i] != 1) continue;
+            
+            _playerEquipment.NewEquipmentSelected(i);
+            break;
+        }
+    }
+    
     private void FixedUpdate()
     {
         GetMoveSpeed();
@@ -48,18 +83,9 @@ public class PlayerController : MonoBehaviour
         Rotate();
     }
 
-    private void GetInputs()
+    private void GetInput(InputAction action, Action methodToCall, bool holdInput)
     {
-        _lookVector = GetInput(_playerInput.actions["Look"]); 
-        _movementVector = GetInput(_playerInput.actions["Move"]);
-        GetInput(_playerInput.actions["Crouch"], ToggleCrouch);
-        GetInput(_playerInput.actions["Run"], ToggleRun);
-        GetInput(_playerInput.actions["Interact"], Interact);
-    }
-
-    private void GetInput(InputAction action, Action methodToCall)
-    {
-        if(action.WasPressedThisFrame())  methodToCall?.Invoke();
+        if(holdInput ? action.IsPressed() : action.WasPressedThisFrame())  methodToCall?.Invoke();
     }
 
     private Vector2 GetInput(InputAction action)
