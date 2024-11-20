@@ -34,6 +34,7 @@ public class PlayerEquipment : MonoBehaviour
 
     private void EquipmentChanged()
     {
+        print("Equipment changed to:" + CurrentEquipment.name);
         // Call animator for equipAnimations;
     }
 
@@ -44,5 +45,7 @@ public class PlayerEquipment : MonoBehaviour
         {
             _equipmentObjects[i] = equipments[i].GetComponent<EquipmentObject>();
         }
+        
+        if(_equipmentObjects.Length > 0) CurrentEquipment = _equipmentObjects[0];
     }
 }

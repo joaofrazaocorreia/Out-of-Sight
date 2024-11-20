@@ -15,5 +15,6 @@ public class PlayerInventory : MonoBehaviour
     {
         inventory[item]--;
         if(inventory[item] == 0) inventory.Remove(item);
+        print(inventory);
     }
 }

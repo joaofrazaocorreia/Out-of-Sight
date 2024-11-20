@@ -26,15 +26,16 @@ public class PlayerController : MonoBehaviour
     private int _isRunning;
     private int _isCrouching;
     
-    private int[] _selectedEquipment;
+    private float[] _selectedEquipment;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _playerCameraController = GetComponentInChildren<PlayerCameraController>();
         _playerInput = GetComponent<PlayerInput>();
-        _playerInteraction = GetComponentInChildren<PlayerInteraction>();
-        _selectedEquipment = new int[9];
+        _playerInteraction = GetComponent<PlayerInteraction>();
+        _playerEquipment = GetComponent<PlayerEquipment>();
+        _selectedEquipment = new float[9];
 
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -52,15 +53,15 @@ public class PlayerController : MonoBehaviour
         GetInput(_playerInput.actions["Crouch"], ToggleCrouch, false);
         GetInput(_playerInput.actions["Run"], ToggleRun, false);
         GetInput(_playerInput.actions["Interact"], Interact, true);
-        _selectedEquipment[0] = _playerInput.actions["EquipmentHotbar1"].ReadValue<int>();
-        _selectedEquipment[1] = _playerInput.actions["EquipmentHotbar2"].ReadValue<int>();
-        _selectedEquipment[2] = _playerInput.actions["EquipmentHotbar3"].ReadValue<int>();
-        _selectedEquipment[3] = _playerInput.actions["EquipmentHotbar4"].ReadValue<int>();
-        _selectedEquipment[4] = _playerInput.actions["EquipmentHotbar5"].ReadValue<int>();
-        _selectedEquipment[5] = _playerInput.actions["EquipmentHotbar6"].ReadValue<int>();
-        _selectedEquipment[6] = _playerInput.actions["EquipmentHotbar7"].ReadValue<int>();
-        _selectedEquipment[7] = _playerInput.actions["EquipmentHotbar8"].ReadValue<int>();
-        _selectedEquipment[8] = _playerInput.actions["EquipmentHotbar9"].ReadValue<int>();
+        _selectedEquipment[0] = _playerInput.actions["EquipmentHotbar1"].ReadValue<float>();
+        _selectedEquipment[1] = _playerInput.actions["EquipmentHotbar2"].ReadValue<float>();
+        _selectedEquipment[2] = _playerInput.actions["EquipmentHotbar3"].ReadValue<float>();
+        _selectedEquipment[3] = _playerInput.actions["EquipmentHotbar4"].ReadValue<float>();
+        _selectedEquipment[4] = _playerInput.actions["EquipmentHotbar5"].ReadValue<float>();
+        _selectedEquipment[5] = _playerInput.actions["EquipmentHotbar6"].ReadValue<float>();
+        _selectedEquipment[6] = _playerInput.actions["EquipmentHotbar7"].ReadValue<float>();
+        _selectedEquipment[7] = _playerInput.actions["EquipmentHotbar8"].ReadValue<float>();
+        _selectedEquipment[8] = _playerInput.actions["EquipmentHotbar9"].ReadValue<float>();
     }
 
     private void CheckEquipmentChanged()
