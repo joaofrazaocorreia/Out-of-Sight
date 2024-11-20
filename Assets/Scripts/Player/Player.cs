@@ -11,6 +11,6 @@ public class Player : MonoBehaviour
     {
         status.Add(Status.Normal);
         //status.Add(Status.Suspicious);
-        //status.Add(Status.Trespassing);
+        status.Add(Status.Trespassing);
     }
 }
