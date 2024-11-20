@@ -15,17 +15,19 @@ public class Jammer : EquipmentObject
         set
         {
             currentAmount = value; 
-            CanBeUsed = currentAmount == 0;
+            CanBeUsed = currentAmount != 0;
+            print("Available Jammers: " + currentAmount);
         }
     }
     private void Start()
     {
         currentAmount = maxAmount;
+        CanBeUsed = true;
     }
 
     public override void Used(InteractiveObject activeInteractiveObject)
     {
-        switch (activeInteractiveObject.GetComponent<IJammable>().Jammed)
+        switch (((JammingSpot)activeInteractiveObject).Jammable.Jammed)
         {
             case true: CurrentAmount++; break;
             case false: CurrentAmount--; break;
