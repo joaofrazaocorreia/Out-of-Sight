@@ -20,6 +20,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float minSearchTime = 4f;
     [SerializeField] private float maxSearchTime = 10f;
     [SerializeField] private float searchRadius = 20f;
+    [SerializeField] private float stuckTime = 10f;
 
     [HideInInspector] public Status status;
     [HideInInspector] public bool halted = false;
@@ -31,13 +32,16 @@ public class EnemyMovement : MonoBehaviour
     public Vector3 LastTarget {get => lastTarget;}
     private NavMeshAgent navMeshAgent;
     public bool IsAtDestination {get => (new Vector3(lastTarget.x, 0f, lastTarget.z) - new Vector3(transform.position.x, 0f, transform.position.z)).magnitude < 0.2f;}
-
+    private float stuckTimer;
+    private Vector3 lastSelfPos;
 
     private void Start()
     {
         moveTimer = 0;
         turnTimer = 0;
         searchTimer = 0;
+        stuckTimer = 0;
+        lastSelfPos = transform.position;
         lastTarget = Vector3.zero;
         navMeshAgent = GetComponent<NavMeshAgent>();
 
@@ -78,6 +82,24 @@ public class EnemyMovement : MonoBehaviour
         {
             MoveTo(Detection.lastPlayerPos);
 
+            if((transform.position - lastSelfPos).magnitude < navMeshAgent.speed * Time.deltaTime)
+            {
+                stuckTimer += Time.deltaTime;
+
+                if(stuckTimer >= stuckTime)
+                {
+                    MoveTo(transform.position);
+                    status = Status.Searching;
+                    stuckTimer = 0f;
+                }
+            }
+
+            else
+            {
+                stuckTimer = 0f;
+            }
+
+
             if(IsAtDestination)
             {
                 CheckForTurning(aggro:true);
@@ -117,6 +139,12 @@ public class EnemyMovement : MonoBehaviour
             movementTargets = new List<Transform>{transform};
 
             //animator.SetBool("Dead", true);
+        }
+
+
+        if(status != Status.KnockedOut)
+        {
+            lastSelfPos = transform.position;
         }
     }
 
