@@ -53,7 +53,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void GetInteractiveObject()
     {
-        if (Physics.Raycast(raycastOrigin.transform.position, transform.forward, out _hit, raycastDistance))
+        if (Physics.Raycast(raycastOrigin.transform.position, raycastOrigin.transform.forward, out _hit, raycastDistance))
         {
             var hitInteractable = _hit.collider.GetComponentInParent<InteractiveObject>();
             ActiveInteractiveObject = hitInteractable;
@@ -87,26 +87,25 @@ public class PlayerInteraction : MonoBehaviour
             _interactionCooldownTimer = interactionCooldown;
             return;
         }
-        
         if(CheckValidInteraction()) Interact(ActiveInteractiveObject.InteractiveType);
     }
     
     private bool CheckValidInteraction()
     {
-        return ActiveInteractiveObject != null && CheckCanInteract();
+        return ActiveInteractiveObject != null && CheckCanInteract() ;
     }
 
     private bool CheckCanInteract()
     {
         if(!ActiveInteractiveObject.HasRequirement) return true;
         switch (ActiveInteractiveObject.InteractiveType)
-        {
+           {
             case InteractiveType.DirectItemRequirement:
                 return _playerInventory.HasItem(ActiveInteractiveObject.RequirementObject);
             
             case InteractiveType.DirectEquipmentRequirement:
                 return _playerEquipment.CurrentEquipment == ActiveInteractiveObject.RequirementEquipment && _playerEquipment.CurrentEquipment.CanBeUsed;
-        }
+            }
         return false;
     }
 
@@ -122,7 +121,7 @@ public class PlayerInteraction : MonoBehaviour
                 break;
             
             case InteractiveType.DirectItemRequirement:
-                if(ActiveInteractiveObject.ConsumeRequirement) _playerInventory.RemoveItem(ActiveInteractiveObject.RequirementObject);
+                if(ActiveInteractiveObject.ConsumeItemRequirement) _playerInventory.RemoveItem(ActiveInteractiveObject.RequirementObject);
                 break;
             
             case InteractiveType.DirectEquipmentRequirement:

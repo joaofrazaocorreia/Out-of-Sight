@@ -1,3 +1,4 @@
+using System;
 using Interaction;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -7,9 +8,11 @@ public abstract class InteractiveObject : MonoBehaviour
     [SerializeField] private InteractiveType interactiveType;
     [SerializeField] private Item requiredItem;
     [SerializeField] private EquipmentObject requiredEquipment;
-    [SerializeField] private bool consumeRequirement;
+    [SerializeField] private bool consumeItemRequirement;
     [SerializeField] private bool oneTimeRequirement;
+    [SerializeField] private bool firstInteractionDurationUnique;
     [SerializeField] private float interactionDuration;
+    [SerializeField] private float interactionSecondDuration;
 
     public InteractiveType InteractiveType
     {
@@ -27,16 +30,34 @@ public abstract class InteractiveObject : MonoBehaviour
     
     public EquipmentObject RequirementEquipment => requiredEquipment;
 
-    public bool HasRequirement => requiredItem != null || requiredEquipment != null;
+    public bool HasRequirement { get; private set; }
     
-    public bool ConsumeRequirement => consumeRequirement;
+    public bool ConsumeItemRequirement => consumeItemRequirement;
     
     public bool OneTimeRequirement => oneTimeRequirement;
-    
-    public abstract void Interact();
 
-    protected void OneTimeRequirementCheck()
+    private void Start()
     {
-        if (HasRequirement && oneTimeRequirement) interactiveType = InteractiveType.DirectNoRequirement;
+        HasRequirement = requiredItem != null || requiredEquipment != null;
+    }
+
+    public virtual void Interact()
+    {
+        OneTimeRequirementCheck();
+        UniqueFirstInteractionDurationCheck();
+    }
+
+    private void OneTimeRequirementCheck()
+    {
+        if (HasRequirement && oneTimeRequirement)
+        {
+            interactiveType = InteractiveType.DirectNoRequirement;
+            HasRequirement = false;
+        }
+    }
+
+    private void UniqueFirstInteractionDurationCheck()
+    {
+        if (firstInteractionDurationUnique) InteractionDuration = interactionSecondDuration;
     }
 }
