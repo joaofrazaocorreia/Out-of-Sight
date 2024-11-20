@@ -32,7 +32,7 @@ public class EnemyGuard : Enemy
             }
 
 
-            if(detection.DetectionMeter >= detection.DetectionLimit/2 &&
+            if(detection.DetectionMeter >= detection.DetectionLimit/3 &&
                 enemyMovement.status == EnemyMovement.Status.Normal)
             {
                 enemyMovement.halted = true;
