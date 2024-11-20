@@ -3,8 +3,8 @@ using UnityEngine;
 public class Detection : MonoBehaviour
 {
     [SerializeField] [Range(10f, 180f)] private float detectionMaxAngle = 75.0f;
-    [SerializeField] private float detectionRange;
-    [SerializeField] private float proximityDetectionRange;
+    [SerializeField] private float detectionRange = 12f;
+    [SerializeField] private float proximityDetectionRange = 0f;
     [SerializeField] [Range(0f, 20f)] private float baseDetectionRate = 1.0f;
     [SerializeField] private float detectionLimit = 5.0f;
 
@@ -22,6 +22,7 @@ public class Detection : MonoBehaviour
     private bool seesPlayer;
     public bool SeesPlayer {get => seesPlayer;}
     private bool tooCloseToPlayer;
+    private EnemyCamera enemyCamera;
 
 
     private void Start()
@@ -30,6 +31,7 @@ public class Detection : MonoBehaviour
         DetectionMeter = 0;
         seesPlayer = false;
         tooCloseToPlayer = false;
+        enemyCamera = GetComponentInParent<EnemyCamera>();
     }
 
     private void FixedUpdate()
@@ -136,7 +138,8 @@ public class Detection : MonoBehaviour
     /// </summary>
     public void TrackPlayer()
     {
-        lastPlayerPos = player.transform.position;
+        if(enemyCamera == null || enemyCamera.IsOn)
+            lastPlayerPos = player.transform.position;
     }
 }
 
