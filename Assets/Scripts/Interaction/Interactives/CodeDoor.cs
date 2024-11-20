@@ -1,4 +1,6 @@
-public class CodeDoor : Door
+using Interaction;
+
+public class CodeDoor : Door, IJammable
 {
     private bool jammed;
     
