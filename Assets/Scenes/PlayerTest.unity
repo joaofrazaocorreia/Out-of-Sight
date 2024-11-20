@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 54141209}
   - component: {fileID: 54141208}
   m_Layer: 8
-  m_Name: DoorModel
+  m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -761,7 +761,7 @@ GameObject:
   m_Component:
   - component: {fileID: 801247566}
   - component: {fileID: 801247565}
-  - component: {fileID: 801247564}
+  - component: {fileID: 801247567}
   m_Layer: 0
   m_Name: CodeDoorJammSpot
   m_TagString: Untagged
@@ -769,27 +769,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &801247564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 801247563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e42a7586c3b48b8b660786f55cd9dc6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactiveType: 3
-  requiredItem: {fileID: 0}
-  requiredEquipment: {fileID: 1113043382}
-  consumeItemRequirement: 0
-  oneTimeRequirement: 0
-  firstInteractionDurationUnique: 0
-  interactionDuration: 0
-  interactionSecondDuration: 0
-  associatedDoor: {fileID: 992700863}
 --- !u!95 &801247565
 Animator:
   serializedVersion: 7
@@ -828,6 +807,27 @@ Transform:
   - {fileID: 1166892675}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &801247567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801247563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e42a7586c3b48b8b660786f55cd9dc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 3
+  requiredItem: {fileID: 0}
+  requiredEquipment: {fileID: 1113043382}
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  interactionSecondDuration: 0
+  jammable: {fileID: 992700862}
 --- !u!1 &894672303
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,6 +880,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 53090522198891133, guid: 7c08d58d0f706ca43b004a37eb8097a2, type: 3}
+      propertyPath: m_Height
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 53090522198891133, guid: 7c08d58d0f706ca43b004a37eb8097a2, type: 3}
+      propertyPath: m_Center.y
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 962727728769566846, guid: 7c08d58d0f706ca43b004a37eb8097a2, type: 3}
+      propertyPath: maxRotationAngle
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 962727728769566846, guid: 7c08d58d0f706ca43b004a37eb8097a2, type: 3}
+      propertyPath: minRotationAngle
+      value: -80
+      objectReference: {fileID: 0}
     - target: {fileID: 2423193230773636509, guid: 7c08d58d0f706ca43b004a37eb8097a2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1292,7 +1308,7 @@ GameObject:
   - component: {fileID: 1166892677}
   - component: {fileID: 1166892676}
   m_Layer: 8
-  m_Name: DoorModel
+  m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1906,7 +1922,7 @@ GameObject:
   - component: {fileID: 1568559867}
   - component: {fileID: 1568559866}
   m_Layer: 8
-  m_Name: DoorModel
+  m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
