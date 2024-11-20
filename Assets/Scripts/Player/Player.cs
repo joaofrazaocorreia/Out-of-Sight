@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         status.Add(Status.Normal);
-        status.Add(Status.Suspicious);
+        //status.Add(Status.Suspicious);
         status.Add(Status.Trespassing);
     }
 }

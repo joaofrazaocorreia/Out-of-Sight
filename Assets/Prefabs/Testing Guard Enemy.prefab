@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectionMaxAngle: 75
-  detectionRange: 10
+  detectionRange: 20
   proximityDetectionRange: 2
   baseDetectionRate: 1
   detectionLimit: 5
@@ -362,13 +362,14 @@ MonoBehaviour:
   movementTargets: []
   minMovementTime: 5
   maxMovementTime: 12
-  minturnTime: 2
-  maxturnTime: 5
+  minTurnTime: 2
+  maxTurnTime: 5
   aggroTurnTime: 1.5
   minSearchTime: 4
   maxSearchTime: 10
   searchRadius: 20
   status: 0
+  halted: 0
 --- !u!195 &389275399878950790
 NavMeshAgent:
   m_ObjectHideFlags: 0
