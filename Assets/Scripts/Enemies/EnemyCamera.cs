@@ -57,12 +57,6 @@ public class EnemyCamera : Enemy, IJammable
                 isOn = false;
             }
 
-            else if(!isOn && !cameraOperator.IsKnockedOut && 
-                (cameraOperator.transform.position - cameraOperatorStartPos).magnitude <= 2f)
-            {
-                isOn = true;
-            }
-
             else if (detection.DetectionMeter >= detection.DetectionLimit)
             {
                 cameraOperator.BecomeAlarmed();
@@ -124,6 +118,12 @@ public class EnemyCamera : Enemy, IJammable
                     rotationIdleTimer -= Time.deltaTime;
                 }
             }
+        }
+
+        else if(!isOn && !cameraOperator.IsKnockedOut && 
+            (cameraOperator.transform.position - cameraOperatorStartPos).magnitude <= 2f)
+        {
+            isOn = true;
         }
     }
 
