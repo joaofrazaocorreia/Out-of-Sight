@@ -22,16 +22,18 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float searchRadius = 20f;
     [SerializeField] private float stuckTime = 3f;
 
-    [HideInInspector] public Status status;
-    [HideInInspector] public bool halted = false;
+    public Status status;
+    public bool halted = false;
 
     private float moveTimer;
     private float turnTimer;
     private float searchTimer;
     private Vector3 lastTarget;
     public Vector3 LastTarget {get => lastTarget;}
+    private Vector3 spawnPos;
     private NavMeshAgent navMeshAgent;
-    public bool IsAtDestination {get => (new Vector3(lastTarget.x, 0f, lastTarget.z) - new Vector3(transform.position.x, 0f, transform.position.z)).magnitude < 0.2f;}
+    public bool IsAtDestination {get => (new Vector3(lastTarget.x, 0f, lastTarget.z) -
+        new Vector3(transform.position.x, 0f, transform.position.z)).magnitude <= navMeshAgent.stoppingDistance;}
     private float stuckTimer;
     private Vector3 lastSelfPos;
 
@@ -43,17 +45,12 @@ public class EnemyMovement : MonoBehaviour
         stuckTimer = 0;
         lastSelfPos = transform.position;
         lastTarget = Vector3.zero;
+        spawnPos = transform.position;
         navMeshAgent = GetComponent<NavMeshAgent>();
 
         // Forcefully sets the NavMeshAgent to the NPC type if it isn't already one
         if(navMeshAgent.agentTypeID != -1372625422)
             navMeshAgent.agentTypeID = -1372625422;
-
-        // Static enemies with no targets are assigned their position as their sole target
-        if(isStatic && movementTargets.Count() == 0)
-        {
-            movementTargets = new List<Transform>{transform};
-        }
     }
 
 
@@ -200,9 +197,10 @@ public class EnemyMovement : MonoBehaviour
             MoveTo(movementTargets[index].position);
         }
 
-        else if(isStatic && (transform.position - movementTargets[0].position).magnitude > 1.5f)
+        else if(isStatic)
         {
-            MoveTo(movementTargets[0].position);
+            Debug.Log($"static enemy {transform.name} is moving to start pos ({spawnPos})");
+            MoveTo(spawnPos);
         }
     }
 
