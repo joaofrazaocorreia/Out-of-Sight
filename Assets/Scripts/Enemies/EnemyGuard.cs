@@ -32,10 +32,18 @@ public class EnemyGuard : Enemy
             }
 
 
-            if(detection.DetectionMeter >= detection.DetectionLimit/3 &&
+            if(detection.DetectionMeter >= detection.DetectionLimit * 2 / 3 &&
                 enemyMovement.status == EnemyMovement.Status.Normal)
             {
                 enemyMovement.halted = true;
+                transform.LookAt(Detection.lastPlayerPos);
+            }
+
+            else if(detection.DetectionMeter >= detection.DetectionLimit * 1 / 3 &&
+                enemyMovement.status == EnemyMovement.Status.Normal)
+            {
+                enemyMovement.halted = true;
+                
             }
 
             else
