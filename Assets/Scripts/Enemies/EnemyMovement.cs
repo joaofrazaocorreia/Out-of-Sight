@@ -7,7 +7,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))] 
 public class EnemyMovement : MonoBehaviour
 {
-    public enum Status {Normal, Scared, Fleeing, Searching, Chasing, KnockedOut};
+    public enum Status {Normal, Scared, Fleeing, Searching, Chasing, Tased, KnockedOut};
 
     [SerializeField] private bool isStatic = false;
     [SerializeField] private bool looksAround = true;
@@ -20,7 +20,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float minSearchTime = 4f;
     [SerializeField] private float maxSearchTime = 10f;
     [SerializeField] private float searchRadius = 20f;
-    [SerializeField] private float stuckTime = 10f;
+    [SerializeField] private float stuckTime = 3f;
 
     [HideInInspector] public Status status;
     [HideInInspector] public bool halted = false;
@@ -82,7 +82,8 @@ public class EnemyMovement : MonoBehaviour
         {
             MoveTo(Detection.lastPlayerPos);
 
-            if((transform.position - lastSelfPos).magnitude < navMeshAgent.speed * Time.deltaTime)
+            if((transform.position - lastSelfPos).magnitude < navMeshAgent.speed * Time.deltaTime
+                && status != Status.Tased && status != Status.KnockedOut)
             {
                 stuckTimer += Time.deltaTime;
 
@@ -133,16 +134,24 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
+        // ------------ Tased ------------ 
+        else if (status == Status.Tased)
+        {
+            movementTargets = new List<Transform>{transform};
+
+            //animator.SetBool("Ragdoll", true);
+        }
+
         // ------------ Knocked Out ------------ 
         else if (status == Status.KnockedOut)
         {
             movementTargets = new List<Transform>{transform};
 
-            //animator.SetBool("Dead", true);
+            //animator.SetBool("Ragdoll", true);
         }
 
 
-        if(status != Status.KnockedOut)
+        if(status != Status.Tased && status != Status.KnockedOut)
         {
             lastSelfPos = transform.position;
         }
@@ -189,6 +198,11 @@ public class EnemyMovement : MonoBehaviour
 
             // Tells the NPC to move towards the chosen index position
             MoveTo(movementTargets[index].position);
+        }
+
+        else if(isStatic && (transform.position - movementTargets[0].position).magnitude > 1.5f)
+        {
+            MoveTo(movementTargets[0].position);
         }
     }
 

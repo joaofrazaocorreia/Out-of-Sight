@@ -1,6 +1,7 @@
+using Interaction;
 using UnityEngine;
 
-public class EnemyCamera : Enemy
+public class EnemyCamera : Enemy, IJammable
 {
     [SerializeField] private EnemyGuard cameraOperator;
     [SerializeField] private Transform cameraBody;
@@ -11,6 +12,10 @@ public class EnemyCamera : Enemy
 
     private bool isOn;
     public bool IsOn {get => isOn;}
+
+    private bool jammed;
+    public bool Jammed {get => jammed;}
+
     private bool canRotate;
     private bool positiveRotationDirection;
     private float rotationIdleTimer;
@@ -44,7 +49,7 @@ public class EnemyCamera : Enemy
     {
         base.Update();
 
-        if(isOn)
+        if(isOn && !jammed)
         {
             if(cameraOperator.IsKnockedOut || 
                 (cameraOperator.transform.position - cameraOperatorStartPos).magnitude > 2f)
@@ -64,47 +69,60 @@ public class EnemyCamera : Enemy
             }
 
 
-            if(canRotate && rotationIdleTimer <= 0)
+            if(canRotate)
             {
                 float newRotationY;
 
-                if(positiveRotationDirection)
+                if(detection.SeesPlayer && detection.DetectionMeter > detection.DetectionLimit * 1 / 3)
                 {
-                    newRotationY = cameraBody.localEulerAngles.y + (Time.deltaTime * rotationSpeed);
-                    if(newRotationY >= 180f)
-                        newRotationY -= 360f;
+                    Quaternion targetRotation = cameraBody.rotation;
+                    targetRotation = Quaternion.RotateTowards(targetRotation, Quaternion.LookRotation(Detection.lastPlayerPos - cameraBody.position), 1f);
 
-                    newRotationY = Mathf.Clamp(newRotationY, -rotationAngles , rotationAngles);
+                    targetRotation = new Quaternion(0f, targetRotation.y, 0f, targetRotation.w);
 
-                    if(newRotationY >= rotationAngles)
+                    cameraBody.rotation = targetRotation;
+                }
+
+                else if(rotationIdleTimer <= 0)
+                {
+                    if(positiveRotationDirection)
                     {
-                        rotationIdleTimer = rotationIdleTime;
-                        positiveRotationDirection = !positiveRotationDirection;
+                        newRotationY = cameraBody.localEulerAngles.y + (Time.deltaTime * rotationSpeed);
+                        if(newRotationY >= 180f)
+                            newRotationY -= 360f;
+
+                        newRotationY = Mathf.Clamp(newRotationY, -rotationAngles , rotationAngles);
+
+                        if(newRotationY >= rotationAngles)
+                        {
+                            rotationIdleTimer = rotationIdleTime;
+                            positiveRotationDirection = !positiveRotationDirection;
+                        }
                     }
+
+                    else
+                    {
+                        newRotationY = cameraBody.localEulerAngles.y - (Time.deltaTime * rotationSpeed);
+                        if(newRotationY >= 180f)
+                            newRotationY -= 360f;
+
+                        newRotationY = Mathf.Clamp(newRotationY, -rotationAngles , rotationAngles);
+
+                        if(newRotationY <= -rotationAngles)
+                        {
+                            rotationIdleTimer = rotationIdleTime;
+                            positiveRotationDirection = !positiveRotationDirection;
+                        }
+                    }
+
+                    cameraBody.localEulerAngles = new Vector3(
+                        cameraBody.rotation.eulerAngles.x, newRotationY, cameraBody.rotation.eulerAngles.z);
                 }
 
                 else
                 {
-                    newRotationY = cameraBody.localEulerAngles.y - (Time.deltaTime * rotationSpeed);
-                    if(newRotationY >= 180f)
-                        newRotationY -= 360f;
-
-                    newRotationY = Mathf.Clamp(newRotationY, -rotationAngles , rotationAngles);
-
-                    if(newRotationY <= -rotationAngles)
-                    {
-                        rotationIdleTimer = rotationIdleTime;
-                        positiveRotationDirection = !positiveRotationDirection;
-                    }
+                    rotationIdleTimer -= Time.deltaTime;
                 }
-
-                cameraBody.localEulerAngles = new Vector3(
-                    cameraBody.rotation.eulerAngles.x, newRotationY, cameraBody.rotation.eulerAngles.z);
-            }
-
-            else
-            {
-                rotationIdleTimer -= Time.deltaTime;
             }
         }
     }
@@ -113,5 +131,10 @@ public class EnemyCamera : Enemy
     {
         detection.TrackPlayer();
         cameraOperator.BecomeAlarmed();
+    }
+
+    public void ToggleJammed()
+    {
+        jammed = !jammed;
     }
 }
