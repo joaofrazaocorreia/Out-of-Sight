@@ -36,14 +36,15 @@ public class EnemyGuard : Enemy
                 enemyMovement.status == EnemyMovement.Status.Normal)
             {
                 enemyMovement.halted = true;
-                transform.LookAt(Detection.lastPlayerPos);
+                //transform.LookAt(Detection.lastPlayerPos);
+                enemyMovement.MoveTo(Detection.lastPlayerPos);
             }
 
             else if(detection.DetectionMeter >= detection.DetectionLimit * 1 / 3 &&
                 enemyMovement.status == EnemyMovement.Status.Normal)
             {
                 enemyMovement.halted = true;
-                
+                //transform.LookAt(Detection.lastPlayerPos);
             }
 
             else
@@ -100,7 +101,7 @@ public class EnemyGuard : Enemy
             // dead
         }
 
-        // If any other enemyMovement.status is detected, resets it to normal.
+        // ----- If any other enemyMovement.status is detected, resets it to normal.
         else
             enemyMovement.status = EnemyMovement.Status.Normal;
     }

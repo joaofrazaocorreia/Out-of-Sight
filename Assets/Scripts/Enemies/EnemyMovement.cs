@@ -12,6 +12,8 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private bool isStatic = false;
     [SerializeField] private bool looksAround = true;
     [SerializeField] private List<Transform> movementTargets;
+    [SerializeField] private float walkSpeed = 4f;
+    [SerializeField] private float runSpeed = 7f;
     [SerializeField] private float minMovementTime = 5f;
     [SerializeField] private float maxMovementTime = 12f;
     [SerializeField] private float minTurnTime = 2f;
@@ -24,6 +26,7 @@ public class EnemyMovement : MonoBehaviour
 
     public Status status;
     public bool halted = false;
+    public List<Transform> MovementTargets {get => movementTargets;}
 
     private float moveTimer;
     private float turnTimer;
@@ -36,6 +39,8 @@ public class EnemyMovement : MonoBehaviour
         new Vector3(transform.position.x, 0f, transform.position.z)).magnitude <= navMeshAgent.stoppingDistance;}
     private float stuckTimer;
     private Vector3 lastSelfPos;
+    private List<MapEntrance> mapEntrances;
+    private Vector3 chosenNearestExit;
 
     private void Start()
     {
@@ -47,6 +52,7 @@ public class EnemyMovement : MonoBehaviour
         lastTarget = Vector3.zero;
         spawnPos = transform.position;
         navMeshAgent = GetComponent<NavMeshAgent>();
+        mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
 
         // Forcefully sets the NavMeshAgent to the NPC type if it isn't already one
         if(navMeshAgent.agentTypeID != -1372625422)
@@ -60,23 +66,36 @@ public class EnemyMovement : MonoBehaviour
 
         // ------------ Normal ------------ 
         if(status == Status.Normal)
+        {
+            navMeshAgent.speed = walkSpeed;
+
             Patrol();
+        }
 
         // ------------ Scared ------------ 
         else if (status == Status.Scared)
         {
-            // run away from player
+            navMeshAgent.speed = runSpeed;
+
+            Vector3 direction = transform.position - Detection.lastPlayerPos;
+
+            if (NavMesh.SamplePosition(transform.position + direction, out NavMeshHit navHit, direction.magnitude, NavMesh.AllAreas))
+                MoveTo(navHit.position);
         }
 
         // ------------ Fleeing ------------ 
         else if (status == Status.Fleeing)
         {
-            // run towards nearest exit
+            navMeshAgent.speed = runSpeed;
+
+            MoveTo(chosenNearestExit);
         }
         
         // ------------ Chasing ------------ 
         else if(status == Status.Chasing)
         {
+            navMeshAgent.speed = runSpeed;
+
             MoveTo(Detection.lastPlayerPos);
 
             if((transform.position - lastSelfPos).magnitude < navMeshAgent.speed * Time.deltaTime
@@ -112,6 +131,8 @@ public class EnemyMovement : MonoBehaviour
         // ------------ Searching ------------ 
         else if (status == Status.Searching)
         {
+            navMeshAgent.speed = walkSpeed;
+
             if(IsAtDestination)
             {
                 if(searchTimer > 0)
@@ -134,17 +155,21 @@ public class EnemyMovement : MonoBehaviour
         // ------------ Tased ------------ 
         else if (status == Status.Tased)
         {
+            navMeshAgent.speed = 0f;
+
             movementTargets = new List<Transform>{transform};
 
-            //animator.SetBool("Ragdoll", true);
+            // -animator.SetBool("Ragdoll", true);
         }
 
         // ------------ Knocked Out ------------ 
         else if (status == Status.KnockedOut)
         {
+            navMeshAgent.speed = 0f;
+
             movementTargets = new List<Transform>{transform};
 
-            //animator.SetBool("Ragdoll", true);
+            // -animator.SetBool("Ragdoll", true);
         }
 
 
@@ -169,7 +194,7 @@ public class EnemyMovement : MonoBehaviour
 
         else if(halted)
         {
-            // turn towards Detection.lastPlayerPos
+            // -turn towards Detection.lastPlayerPos
 
             MoveTo(transform.position);
         }
@@ -199,7 +224,6 @@ public class EnemyMovement : MonoBehaviour
 
         else if(isStatic)
         {
-            Debug.Log($"static enemy {transform.name} is moving to start pos ({spawnPos})");
             MoveTo(spawnPos);
         }
     }
@@ -221,10 +245,9 @@ public class EnemyMovement : MonoBehaviour
     public void Wander(Vector3 center, float radius, int layermask = NavMesh.AllAreas)
     {
         Vector3 randomDirection = center + (Random.insideUnitSphere * radius);
-        
-        NavMeshHit navHit;
-        NavMesh.SamplePosition(randomDirection, out navHit, radius, layermask);
-        
+
+        NavMesh.SamplePosition(randomDirection, out NavMeshHit navHit, radius, layermask);
+
         MoveTo(navHit.position);
     }
 
@@ -237,7 +260,7 @@ public class EnemyMovement : MonoBehaviour
 
         else
         {
-            // turn to another rotation
+            // -turn to another rotation
 
             if(aggro)
             {
@@ -248,5 +271,30 @@ public class EnemyMovement : MonoBehaviour
                 turnTimer = Random.Range(minTurnTime, maxTurnTime);
             }
         }
+    }
+
+    public void CheckNearestExit()
+    {
+        float distanceToNearestExit = float.MaxValue;
+        int chosenExitIndex = 0;
+
+        for(int i = 0; i < mapEntrances.Count; i++)
+        {
+            int index = i;
+            float distanceToExit = (mapEntrances[i].transform.position - transform.position).magnitude;
+
+            if(distanceToExit < distanceToNearestExit)
+            {
+                distanceToNearestExit = distanceToExit;
+                chosenExitIndex = index;
+            }
+        }
+
+        chosenNearestExit = mapEntrances[chosenExitIndex].transform.position;
+    }
+
+    public void SetMovementTargets(List<Transform> newMovementTargets)
+    {
+        movementTargets = newMovementTargets;
     }
 }
