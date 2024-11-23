@@ -7,7 +7,9 @@ public class Enemy : MonoBehaviour
     protected Type type;
     //private Alarm alarm;
     protected Detection detection;
+    public Detection Detection {get => detection;}
     protected EnemyMovement enemyMovement;
+    public EnemyMovement EnemyMovement {get=> enemyMovement;}
     public bool IsKnockedOut {get => enemyMovement.status == EnemyMovement.Status.KnockedOut;}
 
 
