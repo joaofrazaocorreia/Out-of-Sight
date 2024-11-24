@@ -10,7 +10,19 @@ public class Player : MonoBehaviour
     private void Start()
     {
         status.Add(Status.Normal);
-        //status.Add(Status.Suspicious);
-        status.Add(Status.Trespassing);
+        //GainStatus(Status.Suspicious);
+        GainStatus(Status.Trespassing);
+    }
+
+    public void GainStatus(Status newStatus)
+    {
+        if(!status.Contains(newStatus))
+            status.Add(newStatus);
+    }
+
+    public void LoseStatus(Status newStatus)
+    {
+        while(status.Contains(newStatus))
+            status.Remove(newStatus);
     }
 }

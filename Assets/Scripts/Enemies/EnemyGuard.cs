@@ -16,7 +16,6 @@ public class EnemyGuard : Enemy
         base.Start();
 
         type = Type.Guard;
-        enemyMovement.status = EnemyMovement.Status.Normal;
     }
 
 
@@ -56,6 +55,11 @@ public class EnemyGuard : Enemy
         // ------------ Chasing ------------ 
         else if(enemyMovement.status == EnemyMovement.Status.Chasing)
         {
+            if(detection.SeesPlayer)
+            {
+                BecomeAlarmed();
+            }
+
             if(enemyMovement.IsAtDestination)
             {
                 // Remains at the position if it's still aggro, otherwise it begins searching.
@@ -87,12 +91,18 @@ public class EnemyGuard : Enemy
                 BecomeAlarmed();
             }
 
-            /*
+            
             else if (!alarm.IsOn)
             {
                 enemyMovement.status = EnemyMovement.Status.Normal;
             }
-            */
+            
+        }
+
+        // ------------ Tased ------------ 
+        else if(enemyMovement.status == EnemyMovement.Status.Tased)
+        {
+            // dead
         }
 
         // ------------ Knocked Out ------------ 
