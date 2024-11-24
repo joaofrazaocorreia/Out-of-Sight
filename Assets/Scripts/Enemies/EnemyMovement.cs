@@ -7,7 +7,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))] 
 public class EnemyMovement : MonoBehaviour
 {
-    public enum Status {Normal, Scared, Fleeing, Searching, Chasing, Tased, KnockedOut};
+    public enum Status {Normal, Fleeing, Searching, Chasing, Tased, KnockedOut};
 
     [SerializeField] private bool isStatic = false;
     [SerializeField] private bool looksAround = true;
@@ -27,6 +27,7 @@ public class EnemyMovement : MonoBehaviour
     public Status status;
     public bool halted = false;
     public List<Transform> MovementTargets {get => movementTargets;}
+    public bool IsStatic {get => isStatic;}
 
     private float moveTimer;
     private float turnTimer;
@@ -41,6 +42,8 @@ public class EnemyMovement : MonoBehaviour
     private Vector3 lastSelfPos;
     private List<MapEntrance> mapEntrances;
     private Vector3 chosenNearestExit;
+    private bool leavingMap;
+    public bool LeavingMap {get => leavingMap; set{leavingMap = value;}}
 
     private void Start()
     {
@@ -53,6 +56,7 @@ public class EnemyMovement : MonoBehaviour
         spawnPos = transform.position;
         navMeshAgent = GetComponent<NavMeshAgent>();
         mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
+        leavingMap = false;
 
         // Forcefully sets the NavMeshAgent to the NPC type if it isn't already one
         if(navMeshAgent.agentTypeID != -1372625422)
@@ -63,24 +67,17 @@ public class EnemyMovement : MonoBehaviour
     // Checks this enemy's status and moves accordingly.
     private void Update()
     {
+        if(leavingMap)
+        {
+            ExitMap();
+        }
 
         // ------------ Normal ------------ 
-        if(status == Status.Normal)
+        else if(status == Status.Normal)
         {
             navMeshAgent.speed = walkSpeed;
 
             Patrol();
-        }
-
-        // ------------ Scared ------------ 
-        else if (status == Status.Scared)
-        {
-            navMeshAgent.speed = runSpeed;
-
-            Vector3 direction = transform.position - Detection.lastPlayerPos;
-
-            if (NavMesh.SamplePosition(transform.position + direction, out NavMeshHit navHit, direction.magnitude, NavMesh.AllAreas))
-                MoveTo(navHit.position);
         }
 
         // ------------ Fleeing ------------ 
@@ -88,7 +85,7 @@ public class EnemyMovement : MonoBehaviour
         {
             navMeshAgent.speed = runSpeed;
 
-            MoveTo(chosenNearestExit);
+            ExitMap();
         }
         
         // ------------ Chasing ------------ 
@@ -96,6 +93,7 @@ public class EnemyMovement : MonoBehaviour
         {
             navMeshAgent.speed = runSpeed;
 
+            //Debug.Log($"{name} is at {transform.position} and is moving to {Detection.lastPlayerPos}");
             MoveTo(Detection.lastPlayerPos);
 
             if((transform.position - lastSelfPos).magnitude < navMeshAgent.speed * Time.deltaTime
@@ -181,8 +179,15 @@ public class EnemyMovement : MonoBehaviour
 
     private void Patrol()
     {
+        if(halted)
+        {
+            // -turn towards Detection.lastPlayerPos
+
+            MoveTo(transform.position);
+        }
+
         // Progressively decreases the movement timer if the agent is at its target
-        if(IsAtDestination && moveTimer > 0)
+        else if(IsAtDestination && moveTimer > 0)
         {
             moveTimer -= Time.deltaTime;
 
@@ -192,26 +197,20 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
-        else if(halted)
-        {
-            // -turn towards Detection.lastPlayerPos
-
-            MoveTo(transform.position);
-        }
-
         if(moveTimer <= 0 && !halted && !isStatic)
         {
             // Rolls a random index within the number of available targets and
             // loops until it gets a value different than the last chosen index
             int index = Random.Range(0, movementTargets.Count());
 
+            
+            int loop = 0;
             while(movementTargets[index].position == lastTarget)
             {
-                int loop = 0;
                 index = Random.Range(0, movementTargets.Count());
 
                 // If it loops for too long, breaks out of the loop
-                if (loop == 100)
+                if (++loop >= 100)
                 {
                     index = 0;
                     break;
@@ -295,6 +294,14 @@ public class EnemyMovement : MonoBehaviour
 
     public void SetMovementTargets(List<Transform> newMovementTargets)
     {
-        movementTargets = newMovementTargets;
+        if(!leavingMap)
+            movementTargets = newMovementTargets;
+    }
+
+    public void ExitMap()
+    {
+        leavingMap = true;
+        CheckNearestExit();
+        MoveTo(chosenNearestExit);
     }
 }
