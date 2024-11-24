@@ -5,7 +5,7 @@ public class Enemy : MonoBehaviour
     public enum Type {Civillian, Worker, Guard, Police, Camera};
 
     protected Type type;
-    //private Alarm alarm;
+    protected Alarm alarm;
     protected Detection detection;
     public Detection Detection {get => detection;}
     protected EnemyMovement enemyMovement;
@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Start()
     {
+        alarm = FindAnyObjectByType<Alarm>();
         detection = GetComponent<Detection>();
         enemyMovement = GetComponent<EnemyMovement>();
 
@@ -32,17 +33,20 @@ public class Enemy : MonoBehaviour
         {
             if(type != Type.Camera)
             {
-                if((transform.position - Detection.lastPlayerPos).magnitude <= 3f)
-                    enemyMovement.status = EnemyMovement.Status.Scared;
-                else
-                    enemyMovement.status = EnemyMovement.Status.Fleeing;
+                BecomeAlarmed();
+                enemyMovement.status = EnemyMovement.Status.Fleeing;
             }
         }
     }
 
     public virtual void BecomeAlarmed()
     {
-        detection.DetectionMeter = detection.DetectionLimit;
-        // alarm.TriggerAlarm();
+        if(detection == null)
+            Start();
+
+        if(!alarm.IsOn)
+            Debug.Log($"{name} triggered the alarm!");
+
+        alarm.TriggerAlarm(!alarm.IsOn);
     }
 }

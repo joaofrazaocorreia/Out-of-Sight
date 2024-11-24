@@ -8,8 +8,8 @@ public class Detection : MonoBehaviour
     [SerializeField] [Range(0f, 20f)] private float baseDetectionRate = 1.0f;
     [SerializeField] private float detectionLimit = 5.0f;
 
-    [HideInInspector] public static Vector3 lastPlayerPos;
-    [HideInInspector] public static float globalDetectionMultiplier = 1.0f;
+    public static Vector3 lastPlayerPos;
+    public static float globalDetectionMultiplier = 1.0f;
 
     private Player player;
     private float detectionMeter;
@@ -58,6 +58,7 @@ public class Detection : MonoBehaviour
                     {
                         seesPlayer = true;
                         Debug.DrawRay(transform.position, distanceToPlayer * hit.distance, Color.red);
+                        TrackPlayer();
                     }
                     
                     // If the raycast detects an obstacle between the NPC and the player:
@@ -129,8 +130,8 @@ public class Detection : MonoBehaviour
             DetectionMeter -= Time.deltaTime;
         }
 
-        if(DetectionMeter != 0)
-            Debug.Log(transform.parent.name + " - detection %: " + Mathf.Round(DetectionMeter/DetectionLimit * 100));
+        /*if(DetectionMeter != 0)
+            Debug.Log(transform.parent.name + " - detection %: " + Mathf.Round(DetectionMeter/DetectionLimit * 100));*/
     }
 
     /// <summary>

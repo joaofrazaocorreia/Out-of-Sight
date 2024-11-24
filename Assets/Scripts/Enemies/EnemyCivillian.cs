@@ -2,14 +2,11 @@ using UnityEngine;
 
 public class EnemyCivillian : Enemy
 {
-    [SerializeField] private float playerScareDistance = 6f;
-
     protected override void Start()
     {
         base.Start();
 
         type = Type.Civillian;
-        enemyMovement.status = EnemyMovement.Status.Normal;
     }
 
 
@@ -44,24 +41,17 @@ public class EnemyCivillian : Enemy
                 enemyMovement.halted = false;
         }
 
-        // ------------ Scared ------------ 
-        else if(enemyMovement.status == EnemyMovement.Status.Scared)
-        {
-            if(!detection.SeesPlayer || (Detection.lastPlayerPos - transform.position).magnitude > playerScareDistance)
-            {
-                enemyMovement.CheckNearestExit();
-                enemyMovement.status = EnemyMovement.Status.Fleeing;
-            }
-        }
 
         // ------------ Fleeing ------------ 
         else if(enemyMovement.status == EnemyMovement.Status.Fleeing)
         {
-            if(detection.SeesPlayer && (Detection.lastPlayerPos - transform.position).magnitude <= playerScareDistance)
-            {
-                base.BecomeAlarmed();
-                enemyMovement.status = EnemyMovement.Status.Scared;
-            }
+            // nothing yet
+        }
+
+        // ------------ Tased ------------ 
+        else if(enemyMovement.status == EnemyMovement.Status.Tased)
+        {
+            // dead
         }
 
         // ------------ Knocked Out ------------ 
