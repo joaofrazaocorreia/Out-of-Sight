@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float horizontalLookSensitivity = 2f;
     [SerializeField] private float _maxHeadUpAngle = 70;
     [SerializeField] private float _minHeadDownAngle = 290;
-    [SerializeField] private GameObject crosshair;
     /*
     [SerializeField] private AudioSource playerAudioSource;
     [SerializeField] private AudioClip[] footstepSounds;
@@ -28,6 +27,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Range(1f,30f)] private float HeadbobAmount = 5f;
     [SerializeField] [Range(1f,30f)] private float HeadbobSmoothness = 5f;
     [SerializeField] [Range(1f,30f)] private float HeadbobFrequency = 12f;
+    [SerializeField] private bool _isCrouchToggle;
+    [SerializeField] private bool _isRunToggle;
 
     private float speedBoost;
     public float SpeedBoost
@@ -48,13 +49,18 @@ public class PlayerController : MonoBehaviour
     /*
     private float _footstepTimer;
     */
+    private PlayerCameraController _playerCameraController;
     private PlayerInput _playerInput;
     private PlayerInteraction _playerInteraction;
     private PlayerEquipment _playerEquipment;
     private Vector2 _movementVector;
     private Vector3 _lookVector;
+    private Transform _rotationPivot;
+    private Transform _originalRotationPivot;
     private int _isRunning;
     private int _isCrouching;
+    private bool _canMove = true;
+    private bool _canLook = true;
     private float[] _selectedEquipment;
 
     void Start()
@@ -70,24 +76,13 @@ public class PlayerController : MonoBehaviour
         _footstepTimer  = Time.time;
         */
         SpeedBoost      = 1f;
+        _playerCameraController = GetComponentInChildren<PlayerCameraController>();
         _playerInput = GetComponent<PlayerInput>();
         _playerInteraction = GetComponent<PlayerInteraction>();
         _playerEquipment = GetComponent<PlayerEquipment>();
         _selectedEquipment = new float[9];
-
-        LockCursor();
-    }
-
-    public void LockCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        crosshair.SetActive(true);
-    }
-
-    public void UnlockCursor()
-    {
-        Cursor.lockState = CursorLockMode.None;
-        crosshair.SetActive(false);
+        _rotationPivot = transform;
+        _originalRotationPivot = _rotationPivot;
     }
 
     private void Update()
@@ -105,11 +100,16 @@ public class PlayerController : MonoBehaviour
     
     private void GetInputs()
     {
+        if (!_isCrouchToggle) _isCrouching = 0;
+        if(!_isRunToggle) _isRunning = 0;
+        
         _lookVector = GetInput(_playerInput.actions["Look"]); 
         _movementVector = GetInput(_playerInput.actions["Move"]);
-        GetInput(_playerInput.actions["Crouch"], ToggleCrouch, false);
-        GetInput(_playerInput.actions["Run"], ToggleRun, false);
+        GetInput(_playerInput.actions["Crouch"], EnableCrouch, !_isCrouchToggle);
+        GetInput(_playerInput.actions["Run"], EnableRunning, !_isRunToggle);
         GetInput(_playerInput.actions["Interact"], Interact, true);
+        GetInput(_playerInput.actions["UseEquipment"], UseEquipment, false);
+        
         _selectedEquipment[0] = _playerInput.actions["EquipmentHotbar1"].ReadValue<float>();
         _selectedEquipment[1] = _playerInput.actions["EquipmentHotbar2"].ReadValue<float>();
         _selectedEquipment[2] = _playerInput.actions["EquipmentHotbar3"].ReadValue<float>();
@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviour
     {
         for (int i = 0; i < _selectedEquipment.Length; i++)
         {
-            if (_selectedEquipment[i] != 1) continue;
+            if (!Mathf.Approximately(_selectedEquipment[i], 1)) continue;
             
             _playerEquipment.NewEquipmentSelected(i);
             break;
@@ -141,16 +141,33 @@ public class PlayerController : MonoBehaviour
     {
         return action.ReadValue<Vector2>();
     }
+
+    private void EnableRunning() => _isRunning = _isRunToggle ? 1 - _isRunning : 1;
     
-    private void ToggleRun() => _isRunning = 1 - _isRunning;
-    
-    private void ToggleCrouch() => _isCrouching = 1 - _isCrouching;
+
+    private void EnableCrouch() => _isCrouching = _isCrouchToggle ? 1 - _isCrouching : 1;
 
     private void Interact()
     {
         _playerInteraction.TryInteraction();
     }
     
+    private void UseEquipment()
+    {
+        _playerEquipment.TryUseEquipment();
+    }
+
+    public void ToggleControls(bool movement, bool camera)
+    {
+        _canLook = camera;
+        _canMove = movement;
+    }
+
+    public void ExtendedCameraInUse(bool isInUse, Transform camera)
+    {
+        _rotationPivot = isInUse ? camera : _originalRotationPivot;
+        _playerCameraController.ExtendedCameraInUse(isInUse, camera);
+    }
 
     private void UpdateBodyRotation()
     {
