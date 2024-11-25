@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Range(1f,30f)] private float HeadbobAmount = 5f;
     [SerializeField] [Range(1f,30f)] private float HeadbobSmoothness = 5f;
     [SerializeField] [Range(1f,30f)] private float HeadbobFrequency = 12f;
+    [SerializeField] private bool _isCrouchToggle;
+    [SerializeField] private bool _isRunToggle;
 
     private float speedBoost;
     public float SpeedBoost
@@ -98,10 +100,13 @@ public class PlayerController : MonoBehaviour
     
     private void GetInputs()
     {
+        if (!_isCrouchToggle) _isCrouching = 0;
+        if(!_isRunToggle) _isRunning = 0;
+        
         _lookVector = GetInput(_playerInput.actions["Look"]); 
         _movementVector = GetInput(_playerInput.actions["Move"]);
-        GetInput(_playerInput.actions["Crouch"], ToggleCrouch, false);
-        GetInput(_playerInput.actions["Run"], ToggleRun, false);
+        GetInput(_playerInput.actions["Crouch"], EnableCrouch, !_isCrouchToggle);
+        GetInput(_playerInput.actions["Run"], EnableRunning, !_isRunToggle);
         GetInput(_playerInput.actions["Interact"], Interact, true);
         GetInput(_playerInput.actions["UseEquipment"], UseEquipment, false);
         
@@ -136,10 +141,11 @@ public class PlayerController : MonoBehaviour
     {
         return action.ReadValue<Vector2>();
     }
+
+    private void EnableRunning() => _isRunning = _isRunToggle ? 1 - _isRunning : 1;
     
-    private void ToggleRun() => _isRunning = 1 - _isRunning;
-    
-    private void ToggleCrouch() => _isCrouching = 1 - _isCrouching;
+
+    private void EnableCrouch() => _isCrouching = _isCrouchToggle ? 1 - _isCrouching : 1;
 
     private void Interact()
     {
