@@ -49,14 +49,15 @@ public class PlayerController : MonoBehaviour
     /*
     private float _footstepTimer;
     */
-    private PlayerCameraController _playerCameraController;
     private PlayerInput _playerInput;
     private PlayerInteraction _playerInteraction;
     private PlayerEquipment _playerEquipment;
     private Vector2 _movementVector;
     private Vector3 _lookVector;
-    private Transform _rotationPivot;
-    private Transform _originalRotationPivot;
+    private Transform _horizontalRotationPivot;
+    private Transform _originalHorizontalRotationPivot;
+    private Transform _verticalRotationPivot;
+    private Transform _originalVerticalRotationPivot;
     private int _isRunning;
     private int _isCrouching;
     private bool _canMove = true;
@@ -76,13 +77,14 @@ public class PlayerController : MonoBehaviour
         _footstepTimer  = Time.time;
         */
         SpeedBoost      = 1f;
-        _playerCameraController = GetComponentInChildren<PlayerCameraController>();
         _playerInput = GetComponent<PlayerInput>();
         _playerInteraction = GetComponent<PlayerInteraction>();
         _playerEquipment = GetComponent<PlayerEquipment>();
         _selectedEquipment = new float[9];
-        _rotationPivot = transform;
-        _originalRotationPivot = _rotationPivot;
+        _horizontalRotationPivot = transform;
+        _originalHorizontalRotationPivot = _horizontalRotationPivot;
+        _verticalRotationPivot = _head.transform;
+        _originalVerticalRotationPivot = _horizontalRotationPivot;
     }
 
     private void Update()
@@ -90,7 +92,7 @@ public class PlayerController : MonoBehaviour
         GetInputs();
         CheckEquipmentChanged();
 
-        if (_head.enabled && Cursor.lockState == CursorLockMode.Locked)
+        if (_head.enabled && Cursor.lockState == CursorLockMode.Locked && _canLook)
         {
             UpdateBodyRotation();
             UpdateHeadRotation();
@@ -101,24 +103,26 @@ public class PlayerController : MonoBehaviour
     private void GetInputs()
     {
         if (!_isCrouchToggle) _isCrouching = 0;
-        if(!_isRunToggle) _isRunning = 0;
+        if (!_isRunToggle) _isRunning = 0;
         
         _lookVector = GetInput(_playerInput.actions["Look"]); 
         _movementVector = GetInput(_playerInput.actions["Move"]);
         GetInput(_playerInput.actions["Crouch"], EnableCrouch, !_isCrouchToggle);
         GetInput(_playerInput.actions["Run"], EnableRunning, !_isRunToggle);
         GetInput(_playerInput.actions["Interact"], Interact, true);
-        //GetInput(_playerInput.actions["UseEquipment"], UseEquipment, false);
+        GetInput(_playerInput.actions["UseEquipment"], UseEquipment, false);
         
-        _selectedEquipment[0] = _playerInput.actions["EquipmentHotbar1"].ReadValue<float>();
-        _selectedEquipment[1] = _playerInput.actions["EquipmentHotbar2"].ReadValue<float>();
-        _selectedEquipment[2] = _playerInput.actions["EquipmentHotbar3"].ReadValue<float>();
-        _selectedEquipment[3] = _playerInput.actions["EquipmentHotbar4"].ReadValue<float>();
-        _selectedEquipment[4] = _playerInput.actions["EquipmentHotbar5"].ReadValue<float>();
-        _selectedEquipment[5] = _playerInput.actions["EquipmentHotbar6"].ReadValue<float>();
-        _selectedEquipment[6] = _playerInput.actions["EquipmentHotbar7"].ReadValue<float>();
-        _selectedEquipment[7] = _playerInput.actions["EquipmentHotbar8"].ReadValue<float>();
-        _selectedEquipment[8] = _playerInput.actions["EquipmentHotbar9"].ReadValue<float>();
+        _selectedEquipment[0] = _playerInput.actions["EquipmentHotbar1"].WasPressedThisFrame() ? 1 : 0;
+        _selectedEquipment[1] = _playerInput.actions["EquipmentHotbar2"].WasPressedThisFrame() ? 1 : 0;
+        _selectedEquipment[2] = _playerInput.actions["EquipmentHotbar3"].WasPressedThisFrame() ? 1 : 0;
+        _selectedEquipment[3] = _playerInput.actions["EquipmentHotbar4"].WasPressedThisFrame() ? 1 : 0;
+        _selectedEquipment[4] = _playerInput.actions["EquipmentHotbar5"].WasPressedThisFrame() ? 1 : 0;
+        /*
+         _selectedEquipment[5] = _playerInput.actions["EquipmentHotbar6"].WasPressedThisFrame() ? 1 : 0;
+        _selectedEquipment[6] = _playerInput.actions["EquipmentHotbar7"].WasPressedThisFrame() ? 1 : 0;
+        _selectedEquipment[7] = _playerInput.actions["EquipmentHotbar8"].WasPressedThisFrame() ? 1 : 0;
+        _selectedEquipment[8] = _playerInput.actions["EquipmentHotbar9"].WasPressedThisFrame() ? 1 : 0;
+        */
     }
 
     private void CheckEquipmentChanged()
@@ -157,28 +161,29 @@ public class PlayerController : MonoBehaviour
         _playerEquipment.TryUseEquipment();
     }
 
-    public void ToggleControls(bool movement, bool camera)
+    public void ToggleControls(bool canMovePlayer, bool canMoveCamera)
     {
-        _canLook = camera;
-        _canMove = movement;
+        _canLook = canMoveCamera;
+        _canMove = canMovePlayer;
     }
 
-    public void ExtendedCameraInUse(bool isInUse, Transform camera)
+    public void ExtendedCameraInUse(bool isInUse, Transform cameraTransform)
     {
-        _rotationPivot = isInUse ? camera : _originalRotationPivot;
-        _playerCameraController.ExtendedCameraInUse(isInUse, camera);
+        print(cameraTransform);
+        _horizontalRotationPivot = isInUse ? cameraTransform : _originalHorizontalRotationPivot;
+        _verticalRotationPivot = isInUse ? cameraTransform : _originalVerticalRotationPivot;
     }
 
     private void UpdateBodyRotation()
     {
         float rotation = _lookVector.x * horizontalLookSensitivity;
 
-        transform.Rotate(0f, rotation, 0f);
+        _horizontalRotationPivot.Rotate(0f, rotation, 0f);
     }
 
     private void UpdateHeadRotation()
     {
-        float rotation = _head.transform.parent.localEulerAngles.x;
+        float rotation = _verticalRotationPivot.localEulerAngles.x;
 
         rotation -= _lookVector.y * verticalLookSensitivity;
 
@@ -187,7 +192,7 @@ public class PlayerController : MonoBehaviour
         else
             rotation = Mathf.Max(rotation, _minHeadDownAngle);
 
-        _head.transform.parent.localEulerAngles = new Vector3(rotation, 0f, 0f);
+        _verticalRotationPivot.localEulerAngles = new Vector3(rotation, 0f, 0f);
     }
 
     void FixedUpdate()
@@ -208,7 +213,7 @@ public class PlayerController : MonoBehaviour
     {
         float forwardAxis = _movementVector.y;
 
-        if (!_head.enabled || Cursor.lockState != CursorLockMode.Locked)
+        if (!_head.enabled || Cursor.lockState != CursorLockMode.Locked || !_canMove)
             forwardAxis = 0f;
         
 
@@ -226,7 +231,7 @@ public class PlayerController : MonoBehaviour
     {
         float strafeAxis = _movementVector.x;
 
-        if (!_head.enabled || Cursor.lockState != CursorLockMode.Locked)
+        if (!_head.enabled || Cursor.lockState != CursorLockMode.Locked || !_canMove )
             strafeAxis = 0f;
 
 
