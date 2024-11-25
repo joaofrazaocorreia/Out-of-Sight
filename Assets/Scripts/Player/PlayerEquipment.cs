@@ -28,9 +28,16 @@ public class PlayerEquipment : MonoBehaviour
 
     public void NewEquipmentSelected(int index)
     {
-        if(index < 0 || index >= equipments.Length || index == CurrentEquipmentNum) return;
+        if (index < 0 || index >= equipments.Length) return;
+        if (index == CurrentEquipmentNum) Unequip(); 
+        else CurrentEquipmentNum = index;
+    }
 
-        CurrentEquipmentNum = index;
+    private void Unequip()
+    {
+        print("Unequipped");
+        _currentEquipmentNum = -1;
+        CurrentEquipment = null;
     }
 
     public void TryUseEquipment()
@@ -52,6 +59,6 @@ public class PlayerEquipment : MonoBehaviour
             _equipmentObjects[i] = equipments[i].GetComponent<EquipmentObject>();
         }
         
-        if(_equipmentObjects.Length > 0) CurrentEquipment = _equipmentObjects[0];
+        Unequip();
     }
 }

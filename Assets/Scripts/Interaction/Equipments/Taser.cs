@@ -25,21 +25,23 @@ namespace Interaction.Equipments
         {
             if(_currentAmmo <= 0) return;
             
+            _currentAmmo--;
             Fire();
             CanBeUsed = false;
-            _currentAmmo--;
             Reload();
         }
 
         private void Fire()
         {
-            Physics.Raycast(raycastOrigin.transform.position, transform.TransformDirection(Vector3.forward), out RaycastHit hit, raycastDistance);
+            if (Physics.Raycast(raycastOrigin.transform.position, raycastOrigin.transform.TransformDirection(Vector3.forward), out RaycastHit hit, raycastDistance))
+            {
+                var hitenemy = hit.collider.GetComponent<EnemyMovement>();
+            
+                if(hit.collider != null && hitenemy != null) hitenemy.status = EnemyMovement.Status.Tased; 
+                print(hitenemy);
+            }
             
             print("Taser shot! Remaining ammo: " + _currentAmmo);
-
-            var hitenemy = hit.collider.GetComponent<EnemyMovement>();
-            
-           if(hit.collider != null && hitenemy != null) return; //tase enemy; 
         }
 
         private void Reload()
