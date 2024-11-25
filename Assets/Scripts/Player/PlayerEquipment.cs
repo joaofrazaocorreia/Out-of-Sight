@@ -1,4 +1,5 @@
 using System;
+using Interaction.Equipments;
 using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
@@ -30,6 +31,11 @@ public class PlayerEquipment : MonoBehaviour
         if(index < 0 || index >= equipments.Length || index == CurrentEquipmentNum) return;
 
         CurrentEquipmentNum = index;
+    }
+
+    public void TryUseEquipment()
+    {
+        if(CurrentEquipment is IFreeUseEquipment equipment && CurrentEquipment.CanBeUsed) equipment.FreeUse(); 
     }
 
     private void EquipmentChanged()
