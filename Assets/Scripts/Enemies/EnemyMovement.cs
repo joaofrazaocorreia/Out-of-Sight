@@ -93,7 +93,6 @@ public class EnemyMovement : MonoBehaviour
         {
             navMeshAgent.speed = runSpeed;
 
-            //Debug.Log($"{name} is at {transform.position} and is moving to {Detection.lastPlayerPos}");
             MoveTo(Detection.lastPlayerPos);
 
             if((transform.position - lastSelfPos).magnitude < navMeshAgent.speed * Time.deltaTime
