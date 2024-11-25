@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour
         GetInput(_playerInput.actions["Crouch"], EnableCrouch, !_isCrouchToggle);
         GetInput(_playerInput.actions["Run"], EnableRunning, !_isRunToggle);
         GetInput(_playerInput.actions["Interact"], Interact, true);
-        GetInput(_playerInput.actions["UseEquipment"], UseEquipment, false);
+        //GetInput(_playerInput.actions["UseEquipment"], UseEquipment, false);
         
         _selectedEquipment[0] = _playerInput.actions["EquipmentHotbar1"].ReadValue<float>();
         _selectedEquipment[1] = _playerInput.actions["EquipmentHotbar2"].ReadValue<float>();

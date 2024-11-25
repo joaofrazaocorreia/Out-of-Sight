@@ -8,6 +8,7 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private float startingTimeScale = 0f;
     [SerializeField] [Range(1f, 20f)] private float UISpeed = 3f;
     [SerializeField] private CanvasGroup loadingScreen;
     [SerializeField] private CanvasGroup UIBackground;
@@ -36,7 +37,7 @@ public class UIManager : MonoBehaviour
         // Game begins with timeScale = 0f to show the mission briefing before starting the level
         gamePaused = false;
         settingsActive = false;
-        Time.timeScale = 0f;
+        Time.timeScale = startingTimeScale;
 
         originalUIPositions = new Dictionary<Transform, Vector3>();
 
