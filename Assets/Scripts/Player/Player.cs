@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
         status.Add(Status.Normal);
 
 
-        GainStatus(Status.Trespassing);
+        //GainStatus(Status.Trespassing);
         //GainStatus(Status.Suspicious);
     }
 
@@ -38,6 +38,12 @@ public class Player : MonoBehaviour
     {
         while(status.Contains(newStatus))
             status.Remove(newStatus);
+    }
+
+    public void GainDisguise(Disguise newDisguise)
+    {
+        if(disguise != newDisguise)
+            disguise = newDisguise;
     }
 
     private void UpdateStatusUI()
@@ -71,13 +77,13 @@ public class Player : MonoBehaviour
                 
                 case Disguise.Guard_Tier1:
                 {
-                    newText = "Disguised as: Security Guard";
+                    newText = "Disguised as: Hotel Security";
                     break;
                 }
                 
                 case Disguise.Guard_Tier2:
                 {
-                    newText = "Disguised as: Elite Guard";
+                    newText = "Disguised as: Elite Security";
                     break;
                 }
                 
