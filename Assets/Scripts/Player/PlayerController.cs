@@ -1,4 +1,5 @@
 using System;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -20,11 +21,17 @@ public class PlayerController : MonoBehaviour
     
     private Vector3 _movementVector;
     private Vector3 _lookVector;
+
+    private Transform _rotationPivot;
+    private Transform _originalRotationPivot;
     
     private float _moveSpeed;
 
     private int _isRunning;
     private int _isCrouching;
+    
+    private bool _canMove = true;
+    private bool _canLook = true;
     
     private float[] _selectedEquipment;
 
@@ -36,6 +43,9 @@ public class PlayerController : MonoBehaviour
         _playerInteraction = GetComponent<PlayerInteraction>();
         _playerEquipment = GetComponent<PlayerEquipment>();
         _selectedEquipment = new float[9];
+
+        _rotationPivot = transform;
+        _originalRotationPivot = _rotationPivot;
 
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -53,6 +63,8 @@ public class PlayerController : MonoBehaviour
         GetInput(_playerInput.actions["Crouch"], ToggleCrouch, false);
         GetInput(_playerInput.actions["Run"], ToggleRun, false);
         GetInput(_playerInput.actions["Interact"], Interact, true);
+        GetInput(_playerInput.actions["UseEquipment"], UseEquipment, false);
+        
         _selectedEquipment[0] = _playerInput.actions["EquipmentHotbar1"].ReadValue<float>();
         _selectedEquipment[1] = _playerInput.actions["EquipmentHotbar2"].ReadValue<float>();
         _selectedEquipment[2] = _playerInput.actions["EquipmentHotbar3"].ReadValue<float>();
@@ -68,7 +80,7 @@ public class PlayerController : MonoBehaviour
     {
         for (int i = 0; i < _selectedEquipment.Length; i++)
         {
-            if (_selectedEquipment[i] != 1) continue;
+            if (!Mathf.Approximately(_selectedEquipment[i], 1)) continue;
             
             _playerEquipment.NewEquipmentSelected(i);
             break;
@@ -77,11 +89,14 @@ public class PlayerController : MonoBehaviour
     
     private void FixedUpdate()
     {
-        GetMoveSpeed();
-        GetMoveVector();
+        if (_canMove)
+        {
+            GetMoveSpeed();
+            GetMoveVector();
+            Move();
+        }
         
-        Move();
-        Rotate();
+        if(_canLook) Rotate();
     }
 
     private void GetInput(InputAction action, Action methodToCall, bool holdInput)
@@ -117,7 +132,7 @@ public class PlayerController : MonoBehaviour
 
     private void RotatePlayer(float angle)
     {
-        transform.Rotate(0f, angle, 0f);
+        _rotationPivot.Rotate(0f, angle, 0f);
     }
     
     private void ToggleRun() => _isRunning = 1 - _isRunning;
@@ -128,5 +143,21 @@ public class PlayerController : MonoBehaviour
     {
         _playerInteraction.TryInteraction();
     }
-    
+
+    private void UseEquipment()
+    {
+        _playerEquipment.TryUseEquipment();
+    }
+
+    public void ToggleControls(bool movement, bool camera)
+    {
+        _canLook = camera;
+        _canMove = movement;
+    }
+
+    public void ExtendedCameraInUse(bool isInUse, Transform camera)
+    {
+        _rotationPivot = isInUse ? camera : _originalRotationPivot;
+        _playerCameraController.ExtendedCameraInUse(isInUse, camera);
+    }
 }
