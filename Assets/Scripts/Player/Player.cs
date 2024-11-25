@@ -4,13 +4,85 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public enum Status {Normal, Trespassing, Suspicious};
+    public enum Disguise {Civillian, Employee, Guard_Tier1, Guard_Tier2}
 
     public List<Status> status;
+    public Disguise disguise;
+    private UIManager uiManager;
 
     private void Start()
     {
+        uiManager = FindAnyObjectByType<UIManager>();
+
+        disguise = Disguise.Civillian;
         status.Add(Status.Normal);
-        //status.Add(Status.Suspicious);
-        status.Add(Status.Trespassing);
+
+
+        GainStatus(Status.Trespassing);
+        //GainStatus(Status.Suspicious);
+    }
+
+    private void Update()
+    {
+        UpdateDisguiseUI();
+        UpdateStatusUI();
+    }
+
+    public void GainStatus(Status newStatus)
+    {
+        if(!status.Contains(newStatus))
+            status.Add(newStatus);
+    }
+
+    public void LoseStatus(Status newStatus)
+    {
+        while(status.Contains(newStatus))
+            status.Remove(newStatus);
+    }
+
+    private void UpdateStatusUI()
+    {
+        if(status.Contains(Status.Suspicious))
+            uiManager.UpdateStatusText("Suspicious", Color.red);
+        
+        else if(status.Contains(Status.Trespassing))
+            uiManager.UpdateStatusText("Trespassing", Color.yellow);
+
+        else
+            uiManager.UpdateStatusText("Concealed", Color.white);
+    }
+
+    private void UpdateDisguiseUI()
+    {
+        string newText;
+
+        switch(disguise)
+        {
+            case Disguise.Civillian:
+            {
+                newText = "No disguise";
+                break;
+            }
+            
+            case Disguise.Guard_Tier1:
+            {
+                newText = "Disguised as: Security Guard";
+                break;
+            }
+            
+            case Disguise.Guard_Tier2:
+            {
+                newText = "Disguised as: Elite Guard";
+                break;
+            }
+            
+            default:
+            {
+                newText = $"Disguised as: {disguise}";
+                break;
+            }
+        }
+
+        uiManager.UpdateDisguiseText(newText);
     }
 }

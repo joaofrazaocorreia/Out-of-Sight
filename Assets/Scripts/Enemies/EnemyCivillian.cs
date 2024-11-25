@@ -7,7 +7,6 @@ public class EnemyCivillian : Enemy
         base.Start();
 
         type = Type.Civillian;
-        enemyMovement.status = EnemyMovement.Status.Normal;
     }
 
 
@@ -21,18 +20,38 @@ public class EnemyCivillian : Enemy
             {
                 BecomeAlarmed();
             }
+
+
+            if(detection.DetectionMeter >= detection.DetectionLimit * 2 / 3 &&
+                enemyMovement.status == EnemyMovement.Status.Normal)
+            {
+                enemyMovement.halted = true;
+                //transform.LookAt(Detection.lastPlayerPos);
+                enemyMovement.MoveTo(Detection.lastPlayerPos);
+            }
+
+            else if(detection.DetectionMeter >= detection.DetectionLimit * 1 / 3 &&
+                enemyMovement.status == EnemyMovement.Status.Normal)
+            {
+                enemyMovement.halted = true;
+                //transform.LookAt(Detection.lastPlayerPos);
+            }
+
+            else
+                enemyMovement.halted = false;
         }
 
-        // ------------ Scared ------------ 
-        else if(enemyMovement.status == EnemyMovement.Status.Scared)
-        {
-            // run away from player until it's distant enough or stops seeing them
-        }
 
         // ------------ Fleeing ------------ 
         else if(enemyMovement.status == EnemyMovement.Status.Fleeing)
         {
-            // run towards exit, becomes scared if sees player too close
+            // nothing yet
+        }
+
+        // ------------ Tased ------------ 
+        else if(enemyMovement.status == EnemyMovement.Status.Tased)
+        {
+            // dead
         }
 
         // ------------ Knocked Out ------------ 
@@ -41,7 +60,7 @@ public class EnemyCivillian : Enemy
             // dead
         }
 
-        // If any other enemyMovement.status is detected, resets it to normal.
+        // ----- If any other enemyMovement.status is detected, resets it to normal.
         else
             enemyMovement.status = EnemyMovement.Status.Normal;
     }
@@ -51,6 +70,7 @@ public class EnemyCivillian : Enemy
     {
         base.BecomeAlarmed();
 
+        enemyMovement.CheckNearestExit();
         enemyMovement.status = EnemyMovement.Status.Fleeing;
     }
 }
