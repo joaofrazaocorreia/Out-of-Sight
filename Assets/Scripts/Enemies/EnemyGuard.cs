@@ -5,7 +5,7 @@ public class EnemyGuard : Enemy
     /// <summary>
     /// How long this enemy stays at the last seen player position before searching around it.
     /// </summary>
-    [SerializeField] private float aggroTime = 3f;
+    [SerializeField] private float aggroTime = 5f;
     /// <summary>
     /// How close this enemy needs to be to the player while chasing to catch them
     /// </summary>
