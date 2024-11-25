@@ -6,6 +6,10 @@ public class EnemyGuard : Enemy
     /// How long this enemy stays at the last seen player position before searching around it.
     /// </summary>
     [SerializeField] private float aggroTime = 3f;
+    /// <summary>
+    /// How close this enemy needs to be to the player while chasing to catch them
+    /// </summary>
+    [SerializeField] private float playerCatchDistance = 1.5f;
 
     private float aggroTimer;
     private Vector3 prevPlayerPos;
@@ -16,7 +20,6 @@ public class EnemyGuard : Enemy
         base.Start();
 
         type = Type.Guard;
-        enemyMovement.status = EnemyMovement.Status.Normal;
     }
 
 
@@ -32,10 +35,19 @@ public class EnemyGuard : Enemy
             }
 
 
-            if(detection.DetectionMeter >= detection.DetectionLimit/3 &&
+            if(detection.DetectionMeter >= detection.DetectionLimit * 2 / 3 &&
                 enemyMovement.status == EnemyMovement.Status.Normal)
             {
                 enemyMovement.halted = true;
+                //transform.LookAt(Detection.lastPlayerPos);
+                enemyMovement.MoveTo(Detection.lastPlayerPos);
+            }
+
+            else if(detection.DetectionMeter >= detection.DetectionLimit * 1 / 3 &&
+                enemyMovement.status == EnemyMovement.Status.Normal)
+            {
+                enemyMovement.halted = true;
+                //transform.LookAt(Detection.lastPlayerPos);
             }
 
             else
@@ -47,6 +59,11 @@ public class EnemyGuard : Enemy
         // ------------ Chasing ------------ 
         else if(enemyMovement.status == EnemyMovement.Status.Chasing)
         {
+            if(detection.SeesPlayer)
+            {
+                BecomeAlarmed();
+            }
+
             if(enemyMovement.IsAtDestination)
             {
                 // Remains at the position if it's still aggro, otherwise it begins searching.
@@ -67,6 +84,14 @@ public class EnemyGuard : Enemy
             {
                 aggroTimer = aggroTime;
             }
+
+            float distanceToPlayer = (Vector3.Scale(transform.position, new Vector3(1f, 0f, 1f))
+                - Vector3.Scale(player.transform.position, new Vector3(1f, 0f, 1f))).magnitude;
+
+            if(distanceToPlayer < playerCatchDistance)
+            {
+                uiManager.Lose();
+            }
         }
 
         // ------------ Searching ------------ 
@@ -78,12 +103,18 @@ public class EnemyGuard : Enemy
                 BecomeAlarmed();
             }
 
-            /*
+            
             else if (!alarm.IsOn)
             {
                 enemyMovement.status = EnemyMovement.Status.Normal;
             }
-            */
+            
+        }
+
+        // ------------ Tased ------------ 
+        else if(enemyMovement.status == EnemyMovement.Status.Tased)
+        {
+            // dead
         }
 
         // ------------ Knocked Out ------------ 
@@ -92,7 +123,7 @@ public class EnemyGuard : Enemy
             // dead
         }
 
-        // If any other enemyMovement.status is detected, resets it to normal.
+        // ----- If any other enemyMovement.status is detected, resets it to normal.
         else
             enemyMovement.status = EnemyMovement.Status.Normal;
     }
