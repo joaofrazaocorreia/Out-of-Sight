@@ -14,6 +14,7 @@ public class PlayerInteraction : MonoBehaviour
     
     private PlayerInventory _playerInventory;
     private PlayerEquipment _playerEquipment;
+    private Player _player;
 
     private float _interactionDuration;
     private float _interactionCooldownTimer;
@@ -43,6 +44,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         _playerInventory = GetComponent<PlayerInventory>();
         _playerEquipment = GetComponent<PlayerEquipment>();
+        _player = GetComponent<Player>();
     }
 
     private void Update()
@@ -112,7 +114,10 @@ public class PlayerInteraction : MonoBehaviour
     private void Interact(InteractiveType interactiveType)
     {
         _interactionDuration -= Time.deltaTime;
-        if (!(_interactionDuration <= 0f)) return;
+
+        if(ActiveInteractiveObject.IsInteractionSuspicious) _player.GainStatus(Player.Status.Suspicious);
+
+        if (_interactionDuration > 0f) return;
         
         switch (interactiveType)
         {
@@ -131,6 +136,9 @@ public class PlayerInteraction : MonoBehaviour
         
         ActiveInteractiveObject.Interact();
         ActiveInteractiveObject = null;
+
+        if(ActiveInteractiveObject.IsInteractionSuspicious) _player.LoseStatus(Player.Status.Suspicious);
+
         
         _finishedInteraction = true;
         _interactionReady = false;

@@ -9381,7 +9381,9 @@ MonoBehaviour:
   oneTimeRequirement: 0
   firstInteractionDurationUnique: 0
   interactionDuration: 0
-  interactionSecondDuration: 0
+  secondInteractionDuration: 0
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
   itemName: Secret Files
 --- !u!4 &929237071
 Transform:
@@ -13716,10 +13718,6 @@ PrefabInstance:
     - target: {fileID: 152042297698266454, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: looksAround
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3427036616974600107, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
-      propertyPath: playerCatchDistance
-      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -24810,22 +24808,6 @@ PrefabInstance:
     - target: {fileID: 3013677490251117298, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
       propertyPath: m_Name
       value: Civillian NPC1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4444592357244671704, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
-      propertyPath: status
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4444592357244671704, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
-      propertyPath: isStatic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4444592357244671704, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
-      propertyPath: runSpeed
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4444592357244671704, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
-      propertyPath: walkSpeed
-      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4444592357244671704, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
       propertyPath: 'movementTargets.Array.data[0]'
