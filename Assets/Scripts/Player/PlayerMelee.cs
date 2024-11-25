@@ -33,7 +33,7 @@ public class PlayerMelee : MonoBehaviour
 
         if(playerInput.actions["Attack"].WasPressedThisFrame())
         {
-            Debug.Log("Hi-YAH! Roadhouse.");
+            Debug.Log("Player used Melee attack");
 
             distanceToClosestEnemy = float.MaxValue;
             closestEnemy = null;
