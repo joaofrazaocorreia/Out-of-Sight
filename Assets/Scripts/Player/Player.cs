@@ -42,47 +42,53 @@ public class Player : MonoBehaviour
 
     private void UpdateStatusUI()
     {
-        if(status.Contains(Status.Suspicious))
-            uiManager.UpdateStatusText("Suspicious", Color.red);
-        
-        else if(status.Contains(Status.Trespassing))
-            uiManager.UpdateStatusText("Trespassing", Color.yellow);
+        if(uiManager)
+        {
+            if(status.Contains(Status.Suspicious))
+                uiManager.UpdateStatusText("Suspicious", Color.red);
+            
+            else if(status.Contains(Status.Trespassing))
+                uiManager.UpdateStatusText("Trespassing", Color.yellow);
 
-        else
-            uiManager.UpdateStatusText("Concealed", Color.white);
+            else
+                uiManager.UpdateStatusText("Concealed", Color.white);
+        }
     }
 
     private void UpdateDisguiseUI()
     {
-        string newText;
-
-        switch(disguise)
+        if(uiManager)
         {
-            case Disguise.Civillian:
-            {
-                newText = "No disguise";
-                break;
-            }
-            
-            case Disguise.Guard_Tier1:
-            {
-                newText = "Disguised as: Security Guard";
-                break;
-            }
-            
-            case Disguise.Guard_Tier2:
-            {
-                newText = "Disguised as: Elite Guard";
-                break;
-            }
-            
-            default:
-            {
-                newText = $"Disguised as: {disguise}";
-                break;
-            }
-        }
+            string newText;
 
-        uiManager.UpdateDisguiseText(newText);
+            switch(disguise)
+            {
+                case Disguise.Civillian:
+                {
+                    newText = "No disguise";
+                    break;
+                }
+                
+                case Disguise.Guard_Tier1:
+                {
+                    newText = "Disguised as: Security Guard";
+                    break;
+                }
+                
+                case Disguise.Guard_Tier2:
+                {
+                    newText = "Disguised as: Elite Guard";
+                    break;
+                }
+                
+                default:
+                {
+                    newText = $"Disguised as: {disguise}";
+                    break;
+                }
+            }
+
+            uiManager.UpdateDisguiseText(newText);
+        }
     }
 }
