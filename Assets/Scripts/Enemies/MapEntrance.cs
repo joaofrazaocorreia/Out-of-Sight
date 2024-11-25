@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public class MapEntrance : MonoBehaviour
 {
+    [SerializeField] private List<Item> objectiveItems;
     [SerializeField] private float characterDetectionDistance = 4f;
     [SerializeField] private List<GameObject> civillianPrefabs;
     [SerializeField] private float minNPCSpawnTime = 3f;
@@ -13,22 +14,36 @@ public class MapEntrance : MonoBehaviour
     [SerializeField] private Transform enemiesGameObject;
 
     public static Transform Transform;
+    private UIManager uiManager;
     private Alarm alarm;
     private Transform player;
+    private PlayerInventory playerInventory;
     public static List<Enemy> enemies;
     private Queue<List<Transform>> civilliansMovementTargets;
     private int numOfNPCsInQueue;
     private float NPCspawnTimer;
+    private bool PlayerHasAllObjectives {get
+    {
+        foreach(Item i in objectiveItems)
+        {
+            if(!playerInventory.HasItem(i))
+                return false;
+        }
+
+         return true;   
+    }}
 
 
     private void Start()
     {
         Transform = transform;
+        uiManager = FindAnyObjectByType<UIManager>();
         alarm = FindAnyObjectByType<Alarm>();
         numOfNPCsInQueue = 0;
         NPCspawnTimer = Random.Range(minNPCSpawnTime, maxNPCSpawnTime);
 
         player = FindAnyObjectByType<Player>().transform;
+        playerInventory = FindAnyObjectByType<PlayerInventory>();
 
         // Stores a list of all non-camera enemies to check whenever one wants to leave the map
         enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
@@ -70,7 +85,10 @@ public class MapEntrance : MonoBehaviour
         // If the player has the objective in their inventory and comes close to the exit, they complete the mission
         if((transform.position - player.position).magnitude <= characterDetectionDistance)
         {
-            // check if player has the Objective Item in inventory to trigger Game Victory screen
+            if(PlayerHasAllObjectives)
+            {
+                uiManager.Win();
+            }
         }
 
         // If any civillian comes close to the exit and is running away, they "leave" the map (they despawn until the alarm ends)

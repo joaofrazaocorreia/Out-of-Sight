@@ -6,8 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuScripts : MonoBehaviour
 {
-    [SerializeField] [Range(5f, 20f)] private float UIspeed = 10f;
+    [SerializeField] [Range(1f, 20f)] private float UIspeed = 3f;
     [SerializeField] private GameObject background;
+    [SerializeField] private CanvasGroup loadingScreen;
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject levelSelectMenu;
     [SerializeField] private GameObject settingsMenu;
@@ -29,7 +30,7 @@ public class MainMenuScripts : MonoBehaviour
         while(uiTransform.localPosition != newPos)
         {
             Vector3 difference = newPos - uiTransform.localPosition;
-            float movespeed = Time.deltaTime * UIspeed;
+            float movespeed = Time.fixedDeltaTime * UIspeed;
 
             Vector3 translation = new Vector3(
                 Mathf.Max(difference.x * movespeed, Mathf.Min(movespeed, difference.x)),
@@ -95,6 +96,40 @@ public class MainMenuScripts : MonoBehaviour
     public void LoadScene(int scene)
     {
         StopAllCoroutines();
+        StartCoroutine(StartLoadingScene(scene));
+    }
+
+    private IEnumerator StartLoadingScene(int scene)
+    {
+        StartCoroutine(FadeInUI(loadingScreen));
+
+        while(loadingScreen.alpha < 1f)
+        {
+            yield return null;
+        }
+
         SceneManager.LoadScene(scene);
+    }
+
+    private IEnumerator FadeInUI(CanvasGroup ui)
+    {
+        ui.blocksRaycasts = true;
+
+        while(ui.alpha < 1f)
+        {
+            ui.alpha += Time.fixedDeltaTime;
+            yield return null;
+        }
+    }
+
+    private IEnumerator FadeOutUI(CanvasGroup ui)
+    {
+        ui.blocksRaycasts = false;
+        
+        while(ui.alpha > 0f)
+        {
+            ui.alpha -= Time.fixedDeltaTime;
+            yield return null;
+        }
     }
 }

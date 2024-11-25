@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float horizontalLookSensitivity = 2f;
     [SerializeField] private float _maxHeadUpAngle = 70;
     [SerializeField] private float _minHeadDownAngle = 290;
-    [SerializeField] private GameObject crosshair;
     /*
     [SerializeField] private AudioSource playerAudioSource;
     [SerializeField] private AudioClip[] footstepSounds;
@@ -74,20 +73,6 @@ public class PlayerController : MonoBehaviour
         _playerInteraction = GetComponent<PlayerInteraction>();
         _playerEquipment = GetComponent<PlayerEquipment>();
         _selectedEquipment = new float[9];
-
-        LockCursor();
-    }
-
-    public void LockCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        crosshair.SetActive(true);
-    }
-
-    public void UnlockCursor()
-    {
-        Cursor.lockState = CursorLockMode.None;
-        crosshair.SetActive(false);
     }
 
     private void Update()
