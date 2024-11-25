@@ -6,6 +6,10 @@ public class EnemyGuard : Enemy
     /// How long this enemy stays at the last seen player position before searching around it.
     /// </summary>
     [SerializeField] private float aggroTime = 3f;
+    /// <summary>
+    /// How close this enemy needs to be to the player while chasing to catch them
+    /// </summary>
+    [SerializeField] private float playerCatchDistance = 1.5f;
 
     private float aggroTimer;
     private Vector3 prevPlayerPos;
@@ -79,6 +83,14 @@ public class EnemyGuard : Enemy
             else
             {
                 aggroTimer = aggroTime;
+            }
+
+            float distanceToPlayer = (Vector3.Scale(transform.position, new Vector3(1f, 0f, 1f))
+                - Vector3.Scale(player.transform.position, new Vector3(1f, 0f, 1f))).magnitude;
+
+            if(distanceToPlayer < playerCatchDistance)
+            {
+                uiManager.Lose();
             }
         }
 

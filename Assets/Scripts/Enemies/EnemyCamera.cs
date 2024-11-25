@@ -70,7 +70,8 @@ public class EnemyCamera : Enemy, IJammable
                 if(detection.SeesPlayer && detection.DetectionMeter > detection.DetectionLimit * 1 / 3)
                 {
                     Quaternion targetRotation = cameraBody.rotation;
-                    targetRotation = Quaternion.RotateTowards(targetRotation, Quaternion.LookRotation(Detection.lastPlayerPos - cameraBody.position), 1f);
+                    targetRotation = Quaternion.RotateTowards(targetRotation,
+                        Quaternion.LookRotation(Detection.lastPlayerPos - cameraBody.position), 1f);
 
                     targetRotation = new Quaternion(0f, targetRotation.y, 0f, targetRotation.w);
 
