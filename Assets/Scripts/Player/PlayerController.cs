@@ -83,7 +83,7 @@ public class PlayerController : MonoBehaviour
         _selectedEquipment = new float[9];
         _horizontalRotationPivot = transform;
         _originalHorizontalRotationPivot = _horizontalRotationPivot;
-        _verticalRotationPivot = _head.transform;
+        _verticalRotationPivot = _head.transform.parent.transform;
         _originalVerticalRotationPivot = _horizontalRotationPivot;
     }
 
@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
         _movementVector = GetInput(_playerInput.actions["Move"]);
         GetInput(_playerInput.actions["Crouch"], EnableCrouch, !_isCrouchToggle);
         GetInput(_playerInput.actions["Run"], EnableRunning, !_isRunToggle);
-        GetInput(_playerInput.actions["Interact"], Interact, true);
+        GetInput(_playerInput.actions["Interact"], Interact, ResetInteract, true);
         GetInput(_playerInput.actions["UseEquipment"], UseEquipment, false);
         
         _selectedEquipment[0] = _playerInput.actions["EquipmentHotbar1"].WasPressedThisFrame() ? 1 : 0;
@@ -141,6 +141,13 @@ public class PlayerController : MonoBehaviour
         if(holdInput ? action.IsPressed() : action.WasPressedThisFrame())  methodToCall?.Invoke();
     }
 
+    private void GetInput(InputAction action, Action methodToCallWhenSuccessfull, Action methodToCallWhenUnsuccessful,
+        bool holdInput)
+    {
+        if(holdInput ? action.IsPressed() : action.WasPressedThisFrame())  methodToCallWhenSuccessfull?.Invoke();
+        else methodToCallWhenUnsuccessful?.Invoke();
+    }
+
     private Vector2 GetInput(InputAction action)
     {
         return action.ReadValue<Vector2>();
@@ -155,6 +162,11 @@ public class PlayerController : MonoBehaviour
     {
         _playerInteraction.TryInteraction();
     }
+
+    private void ResetInteract()
+    {
+        _playerInteraction.ResetInteract();
+    }
     
     private void UseEquipment()
     {
@@ -167,12 +179,12 @@ public class PlayerController : MonoBehaviour
         _canMove = canMovePlayer;
     }
 
+    /*
     public void ExtendedCameraInUse(bool isInUse, Transform cameraTransform)
     {
-        print(cameraTransform);
         _horizontalRotationPivot = isInUse ? cameraTransform : _originalHorizontalRotationPivot;
         _verticalRotationPivot = isInUse ? cameraTransform : _originalVerticalRotationPivot;
-    }
+    } */
 
     private void UpdateBodyRotation()
     {

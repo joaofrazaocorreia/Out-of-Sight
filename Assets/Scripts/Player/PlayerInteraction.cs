@@ -9,7 +9,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private float raycastDistance;
     [SerializeField] private float interactionCooldown;
     [SerializeField] private LayerMask whatIsInteractable;
-    [SerializeField] private GameObject raycastOrigin;
+    [SerializeField] private Transform raycastOrigin;
     [SerializeField] private GameObject _head;
     
     private PlayerInventory _playerInventory;
@@ -19,6 +19,7 @@ public class PlayerInteraction : MonoBehaviour
     private float _interactionCooldownTimer;
     private bool _finishedInteraction;
     private bool _interactionReady;
+    private bool _startedInteraction;
 
     private RaycastHit _hit;
 
@@ -53,7 +54,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void GetInteractiveObject()
     {
-        if (Physics.Raycast(raycastOrigin.transform.position, raycastOrigin.transform.forward, out _hit, raycastDistance))
+        if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out _hit, raycastDistance))
         {
             var hitInteractable = _hit.collider.GetComponentInParent<InteractiveObject>();
             ActiveInteractiveObject = hitInteractable;
@@ -88,6 +89,11 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
         if(CheckValidInteraction()) Interact(ActiveInteractiveObject.InteractiveType);
+    }
+
+    public void ResetInteract()
+    {
+        _interactionDuration = _activeInteractiveObject != null ? _activeInteractiveObject.InteractionDuration : 0;
     }
     
     private bool CheckValidInteraction()
@@ -134,5 +140,10 @@ public class PlayerInteraction : MonoBehaviour
         
         _finishedInteraction = true;
         _interactionReady = false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(raycastOrigin.position, raycastOrigin.position + raycastOrigin.forward );
     }
 }
