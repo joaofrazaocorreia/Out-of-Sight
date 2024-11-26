@@ -18,8 +18,10 @@ public class PlayerEquipment : MonoBehaviour
 
         private set
         {
+            CurrentEquipment?.Equipped(false);
             _currentEquipmentNum = value;
             CurrentEquipment = EquipmentObjects[_currentEquipmentNum];
+            CurrentEquipment.Equipped(true);
             EquipmentChanged();
         }
     }
@@ -29,7 +31,11 @@ public class PlayerEquipment : MonoBehaviour
     public void NewEquipmentSelected(int index)
     {
         if (index < 0 || index >= equipments.Length) return;
-        if (index == CurrentEquipmentNum) Unequip(); 
+        if (index == CurrentEquipmentNum)
+        {
+            CurrentEquipment.Equipped(false);
+            Unequip();
+        } 
         else CurrentEquipmentNum = index;
     }
 

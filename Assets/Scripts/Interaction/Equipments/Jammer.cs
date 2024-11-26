@@ -19,10 +19,12 @@ public class Jammer : EquipmentObject
             print("Available Jammers: " + currentAmount);
         }
     }
-    private void Start()
+
+    protected override void Start()
     {
+        base.Start();
+        
         currentAmount = maxAmount;
-        CanBeUsed = true;
     }
 
     public override void Used(InteractiveObject activeInteractiveObject)
