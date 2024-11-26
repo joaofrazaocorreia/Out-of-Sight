@@ -15,6 +15,7 @@ public class PlayerInteraction : MonoBehaviour
     private PlayerInventory _playerInventory;
     private PlayerEquipment _playerEquipment;
     private Player _player;
+    private UIManager _uiManager;
 
     private float _interactionDuration;
     private float _interactionCooldownTimer;
@@ -46,11 +47,13 @@ public class PlayerInteraction : MonoBehaviour
         _playerInventory = GetComponent<PlayerInventory>();
         _playerEquipment = GetComponent<PlayerEquipment>();
         _player = GetComponent<Player>();
+        _uiManager = FindFirstObjectByType<UIManager>();
     }
 
     private void Update()
     {
         GetInteractiveObject();
+        UpdateInteractionUI();
         if (!_interactionReady) InteractionCooldown();
     }
 
@@ -150,8 +153,15 @@ public class PlayerInteraction : MonoBehaviour
         ActiveInteractiveObject = null;
     }
 
-    private void OnDrawGizmos()
+    private void UpdateInteractionUI()
     {
-        Gizmos.DrawLine(raycastOrigin.position, raycastOrigin.position + raycastOrigin.forward );
+        if (ActiveInteractiveObject == null)
+        {
+            _uiManager.ToggleInteractionMessage(false);
+            return;
+        }
+
+        _uiManager.UpdateInteractionText(ActiveInteractiveObject.GetInteractionText(CheckCanInteract()));
+        _uiManager.ToggleInteractionMessage(true);
     }
 }

@@ -13,6 +13,7 @@ public class Body : InteractiveObject
         player = FindAnyObjectByType<Player>();
         enemyMovement = GetComponent<EnemyMovement>();
         hasDisguise = true;
+        objectName = disguise + " Disguise";
     }
 
     public override void Interact()
@@ -25,5 +26,12 @@ public class Body : InteractiveObject
             hasDisguise = false;
             player.GainDisguise(disguise);
         }
+    }
+
+    public override string GetInteractionText(bool requirementsMet)
+    {
+        if (!requirementsMet) return "Requires " + GetRequirementNames();
+
+        return "Steal " + objectName;
     }
 }
