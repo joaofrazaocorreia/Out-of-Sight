@@ -1,22 +1,22 @@
 
 using System;
 using Interaction;
+using Interaction.Equipments;
 using UnityEngine;
 
-public class Jammer : EquipmentObject
+public class Jammer : EquipmentObject, IHasAmmo
 {
     [SerializeField] private int maxAmount;
     
-    private int currentAmount;
+    private int _currentAmount;
 
-    public int CurrentAmount
+    public int CurrentAmmo
     {
-        get => currentAmount;
+        get => _currentAmount;
         set
         {
-            currentAmount = value; 
-            CanBeUsed = currentAmount != 0;
-            print("Available Jammers: " + currentAmount);
+            _currentAmount = value; 
+            CanBeUsed = _currentAmount != 0;
         }
     }
 
@@ -24,15 +24,15 @@ public class Jammer : EquipmentObject
     {
         base.Start();
         
-        currentAmount = maxAmount;
+        CurrentAmmo = maxAmount;
     }
 
     public override void Used(InteractiveObject activeInteractiveObject)
     {
         switch (((JammingSpot)activeInteractiveObject).Jammable.Jammed)
         {
-            case true: CurrentAmount++; break;
-            case false: CurrentAmount--; break;
+            case true: CurrentAmmo++; break;
+            case false: CurrentAmmo--; break;
         }
     }
 }
