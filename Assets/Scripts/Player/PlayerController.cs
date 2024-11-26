@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private bool lockCursorOnStart = false;
     [SerializeField] private float _forwardAcceleration = 5;
     [SerializeField] private float _backwardAcceleration = -2;
     [SerializeField] private float _strafeAcceleration = 5;
@@ -85,6 +86,9 @@ public class PlayerController : MonoBehaviour
         _originalHorizontalRotationPivot = _horizontalRotationPivot;
         _verticalRotationPivot = _head.transform.parent.transform;
         _originalVerticalRotationPivot = _horizontalRotationPivot;
+
+        if(lockCursorOnStart)
+            Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
