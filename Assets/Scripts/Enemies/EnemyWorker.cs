@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class EnemyCivillian : Enemy
+public class EnemyWorker : Enemy
 {
     protected override void Start()
     {
         base.Start();
 
-        type = Type.Civillian;
+        type = Type.Worker;
     }
 
 
@@ -87,3 +87,4 @@ public class EnemyCivillian : Enemy
         enemyMovement.status = EnemyMovement.Status.Fleeing;
     }
 }
+

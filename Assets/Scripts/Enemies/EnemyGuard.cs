@@ -115,15 +115,25 @@ public class EnemyGuard : Enemy
         else if(enemyMovement.status == EnemyMovement.Status.Tased)
         {
             if(tasedTimer > 0)
+            {
+                animator.SetBool("Tased", true);
+                animator.applyRootMotion = false;
                 tasedTimer -= Time.deltaTime;
+            }
 
-            else BecomeAlarmed();
+            else
+            {
+                animator.SetBool("Tased", false);
+                animator.applyRootMotion = true;
+                BecomeAlarmed();
+            }
         }
 
         // ------------ Knocked Out ------------ 
         else if(enemyMovement.status == EnemyMovement.Status.KnockedOut)
         {
-            // dead
+            animator.SetTrigger("KO");
+            animator.applyRootMotion = false;
         }
 
         // ----- If any other enemyMovement.status is detected, resets it to normal.

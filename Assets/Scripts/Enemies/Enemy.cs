@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     protected EnemyMovement enemyMovement;
     public EnemyMovement EnemyMovement {get=> enemyMovement;}
     protected Player player;
+    protected Animator animator;
     public bool IsKnockedOut {get => enemyMovement.status == EnemyMovement.Status.KnockedOut;}
     protected float tasedTimer;
 
@@ -25,6 +26,7 @@ public class Enemy : MonoBehaviour
         detection = GetComponent<Detection>();
         enemyMovement = GetComponent<EnemyMovement>();
         player = FindAnyObjectByType<Player>();
+        animator = GetComponent<Animator>();
 
         tasedTimer = tasedTime;
 

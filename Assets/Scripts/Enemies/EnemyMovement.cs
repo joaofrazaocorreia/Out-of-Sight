@@ -55,7 +55,7 @@ public class EnemyMovement : MonoBehaviour
         lastSelfPos = transform.position;
         lastTarget = Vector3.zero;
         spawnPos = transform.position;
-        body = GetComponent<Body>();
+        body = GetComponentInChildren<Body>();
         body.enabled = false;
         navMeshAgent = GetComponent<NavMeshAgent>();
         mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
