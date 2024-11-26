@@ -3115,7 +3115,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &146192423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26338,7 +26338,7 @@ MonoBehaviour:
   interactionUI: {fileID: 1844958887}
   interactionMessage: {fileID: 1096009942}
   interactingBar: {fileID: 146192422}
-  interactingBarFill: {fileID: 1248465957}
+  interactingBarFill: {fileID: 688298339}
 --- !u!1 &1788032688
 GameObject:
   m_ObjectHideFlags: 0
@@ -33407,8 +33407,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 596340104}
     - target: {fileID: 3023059069878369860, guid: 7c08d58d0f706ca43b004a37eb8097a2, type: 3}
+      propertyPath: _maxHeadUpAngle
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023059069878369860, guid: 7c08d58d0f706ca43b004a37eb8097a2, type: 3}
       propertyPath: runSpeedModifier
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023059069878369860, guid: 7c08d58d0f706ca43b004a37eb8097a2, type: 3}
+      propertyPath: _minHeadDownAngle
+      value: 290
       objectReference: {fileID: 0}
     - target: {fileID: 3023059069878369860, guid: 7c08d58d0f706ca43b004a37eb8097a2, type: 3}
       propertyPath: _maxStrafeVelocity
