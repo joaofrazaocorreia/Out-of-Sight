@@ -160,7 +160,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void UpdateInteractionUI()
     {
-        if (ActiveInteractiveObject == null)
+        if (ActiveInteractiveObject == null || !ActiveInteractiveObject.enabled)
         {
             _uiManager.ToggleInteractionMessage(false);
             return;
