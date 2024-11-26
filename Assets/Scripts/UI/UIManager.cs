@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject settingsMenu;
     [SerializeField] private CanvasGroup victoryScreen;
     [SerializeField] private CanvasGroup gameOverScreen;
+    [SerializeField] private Image[] equipmentIcons;
+    [SerializeField] private Image[] inventoryIcons;
 
     public static bool gamePaused;
     private bool settingsActive;
@@ -306,5 +309,16 @@ public class UIManager : MonoBehaviour
     {
         if(ammoText.text != text)
             ammoText.text = text;
+    }
+
+    public void UpdateEquipmentIcon(Sprite newIcon, int index)
+    {
+        if(index < equipmentIcons.Length && equipmentIcons[index] != null) equipmentIcons[index].sprite = newIcon;
+    }
+    
+    
+    public void UpdateInventoryIcon(Sprite newIcon, int index)
+    {
+        if(index < inventoryIcons.Length && inventoryIcons[index] != null) inventoryIcons[index].sprite = newIcon;
     }
 }

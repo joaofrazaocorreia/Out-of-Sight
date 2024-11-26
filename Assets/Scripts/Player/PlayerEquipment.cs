@@ -1,5 +1,6 @@
 using System;
 using Interaction.Equipments;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
@@ -69,6 +70,7 @@ public class PlayerEquipment : MonoBehaviour
         for (int i = 0; i < equipments.Length; i++)
         {
             _equipmentObjects[i] = equipments[i].GetComponent<EquipmentObject>();
+            uIManager.UpdateEquipmentIcon(_equipmentObjects[i].Icon, i);
         }
         
         Unequip();

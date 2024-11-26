@@ -6,6 +6,7 @@ public abstract class EquipmentObject : MonoBehaviour
     [SerializeField] private Sprite icon;
     private GameObject _equipmentModel;
     public bool CanBeUsed { get; protected set; }
+    public Sprite Icon => icon;
 
     public abstract void Used(InteractiveObject activeInteractiveObject);
     
