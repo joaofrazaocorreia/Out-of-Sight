@@ -100,6 +100,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         _interactionDuration = _activeInteractiveObject != null ? _activeInteractiveObject.InteractionDuration : 0;
         _player.LoseStatus(Player.Status.Suspicious);
+        _uiManager.ToggleInteractingBar(false);
     }
     
     private bool CheckValidInteraction()
@@ -123,7 +124,10 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Interact(InteractiveType interactiveType)
     {
-        _interactionDuration -= Time.deltaTime;
+        _interactionDuration = Mathf.Max(_interactionDuration - Time.deltaTime, 0f);
+
+        _uiManager.UpdateInteractingBarFillSize(1 - _interactionDuration / ActiveInteractiveObject.InteractionDuration);
+        _uiManager.ToggleInteractingBar(true);
 
         if(ActiveInteractiveObject.IsInteractionSuspicious) _player.GainStatus(Player.Status.Suspicious);
 
@@ -147,6 +151,7 @@ public class PlayerInteraction : MonoBehaviour
         ActiveInteractiveObject.Interact();
         
         if(ActiveInteractiveObject.IsInteractionSuspicious) _player.LoseStatus(Player.Status.Suspicious);
+        _uiManager.ToggleInteractingBar(false);
         
         _finishedInteraction = true;
         _interactionReady = false;

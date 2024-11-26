@@ -79,7 +79,7 @@ public abstract class InteractiveObject : MonoBehaviour
         {
             case InteractiveType.Item:
             {
-                return "Pick " + objectName; 
+                return "Pick up " + objectName; 
             }
             default:
             {
