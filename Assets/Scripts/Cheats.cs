@@ -21,6 +21,7 @@ public class Cheats : MonoBehaviour
         alarm = FindAnyObjectByType<Alarm>();
         player = FindAnyObjectByType<Player>();
         playerController = FindAnyObjectByType<PlayerController>();
+        playerInventory = FindAnyObjectByType<PlayerInventory>();
 
         speedBoost = false;
     }
@@ -40,7 +41,10 @@ public class Cheats : MonoBehaviour
 
         if(playerInput.actions["ToggleAlarm"].WasPressedThisFrame())
         {
-            alarm.IsOn = !alarm.IsOn;
+            if(alarm.IsOn)
+                alarm.AlarmTimer = 0f;
+            else
+                alarm.TriggerAlarm(true);
         }
 
         if(playerInput.actions["ToggleTrespassing"].WasPressedThisFrame())

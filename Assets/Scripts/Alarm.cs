@@ -22,6 +22,7 @@ public class Alarm : MonoBehaviour
     public bool IsOn {get => isOn; set => isOn = value;}
     private float alarmTimer;
     private float AlarmTime {get => baseDuration + (durationIncreasePerTier * Mathf.Min(currentTier - 1, maxTier));}
+    public float AlarmTimer {get => alarmTimer; set => alarmTimer = value;}
     //private float policeSpawnTimer;
     private List<Enemy> enemies;
     private List<EnemyGuard> nonStaticGuards;
