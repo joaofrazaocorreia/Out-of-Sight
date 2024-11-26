@@ -11,7 +11,7 @@ namespace Interaction.Equipments
         private PlayerController player;
         private bool _inUse;
 
-        private void Start()
+        protected override void Start()
         {
             player = FindFirstObjectByType<PlayerController>();
             CanBeUsed = true;
