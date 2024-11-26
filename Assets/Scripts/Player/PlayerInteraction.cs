@@ -126,12 +126,14 @@ public class PlayerInteraction : MonoBehaviour
     {
         _interactionDuration = Mathf.Max(_interactionDuration - Time.deltaTime, 0f);
 
-        _uiManager.UpdateInteractingBarFillSize(1 - _interactionDuration / ActiveInteractiveObject.InteractionDuration);
-        _uiManager.ToggleInteractingBar(true);
-
         if(ActiveInteractiveObject.IsInteractionSuspicious) _player.GainStatus(Player.Status.Suspicious);
 
-        if (_interactionDuration > 0f) return;
+        if (_interactionDuration > 0f)
+        {
+            _uiManager.UpdateInteractingBarFillSize(1 - _interactionDuration / ActiveInteractiveObject.InteractionDuration);
+            _uiManager.ToggleInteractingBar(true);
+            return;
+        }
         
         switch (interactiveType)
         {
