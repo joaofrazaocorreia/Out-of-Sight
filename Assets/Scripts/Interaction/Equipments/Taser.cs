@@ -3,19 +3,29 @@ using UnityEngine;
 
 namespace Interaction.Equipments
 {
-    public class Taser : EquipmentObject, IFreeUseEquipment
+    public class Taser : EquipmentObject, IFreeUseEquipment, IHasAmmo
     {
         [SerializeField] private Transform raycastOrigin;
         [SerializeField] private float raycastDistance;
         [SerializeField] private int maxAmmo;
         [SerializeField] private LayerMask raycastMask;
+
+        public int CurrentAmmo
+        {
+            get => _currentAmmo;
+            set
+            {
+                _currentAmmo = value; 
+                CanBeUsed = _currentAmmo != 0;
+            }
+        }
         
         private int _currentAmmo;
 
         protected override void Start()
         {
             base.Start();
-            _currentAmmo = maxAmmo;
+            CurrentAmmo = maxAmmo;
         }
 
         public override void Used(InteractiveObject activeInteractiveObject)
@@ -38,14 +48,9 @@ namespace Interaction.Equipments
             if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out RaycastHit hit, raycastDistance, raycastMask))
             {
                 var hitenemy = hit.collider.GetComponentInParent<EnemyMovement>();
-                print(hitenemy);
-                
             
                 if(hit.collider != null && hitenemy != null) hitenemy.status = EnemyMovement.Status.Tased; 
-                print(hitenemy.status);
             }
-            
-            //print("Taser shot! Remaining ammo: " + _currentAmmo);
         }
 
         private void Reload()

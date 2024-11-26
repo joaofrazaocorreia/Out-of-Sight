@@ -6,6 +6,7 @@ public class PlayerEquipment : MonoBehaviour
 {
     [SerializeField] private GameObject[] equipments;
 
+    private UIManager uIManager;
     private EquipmentObject[] _equipmentObjects;
     
     public EquipmentObject[] EquipmentObjects => _equipmentObjects;
@@ -23,6 +24,8 @@ public class PlayerEquipment : MonoBehaviour
             CurrentEquipment = EquipmentObjects[_currentEquipmentNum];
             CurrentEquipment.Equipped(true);
             EquipmentChanged();
+            uIManager.ToggleAmmoDisplay(CurrentEquipment is IHasAmmo);
+            if(CurrentEquipment is IHasAmmo ammo) uIManager.UpdateAmmoText(ammo.CurrentAmmo.ToString());
         }
     }
     
@@ -42,6 +45,7 @@ public class PlayerEquipment : MonoBehaviour
     private void Unequip()
     {
         print("Unequipped");
+        uIManager.ToggleAmmoDisplay(false);
         _currentEquipmentNum = -1;
         CurrentEquipment = null;
     }
@@ -49,6 +53,7 @@ public class PlayerEquipment : MonoBehaviour
     public void TryUseEquipment()
     {
         if(CurrentEquipment is IFreeUseEquipment equipment && CurrentEquipment.CanBeUsed) equipment.FreeUse(); 
+        if(CurrentEquipment is IHasAmmo ihasammo) uIManager.UpdateAmmoText(ihasammo.CurrentAmmo.ToString());
     }
 
     private void EquipmentChanged()
@@ -59,6 +64,7 @@ public class PlayerEquipment : MonoBehaviour
 
     private void Start()
     {
+        uIManager = FindFirstObjectByType<UIManager>();
         _equipmentObjects = new EquipmentObject[equipments.Length];
         for (int i = 0; i < equipments.Length; i++)
         {
