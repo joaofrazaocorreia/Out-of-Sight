@@ -71,7 +71,7 @@ public class Player : MonoBehaviour
             {
                 case Disguise.Civillian:
                 {
-                    newText = "No disguise";
+                    newText = "Disguised as: Civilian";
                     break;
                 }
                 
