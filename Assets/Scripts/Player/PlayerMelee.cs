@@ -28,15 +28,15 @@ public class PlayerMelee : MonoBehaviour
     {
         Debug.DrawRay(transform.position, transform.forward * attackRange, Color.white);
 
-        if(enemiesParent.childCount != allEnemies.Count)
-            UpdateEnemiesList();
-
         if(playerInput.actions["Attack"].WasPressedThisFrame())
         {
             Debug.Log("Player used Melee attack");
 
             distanceToClosestEnemy = float.MaxValue;
             closestEnemy = null;
+
+            if(enemiesParent.childCount != allEnemies.Count)
+                UpdateEnemiesList();
 
             if(allEnemies.Count > 0)
             {
@@ -78,6 +78,8 @@ public class PlayerMelee : MonoBehaviour
 
     private void UpdateEnemiesList()
     {
+        allEnemies = new List<Transform>();
+        
         for(int i = 0; i < enemiesParent.childCount; i++)
         {
             if(enemiesParent.GetChild(i).GetComponent<EnemyMovement>().status != EnemyMovement.Status.KnockedOut)

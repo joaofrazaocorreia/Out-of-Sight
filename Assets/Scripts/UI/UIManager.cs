@@ -31,11 +31,18 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI interactionMessage;
     [SerializeField] private GameObject interactingBar;
     [SerializeField] private RectTransform interactingBarFill;
+    [SerializeField] private GameObject globalDetection;
+    [SerializeField] private GameObject detectionIcon;
+    [SerializeField] private GameObject alarmIcon;
+    [SerializeField] private Image detectionFill;
+    [SerializeField] private Transform NPCParent; 
 
     public static bool gamePaused;
     private bool settingsActive;
     private Dictionary<Transform,Vector3> originalUIPositions;
     private PlayerInput playerInput;
+    private List<Detection> enemyDetections;
+    private Alarm alarm;
     private float deltaTime;
     private float timer;
 
@@ -55,6 +62,8 @@ public class UIManager : MonoBehaviour
         }
         
         playerInput = FindAnyObjectByType<PlayerInput>();
+        enemyDetections = new List<Detection>();
+        alarm = FindAnyObjectByType<Alarm>();
         deltaTime = Time.fixedDeltaTime * UISpeed;
         timer = 0;
 
@@ -70,6 +79,8 @@ public class UIManager : MonoBehaviour
         {
             timer += Time.deltaTime;
             UpdateTimerText();
+
+            UpdateGlobalDetectionFill();
         }
         
         if(playerInput.actions["Pause Game"].WasPressedThisFrame())
@@ -349,8 +360,86 @@ public class UIManager : MonoBehaviour
             interactingBar.SetActive(!interactingBar.activeSelf);
     }
 
-    public void UpdateInteractingBarFillSize(float scale = 1f)
+    public void UpdateInteractingBarFillSize(float scale)
     {
         interactingBarFill.localScale = new Vector3(scale, 1f, 1f);
+    }
+
+    public void ToggleGlobalDetection(bool? toggle, bool alarm = false)
+    {
+        if(toggle != null)
+            globalDetection.SetActive((bool)toggle);
+        
+        else
+            globalDetection.SetActive(!globalDetection.activeSelf);
+
+        if(alarm)
+        {
+            detectionIcon.SetActive(false);
+            alarmIcon.SetActive(true);
+        }
+
+        else
+        {
+            detectionIcon.SetActive(true);
+            alarmIcon.SetActive(false);
+        }
+    }
+
+    private void UpdateEnemyDetectionsList()
+    {
+        int detectionCount = 0;
+        for(int i = 0; i < NPCParent.childCount; i++)
+        {
+            detectionCount += NPCParent.GetChild(i).childCount;
+        }
+
+        if(enemyDetections.Count != detectionCount)
+        {
+            enemyDetections = new List<Detection>();
+
+            for(int i = 0; i < NPCParent.childCount; i++)
+            {
+                for(int j = 0; j < NPCParent.GetChild(i).childCount; j++)
+                {
+                    EnemyMovement em = NPCParent.GetChild(i).GetChild(j).GetComponent<EnemyMovement>();
+                    if(em != null && em.status != EnemyMovement.Status.KnockedOut)
+                        enemyDetections.Add(NPCParent.GetChild(i).GetChild(j).GetComponentInChildren<Detection>());
+                }
+            }
+        }
+    }
+
+    public void UpdateGlobalDetectionFill()
+    {
+        if(!alarm.IsOn)
+        {
+            float fill = 0f;
+
+            UpdateEnemyDetectionsList();
+            foreach(Detection d in enemyDetections)
+            {
+                if(d.DetectionMeter > fill)
+                {
+                    fill = d.DetectionMeter / d.DetectionLimit;
+                }
+            }
+
+            if(fill > 0)
+            {
+                ToggleGlobalDetection(true, alarm.IsOn);
+                detectionFill.fillAmount = fill;
+            }
+
+            else
+            {
+                ToggleGlobalDetection(false, alarm.IsOn);
+            }
+        }
+
+        else
+        {
+            ToggleGlobalDetection(true, alarm.IsOn);
+        }
     }
 }
