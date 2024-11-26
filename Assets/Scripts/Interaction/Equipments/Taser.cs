@@ -1,24 +1,26 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Interaction.Equipments
 {
     public class Taser : EquipmentObject, IFreeUseEquipment
     {
-        [SerializeField] private GameObject raycastOrigin;
+        [SerializeField] private Transform raycastOrigin;
         [SerializeField] private float raycastDistance;
         [SerializeField] private int maxAmmo;
+        [SerializeField] private LayerMask raycastMask;
         
         private int _currentAmmo;
- 
-        private void Start()
+
+        protected override void Start()
         {
-            CanBeUsed = true;
+            base.Start();
             _currentAmmo = maxAmmo;
         }
 
         public override void Used(InteractiveObject activeInteractiveObject)
         {
-            throw new System.NotImplementedException();
+            return;
         }
 
         public void FreeUse()
@@ -33,12 +35,11 @@ namespace Interaction.Equipments
 
         private void Fire()
         {
-            if (Physics.Raycast(raycastOrigin.transform.position, raycastOrigin.transform.TransformDirection(Vector3.forward), out RaycastHit hit, raycastDistance))
+            if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out RaycastHit hit, raycastDistance, raycastMask))
             {
                 var hitenemy = hit.collider.GetComponent<EnemyMovement>();
             
                 if(hit.collider != null && hitenemy != null) hitenemy.status = EnemyMovement.Status.Tased; 
-                print(hitenemy);
             }
             
             print("Taser shot! Remaining ammo: " + _currentAmmo);
