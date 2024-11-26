@@ -4,7 +4,7 @@ public class Enemy : MonoBehaviour
 {
     public enum Type {Civillian, Worker, Guard, Police, Camera};
 
-    [SerializeField] private float tasedTime = 5f;
+    [SerializeField] protected float tasedTime = 5f;
 
     protected Type type;
     protected UIManager uiManager;
