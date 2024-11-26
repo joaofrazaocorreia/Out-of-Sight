@@ -27,8 +27,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CanvasGroup gameOverScreen;
     [SerializeField] private Image[] equipmentIcons;
     [SerializeField] private Image[] inventoryIcons;
-    [SerializeField] private GameObject InteractionUI;
-    [SerializeField] private TextMeshProUGUI InteractionMessage;
+    [SerializeField] private GameObject interactionUI;
+    [SerializeField] private TextMeshProUGUI interactionMessage;
+    [SerializeField] private GameObject interactingBar;
+    [SerializeField] private RectTransform interactingBarFill;
 
     public static bool gamePaused;
     private bool settingsActive;
@@ -324,13 +326,31 @@ public class UIManager : MonoBehaviour
         if(index < inventoryIcons.Length && inventoryIcons[index] != null) inventoryIcons[index].sprite = newIcon;
     }
 
-    public void ToggleInteractionMessage(bool newState)
+    public void ToggleInteractionMessage(bool? toggle)
     {
-        InteractionUI.SetActive(newState);
+        if(toggle != null)
+            interactionUI.SetActive((bool)toggle);
+        
+        else
+            interactionUI.SetActive(!interactingBar.activeSelf);
     }
 
     public void UpdateInteractionText(string text)
     {
-        InteractionMessage.text = text;
+        interactionMessage.text = text;
+    }
+
+    public void ToggleInteractingBar(bool? toggle)
+    {
+        if(toggle != null)
+            interactingBar.SetActive((bool)toggle);
+        
+        else
+            interactingBar.SetActive(!interactingBar.activeSelf);
+    }
+
+    public void UpdateInteractingBarFillSize(float scale = 1f)
+    {
+        interactingBarFill.localScale = new Vector3(scale, 1f, 1f);
     }
 }
