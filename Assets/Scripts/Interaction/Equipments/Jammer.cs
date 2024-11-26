@@ -6,7 +6,13 @@ using UnityEngine;
 
 public class Jammer : EquipmentObject, IHasAmmo
 {
-    [SerializeField] private int maxAmount;
+    [SerializeField] private int maxAmmo;
+
+    public int MaxAmmo 
+    { 
+        get => maxAmmo;
+        set => maxAmmo = value;
+    }
     
     private int _currentAmount;
 
@@ -24,7 +30,7 @@ public class Jammer : EquipmentObject, IHasAmmo
     {
         base.Start();
         
-        CurrentAmmo = maxAmount;
+        CurrentAmmo = maxAmmo;
     }
 
     public override void Used(InteractiveObject activeInteractiveObject)

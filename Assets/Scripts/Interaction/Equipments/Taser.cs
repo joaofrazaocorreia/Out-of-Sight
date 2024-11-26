@@ -10,6 +10,12 @@ namespace Interaction.Equipments
         [SerializeField] private int maxAmmo;
         [SerializeField] private LayerMask raycastMask;
 
+        public int MaxAmmo 
+        { 
+            get => maxAmmo;
+            set => maxAmmo = value;
+        }
+        
         public int CurrentAmmo
         {
             get => _currentAmmo;

@@ -25,7 +25,7 @@ public class PlayerEquipment : MonoBehaviour
             CurrentEquipment.Equipped(true);
             EquipmentChanged();
             uIManager.ToggleAmmoDisplay(CurrentEquipment is IHasAmmo);
-            if(CurrentEquipment is IHasAmmo ammo) uIManager.UpdateAmmoText(ammo.CurrentAmmo.ToString());
+            if(CurrentEquipment is IHasAmmo ammo) uIManager.UpdateAmmoText(ammo.CurrentAmmo + " / " + ammo.MaxAmmo);
         }
     }
     
@@ -53,7 +53,7 @@ public class PlayerEquipment : MonoBehaviour
     public void TryUseEquipment()
     {
         if(CurrentEquipment is IFreeUseEquipment equipment && CurrentEquipment.CanBeUsed) equipment.FreeUse(); 
-        if(CurrentEquipment is IHasAmmo ihasammo) uIManager.UpdateAmmoText(ihasammo.CurrentAmmo.ToString());
+        if(CurrentEquipment is IHasAmmo ammo) uIManager.UpdateAmmoText(ammo.CurrentAmmo + " / " + ammo.MaxAmmo);
     }
 
     private void EquipmentChanged()
