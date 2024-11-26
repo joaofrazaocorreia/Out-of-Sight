@@ -142,13 +142,12 @@ public class PlayerInteraction : MonoBehaviour
         }
         
         ActiveInteractiveObject.Interact();
-        ActiveInteractiveObject = null;
-
+        
         if(ActiveInteractiveObject.IsInteractionSuspicious) _player.LoseStatus(Player.Status.Suspicious);
-
         
         _finishedInteraction = true;
         _interactionReady = false;
+        ActiveInteractiveObject = null;
     }
 
     private void OnDrawGizmos()
