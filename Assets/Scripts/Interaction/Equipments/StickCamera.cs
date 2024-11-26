@@ -27,7 +27,7 @@ namespace Interaction.Equipments
             _inUse = !_inUse;
             localCamera.enabled = _inUse;
             player.ToggleControls(!_inUse, true);
-            player.ExtendedCameraInUse(_inUse, transform);
+            //player.ExtendedCameraInUse(_inUse, transform);
         }
     }
 }
