@@ -146,6 +146,7 @@ public class EnemyGuard : Enemy
 
     public override void BecomeAlarmed()
     {
+        if(enemyMovement == null) Start();
         if(enemyMovement.status != EnemyMovement.Status.KnockedOut && enemyMovement.status != EnemyMovement.Status.Tased)
         {
             base.BecomeAlarmed();

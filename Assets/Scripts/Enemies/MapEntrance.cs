@@ -9,8 +9,11 @@ public class MapEntrance : MonoBehaviour
     [SerializeField] private List<Item> objectiveItems;
     [SerializeField] private float characterDetectionDistance = 4f;
     [SerializeField] private List<GameObject> civillianPrefabs;
-    [SerializeField] private float minNPCSpawnTime = 3f;
-    [SerializeField] private float maxNPCSpawnTime = 12f;
+    [SerializeField] private List<GameObject> workerPrefabs;
+    [SerializeField] private float minCivillianSpawnTime = 3f;
+    [SerializeField] private float maxCivillianSpawnTime = 15f;
+    [SerializeField] private float minWorkerSpawnTime = 2f;
+    [SerializeField] private float maxWorkerSpawnTime = 10f;
     [SerializeField] private Transform enemiesGameObject;
 
     public static Transform Transform;
@@ -20,8 +23,11 @@ public class MapEntrance : MonoBehaviour
     private PlayerInventory playerInventory;
     public static List<Enemy> enemies;
     private Queue<List<Transform>> civilliansMovementTargets;
-    private int numOfNPCsInQueue;
-    private float NPCspawnTimer;
+    private Queue<List<Transform>> workersMovementTargets;
+    private int numOfCivilliansInQueue;
+    private int numOfWorkersInQueue;
+    private float civilliansSpawnTimer;
+    private float workersSpawnTimer;
     private bool PlayerHasAllObjectives {get
     {
         foreach(Item i in objectiveItems)
@@ -39,8 +45,10 @@ public class MapEntrance : MonoBehaviour
         Transform = transform;
         uiManager = FindAnyObjectByType<UIManager>();
         alarm = FindAnyObjectByType<Alarm>();
-        numOfNPCsInQueue = 0;
-        NPCspawnTimer = Random.Range(minNPCSpawnTime, maxNPCSpawnTime);
+        numOfCivilliansInQueue = 0;
+        numOfWorkersInQueue = 0;
+        workersSpawnTimer = Random.Range(minWorkerSpawnTime, maxWorkerSpawnTime);
+        civilliansSpawnTimer = Random.Range(minCivillianSpawnTime, maxCivillianSpawnTime);
 
         player = FindAnyObjectByType<Player>().transform;
         playerInventory = FindAnyObjectByType<PlayerInventory>();
@@ -50,17 +58,44 @@ public class MapEntrance : MonoBehaviour
         enemies = enemies.Where(e => !e.gameObject.GetComponent<EnemyCamera>()).ToList();
 
         civilliansMovementTargets = new Queue<List<Transform>>();
+        workersMovementTargets = new Queue<List<Transform>>();
     }
 
 
     private void Update()
     {
-        // If the alarm is off and there are civillians outside of the map, they progressively respawn one by one
-        if(numOfNPCsInQueue > 0 && !alarm.IsOn)
+        // If the alarm is off and there are workers outside of the map, they progressively respawn one by one
+        if(numOfWorkersInQueue > 0 && !alarm.IsOn)
         {
-            if(NPCspawnTimer > 0)
+            if(workersSpawnTimer > 0)
             {
-                NPCspawnTimer -= Time.deltaTime;
+                workersSpawnTimer -= Time.deltaTime;
+            }
+
+            else
+            {
+                // Picks a random worker prefab to spawn
+                int index = Random.Range(0, workerPrefabs.Count);
+                NavMesh.SamplePosition(transform.position, out NavMeshHit navHit,
+                    characterDetectionDistance, NavMesh.AllAreas);
+
+                // Spawns the worker in the navmesh position nearest to this exit's position and
+                // assigns the movement targets of a previous NPC to the new one
+                GameObject newNPC = SpawnEnemy(workerPrefabs[index], workersMovementTargets.Dequeue());
+                enemies.Add(newNPC.GetComponent<EnemyWorker>());
+
+                // Decreases the number of NPCs in the queue and restarts the spawn timer
+                numOfWorkersInQueue--;
+                workersSpawnTimer = Random.Range(minWorkerSpawnTime, maxWorkerSpawnTime);
+            }
+        }
+
+        // If the alarm is off and there are civillians outside of the map, they progressively respawn one by one
+        if(numOfCivilliansInQueue > 0 && !alarm.IsOn)
+        {
+            if(civilliansSpawnTimer > 0)
+            {
+                civilliansSpawnTimer -= Time.deltaTime;
             }
 
             else
@@ -76,8 +111,8 @@ public class MapEntrance : MonoBehaviour
                 enemies.Add(newNPC.GetComponent<EnemyCivillian>());
 
                 // Decreases the number of NPCs in the queue and restarts the spawn timer
-                numOfNPCsInQueue--;
-                NPCspawnTimer = Random.Range(minNPCSpawnTime, maxNPCSpawnTime);
+                numOfCivilliansInQueue--;
+                civilliansSpawnTimer = Random.Range(minCivillianSpawnTime, maxCivillianSpawnTime);
             }
         }
 
@@ -99,8 +134,16 @@ public class MapEntrance : MonoBehaviour
             {
                 // Tells the game that one more civillian needs to be spawned in and stores
                 // the current civillian's movement targets for it
-                numOfNPCsInQueue++;
-                civilliansMovementTargets.Enqueue(e.EnemyMovement.MovementTargets);
+                if(e.GetComponent<EnemyWorker>())
+                {
+                    numOfWorkersInQueue++;
+                    workersMovementTargets.Enqueue(e.EnemyMovement.MovementTargets);
+                }
+                else
+                {
+                    numOfCivilliansInQueue++;
+                    civilliansMovementTargets.Enqueue(e.EnemyMovement.MovementTargets);
+                }
 
                 // Schedules the enemy's GameObject for destruction and removal from the list
                 StartCoroutine(ScheduleGameObjectForDestruction(e.gameObject));
