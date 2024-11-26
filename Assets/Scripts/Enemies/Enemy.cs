@@ -4,6 +4,8 @@ public class Enemy : MonoBehaviour
 {
     public enum Type {Civillian, Worker, Guard, Police, Camera};
 
+    [SerializeField] private float tasedTime = 5f;
+
     protected Type type;
     protected UIManager uiManager;
     protected Alarm alarm;
@@ -13,6 +15,7 @@ public class Enemy : MonoBehaviour
     public EnemyMovement EnemyMovement {get=> enemyMovement;}
     protected Player player;
     public bool IsKnockedOut {get => enemyMovement.status == EnemyMovement.Status.KnockedOut;}
+    protected float tasedTimer;
 
 
     protected virtual void Start()
@@ -22,6 +25,8 @@ public class Enemy : MonoBehaviour
         detection = GetComponent<Detection>();
         enemyMovement = GetComponent<EnemyMovement>();
         player = FindAnyObjectByType<Player>();
+
+        tasedTimer = tasedTime;
 
 
         if(detection == null)

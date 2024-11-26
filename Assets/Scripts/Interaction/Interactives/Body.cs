@@ -7,6 +7,7 @@ public class Body : InteractiveObject
     private Player player;
     private EnemyMovement enemyMovement;
     private bool hasDisguise;
+    public bool HasDisguise {get => hasDisguise;}
 
     private void Start()
     {

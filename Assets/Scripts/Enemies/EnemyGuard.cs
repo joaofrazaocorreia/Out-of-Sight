@@ -114,7 +114,10 @@ public class EnemyGuard : Enemy
         // ------------ Tased ------------ 
         else if(enemyMovement.status == EnemyMovement.Status.Tased)
         {
-            // dead
+            if(tasedTimer > 0)
+                tasedTimer -= Time.deltaTime;
+
+            else BecomeAlarmed();
         }
 
         // ------------ Knocked Out ------------ 
