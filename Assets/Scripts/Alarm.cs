@@ -19,7 +19,7 @@ public class Alarm : MonoBehaviour
     private Transform player;
     private int currentTier;
     private bool isOn;
-    public bool IsOn {get => isOn;}
+    public bool IsOn {get => isOn; set => isOn = value;}
     private float alarmTimer;
     private float AlarmTime {get => baseDuration + (durationIncreasePerTier * Mathf.Min(currentTier - 1, maxTier));}
     //private float policeSpawnTimer;
