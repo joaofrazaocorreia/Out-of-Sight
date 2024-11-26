@@ -1,7 +1,5 @@
-using System;
 using Interaction;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public abstract class InteractiveObject : MonoBehaviour
 {
@@ -20,6 +18,8 @@ public abstract class InteractiveObject : MonoBehaviour
     [Header("Detection Options")]
     [SerializeField] private bool isInteractionSuspicious;
     [SerializeField] private bool isSecondInteractionSuspicious;
+    [Header("UI Options")]
+    [SerializeField] protected string objectName;
 
     public InteractiveType InteractiveType
     {
@@ -69,5 +69,40 @@ public abstract class InteractiveObject : MonoBehaviour
     private void UniqueFirstInteractionDurationCheck()
     {
         if (firstInteractionDurationUnique) InteractionDuration = secondInteractionDuration;
+    }
+
+    public virtual string GetInteractionText(bool requirementsMet)
+    {
+        if (!requirementsMet) return "Requires " + GetRequirementNames();
+        
+        switch (interactiveType)
+        {
+            case InteractiveType.Item:
+            {
+                return "Pick " + objectName; 
+            }
+            default:
+            {
+                return "Use " + objectName;
+            }
+        }
+    }
+
+    protected string GetRequirementNames()
+    {
+        string names = string.Empty;
+        
+        if (requiredItem != null)
+        {
+            names += requiredItem.name;
+            if (requiredEquipment != null)
+                names += " and " + requiredEquipment.name;
+        }
+        else if (requiredEquipment != null)
+        {
+            names += requiredEquipment.name;
+        }
+
+        return names;
     }
 }

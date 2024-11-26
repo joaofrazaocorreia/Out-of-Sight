@@ -27,6 +27,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CanvasGroup gameOverScreen;
     [SerializeField] private Image[] equipmentIcons;
     [SerializeField] private Image[] inventoryIcons;
+    [SerializeField] private GameObject InteractionUI;
+    [SerializeField] private TextMeshProUGUI InteractionMessage;
 
     public static bool gamePaused;
     private bool settingsActive;
@@ -320,5 +322,15 @@ public class UIManager : MonoBehaviour
     public void UpdateInventoryIcon(Sprite newIcon, int index)
     {
         if(index < inventoryIcons.Length && inventoryIcons[index] != null) inventoryIcons[index].sprite = newIcon;
+    }
+
+    public void ToggleInteractionMessage(bool newState)
+    {
+        InteractionUI.SetActive(newState);
+    }
+
+    public void UpdateInteractionText(string text)
+    {
+        InteractionMessage.text = text;
     }
 }
