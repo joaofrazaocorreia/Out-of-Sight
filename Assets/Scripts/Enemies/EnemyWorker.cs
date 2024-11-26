@@ -62,6 +62,8 @@ public class EnemyWorker : Enemy
             {
                 animator.SetBool("Tased", false);
                 animator.applyRootMotion = true;
+
+                tasedTimer = tasedTime;
                 BecomeAlarmed();
             }
         }
@@ -81,10 +83,13 @@ public class EnemyWorker : Enemy
 
     public override void BecomeAlarmed()
     {
-        base.BecomeAlarmed();
+        if(enemyMovement.status != EnemyMovement.Status.KnockedOut && enemyMovement.status != EnemyMovement.Status.Tased)
+        {
+            base.BecomeAlarmed();
 
-        enemyMovement.CheckNearestExit();
-        enemyMovement.status = EnemyMovement.Status.Fleeing;
+            enemyMovement.CheckNearestExit();
+            enemyMovement.status = EnemyMovement.Status.Fleeing;
+        }
     }
 }
 
