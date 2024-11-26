@@ -35,6 +35,7 @@ public class EnemyMovement : MonoBehaviour
     private Vector3 lastTarget;
     public Vector3 LastTarget {get => lastTarget;}
     private Vector3 spawnPos;
+    private Body body;
     private NavMeshAgent navMeshAgent;
     public bool IsAtDestination {get => (new Vector3(lastTarget.x, 0f, lastTarget.z) -
         new Vector3(transform.position.x, 0f, transform.position.z)).magnitude <= navMeshAgent.stoppingDistance;}
@@ -54,6 +55,8 @@ public class EnemyMovement : MonoBehaviour
         lastSelfPos = transform.position;
         lastTarget = Vector3.zero;
         spawnPos = transform.position;
+        body = GetComponent<Body>();
+        body.enabled = false;
         navMeshAgent = GetComponent<NavMeshAgent>();
         mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
         leavingMap = false;
@@ -162,6 +165,12 @@ public class EnemyMovement : MonoBehaviour
         // ------------ Knocked Out ------------ 
         else if (status == Status.KnockedOut)
         {
+            if(!body.enabled && body.HasDisguise)
+                body.enabled = true;
+                
+            else if(body.enabled && !body.HasDisguise)
+                body.enabled = false;
+
             navMeshAgent.speed = 0f;
 
             movementTargets = new List<Transform>{transform};
