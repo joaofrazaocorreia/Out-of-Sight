@@ -7,7 +7,7 @@ public class Door : InteractiveObject
     
     private void Awake()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponentInParent<Animator>();
     }
 
     public override void Interact()
