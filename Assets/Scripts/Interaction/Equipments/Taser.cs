@@ -37,12 +37,15 @@ namespace Interaction.Equipments
         {
             if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out RaycastHit hit, raycastDistance, raycastMask))
             {
-                var hitenemy = hit.collider.GetComponent<EnemyMovement>();
+                var hitenemy = hit.collider.GetComponentInParent<EnemyMovement>();
+                print(hitenemy);
+                
             
                 if(hit.collider != null && hitenemy != null) hitenemy.status = EnemyMovement.Status.Tased; 
+                print(hitenemy.status);
             }
             
-            print("Taser shot! Remaining ammo: " + _currentAmmo);
+            //print("Taser shot! Remaining ammo: " + _currentAmmo);
         }
 
         private void Reload()
