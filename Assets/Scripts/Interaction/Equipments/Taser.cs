@@ -55,7 +55,10 @@ namespace Interaction.Equipments
             {
                 var hitenemy = hit.collider.GetComponentInParent<EnemyMovement>();
             
-                if(hit.collider != null && hitenemy != null) hitenemy.status = EnemyMovement.Status.Tased; 
+                if(hit.collider != null && hitenemy != null && hitenemy.status != EnemyMovement.Status.KnockedOut)
+                {
+                    hitenemy.GetTased();
+                }
             }
         }
 

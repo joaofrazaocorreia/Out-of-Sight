@@ -12,7 +12,7 @@ public class Body : InteractiveObject
     private void Start()
     {
         player = FindAnyObjectByType<Player>();
-        enemyMovement = GetComponent<EnemyMovement>();
+        enemyMovement = GetComponentInParent<EnemyMovement>();
         hasDisguise = true;
         objectName = disguise + " Disguise";
     }
