@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1762310718866197437}
   - component: {fileID: 8734180238092878120}
   - component: {fileID: 4444592357244671704}
-  - component: {fileID: 4482778472130377277}
   - component: {fileID: 1810790442000928118}
   - component: {fileID: 7588830322911778905}
   m_Layer: 7
@@ -89,30 +88,6 @@ MonoBehaviour:
   stuckTime: 3
   status: 0
   halted: 0
---- !u!114 &4482778472130377277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013677490251117298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73b381acdb3924e438dc87b033ea5451, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactiveType: 1
-  requiredItem: {fileID: 0}
-  requiredEquipment: {fileID: 0}
-  consumeItemRequirement: 0
-  oneTimeRequirement: 0
-  firstInteractionDurationUnique: 1
-  interactionDuration: 3
-  secondInteractionDuration: 0
-  isInteractionSuspicious: 1
-  isSecondInteractionSuspicious: 0
-  objectName: 
-  disguise: 1
 --- !u!195 &1810790442000928118
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -278,6 +253,7 @@ GameObject:
   - component: {fileID: 2078247271318200587}
   - component: {fileID: 3102478498875320902}
   - component: {fileID: 8604077463639188931}
+  - component: {fileID: 7237220906893124270}
   m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
@@ -404,6 +380,30 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &7237220906893124270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5543682029640339654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b381acdb3924e438dc87b033ea5451, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 1
+  requiredItem: {fileID: 0}
+  requiredEquipment: {fileID: 0}
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 1
+  interactionDuration: 3
+  secondInteractionDuration: 0
+  isInteractionSuspicious: 1
+  isSecondInteractionSuspicious: 0
+  objectName: 
+  disguise: 1
 --- !u!1 &7902634015391304319
 GameObject:
   m_ObjectHideFlags: 0

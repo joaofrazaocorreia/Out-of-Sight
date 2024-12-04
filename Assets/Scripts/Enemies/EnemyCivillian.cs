@@ -51,28 +51,13 @@ public class EnemyCivillian : Enemy
         // ------------ Tased ------------ 
         else if(enemyMovement.status == EnemyMovement.Status.Tased)
         {
-            if(tasedTimer > 0)
-            {
-                animator.SetBool("Tased", true);
-                animator.applyRootMotion = false;
-                tasedTimer -= Time.deltaTime;
-            }
-
-            else
-            {
-                animator.SetBool("Tased", false);
-                animator.applyRootMotion = true;
-
-                tasedTimer = tasedTime;
-                BecomeAlarmed();
-            }
+            // nothing yet
         }
 
         // ------------ Knocked Out ------------ 
         else if(enemyMovement.status == EnemyMovement.Status.KnockedOut)
         {
-            animator.SetTrigger("KO");
-            animator.applyRootMotion = false;
+            // nothing yet
         }
 
         // ----- If any other enemyMovement.status is detected, resets it to normal.
@@ -83,7 +68,7 @@ public class EnemyCivillian : Enemy
 
     public override void BecomeAlarmed()
     {
-        if(enemyMovement.status != EnemyMovement.Status.KnockedOut && enemyMovement.status != EnemyMovement.Status.Tased)
+        if(!IsKnockedOut && !IsTased)
         {
             base.BecomeAlarmed();
 

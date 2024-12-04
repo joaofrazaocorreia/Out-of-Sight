@@ -23,6 +23,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float maxSearchTime = 10f;
     [SerializeField] private float searchRadius = 20f;
     [SerializeField] private float stuckTime = 3f;
+    [SerializeField] protected float tasedTime = 5f;
 
     public Status status;
     public bool halted = false;
@@ -32,10 +33,12 @@ public class EnemyMovement : MonoBehaviour
     private float moveTimer;
     private float turnTimer;
     private float searchTimer;
+    private float tasedTimer;
     private Vector3 lastTarget;
     public Vector3 LastTarget {get => lastTarget;}
     private Vector3 spawnPos;
     private Body body;
+    private Animator animator;
     private NavMeshAgent navMeshAgent;
     public bool IsAtDestination {get => (new Vector3(lastTarget.x, 0f, lastTarget.z) -
         new Vector3(transform.position.x, 0f, transform.position.z)).magnitude <= navMeshAgent.stoppingDistance;}
@@ -52,10 +55,12 @@ public class EnemyMovement : MonoBehaviour
         turnTimer = 0;
         searchTimer = 0;
         stuckTimer = 0;
+        tasedTimer = tasedTime;
         lastSelfPos = transform.position;
         lastTarget = Vector3.zero;
         spawnPos = transform.position;
         body = GetComponentInChildren<Body>();
+        animator = GetComponent<Animator>();
         body.enabled = false;
         navMeshAgent = GetComponent<NavMeshAgent>();
         mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
@@ -157,9 +162,23 @@ public class EnemyMovement : MonoBehaviour
         {
             navMeshAgent.speed = 0f;
 
-            movementTargets = new List<Transform>{transform};
+            MoveTo(transform.position);
 
-            // -animator.SetBool("Ragdoll", true);
+            if(tasedTimer > 0)
+            {
+                animator.SetBool("Tased", true);
+                animator.applyRootMotion = false;
+                tasedTimer -= Time.deltaTime;
+            }
+
+            else
+            {
+                animator.SetBool("Tased", false);
+                animator.applyRootMotion = true;
+
+                status = Status.Normal;
+                GetComponent<Enemy>().BecomeAlarmed();
+            }
         }
 
         // ------------ Knocked Out ------------ 
@@ -175,7 +194,8 @@ public class EnemyMovement : MonoBehaviour
 
             movementTargets = new List<Transform>{transform};
 
-            // -animator.SetBool("Ragdoll", true);
+            animator.SetBool("KO", true);
+            animator.applyRootMotion = false;
         }
 
 
@@ -311,5 +331,12 @@ public class EnemyMovement : MonoBehaviour
         leavingMap = true;
         CheckNearestExit();
         MoveTo(chosenNearestExit);
+    }
+
+    public void GetTased()
+    {
+        status = Status.Tased;
+        tasedTimer = tasedTime;
+        leavingMap = false;
     }
 }

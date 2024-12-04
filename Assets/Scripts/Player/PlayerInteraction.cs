@@ -105,7 +105,7 @@ public class PlayerInteraction : MonoBehaviour
     
     private bool CheckValidInteraction()
     {
-        return ActiveInteractiveObject != null && CheckCanInteract() ;
+        return ActiveInteractiveObject != null && CheckCanInteract() && ActiveInteractiveObject.enabled;
     }
 
     private bool CheckCanInteract()
