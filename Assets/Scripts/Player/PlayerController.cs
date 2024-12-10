@@ -169,10 +169,18 @@ public class PlayerController : MonoBehaviour
         return action.ReadValue<Vector2>();
     }
 
-    private void EnableRunning() => _isRunning = isRunToggle ? 1 - _isRunning : 1;
-    
+    private void EnableRunning()
+    {
+        _isRunning = isRunToggle ? 1 - _isRunning : 1;
+        _isCrouching = 0;
+    }
 
-    private void EnableCrouch() => _isCrouching = isCrouchToggle ? 1 - _isCrouching : 1;
+
+    private void EnableCrouch()
+    {
+        _isCrouching = isCrouchToggle ? 1 - _isCrouching : 1;
+        _isRunning = 0;
+    }
 
     private void Interact()
     {
