@@ -40,5 +40,7 @@ public class Jammer : EquipmentObject, IHasAmmo
             case true: CurrentAmmo++; break;
             case false: CurrentAmmo--; break;
         }
+        
+        base.Used(activeInteractiveObject);
     }
 }
