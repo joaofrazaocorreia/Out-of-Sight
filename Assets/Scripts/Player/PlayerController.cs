@@ -1,5 +1,6 @@
 using System;
 using Unity.Cinemachine;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,8 +11,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _backwardAcceleration = -2;
     [SerializeField] private float _strafeAcceleration = 5;
     [SerializeField] private float _gravityAcceleration = -10;
-    [SerializeField] private float runSpeedModifier = 1.5f;
-    [SerializeField] private float crouchSpeedModifier = 0.75f;
     [SerializeField] private float _maxForwardVelocity = 5;
     [SerializeField] private float _maxBackwardVelocity = -2;
     [SerializeField] private float _maxStrafeVelocity = 5;
@@ -28,13 +27,26 @@ public class PlayerController : MonoBehaviour
     [SerializeField] [Range(1f,30f)] private float HeadbobAmount = 5f;
     [SerializeField] [Range(1f,30f)] private float HeadbobSmoothness = 5f;
     [SerializeField] [Range(1f,30f)] private float HeadbobFrequency = 12f;
-    [SerializeField] private bool _isCrouchToggle;
-    [SerializeField] private bool _isRunToggle;
+    
+    [Header("Crouch Variables")]
+    [SerializeField] private bool isCrouchToggle;
+    private int _isCrouching; 
+    [SerializeField] private float crouchSpeedModifier = 0.75f;
 
+    [Header("Run Variables")] [SerializeField]
+    private bool isRunToggle;
+    private int _isRunning;
+    private int _canRun;
+    [SerializeField] private float runSpeedModifier = 1.5f;
+    private const float maxStamina = 1;
+    private float _currentStamina = 1;
+    [SerializeField] private float staminaRegenSpeed = 0.25f;
+    [SerializeField] private float staminaUsagePerSecond = 0.1f;
+    
     private float speedBoost;
     public float SpeedBoost
     {
-        get => speedBoost * Mathf.Pow(runSpeedModifier, _isRunning) * Mathf.Pow(crouchSpeedModifier, _isCrouching);
+        get => speedBoost * Mathf.Pow(runSpeedModifier, _isRunning * _canRun) * Mathf.Pow(crouchSpeedModifier, _isCrouching);
         set 
         {
             speedBoost = value;
@@ -52,15 +64,14 @@ public class PlayerController : MonoBehaviour
     */
     private PlayerInput _playerInput;
     private PlayerInteraction _playerInteraction;
-    private PlayerEquipment _playerEquipment;
+    private PlayerEquipment _playerEquipment; 
+    private UIManager _uiManager;
     private Vector2 _movementVector;
     private Vector3 _lookVector;
     private Transform _horizontalRotationPivot;
     private Transform _originalHorizontalRotationPivot;
     private Transform _verticalRotationPivot;
     private Transform _originalVerticalRotationPivot;
-    private int _isRunning;
-    private int _isCrouching;
     private bool _canMove = true;
     private bool _canLook = true;
     private float[] _selectedEquipment;
@@ -77,6 +88,7 @@ public class PlayerController : MonoBehaviour
         /*
         _footstepTimer  = Time.time;
         */
+        _uiManager = FindAnyObjectByType<UIManager>();
         SpeedBoost      = 1f;
         _playerInput = GetComponent<PlayerInput>();
         _playerInteraction = GetComponent<PlayerInteraction>();
@@ -106,13 +118,13 @@ public class PlayerController : MonoBehaviour
     
     private void GetInputs()
     {
-        if (!_isCrouchToggle) _isCrouching = 0;
-        if (!_isRunToggle) _isRunning = 0;
+        if (!isCrouchToggle) _isCrouching = 0;
+        if (!isRunToggle) _isRunning = 0;
         
         _lookVector = GetInput(_playerInput.actions["Look"]); 
         _movementVector = GetInput(_playerInput.actions["Move"]);
-        GetInput(_playerInput.actions["Crouch"], EnableCrouch, !_isCrouchToggle);
-        GetInput(_playerInput.actions["Run"], EnableRunning, !_isRunToggle);
+        GetInput(_playerInput.actions["Crouch"], EnableCrouch, !isCrouchToggle);
+        GetInput(_playerInput.actions["Run"], EnableRunning, !isRunToggle);
         GetInput(_playerInput.actions["Interact"], Interact, ResetInteract, true);
         GetInput(_playerInput.actions["UseEquipment"], UseEquipment, false);
         
@@ -157,10 +169,10 @@ public class PlayerController : MonoBehaviour
         return action.ReadValue<Vector2>();
     }
 
-    private void EnableRunning() => _isRunning = _isRunToggle ? 1 - _isRunning : 1;
+    private void EnableRunning() => _isRunning = isRunToggle ? 1 - _isRunning : 1;
     
 
-    private void EnableCrouch() => _isCrouching = _isCrouchToggle ? 1 - _isCrouching : 1;
+    private void EnableCrouch() => _isCrouching = isCrouchToggle ? 1 - _isCrouching : 1;
 
     private void Interact()
     {
@@ -216,6 +228,7 @@ public class PlayerController : MonoBehaviour
         UpdateAcceleration();
         UpdateVelocity();
         UpdatePosition();
+        UpdateStamina();
     }
 
     private void UpdateAcceleration()
@@ -326,6 +339,14 @@ public class PlayerController : MonoBehaviour
         _motion = transform.TransformVector(_motion);
 
         _controller.Move(_motion);
+    }
+
+    private void UpdateStamina()
+    {
+        _currentStamina = _isRunning == 1 && _velocity.magnitude > 1f ? _currentStamina -= staminaUsagePerSecond * Time.deltaTime : _currentStamina += staminaRegenSpeed * Time.deltaTime;
+        _canRun = _currentStamina > 0f ? 1 : 0;
+        _currentStamina = math.clamp(_currentStamina, 0f, maxStamina);
+        _uiManager.UpdateStamina(_currentStamina);
     }
 
     private void TriggerHeadbob()
