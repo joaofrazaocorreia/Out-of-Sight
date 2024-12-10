@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Detection : MonoBehaviour
@@ -21,6 +22,9 @@ public class Detection : MonoBehaviour
     public float DetectionLimit {get => detectionLimit;}
     private bool seesPlayer;
     public bool SeesPlayer {get => seesPlayer;}
+    private bool seesSuspiciousObject;
+    public bool SeesSuspiciousObject {get => seesSuspiciousObject;}
+    private List<GameObject> allSuspiciousObjects;
     private bool tooCloseToPlayer;
     private EnemyCamera enemyCamera;
     private EnemyMovement enemyMovement;
@@ -31,9 +35,12 @@ public class Detection : MonoBehaviour
         player = FindAnyObjectByType<Player>();
         DetectionMeter = 0;
         seesPlayer = false;
+        seesSuspiciousObject = false;
         tooCloseToPlayer = false;
         enemyMovement = GetComponentInParent<EnemyMovement>();
         enemyCamera = GetComponentInParent<EnemyCamera>();
+
+        allSuspiciousObjects = new List<GameObject>();
     }
 
     private void FixedUpdate()
@@ -109,7 +116,7 @@ public class Detection : MonoBehaviour
         // Multiple sources of detection stack with each other
         int sourceMultiplier = 0;
 
-        if(seesPlayer || tooCloseToPlayer) // || seesSuspiciousObject);
+        if(seesPlayer || tooCloseToPlayer)
         {
             TrackPlayer();
 
@@ -121,24 +128,24 @@ public class Detection : MonoBehaviour
 
             if(seesPlayer && player.status.Contains(Player.Status.Trespassing))
                 sourceMultiplier++;
+        }
 
-            /*
-            if(seesSuspiciousObject)
-                sourceMultiplier++;
-            */
+        if(seesSuspiciousObject)
+        {
+            sourceMultiplier++;
+        }
 
-
+        // Increases detection based on the number of sources that increase it
+        if (sourceMultiplier != 0)
+        {
             DetectionMeter += Time.deltaTime * baseDetectionRate * globalDetectionMultiplier * sourceMultiplier;
         }
 
         // If there are no sources of detection, it's decreased instead
-        if(sourceMultiplier == 0)
+        else
         {
             DetectionMeter -= Time.deltaTime;
         }
-
-        /*if(DetectionMeter != 0)
-            Debug.Log(transform.parent.name + " - detection %: " + Mathf.Round(DetectionMeter/DetectionLimit * 100));*/
     }
 
     /// <summary>
