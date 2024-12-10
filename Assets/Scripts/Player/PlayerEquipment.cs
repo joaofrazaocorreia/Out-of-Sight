@@ -45,7 +45,6 @@ public class PlayerEquipment : MonoBehaviour
 
     private void Unequip()
     {
-        print("Unequipped");
         uIManager.ToggleAmmoDisplay(false);
         _currentEquipmentNum = -1;
         CurrentEquipment = null;
@@ -54,12 +53,10 @@ public class PlayerEquipment : MonoBehaviour
     public void TryUseEquipment()
     {
         if(CurrentEquipment is IFreeUseEquipment equipment && CurrentEquipment.CanBeUsed) equipment.FreeUse(); 
-        if(CurrentEquipment is IHasAmmo ammo) uIManager.UpdateAmmoText(ammo.CurrentAmmo + " / " + ammo.MaxAmmo);
     }
 
     private void EquipmentChanged()
     {
-        print("Equipment changed to:" + CurrentEquipment.name);
         // Call animator for equipAnimations;
     }
 
@@ -74,5 +71,10 @@ public class PlayerEquipment : MonoBehaviour
         }
         
         Unequip();
+    }
+
+    public void EquipmentUsed()
+    {
+        if(CurrentEquipment is IHasAmmo ammo) uIManager.UpdateAmmoText(ammo.CurrentAmmo + " / " + ammo.MaxAmmo);
     }
 }

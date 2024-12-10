@@ -35,7 +35,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject detectionIcon;
     [SerializeField] private GameObject alarmIcon;
     [SerializeField] private Image detectionFill;
-    [SerializeField] private Transform NPCParent; 
+    [SerializeField] private Transform NPCParent;
+    [SerializeField] private Slider staminaSlider;
 
     public static bool gamePaused;
     private bool settingsActive;
@@ -442,4 +443,6 @@ public class UIManager : MonoBehaviour
             ToggleGlobalDetection(true, alarm.IsOn);
         }
     }
+
+    public void UpdateStamina(float stamina) => staminaSlider.value = stamina;
 }
