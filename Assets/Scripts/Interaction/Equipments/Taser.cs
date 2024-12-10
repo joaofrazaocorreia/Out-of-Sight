@@ -34,11 +34,6 @@ namespace Interaction.Equipments
             CurrentAmmo = maxAmmo;
         }
 
-        public override void Used(InteractiveObject activeInteractiveObject)
-        {
-            return;
-        }
-
         public void FreeUse()
         {
             if(_currentAmmo <= 0) return;
@@ -47,6 +42,8 @@ namespace Interaction.Equipments
             Fire();
             CanBeUsed = false;
             Reload();
+            
+            base.Used(null);
         }
 
         private void Fire()
