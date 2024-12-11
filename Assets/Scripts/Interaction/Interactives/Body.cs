@@ -20,10 +20,18 @@ public class Body : InteractiveObject
         objectName = disguise + " Disguise";
     }
 
+    private void Update()
+    {
+        if(enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut && HasDisguise)
+            enabled = true;
+        else
+            enabled = false;
+    }
+
     public override void Interact()
     {
         if(disguise != player.disguise && hasDisguise &&
-            enemyMovement.status == EnemyMovement.Status.KnockedOut)
+            enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
         {
             base.Interact();
 
@@ -37,5 +45,10 @@ public class Body : InteractiveObject
         if (!requirementsMet) return "Requires " + GetRequirementNames();
 
         return "Steal " + objectName;
+    }
+
+    public void ResetNPC()
+    {
+        Start();
     }
 }

@@ -48,8 +48,8 @@ public class Detection : MonoBehaviour
     private void FixedUpdate()
     {
         if((enemyMovement != null && enemyCamera == null &&
-            enemyMovement.status != EnemyMovement.Status.Tased &&
-                enemyMovement.status != EnemyMovement.Status.KnockedOut) ||
+            enemyMovement.currentStatus != EnemyMovement.Status.Tased &&
+                enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut) ||
                     (enemyCamera != null && enemyMovement == null))
         {
             Vector3 distanceToPlayer = player.transform.position - transform.position;

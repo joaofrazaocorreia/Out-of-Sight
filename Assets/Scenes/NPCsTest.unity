@@ -20159,14 +20159,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '- Example Task 1
+  m_text: '- Find the Manager''s office
 
-    - Example Task 2
+    - Find the safe combination
 
-    - Example Task 3
+    - Steal
+    the secret files
 
-    - (Optional)
-    Example Task 4'
+    - Leave the location'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -25254,38 +25254,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1612116640}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1615742298 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1966235439028691602, guid: 7c08d58d0f706ca43b004a37eb8097a2, type: 3}
-  m_PrefabInstance: {fileID: 6712879158002967301}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &1615742300
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615742298}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!1 &1617895308
 GameObject:
   m_ObjectHideFlags: 0
@@ -35649,9 +35617,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6061762206571335386, guid: 7c08d58d0f706ca43b004a37eb8097a2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 940402197}
-    - targetCorrespondingSourceObject: {fileID: 1966235439028691602, guid: 7c08d58d0f706ca43b004a37eb8097a2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1615742300}
   m_SourcePrefab: {fileID: 100100000, guid: 7c08d58d0f706ca43b004a37eb8097a2, type: 3}
 --- !u!1001 &7103823813562595992
 PrefabInstance:
@@ -35883,6 +35848,10 @@ PrefabInstance:
       propertyPath: baseDuration
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 6755752214402548990, guid: e7b481e9e43a7f34aaf068b611e73daa, type: 3}
+      propertyPath: policePrefab
+      value: 
+      objectReference: {fileID: 5892113209513531551, guid: d84cfed7b444e9f47b12d24cb391bdff, type: 3}
     - target: {fileID: 6755752214402548990, guid: e7b481e9e43a7f34aaf068b611e73daa, type: 3}
       propertyPath: durationIncreasePerTier
       value: 20

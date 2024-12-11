@@ -14,7 +14,7 @@ public class EnemyCivillian : Enemy
     protected override void Update()
     {
         // ------------ Normal ------------ 
-        if(enemyMovement.status == EnemyMovement.Status.Normal)
+        if(enemyMovement.currentStatus == EnemyMovement.Status.Normal)
         {
             if(detection.DetectionMeter >= detection.DetectionLimit)
             {
@@ -23,7 +23,7 @@ public class EnemyCivillian : Enemy
 
 
             if(detection.DetectionMeter >= detection.DetectionLimit * 2 / 3 &&
-                enemyMovement.status == EnemyMovement.Status.Normal)
+                enemyMovement.currentStatus == EnemyMovement.Status.Normal)
             {
                 enemyMovement.halted = true;
                 //transform.LookAt(Detection.lastPlayerPos);
@@ -31,7 +31,7 @@ public class EnemyCivillian : Enemy
             }
 
             else if(detection.DetectionMeter >= detection.DetectionLimit * 1 / 3 &&
-                enemyMovement.status == EnemyMovement.Status.Normal)
+                enemyMovement.currentStatus == EnemyMovement.Status.Normal)
             {
                 enemyMovement.halted = true;
                 //transform.LookAt(Detection.lastPlayerPos);
@@ -43,26 +43,26 @@ public class EnemyCivillian : Enemy
 
 
         // ------------ Fleeing ------------ 
-        else if(enemyMovement.status == EnemyMovement.Status.Fleeing)
+        else if(enemyMovement.currentStatus == EnemyMovement.Status.Fleeing)
         {
             // nothing yet
         }
 
         // ------------ Tased ------------ 
-        else if(enemyMovement.status == EnemyMovement.Status.Tased)
+        else if(enemyMovement.currentStatus == EnemyMovement.Status.Tased)
         {
             // nothing yet
         }
 
         // ------------ Knocked Out ------------ 
-        else if(enemyMovement.status == EnemyMovement.Status.KnockedOut)
+        else if(enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
         {
             // nothing yet
         }
 
-        // ----- If any other enemyMovement.status is detected, resets it to normal.
+        // ----- If any other enemyMovement.currentStatus is detected, resets it to normal.
         else
-            enemyMovement.status = EnemyMovement.Status.Normal;
+            enemyMovement.currentStatus = EnemyMovement.Status.Normal;
     }
     
 
@@ -73,7 +73,7 @@ public class EnemyCivillian : Enemy
             base.BecomeAlarmed();
 
             enemyMovement.CheckNearestExit();
-            enemyMovement.status = EnemyMovement.Status.Fleeing;
+            enemyMovement.currentStatus = EnemyMovement.Status.Fleeing;
         }
     }
 }
