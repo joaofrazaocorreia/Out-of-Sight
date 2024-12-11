@@ -55,4 +55,9 @@ public class Enemy : MonoBehaviour
 
         alarm.TriggerAlarm(!alarm.IsOn);
     }
+
+    public void ResetNPC()
+    {
+        Start();
+    }
 }

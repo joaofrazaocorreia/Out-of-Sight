@@ -66,6 +66,7 @@ public class PlayerMelee : MonoBehaviour
                         // Checks if the raycast hit the enemy
                         if (hit.transform == enemy || hit.transform.parent == enemy)
                         {
+                            Debug.Log(enemy + " is in range");
                             if(distanceToClosestEnemy > distanceToEnemy.magnitude)
                             {
                                 closestEnemy = enemy;

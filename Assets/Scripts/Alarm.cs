@@ -82,6 +82,11 @@ public class Alarm : MonoBehaviour
             {
                 Debug.Log("Alarm turned off!");
                 isOn = false;
+
+                foreach(Enemy e in enemies)
+                {
+                    e.EnemyMovement.status = EnemyMovement.Status.Normal;
+                }
       
                 int enemyCount = 0;
                 List<EnemyGuard> enemiesToRemove = new List<EnemyGuard>();

@@ -43,8 +43,8 @@ public class MapEntrance : MonoBehaviour
         Transform = transform;
         uiManager = FindAnyObjectByType<UIManager>();
         alarm = FindAnyObjectByType<Alarm>();
-        QueuedCivilliansParent.gameObject.SetActive(false);
-        QueuedWorkersParent.gameObject.SetActive(false);
+        QueuedCivilliansParent.gameObject.SetActive(true);
+        QueuedWorkersParent.gameObject.SetActive(true);
         numOfCivilliansInQueue = 0;
         numOfWorkersInQueue = 0;
         workersSpawnTimer = Random.Range(minWorkerSpawnTime, maxWorkerSpawnTime);
@@ -152,6 +152,8 @@ public class MapEntrance : MonoBehaviour
 
         if(type == Enemy.Type.Worker)
             go.transform.parent = QueuedWorkersParent;
+        
+        UpdateEnemies();
     }
 
     /// <summary>
@@ -170,6 +172,7 @@ public class MapEntrance : MonoBehaviour
         enemies.Add(newNPC.GetComponent<Enemy>());
 
         newNPC.GetComponent<EnemyMovement>().SetMovementTargets(movementTargets);
+        UpdateEnemies();
 
         return newNPC;
     }
@@ -194,11 +197,16 @@ public class MapEntrance : MonoBehaviour
 
         // Respawns a random NPC of the given type in the navmesh position nearest to this exit's position
         int index = Random.Range(0, QueuedEnemiesGameObject.childCount);
-        Transform newNPC = QueuedEnemiesGameObject.GetChild(index);
-        enemies.Add(newNPC.GetComponent<Enemy>());
+        Enemy newNPC = Instantiate(QueuedEnemiesGameObject.GetChild(index), navHit.position, Quaternion.identity, enemiesGameObject).GetComponent<Enemy>();
+        enemies.Add(newNPC);
 
-        newNPC.position = navHit.position;
+        newNPC.transform.parent = enemiesGameObject;
+        newNPC.transform.position = navHit.position;
+        newNPC.ResetNPC();
+        newNPC.EnemyMovement.ResetNPC();
         newNPC.gameObject.SetActive(true);
+
+        Destroy(QueuedEnemiesGameObject.GetChild(index).gameObject);
 
         return newNPC.gameObject;
     }
