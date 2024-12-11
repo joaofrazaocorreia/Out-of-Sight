@@ -35,7 +35,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject detectionIcon;
     [SerializeField] private GameObject alarmIcon;
     [SerializeField] private Image detectionFill;
-    [SerializeField] private Transform NPCParent;
+    [SerializeField] private Transform NPCsParent;
+    [SerializeField] private Transform CamerasParent;
     [SerializeField] private Slider staminaSlider;
 
     public static bool gamePaused;
@@ -53,7 +54,7 @@ public class UIManager : MonoBehaviour
         gamePaused = false;
         settingsActive = false;
         Time.timeScale = startingTimeScale;
-        
+
         #if UNITY_EDITOR
             UISpeed *= 3;
         #endif
@@ -393,24 +394,24 @@ public class UIManager : MonoBehaviour
 
     private void UpdateEnemyDetectionsList()
     {
-        int detectionCount = 0;
-        for(int i = 0; i < NPCParent.childCount; i++)
-        {
-            detectionCount += NPCParent.GetChild(i).childCount;
-        }
+        int detectionCount = NPCsParent.childCount + CamerasParent.childCount;
 
         if(enemyDetections.Count != detectionCount)
         {
             enemyDetections = new List<Detection>();
 
-            for(int i = 0; i < NPCParent.childCount; i++)
+            for(int i = 0; i < NPCsParent.childCount; i++)
             {
-                for(int j = 0; j < NPCParent.GetChild(i).childCount; j++)
-                {
-                    EnemyMovement em = NPCParent.GetChild(i).GetChild(j).GetComponent<EnemyMovement>();
-                    if(em != null && em.currentStatus != EnemyMovement.Status.KnockedOut)
-                        enemyDetections.Add(NPCParent.GetChild(i).GetChild(j).GetComponentInChildren<Detection>());
-                }
+                EnemyMovement em = NPCsParent.GetChild(i).GetComponent<EnemyMovement>();
+                if(em != null && em.currentStatus != EnemyMovement.Status.KnockedOut)
+                    enemyDetections.Add(NPCsParent.GetChild(i).GetComponentInChildren<Detection>());
+            }
+
+            for(int i = 0; i < CamerasParent.childCount; i++)
+            {
+                EnemyCamera ec = CamerasParent.GetChild(i).GetComponent<EnemyCamera>();
+                if(ec != null && ec.IsOn)
+                    enemyDetections.Add(CamerasParent.GetChild(i).GetComponentInChildren<Detection>());
             }
         }
     }

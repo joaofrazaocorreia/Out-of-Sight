@@ -18,14 +18,7 @@ public class Body : InteractiveObject
         hasDisguise = true;
         hasBeenDetected = false;
         objectName = disguise + " Disguise";
-    }
-
-    private void Update()
-    {
-        if(enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut && HasDisguise)
-            enabled = true;
-        else
-            enabled = false;
+        enabled = false;
     }
 
     public override void Interact()
