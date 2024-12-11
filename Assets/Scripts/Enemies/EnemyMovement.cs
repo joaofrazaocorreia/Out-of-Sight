@@ -366,4 +366,20 @@ public class EnemyMovement : MonoBehaviour
         tasedTimer = tasedTime;
         leavingMap = false;
     }
+
+    public void ResetNPC()
+    {
+        status = Status.Normal;
+        moveTimer = 0;
+        turnTimer = 0;
+        searchTimer = 0;
+        stuckTimer = 0;
+        tasedTimer = tasedTime;
+        body = GetComponentInChildren<Body>();
+        animator = GetComponent<Animator>();
+        body.enabled = false;
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
+        leavingMap = false;
+    }
 }
