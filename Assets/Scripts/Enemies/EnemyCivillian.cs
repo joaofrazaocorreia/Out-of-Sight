@@ -27,7 +27,7 @@ public class EnemyCivillian : Enemy
             {
                 enemyMovement.halted = true;
                 //transform.LookAt(Detection.lastPlayerPos);
-                enemyMovement.MoveTo(Detection.lastPlayerPos);
+                //enemyMovement.MoveTo(Detection.lastPlayerPos);
             }
 
             else if(detection.DetectionMeter >= detection.DetectionLimit * 1 / 3 &&

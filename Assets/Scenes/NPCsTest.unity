@@ -13387,6 +13387,7 @@ Transform:
   m_Children:
   - {fileID: 417614681}
   - {fileID: 291502267}
+  - {fileID: 2025571896}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &827573817
@@ -20810,6 +20811,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
   m_PrefabInstance: {fileID: 1297305140}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1301515165
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1301515166}
+  m_Layer: 0
+  m_Name: QueuedCivillians
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1301515166
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301515165}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2025571896}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1308917849
 GameObject:
   m_ObjectHideFlags: 0
@@ -28712,6 +28744,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1837095988}
   m_CullTransparentMesh: 1
+--- !u!1 &1838542497
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1838542498}
+  m_Layer: 0
+  m_Name: QueuedWorkers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1838542498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838542497}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2025571896}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1841931910
 GameObject:
   m_ObjectHideFlags: 0
@@ -32901,6 +32964,39 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2021329761}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2025571895
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2025571896}
+  m_Layer: 0
+  m_Name: QueuedEnemies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2025571896
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2025571895}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1301515166}
+  - {fileID: 1838542498}
+  m_Father: {fileID: 816901736}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2028368806
 GameObject:
   m_ObjectHideFlags: 0
@@ -35217,6 +35313,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 417614681}
     - target: {fileID: 5600877040512835652, guid: 10db1b31ca155a042b4280a0725071c2, type: 3}
+      propertyPath: QueuedWorkersParent
+      value: 
+      objectReference: {fileID: 1838542498}
+    - target: {fileID: 5600877040512835652, guid: 10db1b31ca155a042b4280a0725071c2, type: 3}
+      propertyPath: QueuedCivilliansParent
+      value: 
+      objectReference: {fileID: 1301515166}
+    - target: {fileID: 5600877040512835652, guid: 10db1b31ca155a042b4280a0725071c2, type: 3}
       propertyPath: workerPrefabs.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -35775,6 +35879,14 @@ PrefabInstance:
       propertyPath: mapEntrance
       value: 
       objectReference: {fileID: 1443478034}
+    - target: {fileID: 6755752214402548990, guid: e7b481e9e43a7f34aaf068b611e73daa, type: 3}
+      propertyPath: baseDuration
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6755752214402548990, guid: e7b481e9e43a7f34aaf068b611e73daa, type: 3}
+      propertyPath: durationIncreasePerTier
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6755752214402548990, guid: e7b481e9e43a7f34aaf068b611e73daa, type: 3}
       propertyPath: maxGuardsRemainPermanent
       value: 2
