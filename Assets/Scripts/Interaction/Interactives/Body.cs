@@ -8,12 +8,15 @@ public class Body : InteractiveObject
     private EnemyMovement enemyMovement;
     private bool hasDisguise;
     public bool HasDisguise {get => hasDisguise;}
+    private bool hasBeenDetected;
+    public bool HasBeenDetected {get => hasBeenDetected; set{ if(!hasBeenDetected) hasBeenDetected = value;}}
 
     private void Start()
     {
         player = FindAnyObjectByType<Player>();
         enemyMovement = GetComponentInParent<EnemyMovement>();
         hasDisguise = true;
+        hasBeenDetected = false;
         objectName = disguise + " Disguise";
     }
 

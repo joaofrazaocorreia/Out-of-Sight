@@ -5,6 +5,7 @@ public class Enemy : MonoBehaviour
     public enum Type {Civillian, Worker, Guard, Police, Camera};
 
     protected Type type;
+    public Type EnemyType {get=> type;}
     protected UIManager uiManager;
     protected Alarm alarm;
     protected Detection detection;

@@ -136,9 +136,16 @@ public class Alarm : MonoBehaviour
                     newGuard.GetComponent<EnemyMovement>().status = EnemyMovement.Status.Chasing;
                 }
             }
+        }
 
-            enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
-            enemies = enemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
+        enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
+        enemies = enemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
+        
+        // NPCs become aware of the bodies in the level so they don't raise the alarm right after it ends
+        foreach(Enemy e in enemies)
+        {
+            if(e.GetComponent<EnemyMovement>().status == EnemyMovement.Status.KnockedOut)
+                e.GetComponentInChildren<Body>().HasBeenDetected = true;
         }
 
         // Alerts all enemies in the level;

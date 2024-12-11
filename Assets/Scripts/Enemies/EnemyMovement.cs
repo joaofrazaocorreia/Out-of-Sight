@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -28,6 +29,8 @@ public class EnemyMovement : MonoBehaviour
     public Status status;
     public bool halted = false;
     public List<Transform> MovementTargets {get => movementTargets;}
+    private List<Vector3> movementPosTargets;
+    public List<Vector3> MovementPosTargets {get => movementPosTargets;}
     public bool IsStatic {get => isStatic;}
 
     private float moveTimer;
@@ -41,7 +44,7 @@ public class EnemyMovement : MonoBehaviour
     private Animator animator;
     private NavMeshAgent navMeshAgent;
     public bool IsAtDestination {get => (new Vector3(lastTarget.x, 0f, lastTarget.z) -
-        new Vector3(transform.position.x, 0f, transform.position.z)).magnitude <= navMeshAgent.stoppingDistance;}
+        new Vector3(transform.position.x, 0f, transform.position.z)).magnitude <= navMeshAgent.stoppingDistance * 2f;}
     private float stuckTimer;
     private Vector3 lastSelfPos;
     private List<MapEntrance> mapEntrances;
@@ -69,6 +72,19 @@ public class EnemyMovement : MonoBehaviour
         // Forcefully sets the NavMeshAgent to the NPC type if it isn't already one
         if(navMeshAgent.agentTypeID != -1372625422)
             navMeshAgent.agentTypeID = -1372625422;
+
+        if(isStatic)
+        {
+            movementTargets = new List<Transform>() {transform};
+            movementPosTargets = new List<Vector3>() {transform.position};
+        }
+
+        else
+        {
+            movementPosTargets = new List<Vector3>();
+            foreach(Transform t in movementTargets)
+                movementPosTargets.Add(t.position);
+        }
     }
 
 
@@ -192,7 +208,7 @@ public class EnemyMovement : MonoBehaviour
 
             navMeshAgent.speed = 0f;
 
-            movementTargets = new List<Transform>{transform};
+            movementPosTargets = new List<Vector3>{transform.position};
 
             animator.SetBool("KO", true);
             animator.applyRootMotion = false;
@@ -229,13 +245,18 @@ public class EnemyMovement : MonoBehaviour
         {
             // Rolls a random index within the number of available targets and
             // loops until it gets a value different than the last chosen index
-            int index = Random.Range(0, movementTargets.Count());
+            int index = Random.Range(0, movementPosTargets.Count());
+
+            if(movementPosTargets[index] == null)
+            {
+                Start();
+            }
 
             
             int loop = 0;
-            while(movementTargets[index].position == lastTarget)
+            while(movementPosTargets[index] == lastTarget)
             {
-                index = Random.Range(0, movementTargets.Count());
+                index = Random.Range(0, movementPosTargets.Count());
 
                 // If it loops for too long, breaks out of the loop
                 if (++loop >= 100)
@@ -246,7 +267,7 @@ public class EnemyMovement : MonoBehaviour
             }
 
             // Tells the NPC to move towards the chosen index position
-            MoveTo(movementTargets[index].position);
+            MoveTo(movementPosTargets[index]);
         }
 
         else if(isStatic)
@@ -323,7 +344,13 @@ public class EnemyMovement : MonoBehaviour
     public void SetMovementTargets(List<Transform> newMovementTargets)
     {
         if(!leavingMap)
+        {
             movementTargets = newMovementTargets;
+            movementPosTargets = new List<Vector3>();
+
+            foreach(Transform t in movementTargets)
+                movementPosTargets.Add(t.position);
+        }
     }
 
     public void ExitMap()
