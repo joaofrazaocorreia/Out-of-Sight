@@ -16,6 +16,7 @@ public class PlayerInteraction : MonoBehaviour
     private PlayerEquipment _playerEquipment;
     private Player _player;
     private UIManager _uiManager;
+    private Animator _animator;
 
     private float _interactionDuration;
     private float _interactionCooldownTimer;
@@ -48,6 +49,7 @@ public class PlayerInteraction : MonoBehaviour
         _playerEquipment = GetComponent<PlayerEquipment>();
         _player = GetComponent<Player>();
         _uiManager = FindFirstObjectByType<UIManager>();
+        _animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
@@ -139,14 +141,20 @@ public class PlayerInteraction : MonoBehaviour
         {
             case InteractiveType.Item:
                 _playerInventory.AddItem(ActiveInteractiveObject.GetComponent<Item>(), 1);
+                InteractAnimation();
                 break;
             
             case InteractiveType.DirectItemRequirement:
                 if(ActiveInteractiveObject.ConsumeItemRequirement) _playerInventory.RemoveItem(ActiveInteractiveObject.RequirementObject);
+                InteractAnimation();
                 break;
             
             case InteractiveType.DirectEquipmentRequirement:
                 _playerEquipment.CurrentEquipment.Used(ActiveInteractiveObject);
+                break;
+            
+            case InteractiveType.DirectNoRequirement:
+                InteractAnimation();
                 break;
         }
         
@@ -170,5 +178,10 @@ public class PlayerInteraction : MonoBehaviour
 
         _uiManager.UpdateInteractionText(ActiveInteractiveObject.GetInteractionText(CheckCanInteract()));
         _uiManager.ToggleInteractionMessage(true);
+    }
+    
+    private void InteractAnimation()
+    {
+        _animator.SetTrigger("IsInteracting");
     }
 }

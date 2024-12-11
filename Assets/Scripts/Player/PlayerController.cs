@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInteraction _playerInteraction;
     private PlayerEquipment _playerEquipment; 
     private UIManager _uiManager;
+    private Animator _animator;
     private Vector2 _movementVector;
     private Vector3 _lookVector;
     private Transform _horizontalRotationPivot;
@@ -128,6 +129,7 @@ public class PlayerController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _playerInteraction = GetComponent<PlayerInteraction>();
         _playerEquipment = GetComponent<PlayerEquipment>();
+        _animator = GetComponentInChildren<Animator>();
         _selectedEquipment = new float[9];
         _horizontalRotationPivot = transform;
         _originalHorizontalRotationPivot = _horizontalRotationPivot;
@@ -307,6 +309,7 @@ public class PlayerController : MonoBehaviour
         UpdateVelocity();
         UpdatePosition();
         UpdateStamina();
+        UpdateAnimator();
     }
 
     private void UpdateAcceleration()
@@ -425,6 +428,12 @@ public class PlayerController : MonoBehaviour
         _canRun = _currentStamina > 0f ? 1 : 0;
         _currentStamina = math.clamp(_currentStamina, 0f, maxStamina);
         _uiManager.UpdateStamina(_currentStamina);
+    }
+
+    private void UpdateAnimator()
+    {
+        _animator.SetBool("IsWalking", _velocity.magnitude > 0.1f);
+        _animator.SetBool("IsRunning", IsRunning == 1);
     }
 
     private void OnRun()
