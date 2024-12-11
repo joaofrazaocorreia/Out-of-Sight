@@ -7,35 +7,71 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private bool lockCursorOnStart = false;
+    
+    [Header("Acceleration Variables")]
     [SerializeField] private float _forwardAcceleration = 5;
     [SerializeField] private float _backwardAcceleration = -2;
     [SerializeField] private float _strafeAcceleration = 5;
     [SerializeField] private float _gravityAcceleration = -10;
+    
+    [Header("Velocity Variables")]
     [SerializeField] private float _maxForwardVelocity = 5;
     [SerializeField] private float _maxBackwardVelocity = -2;
     [SerializeField] private float _maxStrafeVelocity = 5;
     [SerializeField] private float _maxFallVelocity = -10;
+    
+    [Header("Camera Variables")]
     [SerializeField] private float verticalLookSensitivity = 2f;
     [SerializeField] private float horizontalLookSensitivity = 2f;
     [SerializeField] private float _maxHeadUpAngle = 70;
     [SerializeField] private float _minHeadDownAngle = 290;
+    [SerializeField] [Range(1f,30f)] private float HeadbobAmount = 5f;
+    [SerializeField] [Range(1f,30f)] private float HeadbobSmoothness = 5f;
+    [SerializeField] [Range(1f,30f)] private float HeadbobFrequency = 12f;
+    [SerializeField] private GameObject _charHead;
+    private Vector3 _startCharHeadPos;
+    private Vector3 _currentCharHeadPos;
+    private Vector3 _startCamPos;
+    
     /*
+    [Header("Audio Variables")]
     [SerializeField] private AudioSource playerAudioSource;
     [SerializeField] private AudioClip[] footstepSounds;
     [SerializeField] [Range(0.1f, 2f)] private float footstepInterval = 0.45f;
     */
-    [SerializeField] [Range(1f,30f)] private float HeadbobAmount = 5f;
-    [SerializeField] [Range(1f,30f)] private float HeadbobSmoothness = 5f;
-    [SerializeField] [Range(1f,30f)] private float HeadbobFrequency = 12f;
-    
     [Header("Crouch Variables")]
     [SerializeField] private bool isCrouchToggle;
-    private int _isCrouching; 
+    private int _isCrouching;
+    private int IsCrouching
+    {
+        get => _isCrouching;
+        set
+        {
+            if(value == _isCrouching) return;
+            _isCrouching = value;
+            OnCrouch();
+        }
+    }
     [SerializeField] private float crouchSpeedModifier = 0.75f;
+    [SerializeField] private float crouchHeight;
+    [SerializeField] private float crouchCenterY;
+    private float _crouchCenterYDelta;
+    private float _defaultPlayerHeight;
+    private float _defaultPlayerCenterY;
 
     [Header("Run Variables")] [SerializeField]
     private bool isRunToggle;
     private int _isRunning;
+    private int IsRunning
+    {
+        get => _isRunning;
+        set
+        {
+            if(value == _isRunning) return;
+            _isRunning = value;
+            OnRun();
+        }
+    }
     private int _canRun;
     [SerializeField] private float runSpeedModifier = 1.5f;
     private const float maxStamina = 1;
@@ -58,7 +94,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 _velocity;
     private Vector3 _motion;
     private float   _sinPI4;
-    private Vector3 _startCamPos;
     /*
     private float _footstepTimer;
     */
@@ -98,7 +133,12 @@ public class PlayerController : MonoBehaviour
         _originalHorizontalRotationPivot = _horizontalRotationPivot;
         _verticalRotationPivot = _head.transform.parent.transform;
         _originalVerticalRotationPivot = _horizontalRotationPivot;
-
+        _defaultPlayerHeight = _controller.height;
+        _defaultPlayerCenterY = _controller.center.y;
+        _crouchCenterYDelta = crouchCenterY - _startCamPos.y;
+        _startCharHeadPos = _charHead.transform.localPosition;
+        _currentCharHeadPos = _startCharHeadPos;
+        
         if(lockCursorOnStart)
             Cursor.lockState = CursorLockMode.Locked;
     }
@@ -118,13 +158,10 @@ public class PlayerController : MonoBehaviour
     
     private void GetInputs()
     {
-        if (!isCrouchToggle) _isCrouching = 0;
-        if (!isRunToggle) _isRunning = 0;
-        
         _lookVector = GetInput(_playerInput.actions["Look"]); 
         _movementVector = GetInput(_playerInput.actions["Move"]);
-        GetInput(_playerInput.actions["Crouch"], EnableCrouch, !isCrouchToggle);
-        GetInput(_playerInput.actions["Run"], EnableRunning, !isRunToggle);
+        GetInput(_playerInput.actions["Crouch"], EnableCrouch, DisableCrouch, !isCrouchToggle);
+        GetInput(_playerInput.actions["Run"], EnableRunning, DisableRun, !isRunToggle);
         GetInput(_playerInput.actions["Interact"], Interact, ResetInteract, true);
         GetInput(_playerInput.actions["UseEquipment"], UseEquipment, false);
         
@@ -171,15 +208,48 @@ public class PlayerController : MonoBehaviour
 
     private void EnableRunning()
     {
-        _isRunning = isRunToggle ? 1 - _isRunning : 1;
-        _isCrouching = 0;
+        IsRunning = isRunToggle ? 1 - IsRunning : 1;
     }
 
+    private void DisableRun()
+    {
+        if(isRunToggle) return;
+        IsRunning = 0;
+    }
 
+    private void DisableCrouch()
+    {
+        if(isCrouchToggle) return;
+        IsCrouching = 0;
+    }
+    
     private void EnableCrouch()
     {
-        _isCrouching = isCrouchToggle ? 1 - _isCrouching : 1;
-        _isRunning = 0;
+        IsCrouching = isCrouchToggle ? 1 - IsCrouching : 1;
+    }
+
+    private void OnCrouch()
+    {
+        switch (IsCrouching)
+        {
+            case 1:
+            {
+                _controller.height = crouchHeight;
+                _controller.center = new Vector3(_controller.center.x, crouchCenterY, _controller.center.z);
+                _currentCharHeadPos.y += _crouchCenterYDelta; 
+                _charHead.transform.localPosition = new Vector3(_currentCharHeadPos.x, _currentCharHeadPos.y, _currentCharHeadPos.z);
+                IsRunning = 0;
+                break;
+            }
+            case 0:
+            {
+                _controller.height = _defaultPlayerHeight;
+                _controller.center = new Vector3(_controller.center.x, _defaultPlayerCenterY, _controller.center.z);
+                _currentCharHeadPos = _startCharHeadPos;
+                _charHead.transform.localPosition = new Vector3(_currentCharHeadPos.x, _currentCharHeadPos.y, _currentCharHeadPos.z);
+                break;
+            }
+        }
     }
 
     private void Interact()
@@ -351,10 +421,15 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateStamina()
     {
-        _currentStamina = _isRunning == 1 && _velocity.magnitude > 1f ? _currentStamina -= staminaUsagePerSecond * Time.deltaTime : _currentStamina += staminaRegenSpeed * Time.deltaTime;
+        _currentStamina = _isRunning == 1 && _velocity.magnitude > 1f ? _currentStamina -= staminaUsagePerSecond * Time.fixedDeltaTime : _currentStamina += staminaRegenSpeed * Time.fixedDeltaTime;
         _canRun = _currentStamina > 0f ? 1 : 0;
         _currentStamina = math.clamp(_currentStamina, 0f, maxStamina);
         _uiManager.UpdateStamina(_currentStamina);
+    }
+
+    private void OnRun()
+    {
+        if (IsRunning == 1) IsCrouching = 0;
     }
 
     private void TriggerHeadbob()
@@ -363,8 +438,7 @@ public class PlayerController : MonoBehaviour
             Headbob();
         
         else if (_head.transform.localPosition != _startCamPos)
-            _head.transform.localPosition = 
-                Vector3.Lerp(_head.transform.localPosition, _startCamPos, HeadbobSmoothness * Time.deltaTime);
+            _head.transform.localPosition = Vector3.Lerp(_head.transform.localPosition, _startCamPos, HeadbobSmoothness * Time.deltaTime);
     }
 
     private void Headbob()
