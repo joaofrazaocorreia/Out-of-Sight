@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerMelee : MonoBehaviour
 {
     [SerializeField] private float attackRange = 4f;
-    [SerializeField] private float frontalAngle = 50f;
+    [SerializeField] private float frontalAngle = 120f;
     [SerializeField] private Transform enemiesParent;
 
     private PlayerInput playerInput;
@@ -58,7 +58,8 @@ public class PlayerMelee : MonoBehaviour
                 // Checks if the enemy is within the player's field of view
                 if(Vector3.Angle(transform.TransformDirection(Vector3.forward),
                     Vector3.Scale(enemy.position, new Vector3(1, 0, 1))
-                        - Vector3.Scale(transform.position, new Vector3(1, 0, 1))) <= frontalAngle)
+                        - Vector3.Scale(transform.position, new Vector3(1, 0, 1))) <= frontalAngle ||
+                            (enemy.transform.position - transform.position).magnitude <= 1.5f)
                 {
                     // Sends a raycast towards the enemy
                     if (Physics.Raycast(transform.position, distanceToEnemy, out RaycastHit hit, attackRange*2))
