@@ -26,7 +26,8 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float stuckTime = 3f;
     [SerializeField] protected float tasedTime = 5f;
 
-    public Status status;
+    private Status status;
+    public Status currentStatus {get => status; set {if(status != Status.KnockedOut) status = value;}}
     public bool halted = false;
     public List<Transform> MovementTargets {get => movementTargets;}
     private List<Vector3> movementPosTargets;
@@ -40,11 +41,13 @@ public class EnemyMovement : MonoBehaviour
     private Vector3 lastTarget;
     public Vector3 LastTarget {get => lastTarget;}
     private Vector3 spawnPos;
+    public Vector3 SpawnPos {get=> spawnPos;}
+    private Player player;
     private Body body;
     private Animator animator;
     private NavMeshAgent navMeshAgent;
     public bool IsAtDestination {get => (new Vector3(lastTarget.x, 0f, lastTarget.z) -
-        new Vector3(transform.position.x, 0f, transform.position.z)).magnitude <= navMeshAgent.stoppingDistance * 2f;}
+        new Vector3(transform.position.x, 0f, transform.position.z)).magnitude <= navMeshAgent.stoppingDistance * 3f;}
     private float stuckTimer;
     private Vector3 lastSelfPos;
     private List<MapEntrance> mapEntrances;
@@ -62,6 +65,7 @@ public class EnemyMovement : MonoBehaviour
         lastSelfPos = transform.position;
         lastTarget = Vector3.zero;
         spawnPos = transform.position;
+        player = FindAnyObjectByType<Player>();
         body = GetComponentInChildren<Body>();
         animator = GetComponent<Animator>();
         body.enabled = false;
@@ -76,7 +80,7 @@ public class EnemyMovement : MonoBehaviour
         if(isStatic)
         {
             movementTargets = new List<Transform>() {transform};
-            movementPosTargets = new List<Vector3>() {transform.position};
+            movementPosTargets = new List<Vector3>() {spawnPos};
         }
 
         else
@@ -97,7 +101,7 @@ public class EnemyMovement : MonoBehaviour
         }
 
         // ------------ Normal ------------ 
-        else if(status == Status.Normal)
+        else if(currentStatus == Status.Normal)
         {
             navMeshAgent.speed = walkSpeed;
 
@@ -105,7 +109,7 @@ public class EnemyMovement : MonoBehaviour
         }
 
         // ------------ Fleeing ------------ 
-        else if (status == Status.Fleeing)
+        else if (currentStatus == Status.Fleeing)
         {
             navMeshAgent.speed = runSpeed;
 
@@ -113,21 +117,25 @@ public class EnemyMovement : MonoBehaviour
         }
         
         // ------------ Chasing ------------ 
-        else if(status == Status.Chasing)
+        else if(currentStatus == Status.Chasing)
         {
             navMeshAgent.speed = runSpeed;
 
-            MoveTo(Detection.lastPlayerPos);
+            if(GetComponent<EnemyPolice>())
+                MoveTo(player.transform.position);
+
+            else
+                MoveTo(Detection.lastPlayerPos);
 
             if((transform.position - lastSelfPos).magnitude < navMeshAgent.speed * Time.deltaTime
-                && status != Status.Tased && status != Status.KnockedOut)
+                && currentStatus != Status.Tased && currentStatus != Status.KnockedOut)
             {
                 stuckTimer += Time.deltaTime;
 
                 if(stuckTimer >= stuckTime)
                 {
                     MoveTo(transform.position);
-                    status = Status.Searching;
+                    currentStatus = Status.Searching;
                     stuckTimer = 0f;
                 }
             }
@@ -150,7 +158,7 @@ public class EnemyMovement : MonoBehaviour
         }
 
         // ------------ Searching ------------ 
-        else if (status == Status.Searching)
+        else if (currentStatus == Status.Searching)
         {
             navMeshAgent.speed = walkSpeed;
 
@@ -174,7 +182,7 @@ public class EnemyMovement : MonoBehaviour
         }
 
         // ------------ Tased ------------ 
-        else if (status == Status.Tased)
+        else if (currentStatus == Status.Tased)
         {
             navMeshAgent.speed = 0f;
 
@@ -192,13 +200,13 @@ public class EnemyMovement : MonoBehaviour
                 animator.SetBool("Tased", false);
                 animator.applyRootMotion = true;
 
-                status = Status.Normal;
+                currentStatus = Status.Normal;
                 GetComponent<Enemy>().BecomeAlarmed();
             }
         }
 
         // ------------ Knocked Out ------------ 
-        else if (status == Status.KnockedOut)
+        else if (currentStatus == Status.KnockedOut)
         {
             if(!body.enabled && body.HasDisguise)
                 body.enabled = true;
@@ -215,7 +223,7 @@ public class EnemyMovement : MonoBehaviour
         }
 
 
-        if(status != Status.Tased && status != Status.KnockedOut)
+        if(currentStatus != Status.Tased && currentStatus != Status.KnockedOut)
         {
             lastSelfPos = transform.position;
         }
@@ -278,7 +286,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void MoveTo(Vector3 destination)
     {
-        if(destination != null && destination != lastTarget)
+        if(destination != null && destination != lastTarget && currentStatus != Status.KnockedOut && currentStatus != Status.Tased)
         {
             // Moves to the given destination and registers it as the last chosen
             navMeshAgent.SetDestination(destination);
@@ -343,7 +351,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void SetMovementTargets(List<Transform> newMovementTargets)
     {
-        if(!leavingMap)
+        if(!leavingMap && currentStatus != Status.KnockedOut && currentStatus != Status.Tased)
         {
             movementTargets = newMovementTargets;
             movementPosTargets = new List<Vector3>();
@@ -355,31 +363,42 @@ public class EnemyMovement : MonoBehaviour
 
     public void ExitMap()
     {
-        leavingMap = true;
-        CheckNearestExit();
-        MoveTo(chosenNearestExit);
+        if(currentStatus != Status.KnockedOut && currentStatus != Status.Tased)
+        {
+            leavingMap = true;
+            CheckNearestExit();
+            MoveTo(chosenNearestExit);
+        }
     }
 
     public void GetTased()
     {
-        status = Status.Tased;
-        tasedTimer = tasedTime;
-        leavingMap = false;
+        if(currentStatus != Status.KnockedOut)
+        {
+            currentStatus = Status.Tased;
+            tasedTimer = tasedTime;
+            leavingMap = false;
+        }
     }
 
-    public void ResetNPC()
+    public void ResetNPC(Vector3 oldSpawnPos)
     {
-        status = Status.Normal;
-        moveTimer = 0;
-        turnTimer = 0;
-        searchTimer = 0;
-        stuckTimer = 0;
-        tasedTimer = tasedTime;
-        body = GetComponentInChildren<Body>();
-        animator = GetComponent<Animator>();
-        body.enabled = false;
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
-        leavingMap = false;
+        if(currentStatus != Status.KnockedOut)
+        {
+            currentStatus = Status.Normal;
+            moveTimer = 0;
+            turnTimer = 0;
+            searchTimer = 0;
+            stuckTimer = 0;
+            tasedTimer = tasedTime;
+            spawnPos = oldSpawnPos;
+            body = GetComponentInChildren<Body>();
+            animator = GetComponent<Animator>();
+            body.ResetNPC();
+            body.enabled = false;
+            navMeshAgent = GetComponent<NavMeshAgent>();
+            mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
+            leavingMap = false;
+        }
     }
 }

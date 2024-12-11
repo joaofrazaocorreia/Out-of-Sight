@@ -13,8 +13,8 @@ public class Enemy : MonoBehaviour
     protected EnemyMovement enemyMovement;
     public EnemyMovement EnemyMovement {get=> enemyMovement;}
     protected Player player;
-    public bool IsKnockedOut {get => enemyMovement.status == EnemyMovement.Status.KnockedOut;}
-    public bool IsTased {get => enemyMovement.status == EnemyMovement.Status.Tased;}
+    public bool IsKnockedOut {get => enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut;}
+    public bool IsTased {get => enemyMovement.currentStatus == EnemyMovement.Status.Tased;}
 
 
     protected virtual void Start()
@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
             if(type != Type.Camera)
             {
                 BecomeAlarmed();
-                enemyMovement.status = EnemyMovement.Status.Fleeing;
+                enemyMovement.currentStatus = EnemyMovement.Status.Fleeing;
             }
         }
     }

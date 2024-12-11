@@ -114,7 +114,7 @@ public class MapEntrance : MonoBehaviour
         foreach(Enemy e in enemies)
         {
             if((transform.position - e.transform.position).magnitude <= characterDetectionDistance && e.EnemyMovement &&
-                (e.EnemyMovement.status == EnemyMovement.Status.Fleeing || e.EnemyMovement.LeavingMap))
+                (e.EnemyMovement.currentStatus == EnemyMovement.Status.Fleeing || e.EnemyMovement.LeavingMap))
             {
                 // Tells the game that one more civillian needs to be spawned in and stores
                 // the current civillian's movement targets for it
@@ -150,8 +150,10 @@ public class MapEntrance : MonoBehaviour
         if(type == Enemy.Type.Civillian)
             go.transform.parent = QueuedCivilliansParent;
 
-        if(type == Enemy.Type.Worker)
+        else if(type == Enemy.Type.Worker)
             go.transform.parent = QueuedWorkersParent;
+        
+        else Destroy(go);
         
         UpdateEnemies();
     }
@@ -203,7 +205,7 @@ public class MapEntrance : MonoBehaviour
         newNPC.transform.parent = enemiesGameObject;
         newNPC.transform.position = navHit.position;
         newNPC.ResetNPC();
-        newNPC.EnemyMovement.ResetNPC();
+        newNPC.EnemyMovement.ResetNPC(QueuedEnemiesGameObject.GetChild(index).GetComponent<EnemyMovement>().SpawnPos);
         newNPC.gameObject.SetActive(true);
 
         Destroy(QueuedEnemiesGameObject.GetChild(index).gameObject);
