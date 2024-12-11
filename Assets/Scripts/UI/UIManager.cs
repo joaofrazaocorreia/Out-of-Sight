@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private float startingTimeScale = 0f;
-    [SerializeField] [Range(1f, 20f)] private float UISpeed = 3f;
+    [SerializeField] [Range(0.001f, 20f)] private float UISpeed = 3f;
     [SerializeField] private CanvasGroup loadingScreen;
     [SerializeField] private CanvasGroup UIBackground;
     [SerializeField] private CanvasGroup missionBriefingScreen;

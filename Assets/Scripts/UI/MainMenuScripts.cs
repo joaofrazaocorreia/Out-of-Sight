@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuScripts : MonoBehaviour
 {
-    [SerializeField] [Range(1f, 20f)] private float UIspeed = 3f;
+    [SerializeField] [Range(0.001f, 20f)] private float UIspeed = 3f;
     [SerializeField] private GameObject background;
     [SerializeField] private CanvasGroup loadingScreen;
     [SerializeField] private GameObject mainMenu;
