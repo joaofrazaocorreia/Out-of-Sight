@@ -27,7 +27,7 @@ public class EnemyGuard : Enemy
     protected override void Update()
     {
         // ------------ Normal ------------ 
-        if(enemyMovement.status == EnemyMovement.Status.Normal)
+        if(enemyMovement.currentStatus == EnemyMovement.Status.Normal)
         {
             if(detection.DetectionMeter >= detection.DetectionLimit)
             {
@@ -36,7 +36,7 @@ public class EnemyGuard : Enemy
 
 
             if(detection.DetectionMeter >= detection.DetectionLimit * 2 / 3 &&
-                enemyMovement.status == EnemyMovement.Status.Normal)
+                enemyMovement.currentStatus == EnemyMovement.Status.Normal)
             {
                 enemyMovement.halted = true;
                 //transform.LookAt(Detection.lastPlayerPos);
@@ -44,7 +44,7 @@ public class EnemyGuard : Enemy
             }
 
             else if(detection.DetectionMeter >= detection.DetectionLimit * 1 / 3 &&
-                enemyMovement.status == EnemyMovement.Status.Normal)
+                enemyMovement.currentStatus == EnemyMovement.Status.Normal)
             {
                 enemyMovement.halted = true;
                 //transform.LookAt(Detection.lastPlayerPos);
@@ -57,7 +57,7 @@ public class EnemyGuard : Enemy
         }
 
         // ------------ Chasing ------------ 
-        else if(enemyMovement.status == EnemyMovement.Status.Chasing)
+        else if(enemyMovement.currentStatus == EnemyMovement.Status.Chasing)
         {
             if(detection.SeesPlayer)
             {
@@ -75,7 +75,7 @@ public class EnemyGuard : Enemy
                 else
                 {
                     prevPlayerPos = Detection.lastPlayerPos;
-                    enemyMovement.status = EnemyMovement.Status.Searching;
+                    enemyMovement.currentStatus = EnemyMovement.Status.Searching;
                 }
             }
 
@@ -95,7 +95,7 @@ public class EnemyGuard : Enemy
         }
 
         // ------------ Searching ------------ 
-        else if(enemyMovement.status == EnemyMovement.Status.Searching)
+        else if(enemyMovement.currentStatus == EnemyMovement.Status.Searching)
         {
             if(detection.SeesPlayer || Detection.lastPlayerPos != prevPlayerPos)
             {
@@ -106,26 +106,26 @@ public class EnemyGuard : Enemy
             
             else if (!alarm.IsOn)
             {
-                enemyMovement.status = EnemyMovement.Status.Normal;
+                enemyMovement.currentStatus = EnemyMovement.Status.Normal;
             }
             
         }
 
         // ------------ Tased ------------ 
-        else if(enemyMovement.status == EnemyMovement.Status.Tased)
+        else if(enemyMovement.currentStatus == EnemyMovement.Status.Tased)
         {
             // nothing yet
         }
 
         // ------------ Knocked Out ------------ 
-        else if(enemyMovement.status == EnemyMovement.Status.KnockedOut)
+        else if(enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
         {
             // nothing yet
         }
 
-        // ----- If any other enemyMovement.status is detected, resets it to normal.
+        // ----- If any other enemyMovement.currentStatus is detected, resets it to normal.
         else
-            enemyMovement.status = EnemyMovement.Status.Normal;
+            enemyMovement.currentStatus = EnemyMovement.Status.Normal;
     }
     
 
@@ -136,7 +136,7 @@ public class EnemyGuard : Enemy
         {
             base.BecomeAlarmed();
 
-            enemyMovement.status = EnemyMovement.Status.Chasing;
+            enemyMovement.currentStatus = EnemyMovement.Status.Chasing;
             aggroTimer = aggroTime;
         }
     }

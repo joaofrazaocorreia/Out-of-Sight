@@ -66,7 +66,6 @@ public class PlayerMelee : MonoBehaviour
                         // Checks if the raycast hit the enemy
                         if (hit.transform == enemy || hit.transform.parent == enemy)
                         {
-                            Debug.Log(enemy + " is in range");
                             if(distanceToClosestEnemy > distanceToEnemy.magnitude)
                             {
                                 closestEnemy = enemy;
@@ -78,13 +77,12 @@ public class PlayerMelee : MonoBehaviour
             }
 
             // Knocks out the enemy if they're not already knocked out
-            EnemyMovement enemyMovement;
             if(closestEnemy != null)
             {
-                enemyMovement = closestEnemy.GetComponent<EnemyMovement>();
+                EnemyMovement enemyMovement = closestEnemy.GetComponent<EnemyMovement>();
                 
-                if(enemyMovement.status != EnemyMovement.Status.KnockedOut)
-                    enemyMovement.status = EnemyMovement.Status.KnockedOut;
+                if(enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut)
+                    enemyMovement.currentStatus = EnemyMovement.Status.KnockedOut;
 
                 // TEMPORARY - moves the body away from the level when using meelee on it, this will be replaced by the body-carrying mechanic later
                 else
@@ -103,7 +101,7 @@ public class PlayerMelee : MonoBehaviour
         
         for(int i = 0; i < enemiesParent.childCount; i++)
         {
-            if(enemiesParent.GetChild(i).GetComponent<EnemyMovement>().status != EnemyMovement.Status.KnockedOut)
+            if(enemiesParent.GetChild(i).GetComponent<EnemyMovement>().currentStatus != EnemyMovement.Status.KnockedOut)
                 allEnemies.Add(enemiesParent.GetChild(i));
         }
     }
