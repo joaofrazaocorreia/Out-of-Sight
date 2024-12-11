@@ -68,7 +68,6 @@ public class EnemyMovement : MonoBehaviour
         player = FindAnyObjectByType<Player>();
         body = GetComponentInChildren<Body>();
         animator = GetComponent<Animator>();
-        body.enabled = false;
         navMeshAgent = GetComponent<NavMeshAgent>();
         mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
         leavingMap = false;
