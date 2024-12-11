@@ -28,6 +28,11 @@ public class PlayerMelee : MonoBehaviour
     {
         Debug.DrawRay(transform.position, transform.forward * attackRange, Color.white);
 
+        CheckForAttack();
+    }
+
+    private void CheckForAttack()
+    {
         if(playerInput.actions["Attack"].WasPressedThisFrame())
         {
             Debug.Log("Player used Melee attack");
@@ -61,6 +66,7 @@ public class PlayerMelee : MonoBehaviour
                         // Checks if the raycast hit the enemy
                         if (hit.transform == enemy || hit.transform.parent == enemy)
                         {
+                            Debug.Log(enemy + " is in range");
                             if(distanceToClosestEnemy > distanceToEnemy.magnitude)
                             {
                                 closestEnemy = enemy;
@@ -71,8 +77,23 @@ public class PlayerMelee : MonoBehaviour
                 }
             }
 
+            // Knocks out the enemy if they're not already knocked out
+            EnemyMovement enemyMovement;
             if(closestEnemy != null)
-                closestEnemy.GetComponent<EnemyMovement>().status = EnemyMovement.Status.KnockedOut;
+            {
+                enemyMovement = closestEnemy.GetComponent<EnemyMovement>();
+                
+                if(enemyMovement.status != EnemyMovement.Status.KnockedOut)
+                    enemyMovement.status = EnemyMovement.Status.KnockedOut;
+
+                // TEMPORARY - moves the body away from the level when using meelee on it, this will be replaced by the body-carrying mechanic later
+                else
+                {
+                    enemyMovement.gameObject.SetActive(false);
+                    enemyMovement.transform.position = new Vector3(1000, 1000, 1000);
+                    enemyMovement.gameObject.SetActive(true);
+                }
+            }
         }
     }
 

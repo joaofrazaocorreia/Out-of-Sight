@@ -8,13 +8,13 @@ public class MapEntrance : MonoBehaviour
 {
     [SerializeField] private List<Item> objectiveItems;
     [SerializeField] private float characterDetectionDistance = 4f;
-    [SerializeField] private List<GameObject> civillianPrefabs;
-    [SerializeField] private List<GameObject> workerPrefabs;
     [SerializeField] private float minCivillianSpawnTime = 3f;
     [SerializeField] private float maxCivillianSpawnTime = 15f;
     [SerializeField] private float minWorkerSpawnTime = 2f;
     [SerializeField] private float maxWorkerSpawnTime = 10f;
     [SerializeField] private Transform enemiesGameObject;
+    [SerializeField] private Transform QueuedCivilliansParent;
+    [SerializeField] private Transform QueuedWorkersParent;
 
     public static Transform Transform;
     private UIManager uiManager;
@@ -22,8 +22,6 @@ public class MapEntrance : MonoBehaviour
     private Transform player;
     private PlayerInventory playerInventory;
     public static List<Enemy> enemies;
-    private Queue<List<Transform>> civilliansMovementTargets;
-    private Queue<List<Transform>> workersMovementTargets;
     private int numOfCivilliansInQueue;
     private int numOfWorkersInQueue;
     private float civilliansSpawnTimer;
@@ -45,6 +43,8 @@ public class MapEntrance : MonoBehaviour
         Transform = transform;
         uiManager = FindAnyObjectByType<UIManager>();
         alarm = FindAnyObjectByType<Alarm>();
+        QueuedCivilliansParent.gameObject.SetActive(true);
+        QueuedWorkersParent.gameObject.SetActive(true);
         numOfCivilliansInQueue = 0;
         numOfWorkersInQueue = 0;
         workersSpawnTimer = Random.Range(minWorkerSpawnTime, maxWorkerSpawnTime);
@@ -53,12 +53,7 @@ public class MapEntrance : MonoBehaviour
         player = FindAnyObjectByType<Player>().transform;
         playerInventory = FindAnyObjectByType<PlayerInventory>();
 
-        // Stores a list of all non-camera enemies to check whenever one wants to leave the map
-        enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
-        enemies = enemies.Where(e => !e.gameObject.GetComponent<EnemyCamera>()).ToList();
-
-        civilliansMovementTargets = new Queue<List<Transform>>();
-        workersMovementTargets = new Queue<List<Transform>>();
+        UpdateEnemies();
     }
 
 
@@ -74,14 +69,8 @@ public class MapEntrance : MonoBehaviour
 
             else
             {
-                // Picks a random worker prefab to spawn
-                int index = Random.Range(0, workerPrefabs.Count);
-                NavMesh.SamplePosition(transform.position, out NavMeshHit navHit,
-                    characterDetectionDistance, NavMesh.AllAreas);
-
-                // Spawns the worker in the navmesh position nearest to this exit's position and
-                // assigns the movement targets of a previous NPC to the new one
-                GameObject newNPC = SpawnEnemy(workerPrefabs[index], workersMovementTargets.Dequeue());
+                // Respawns a worker in this exit's position
+                GameObject newNPC = SpawnEnemy(Enemy.Type.Worker);
                 enemies.Add(newNPC.GetComponent<EnemyWorker>());
 
                 // Decreases the number of NPCs in the queue and restarts the spawn timer
@@ -100,14 +89,8 @@ public class MapEntrance : MonoBehaviour
 
             else
             {
-                // Picks a random civillian prefab to spawn
-                int index = Random.Range(0, civillianPrefabs.Count);
-                NavMesh.SamplePosition(transform.position, out NavMeshHit navHit,
-                    characterDetectionDistance, NavMesh.AllAreas);
-
-                // Spawns the civillian in the navmesh position nearest to this exit's position and
-                // assigns the movement targets of a previous NPC to the new one
-                GameObject newNPC = SpawnEnemy(civillianPrefabs[index], civilliansMovementTargets.Dequeue());
+                // Spawns the civillian in this exit's position
+                GameObject newNPC = SpawnEnemy(Enemy.Type.Civillian);
                 enemies.Add(newNPC.GetComponent<EnemyCivillian>());
 
                 // Decreases the number of NPCs in the queue and restarts the spawn timer
@@ -127,6 +110,7 @@ public class MapEntrance : MonoBehaviour
         }
 
         // If any civillian comes close to the exit and is running away, they "leave" the map (they despawn until the alarm ends)
+        UpdateEnemies();
         foreach(Enemy e in enemies)
         {
             if((transform.position - e.transform.position).magnitude <= characterDetectionDistance && e.EnemyMovement &&
@@ -137,26 +121,24 @@ public class MapEntrance : MonoBehaviour
                 if(e.GetComponent<EnemyWorker>())
                 {
                     numOfWorkersInQueue++;
-                    workersMovementTargets.Enqueue(e.EnemyMovement.MovementTargets);
                 }
-                else
+                else if(e.GetComponent<EnemyCivillian>())
                 {
                     numOfCivilliansInQueue++;
-                    civilliansMovementTargets.Enqueue(e.EnemyMovement.MovementTargets);
                 }
 
                 // Schedules the enemy's GameObject for destruction and removal from the list
-                StartCoroutine(ScheduleGameObjectForDestruction(e.gameObject));
+                StartCoroutine(ScheduleGameObjectForQueue(e.gameObject, e.EnemyType));
             }
         }
     }
     
     /// <summary>
-    /// Coroutine that instantly disables the given GameObject and safely destroys it in the next frame.
+    /// Coroutine that instantly disables the given GameObject and safely stores it in the next frame.
     /// </summary>
     /// <param name="go">The GameObject to be deleted.</param>
     /// <returns></returns>
-    private IEnumerator ScheduleGameObjectForDestruction(GameObject go)
+    private IEnumerator ScheduleGameObjectForQueue(GameObject go, Enemy.Type type)
     {
         go.SetActive(false);
 
@@ -165,11 +147,17 @@ public class MapEntrance : MonoBehaviour
         if(go.GetComponent<Enemy>() != null) 
             enemies.Remove(go.GetComponent<Enemy>());
 
-        Destroy(go);
+        if(type == Enemy.Type.Civillian)
+            go.transform.parent = QueuedCivilliansParent;
+
+        if(type == Enemy.Type.Worker)
+            go.transform.parent = QueuedWorkersParent;
+        
+        UpdateEnemies();
     }
 
     /// <summary>
-    /// Spawns the given prefab at the entrance of the map.
+    /// Spawns the given prefab at the entrance of the map with the given movement targets.
     /// </summary>
     /// <param name="prefab">The prefab to be spawned.</param>
     /// <returns>The spawned GameObject.</returns>
@@ -184,7 +172,51 @@ public class MapEntrance : MonoBehaviour
         enemies.Add(newNPC.GetComponent<Enemy>());
 
         newNPC.GetComponent<EnemyMovement>().SetMovementTargets(movementTargets);
+        UpdateEnemies();
 
         return newNPC;
+    }
+
+    /// <summary>
+    /// Respawns the given type of enemy at the entrance of the map.
+    /// </summary>
+    /// <param name="prefab">The prefab to be spawned.</param>
+    /// <returns>The spawned GameObject.</returns>
+    public GameObject SpawnEnemy(Enemy.Type type)
+    {
+        Transform QueuedEnemiesGameObject;
+        if(type == Enemy.Type.Civillian)
+            QueuedEnemiesGameObject = QueuedCivilliansParent;
+        
+        else
+            QueuedEnemiesGameObject = QueuedWorkersParent;
+        
+        // Calculates the position in the navmesh to spawn the NPC
+        NavMesh.SamplePosition(transform.position, out NavMeshHit navHit,
+            characterDetectionDistance, NavMesh.AllAreas);
+
+        // Respawns a random NPC of the given type in the navmesh position nearest to this exit's position
+        int index = Random.Range(0, QueuedEnemiesGameObject.childCount);
+        Enemy newNPC = Instantiate(QueuedEnemiesGameObject.GetChild(index), navHit.position, Quaternion.identity, enemiesGameObject).GetComponent<Enemy>();
+        enemies.Add(newNPC);
+
+        newNPC.transform.parent = enemiesGameObject;
+        newNPC.transform.position = navHit.position;
+        newNPC.ResetNPC();
+        newNPC.EnemyMovement.ResetNPC();
+        newNPC.gameObject.SetActive(true);
+
+        Destroy(QueuedEnemiesGameObject.GetChild(index).gameObject);
+
+        return newNPC.gameObject;
+    }
+
+    /// <summary>
+    /// Stores a list of all non-camera enemies to check whenever one wants to leave the map.
+    /// </summary>
+    public static void UpdateEnemies()
+    {
+        enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
+        enemies = enemies.Where(e => !e.gameObject.GetComponent<EnemyCamera>()).ToList();
     }
 }

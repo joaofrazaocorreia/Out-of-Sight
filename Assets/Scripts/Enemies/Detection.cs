@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Detection : MonoBehaviour
@@ -22,9 +24,9 @@ public class Detection : MonoBehaviour
     public float DetectionLimit {get => detectionLimit;}
     private bool seesPlayer;
     public bool SeesPlayer {get => seesPlayer;}
-    private bool seesSuspiciousObject;
-    public bool SeesSuspiciousObject {get => seesSuspiciousObject;}
-    private List<GameObject> allSuspiciousObjects;
+    private bool seesBody;
+    public bool SeesBody {get => seesBody;}
+    private List<Body> allBodies;
     private bool tooCloseToPlayer;
     private EnemyCamera enemyCamera;
     private EnemyMovement enemyMovement;
@@ -35,12 +37,12 @@ public class Detection : MonoBehaviour
         player = FindAnyObjectByType<Player>();
         DetectionMeter = 0;
         seesPlayer = false;
-        seesSuspiciousObject = false;
+        seesBody = false;
         tooCloseToPlayer = false;
         enemyMovement = GetComponentInParent<EnemyMovement>();
         enemyCamera = GetComponentInParent<EnemyCamera>();
 
-        allSuspiciousObjects = new List<GameObject>();
+        allBodies = new List<Body>();
     }
 
     private void FixedUpdate()
@@ -52,15 +54,13 @@ public class Detection : MonoBehaviour
         {
             Vector3 distanceToPlayer = player.transform.position - transform.position;
 
-            
             // Checks if the player is too close to the NPC
             tooCloseToPlayer = distanceToPlayer.magnitude <= proximityDetectionRange;
-
 
             // Checks if the player is within range of this NPC's detection range
             if(distanceToPlayer.magnitude <= detectionRange)
             {
-                // Checks if player is within this NPC's field of view
+                // Checks if the player is within this NPC's field of view
                 if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distanceToPlayer) <= detectionMaxAngle)
                 {
                     // Sends a raycast towards the player and checks if it hits anything
@@ -106,12 +106,70 @@ public class Detection : MonoBehaviour
             }
 
 
-            CheckForPlayer();
+            UpdateAllBodies();
+
+            foreach(Body b in allBodies)
+            {
+                if (!b.enabled || b.HasBeenDetected)
+                    continue;
+                
+                Vector3 distance = b.transform.position - transform.position;
+
+                // Checks if the body is within range of this NPC's detection range
+                if(distance.magnitude <= detectionRange)
+                {
+                    // Checks if the body is within this NPC's field of view
+                    if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distance) <= detectionMaxAngle)
+                    {
+                        // Sends a raycast towards the body and checks if it hits anything
+                        if (Physics.Raycast(transform.position, distance, out RaycastHit hit, detectionRange))
+                        {
+                            // Checks if the raycast hit an body
+                            if (b.enabled && !b.HasBeenDetected)
+                            {
+                                seesBody = true;
+                                Debug.DrawRay(transform.position, distance * hit.distance, Color.red);
+                                break;
+                            }
+
+                            // If the raycast detects an obstacle between the NPC and the body:
+                            else
+                            {
+                                seesBody = false;
+                                Debug.DrawRay(transform.position, distance * hit.distance, Color.yellow);
+                            }
+                        }
+
+                        // If the raycast doesn't reach the body:
+                        else
+                        {
+                            seesBody = false;
+                            Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
+                        }
+                    }
+                    
+                    // If the body is not within the enemy's field of view:
+                    else
+                    {
+                        seesBody = false;
+                        Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
+                    }
+                }
+
+                // If the body is too far away to be detected:
+                else
+                {
+                    seesBody = false;
+                    Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
+                }
+            }
+
+            UpdateDetection();
         }
     }
 
     // Checks if the NPC sees the player or if it's too close to them, and raises/decreases detection accordingly
-    private void CheckForPlayer()
+    private void UpdateDetection()
     {
         // Multiple sources of detection stack with each other
         int sourceMultiplier = 0;
@@ -130,9 +188,10 @@ public class Detection : MonoBehaviour
                 sourceMultiplier++;
         }
 
-        if(seesSuspiciousObject)
+        // Seeing a body increases the multiplier thrice as much
+        if(seesBody)
         {
-            sourceMultiplier++;
+            sourceMultiplier += 3;
         }
 
         // Increases detection based on the number of sources that increase it
@@ -155,6 +214,21 @@ public class Detection : MonoBehaviour
     {
         if(enemyCamera == null || enemyCamera.IsOn)
             lastPlayerPos = player.transform.position;
+    }
+
+    public void UpdateAllBodies()
+    {
+        Body[] bodies = FindObjectsByType<Body>(FindObjectsSortMode.None);
+
+        if(allBodies.Count != bodies.Count())
+        {
+            allBodies = new List<Body>();
+
+            foreach(Body b in bodies)
+            {
+                allBodies.Add(b);
+            }
+        }
     }
 }
 

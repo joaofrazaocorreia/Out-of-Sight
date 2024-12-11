@@ -41,6 +41,8 @@ public class PlayerEquipment : MonoBehaviour
             Unequip();
         } 
         else CurrentEquipmentNum = index;
+
+        GetComponent<Player>().GainStatus(Player.Status.Suspicious);
     }
 
     private void Unequip()
@@ -48,6 +50,8 @@ public class PlayerEquipment : MonoBehaviour
         uIManager.ToggleAmmoDisplay(false);
         _currentEquipmentNum = -1;
         CurrentEquipment = null;
+
+        GetComponent<Player>().LoseStatus(Player.Status.Suspicious);
     }
 
     public void TryUseEquipment()
