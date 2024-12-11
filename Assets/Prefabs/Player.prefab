@@ -346,8 +346,6 @@ MonoBehaviour:
   _backwardAcceleration: -12
   _strafeAcceleration: 20
   _gravityAcceleration: -10
-  runSpeedModifier: 2
-  crouchSpeedModifier: 0.75
   _maxForwardVelocity: 10
   _maxBackwardVelocity: -6
   _maxStrafeVelocity: 10
@@ -359,8 +357,15 @@ MonoBehaviour:
   HeadbobAmount: 5
   HeadbobSmoothness: 10
   HeadbobFrequency: 12
-  _isCrouchToggle: 0
-  _isRunToggle: 0
+  _charHead: {fileID: 2051839802640443896}
+  isCrouchToggle: 0
+  crouchSpeedModifier: 0.75
+  crouchHeight: 2
+  crouchCenterY: -1.75
+  isRunToggle: 0
+  runSpeedModifier: 2
+  staminaRegenSpeed: 0.25
+  staminaUsagePerSecond: 0.1
 --- !u!114 &6749328818668131904
 MonoBehaviour:
   m_ObjectHideFlags: 0
