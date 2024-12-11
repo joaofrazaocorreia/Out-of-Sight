@@ -53,6 +53,10 @@ public class UIManager : MonoBehaviour
         gamePaused = false;
         settingsActive = false;
         Time.timeScale = startingTimeScale;
+        
+        #if UNITY_EDITOR
+            UISpeed *= 3;
+        #endif
 
         originalUIPositions = new Dictionary<Transform, Vector3>();
 

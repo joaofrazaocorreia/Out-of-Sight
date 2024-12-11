@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuScripts : MonoBehaviour
 {
-    [SerializeField] [Range(0.001f, 20f)] private float UIspeed = 3f;
+    [SerializeField] [Range(0.001f, 20f)] private float UISpeed = 3f;
     [SerializeField] private GameObject background;
     [SerializeField] private CanvasGroup loadingScreen;
     [SerializeField] private GameObject mainMenu;
@@ -18,6 +18,10 @@ public class MainMenuScripts : MonoBehaviour
     private void Start()
     {
         originalUIPositions = new Dictionary<Transform, Vector3>();
+        
+        #if UNITY_EDITOR
+            UISpeed *= 3;
+        #endif
 
         for(int i = 0; i < transform.childCount; i++)
         {
@@ -30,7 +34,7 @@ public class MainMenuScripts : MonoBehaviour
         while(uiTransform.localPosition != newPos)
         {
             Vector3 difference = newPos - uiTransform.localPosition;
-            float movespeed = Time.fixedDeltaTime * UIspeed;
+            float movespeed = Time.fixedDeltaTime * UISpeed;
 
             Vector3 translation = new Vector3(
                 Mathf.Max(difference.x * movespeed, Mathf.Min(movespeed, difference.x)),
