@@ -16,10 +16,6 @@ public class Player : MonoBehaviour
 
         disguise = Disguise.Civillian;
         status.Add(Status.Normal);
-
-
-        //GainStatus(Status.Trespassing);
-        //GainStatus(Status.Suspicious);
     }
 
     private void Update()
