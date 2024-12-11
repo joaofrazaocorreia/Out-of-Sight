@@ -12,9 +12,9 @@ public class Alarm : MonoBehaviour
     [SerializeField] private MapEntrance mapEntrance;
     [SerializeField] private List<Transform> movementTargets;
     [SerializeField] private GameObject guardPrefab;
-    //[SerializeField] private GameObject policePrefab;
-    //[SerializeField] private float policeSpawnTime = 10f;
-    //[SerializeField] private int maxPoliceNPCS = 6;
+    [SerializeField] private GameObject policePrefab;
+    [SerializeField] private float policeSpawnTime = 10f;
+    [SerializeField] private int maxPoliceNPCS = 6;
 
     private Transform player;
     private int currentTier;
@@ -23,21 +23,22 @@ public class Alarm : MonoBehaviour
     private float alarmTimer;
     private float AlarmTime {get => baseDuration + (durationIncreasePerTier * Mathf.Min(currentTier - 1, maxTier));}
     public float AlarmTimer {get => alarmTimer; set => alarmTimer = value;}
-    //private float policeSpawnTimer;
+    private float policeSpawnTimer;
     private List<Enemy> enemies;
     private List<EnemyGuard> nonStaticGuards;
     private List<EnemyGuard> extraGuards;
-    //private List<EnemyPolice> policeGuards;
+    private List<EnemyPolice> policeGuards;
 
     private void Start()
     {
         currentTier = 0;
         isOn = false;
         alarmTimer = AlarmTime;
-        //policeSpawnTimer = 0f;
+        policeSpawnTimer = 0f;
         enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
         enemies = enemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
         extraGuards = new List<EnemyGuard>();
+        policeGuards = new List<EnemyPolice>();
         nonStaticGuards = FindObjectsByType<EnemyGuard>(FindObjectsSortMode.None).ToList();
         nonStaticGuards = nonStaticGuards.Where(enemy => !enemy.GetComponent<EnemyMovement>().IsStatic).ToList();
 
@@ -56,14 +57,13 @@ public class Alarm : MonoBehaviour
                     alarmTimer -= Time.deltaTime;
                 }
 
-                /*
                 // If it's the last tier, starts generating police NPCs procedurally until the maximum amount is hit.
                 else if(policeGuards.Count < maxPoliceNPCS)
                 {
                     if(policeSpawnTimer <= 0)
                     {
                         policeSpawnTimer = policeSpawnTime;
-                        GameObject newPolice = mapEntrance.SpawnEnemy(policePrefab, player);
+                        GameObject newPolice = mapEntrance.SpawnEnemy(policePrefab, new List<Transform>() {player.transform});
 
                         policeGuards.Add(newPolice.GetComponent<EnemyPolice>());
                     }
@@ -73,7 +73,6 @@ public class Alarm : MonoBehaviour
                         policeSpawnTimer -= Time.deltaTime;
                     }
                 }
-                */
             }
 
             // When the duration ends, the alarm turns off and any extra spawned enemies leave the map.
@@ -85,7 +84,7 @@ public class Alarm : MonoBehaviour
 
                 foreach(Enemy e in enemies)
                 {
-                    e.EnemyMovement.status = EnemyMovement.Status.Normal;
+                    e.EnemyMovement.currentStatus = EnemyMovement.Status.Normal;
                 }
       
                 int enemyCount = 0;
@@ -138,7 +137,7 @@ public class Alarm : MonoBehaviour
                     GameObject newGuard = mapEntrance.SpawnEnemy(guardPrefab, movementTargets);
                     extraGuards.Add(newGuard.GetComponent<EnemyGuard>());
 
-                    newGuard.GetComponent<EnemyMovement>().status = EnemyMovement.Status.Chasing;
+                    newGuard.GetComponent<EnemyMovement>().currentStatus = EnemyMovement.Status.Chasing;
                 }
             }
         }
@@ -146,10 +145,10 @@ public class Alarm : MonoBehaviour
         enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
         enemies = enemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
         
-        // NPCs become aware of the bodies in the level so they don't raise the alarm right after it ends
+        // NPCs become aware of the bodies in the level so they don't raise the alarm again
         foreach(Enemy e in enemies)
         {
-            if(e.GetComponent<EnemyMovement>().status == EnemyMovement.Status.KnockedOut)
+            if(e.GetComponent<EnemyMovement>().currentStatus == EnemyMovement.Status.KnockedOut)
                 e.GetComponentInChildren<Body>().HasBeenDetected = true;
         }
 

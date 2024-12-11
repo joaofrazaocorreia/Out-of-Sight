@@ -404,7 +404,7 @@ public class UIManager : MonoBehaviour
                 for(int j = 0; j < NPCParent.GetChild(i).childCount; j++)
                 {
                     EnemyMovement em = NPCParent.GetChild(i).GetChild(j).GetComponent<EnemyMovement>();
-                    if(em != null && em.status != EnemyMovement.Status.KnockedOut)
+                    if(em != null && em.currentStatus != EnemyMovement.Status.KnockedOut)
                         enemyDetections.Add(NPCParent.GetChild(i).GetChild(j).GetComponentInChildren<Detection>());
                 }
             }
