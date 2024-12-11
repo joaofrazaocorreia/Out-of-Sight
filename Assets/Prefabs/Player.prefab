@@ -260,6 +260,7 @@ GameObject:
   - component: {fileID: 6323751845344798753}
   - component: {fileID: 4004361906442288972}
   - component: {fileID: 6721959621666895681}
+  - component: {fileID: 3179077919114121297}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -346,8 +347,6 @@ MonoBehaviour:
   _backwardAcceleration: -12
   _strafeAcceleration: 20
   _gravityAcceleration: -10
-  runSpeedModifier: 2
-  crouchSpeedModifier: 0.75
   _maxForwardVelocity: 10
   _maxBackwardVelocity: -6
   _maxStrafeVelocity: 10
@@ -359,8 +358,15 @@ MonoBehaviour:
   HeadbobAmount: 5
   HeadbobSmoothness: 10
   HeadbobFrequency: 12
-  _isCrouchToggle: 0
-  _isRunToggle: 0
+  _charHead: {fileID: 2051839802640443896}
+  isCrouchToggle: 0
+  crouchSpeedModifier: 0.75
+  crouchHeight: 2
+  crouchCenterY: -1.75
+  isRunToggle: 0
+  runSpeedModifier: 2
+  staminaRegenSpeed: 0.25
+  staminaUsagePerSecond: 0.1
 --- !u!114 &6749328818668131904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -590,6 +596,28 @@ MonoBehaviour:
   - {fileID: 9204613520076188937}
   - {fileID: 4417400501556301415}
   - {fileID: 2494546971780649612}
+--- !u!95 &3179077919114121297
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6061762206571335386}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8fd2f657487a0bc4aba7f7c6632a3e04, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6290793974875613221
 GameObject:
   m_ObjectHideFlags: 0
