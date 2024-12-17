@@ -28,13 +28,17 @@ public class PlayerInteraction : MonoBehaviour
 
     private GameObject _activeObject;
     
+    private GameObject _lastHitObject;
+    private InteractiveObject[] _hitInteractables;
+    private int _hitIndex;
+    
     private InteractiveObject ActiveInteractiveObject
     {
         get => _activeInteractiveObject;
         set
         {
-            if(value == _activeInteractiveObject) return;
-            
+            if (value == _activeInteractiveObject) return;
+
             _activeInteractiveObject = value;
             
             _interactionDuration = _activeInteractiveObject ? _activeInteractiveObject.InteractionDuration : 0;
@@ -54,6 +58,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Update()
     {
+        _player.LoseStatus(Player.Status.Suspicious);
         GetInteractiveObject();
         UpdateInteractionUI();
         if (!_interactionReady) InteractionCooldown();
@@ -63,14 +68,17 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out _hit, raycastDistance))
         {
-            var hitInteractable = _hit.collider.GetComponentInParent<InteractiveObject>();
-            ActiveInteractiveObject = hitInteractable;
+            var temp =  _hit.collider.gameObject;
+            if(_lastHitObject == temp) return;
+            
+            _lastHitObject = temp;
+            _hitInteractables = _lastHitObject.GetComponentsInParent<InteractiveObject>();
         }
         else
         {
+            _hitInteractables = null;
             ActiveInteractiveObject = null;
         }
-            
     }
 
     private void InteractionCooldown()
@@ -88,40 +96,56 @@ public class PlayerInteraction : MonoBehaviour
         _interactionReady = true;
     }
     
-    public void TryInteraction()
+    public void TryInteraction(bool isPrimaryInteraction)
     {
         if (!_interactionReady)
         {
             _interactionCooldownTimer = interactionCooldown;
             return;
         }
-        if(CheckValidInteraction()) Interact(ActiveInteractiveObject.InteractiveType);
+        if(_hitInteractables == null) return;
+        StartInteract(isPrimaryInteraction);
     }
 
     public void ResetInteract()
     {
         _interactionDuration = _activeInteractiveObject != null ? _activeInteractiveObject.InteractionDuration : 0;
-        _player.LoseStatus(Player.Status.Suspicious);
         _uiManager.ToggleInteractingBar(false);
     }
     
     private bool CheckValidInteraction()
     {
-        return ActiveInteractiveObject != null && CheckCanInteract() && ActiveInteractiveObject.enabled;
+        return ActiveInteractiveObject != null && CheckCanInteract(ActiveInteractiveObject) && ActiveInteractiveObject.enabled;
     }
 
-    private bool CheckCanInteract()
+    private bool CheckCanInteract(InteractiveObject interactiveObject)
     {
-        if(!ActiveInteractiveObject.HasRequirement) return true;
-        switch (ActiveInteractiveObject.InteractiveType)
+        if(!interactiveObject.HasRequirement) return true;
+        switch (interactiveObject.InteractiveType)
            {
             case InteractiveType.DirectItemRequirement:
-                return _playerInventory.HasItem(ActiveInteractiveObject.RequirementObject);
+                return _playerInventory.HasItem(interactiveObject.RequirementObject);
             
             case InteractiveType.DirectEquipmentRequirement:
-                return _playerEquipment.CurrentEquipment == ActiveInteractiveObject.RequirementEquipment && _playerEquipment.CurrentEquipment.CanBeUsed;
+                return _playerEquipment.CurrentEquipment == interactiveObject.RequirementEquipment && _playerEquipment.CurrentEquipment.CanBeUsed;
             }
         return false;
+    }
+
+    private void StartInteract(bool isPrimaryInteraction)
+    {
+        switch (_hitInteractables.Length)
+        {
+            case 1:
+                ActiveInteractiveObject = isPrimaryInteraction ? _hitInteractables[0] : null;
+                break;
+            case 2: 
+                ActiveInteractiveObject = isPrimaryInteraction ? _hitInteractables[0] : _hitInteractables[1];
+                break;
+            default: ActiveInteractiveObject = null; break;
+        }
+        if(!CheckValidInteraction()) return;
+        Interact(ActiveInteractiveObject.InteractiveType);
     }
 
     private void Interact(InteractiveType interactiveType)
@@ -160,7 +184,6 @@ public class PlayerInteraction : MonoBehaviour
         
         ActiveInteractiveObject.Interact();
         
-        if(ActiveInteractiveObject.IsInteractionSuspicious) _player.LoseStatus(Player.Status.Suspicious);
         _uiManager.ToggleInteractingBar(false);
         
         _finishedInteraction = true;
@@ -170,14 +193,42 @@ public class PlayerInteraction : MonoBehaviour
 
     private void UpdateInteractionUI()
     {
-        if (ActiveInteractiveObject == null || !ActiveInteractiveObject.enabled)
+        
+        if (_hitInteractables == null || _hitInteractables.Length == 0)
         {
-            _uiManager.ToggleInteractionMessage(false);
+            DisableInteractionUI();
             return;
         }
 
-        _uiManager.UpdateInteractionText(ActiveInteractiveObject.GetInteractionText(CheckCanInteract()));
-        _uiManager.ToggleInteractionMessage(true);
+        switch (_hitInteractables.Length)
+        {
+            case 1:
+                if (!_hitInteractables[0].enabled)
+                {
+                    _uiManager.ToggleInteractionMessage(false,0);
+                    return;
+                }
+                
+                _uiManager.UpdateInteractionUi(_hitInteractables, CheckCanInteract(_hitInteractables[0]), false);
+                break;
+            case 2:
+                if (!_hitInteractables[1].enabled && !_hitInteractables[0].enabled) return;
+                
+                _uiManager.ToggleInteractionMessage(!_hitInteractables[0].enabled, 0);
+                _uiManager.ToggleInteractionMessage(!_hitInteractables[1].enabled, 1);
+                
+                _uiManager.UpdateInteractionUi(_hitInteractables, CheckCanInteract(_hitInteractables[0]), CheckCanInteract(_hitInteractables[1]));
+                break;
+        }
+        
+
+        
+    }
+
+    private void DisableInteractionUI()
+    {
+        _uiManager.ToggleInteractionMessage(false, 0);
+        _uiManager.ToggleInteractionMessage(false, 1);
     }
     
     private void InteractAnimation()
