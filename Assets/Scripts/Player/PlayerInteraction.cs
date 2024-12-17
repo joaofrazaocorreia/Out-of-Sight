@@ -163,7 +163,7 @@ public class PlayerInteraction : MonoBehaviour
         switch (interactiveType)
         {
             case InteractiveType.Item:
-                _playerInventory.AddItem(ActiveInteractiveObject.GetComponent<Item>(), 1);
+                _playerInventory.AddItem(ActiveInteractiveObject.GetComponent<Item>());
                 InteractAnimation();
                 break;
             
