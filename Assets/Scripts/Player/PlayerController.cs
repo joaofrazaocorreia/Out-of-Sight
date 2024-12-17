@@ -111,6 +111,7 @@ public class PlayerController : MonoBehaviour
     private bool _canMove = true;
     private bool _canLook = true;
     private float[] _selectedEquipment;
+    private int _resetInteract;
 
     void Start()
     {
@@ -164,7 +165,9 @@ public class PlayerController : MonoBehaviour
         _movementVector = GetInput(_playerInput.actions["Move"]);
         GetInput(_playerInput.actions["Crouch"], EnableCrouch, DisableCrouch, !isCrouchToggle);
         GetInput(_playerInput.actions["Run"], EnableRunning, DisableRun, !isRunToggle);
+        _resetInteract = 0;
         GetInput(_playerInput.actions["Interact"], Interact, ResetInteract, true);
+        GetInput(_playerInput.actions["InteractSecondary"], InteractSecondary, ResetInteract, true);
         GetInput(_playerInput.actions["UseEquipment"], UseEquipment, false);
         
         _selectedEquipment[0] = _playerInput.actions["EquipmentHotbar1"].WasPressedThisFrame() ? 1 : 0;
@@ -256,11 +259,21 @@ public class PlayerController : MonoBehaviour
 
     private void Interact()
     {
-        _playerInteraction.TryInteraction();
+        _playerInteraction.TryInteraction(true);
+    }
+    
+    private void InteractSecondary()
+    {
+        _playerInteraction.TryInteraction(false);
     }
 
     private void ResetInteract()
     {
+        if (_resetInteract != 2)
+        {
+            _resetInteract++;
+            return;
+        }
         _playerInteraction.ResetInteract();
     }
     

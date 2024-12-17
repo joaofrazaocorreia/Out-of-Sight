@@ -27,8 +27,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CanvasGroup gameOverScreen;
     [SerializeField] private Image[] equipmentIcons;
     [SerializeField] private Image[] inventoryIcons;
-    [SerializeField] private GameObject interactionUI;
-    [SerializeField] private TextMeshProUGUI interactionMessage;
+    [SerializeField] private GameObject[] interactionUI;
     [SerializeField] private GameObject interactingBar;
     [SerializeField] private RectTransform interactingBarFill;
     [SerializeField] private GameObject globalDetection;
@@ -43,6 +42,7 @@ public class UIManager : MonoBehaviour
     private bool settingsActive;
     private Dictionary<Transform,Vector3> originalUIPositions;
     private PlayerInput playerInput;
+    private TextMeshProUGUI interactionMessage;
     private List<Detection> enemyDetections;
     private Alarm alarm;
     private float deltaTime;
@@ -343,16 +343,31 @@ public class UIManager : MonoBehaviour
         if(index < inventoryIcons.Length && inventoryIcons[index] != null) inventoryIcons[index].sprite = newIcon;
     }
 
-    public void ToggleInteractionMessage(bool? toggle)
+    public void UpdateInteractionUi(InteractiveObject[] interactiveObjects, bool canInteractPrimary, bool canInteractSecondary)
+    {
+        for (int i = 0; i < interactiveObjects.Length; i++)
+        {
+            if (interactiveObjects[i] == null)
+            {
+                ToggleInteractionMessage(false, i);
+                continue;
+            }
+            interactionMessage = interactionUI[i].GetComponentInChildren<TextMeshProUGUI>();
+            UpdateInteractionText(interactiveObjects[i].GetInteractionText(i == 0 ? canInteractPrimary : canInteractSecondary));
+            ToggleInteractionMessage(true, i);
+        }
+    }
+    
+    public void ToggleInteractionMessage(bool? toggle, int index)
     {
         if(toggle != null)
-            interactionUI.SetActive((bool)toggle);
+            interactionUI[index].SetActive((bool)toggle);
         
         else
-            interactionUI.SetActive(!interactingBar.activeSelf);
+            interactionUI[index].SetActive(!interactingBar.activeSelf);
     }
 
-    public void UpdateInteractionText(string text)
+    private void UpdateInteractionText(string text)
     {
         interactionMessage.text = text;
     }
