@@ -59,17 +59,17 @@ public class Cheats : MonoBehaviour
 
         if(playerInput.actions["GetKeycard"].WasPressedThisFrame())
         {
-            playerInventory.AddItem(keycard, 1);
+            playerInventory.AddItem(keycard);
         }
 
         if(playerInput.actions["GetCode"].WasPressedThisFrame())
         {
-            playerInventory.AddItem(code, 1);
+            playerInventory.AddItem(code);
         }
 
         if(playerInput.actions["GetFiles"].WasPressedThisFrame())
         {
-            playerInventory.AddItem(files, 1);
+            playerInventory.AddItem(files);
         }
     }
 }

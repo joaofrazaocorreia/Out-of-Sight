@@ -6,27 +6,30 @@ public class PlayerInventory : MonoBehaviour
 {
     [SerializeField] private Sprite emptySlotSprite;
     private UIManager uIManager;
-    private Dictionary<Item, int> inventory = new Dictionary<Item, int>();
+    private List<Item> inventory = new List<Item>();
+    
+    public List<Item> Inventory
+    {
+        get { return inventory; }
+        private set { inventory = value; }
+    }
 
     private void Start()
     {
         uIManager = FindFirstObjectByType<UIManager>();
     }
-
-    public int GetItemQuantity(Item item) => inventory[item];
     
-    public bool HasItem(Item item) => inventory.ContainsKey(item);
+    public bool HasItem(Item item) => Inventory.Contains(item);
     
-    public void AddItem(Item item, int amount)
+    public void AddItem(Item newItem)
     {
-        inventory.Add(item, amount);
-        uIManager.UpdateInventoryIcon(item.Icon, inventory[item]);
+        Inventory.Add(newItem);
+        uIManager.UpdateInventoryIcon(newItem.Icon, Inventory.IndexOf(newItem));
     }
 
     public void RemoveItem(Item item)
     {
-        uIManager.UpdateInventoryIcon(emptySlotSprite, inventory[item]);
-        inventory[item]--;
-        if(inventory[item] == 0) inventory.Remove(item);
+        uIManager.UpdateInventoryIcon(emptySlotSprite, Inventory.IndexOf(item));
+        Inventory.Remove(item);
     }
 }
