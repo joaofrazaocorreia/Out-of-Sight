@@ -58,7 +58,6 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Update()
     {
-        _player.LoseStatus(Player.Status.Suspicious);
         GetInteractiveObject();
         UpdateInteractionUI();
         if (!_interactionReady) InteractionCooldown();

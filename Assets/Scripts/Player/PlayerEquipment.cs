@@ -39,10 +39,13 @@ public class PlayerEquipment : MonoBehaviour
         {
             CurrentEquipment.Equipped(false);
             Unequip();
-        } 
-        else CurrentEquipmentNum = index;
+        }
+        else
+        {
+            CurrentEquipmentNum = index;
+            GetComponent<Player>().GainStatus(Player.Status.Suspicious);
+        }
 
-        GetComponent<Player>().GainStatus(Player.Status.Suspicious);
     }
 
     private void Unequip()
