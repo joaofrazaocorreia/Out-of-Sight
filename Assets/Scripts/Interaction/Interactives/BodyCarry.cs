@@ -19,7 +19,7 @@ public class BodyCarry : InteractiveObject
 
     public override void Interact()
     {
-        if(enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
+        if(enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut && !playerBodyInventory.CarryingBody)
         {
             base.Interact();
 
@@ -30,6 +30,8 @@ public class BodyCarry : InteractiveObject
     public override string GetInteractionText(bool requirementsMet)
     {
         if (!requirementsMet) return "Requires " + GetRequirementNames();
+
+        else if(playerBodyInventory.CarryingBody) return "Already carrying a body!";
 
         return "Carry Body";
     }
