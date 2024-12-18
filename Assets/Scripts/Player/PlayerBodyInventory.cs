@@ -8,9 +8,12 @@ public class PlayerBodyInventory : MonoBehaviour
 
     public void PickUpBody(GameObject go)
     {
-        storedBody = go;
-        go.transform.position = new Vector3(0, 100, 0);
-        go.SetActive(false);
+        if(!storedBody)
+        {
+            storedBody = go;
+            go.transform.position = new Vector3(0, 100, 0);
+            go.SetActive(false);
+        }
     }
 
     public void DropBody()
