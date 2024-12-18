@@ -28,6 +28,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image[] equipmentIcons;
     [SerializeField] private Image[] inventoryIcons;
     [SerializeField] private GameObject[] interactionUI;
+    [SerializeField] private TextMeshProUGUI[] interactionMessages;
     [SerializeField] private GameObject interactingBar;
     [SerializeField] private RectTransform interactingBarFill;
     [SerializeField] private GameObject globalDetection;
@@ -42,7 +43,6 @@ public class UIManager : MonoBehaviour
     private bool settingsActive;
     private Dictionary<Transform,Vector3> originalUIPositions;
     private PlayerInput playerInput;
-    private TextMeshProUGUI interactionMessage;
     private List<Detection> enemyDetections;
     private Alarm alarm;
     private float deltaTime;
@@ -347,14 +347,14 @@ public class UIManager : MonoBehaviour
     {
         for (int i = 0; i < interactiveObjects.Length; i++)
         {
-            if (interactiveObjects[i] == null)
+            if (interactiveObjects[i] == null || !interactiveObjects[i].enabled)
             {
                 ToggleInteractionMessage(false, i);
                 continue;
             }
-            interactionMessage = interactionUI[i].GetComponentInChildren<TextMeshProUGUI>();
-            UpdateInteractionText(interactiveObjects[i].GetInteractionText(i == 0 ? canInteractPrimary : canInteractSecondary));
+            
             ToggleInteractionMessage(true, i);
+            UpdateInteractionText(interactiveObjects[i].GetInteractionText(i==0 ? canInteractPrimary : canInteractSecondary), i);
         }
     }
     
@@ -367,9 +367,9 @@ public class UIManager : MonoBehaviour
             interactionUI[index].SetActive(!interactingBar.activeSelf);
     }
 
-    private void UpdateInteractionText(string text)
+    private void UpdateInteractionText(string text, int index)
     {
-        interactionMessage.text = text;
+        interactionMessages[index].text = text;
     }
 
     public void ToggleInteractingBar(bool? toggle)

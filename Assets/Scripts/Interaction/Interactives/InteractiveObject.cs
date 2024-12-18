@@ -20,11 +20,13 @@ public abstract class InteractiveObject : MonoBehaviour
     [SerializeField] private bool isSecondInteractionSuspicious;
     [Header("UI Options")]
     [SerializeField] protected string objectName;
+    [SerializeField] private bool hasCustomInteractionMessage;
+    [SerializeField] private string customInteractionMessage;
 
     public InteractiveType InteractiveType
     {
         get => interactiveType;
-        private set => interactiveType = value;
+        protected set => interactiveType = value;
     }
 
     public float InteractionDuration
