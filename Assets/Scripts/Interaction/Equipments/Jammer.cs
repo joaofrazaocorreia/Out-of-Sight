@@ -35,11 +35,7 @@ public class Jammer : EquipmentObject, IHasAmmo
 
     public override void Used(InteractiveObject activeInteractiveObject)
     {
-        switch (((JammingSpot)activeInteractiveObject).Jammable.Jammed)
-        {
-            case true: CurrentAmmo++; break;
-            case false: CurrentAmmo--; break;
-        }
+        CurrentAmmo--;
         
         base.Used(activeInteractiveObject);
     }
