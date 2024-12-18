@@ -269,7 +269,7 @@ public class PlayerController : MonoBehaviour
 
     private void ResetInteract()
     {
-        if (_resetInteract != 2)
+        if (_resetInteract != 1)
         {
             _resetInteract++;
             return;
