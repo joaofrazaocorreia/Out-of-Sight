@@ -1,35 +1,29 @@
 using UnityEngine;
 
-public class Body : InteractiveObject
+public class BodyCarry : InteractiveObject
 {
-    [SerializeField] private Player.Disguise disguise;
-
-    private Player player;
     private EnemyMovement enemyMovement;
-    private bool hasDisguise;
-    public bool HasDisguise {get => hasDisguise;}
+    private PlayerBodyInventory playerBodyInventory;
+    private GameObject thisBody;
     private bool hasBeenDetected;
     public bool HasBeenDetected {get => hasBeenDetected; set{ if(!hasBeenDetected) hasBeenDetected = value;}}
 
     private void Start()
     {
-        player = FindAnyObjectByType<Player>();
         enemyMovement = GetComponentInParent<EnemyMovement>();
-        hasDisguise = true;
+        playerBodyInventory = FindAnyObjectByType<PlayerBodyInventory>();
+        thisBody = transform.parent.gameObject;
         hasBeenDetected = false;
-        objectName = disguise + " Disguise";
         enabled = false;
     }
 
     public override void Interact()
     {
-        if(disguise != player.disguise && hasDisguise &&
-            enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
+        if(enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
         {
             base.Interact();
 
-            hasDisguise = false;
-            player.GainDisguise(disguise);
+            playerBodyInventory.PickUpBody(thisBody);
         }
     }
 
@@ -37,7 +31,7 @@ public class Body : InteractiveObject
     {
         if (!requirementsMet) return "Requires " + GetRequirementNames();
 
-        return "Steal " + objectName;
+        return "Carry Body";
     }
 
     public void ResetNPC()

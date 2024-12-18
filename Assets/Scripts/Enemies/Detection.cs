@@ -26,7 +26,7 @@ public class Detection : MonoBehaviour
     public bool SeesPlayer {get => seesPlayer;}
     private bool seesBody;
     public bool SeesBody {get => seesBody;}
-    private List<Body> allBodies;
+    private List<BodyCarry> allBodies;
     private bool tooCloseToPlayer;
     private EnemyCamera enemyCamera;
     private EnemyMovement enemyMovement;
@@ -42,7 +42,7 @@ public class Detection : MonoBehaviour
         enemyMovement = GetComponentInParent<EnemyMovement>();
         enemyCamera = GetComponentInParent<EnemyCamera>();
 
-        allBodies = new List<Body>();
+        allBodies = new List<BodyCarry>();
     }
 
     private void FixedUpdate()
@@ -108,23 +108,23 @@ public class Detection : MonoBehaviour
 
             UpdateAllBodies();
 
-            foreach(Body b in allBodies)
+            foreach(BodyCarry b in allBodies)
             {
                 if (!b.enabled || b.HasBeenDetected)
                     continue;
                 
                 Vector3 distance = b.transform.position - transform.position;
 
-                // Checks if the body is within range of this NPC's detection range
+                // Checks if the bodyCarry is within range of this NPC's detection range
                 if(distance.magnitude <= detectionRange)
                 {
-                    // Checks if the body is within this NPC's field of view
+                    // Checks if the bodyCarry is within this NPC's field of view
                     if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distance) <= detectionMaxAngle)
                     {
-                        // Sends a raycast towards the body and checks if it hits anything
+                        // Sends a raycast towards the bodyCarry and checks if it hits anything
                         if (Physics.Raycast(transform.position, distance, out RaycastHit hit, detectionRange))
                         {
-                            // Checks if the raycast hit an body
+                            // Checks if the raycast hit an bodyCarry
                             if (b.enabled && !b.HasBeenDetected)
                             {
                                 seesBody = true;
@@ -132,7 +132,7 @@ public class Detection : MonoBehaviour
                                 break;
                             }
 
-                            // If the raycast detects an obstacle between the NPC and the body:
+                            // If the raycast detects an obstacle between the NPC and the bodyCarry:
                             else
                             {
                                 seesBody = false;
@@ -140,7 +140,7 @@ public class Detection : MonoBehaviour
                             }
                         }
 
-                        // If the raycast doesn't reach the body:
+                        // If the raycast doesn't reach the bodyCarry:
                         else
                         {
                             seesBody = false;
@@ -148,7 +148,7 @@ public class Detection : MonoBehaviour
                         }
                     }
                     
-                    // If the body is not within the enemy's field of view:
+                    // If the bodyCarry is not within the enemy's field of view:
                     else
                     {
                         seesBody = false;
@@ -156,7 +156,7 @@ public class Detection : MonoBehaviour
                     }
                 }
 
-                // If the body is too far away to be detected:
+                // If the bodyCarry is too far away to be detected:
                 else
                 {
                     seesBody = false;
@@ -188,7 +188,7 @@ public class Detection : MonoBehaviour
                 sourceMultiplier++;
         }
 
-        // Seeing a body increases the multiplier thrice as much
+        // Seeing a bodyCarry increases the multiplier thrice as much
         if(seesBody)
         {
             sourceMultiplier += 3;
@@ -218,13 +218,13 @@ public class Detection : MonoBehaviour
 
     public void UpdateAllBodies()
     {
-        Body[] bodies = FindObjectsByType<Body>(FindObjectsSortMode.None);
+        BodyCarry[] bodies = FindObjectsByType<BodyCarry>(FindObjectsSortMode.None);
 
         if(allBodies.Count != bodies.Count())
         {
-            allBodies = new List<Body>();
+            allBodies = new List<BodyCarry>();
 
-            foreach(Body b in bodies)
+            foreach(BodyCarry b in bodies)
             {
                 allBodies.Add(b);
             }

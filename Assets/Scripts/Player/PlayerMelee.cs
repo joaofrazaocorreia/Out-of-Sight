@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,7 @@ public class PlayerMelee : MonoBehaviour
     [SerializeField] private Transform enemiesParent;
 
     private PlayerInput playerInput;
+    private PlayerBodyInventory playerBodyInventory;
     private List<Transform> allEnemies;
     private List<Transform> enemiesInRange;
     private Transform closestEnemy;
@@ -18,6 +20,7 @@ public class PlayerMelee : MonoBehaviour
     private void Start()
     {
         playerInput = FindAnyObjectByType<PlayerInput>();
+        playerBodyInventory = FindAnyObjectByType<PlayerBodyInventory>();
         allEnemies = new List<Transform>();
         enemiesInRange = new List<Transform>();
 
@@ -35,62 +38,67 @@ public class PlayerMelee : MonoBehaviour
     {
         if(playerInput.actions["Attack"].WasPressedThisFrame())
         {
-            Debug.Log("Player used Melee attack");
-
-            distanceToClosestEnemy = float.MaxValue;
-            closestEnemy = null;
-
-            if(enemiesParent.childCount != allEnemies.Count)
-                UpdateEnemiesList();
-
-            if(allEnemies.Count > 0)
+            if(playerBodyInventory.CarryingBody)
             {
-                enemiesInRange = allEnemies.Where(enemy => 
-                    (Vector3.Scale(enemy.position, new Vector3(1, 0, 1))
-                        - Vector3.Scale(transform.position, new Vector3(1, 0, 1))).magnitude <= attackRange).ToList();
+                Debug.Log("Player dropped a body");
+
+                playerBodyInventory.DropBody();
             }
 
-            // Checks for every enemy within range of the player's detection range
-            foreach(Transform enemy in enemiesInRange)
+            else
             {
-                Vector3 distanceToEnemy = enemy.position - transform.position;
+                Debug.Log("Player used Melee attack");
 
-                // Checks if the enemy is within the player's field of view
-                if(Vector3.Angle(transform.TransformDirection(Vector3.forward),
-                    Vector3.Scale(enemy.position, new Vector3(1, 0, 1))
-                        - Vector3.Scale(transform.position, new Vector3(1, 0, 1))) <= frontalAngle ||
-                            (enemy.transform.position - transform.position).magnitude <= 1.5f)
+                distanceToClosestEnemy = float.MaxValue;
+                closestEnemy = null;
+
+                if(enemiesParent.childCount != allEnemies.Count)
+                    UpdateEnemiesList();
+
+                if(allEnemies.Count > 0)
                 {
-                    // Sends a raycast towards the enemy
-                    if (Physics.Raycast(transform.position, distanceToEnemy, out RaycastHit hit, attackRange*2))
+                    enemiesInRange = allEnemies.Where(enemy => 
+                        (Vector3.Scale(enemy.position, new Vector3(1, 0, 1))
+                            - Vector3.Scale(transform.position, new Vector3(1, 0, 1))).magnitude <= attackRange).ToList();
+                }
+
+                // Checks for every enemy within range of the player's detection range
+                foreach(Transform enemy in enemiesInRange)
+                {
+                    Vector3 distanceToEnemy = enemy.position - transform.position;
+
+                    // Checks if the enemy is within the player's field of view
+                    if(Vector3.Angle(transform.TransformDirection(Vector3.forward),
+                        Vector3.Scale(enemy.position, new Vector3(1, 0, 1))
+                            - Vector3.Scale(transform.position, new Vector3(1, 0, 1))) <= frontalAngle ||
+                                (enemy.transform.position - transform.position).magnitude <= 1.5f)
                     {
-                        // Checks if the raycast hit the enemy
-                        if (hit.transform == enemy || hit.transform.parent == enemy)
+                        // Sends a raycast towards the enemy
+                        if (Physics.Raycast(transform.position, distanceToEnemy, out RaycastHit hit, attackRange*2))
                         {
-                            if(distanceToClosestEnemy > distanceToEnemy.magnitude)
+                            // Checks if the raycast hit the enemy
+                            if (hit.transform == enemy || hit.transform.parent == enemy)
                             {
-                                closestEnemy = enemy;
-                                distanceToClosestEnemy = distanceToEnemy.magnitude;
+                                if(distanceToClosestEnemy > distanceToEnemy.magnitude)
+                                {
+                                    closestEnemy = enemy;
+                                    distanceToClosestEnemy = distanceToEnemy.magnitude;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            // Knocks out the enemy if they're not already knocked out
-            if(closestEnemy != null)
-            {
-                EnemyMovement enemyMovement = closestEnemy.GetComponent<EnemyMovement>();
-                
-                if(enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut)
-                    enemyMovement.currentStatus = EnemyMovement.Status.KnockedOut;
-
-                // TEMPORARY - moves the body away from the level when using meelee on it, this will be replaced by the body-carrying mechanic later
-                else
+                // Knocks out the enemy if they're not already knocked out
+                if(closestEnemy != null)
                 {
-                    enemyMovement.gameObject.SetActive(false);
-                    enemyMovement.transform.position = new Vector3(1000, 1000, 1000);
-                    enemyMovement.gameObject.SetActive(true);
+                    EnemyMovement enemyMovement = closestEnemy.GetComponent<EnemyMovement>();
+                    
+                    if(enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut)
+                    {
+                        enemyMovement.currentStatus = EnemyMovement.Status.KnockedOut;
+                        closestEnemy.GetComponentInChildren<Detection>().DetectionMeter = 0;
+                    }
                 }
             }
         }

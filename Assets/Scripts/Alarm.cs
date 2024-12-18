@@ -149,7 +149,7 @@ public class Alarm : MonoBehaviour
         foreach(Enemy e in enemies)
         {
             if(e.GetComponent<EnemyMovement>().currentStatus == EnemyMovement.Status.KnockedOut)
-                e.GetComponentInChildren<Body>().HasBeenDetected = true;
+                e.GetComponentInChildren<BodyCarry>().HasBeenDetected = true;
         }
 
         // Alerts all enemies in the level;
