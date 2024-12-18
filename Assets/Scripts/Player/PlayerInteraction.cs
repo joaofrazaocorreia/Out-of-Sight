@@ -108,9 +108,9 @@ public class PlayerInteraction : MonoBehaviour
 
     public void ResetInteract()
     {
-        _interactionDuration = _activeInteractiveObject != null ? _activeInteractiveObject.InteractionDuration : 0;
+        ActiveInteractiveObject = null;
         _uiManager.ToggleInteractingBar(false);
-    }
+    }   
     
     private bool CheckValidInteraction()
     {
