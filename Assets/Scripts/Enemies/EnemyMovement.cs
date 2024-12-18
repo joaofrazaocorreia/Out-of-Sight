@@ -43,7 +43,8 @@ public class EnemyMovement : MonoBehaviour
     private Vector3 spawnPos;
     public Vector3 SpawnPos {get=> spawnPos;}
     private Player player;
-    private Body body;
+    private BodyDisguise bodyDisguise;
+    private BodyCarry bodyCarry;
     private Animator animator;
     private NavMeshAgent navMeshAgent;
     public bool IsAtDestination {get => (new Vector3(lastTarget.x, 0f, lastTarget.z) -
@@ -57,36 +58,40 @@ public class EnemyMovement : MonoBehaviour
 
     private void Start()
     {
-        moveTimer = 0;
-        turnTimer = 0;
-        searchTimer = 0;
-        stuckTimer = 0;
-        tasedTimer = tasedTime;
-        lastSelfPos = transform.position;
-        lastTarget = Vector3.zero;
-        spawnPos = transform.position;
-        player = FindAnyObjectByType<Player>();
-        body = GetComponentInChildren<Body>();
-        animator = GetComponent<Animator>();
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
-        leavingMap = false;
+        if(status != Status.KnockedOut)
+            {
+            moveTimer = 0;
+            turnTimer = 0;
+            searchTimer = 0;
+            stuckTimer = 0;
+            tasedTimer = tasedTime;
+            lastSelfPos = transform.position;
+            lastTarget = Vector3.zero;
+            spawnPos = transform.position;
+            player = FindAnyObjectByType<Player>();
+            bodyDisguise = GetComponentInChildren<BodyDisguise>();
+            bodyCarry = GetComponentInChildren<BodyCarry>();
+            animator = GetComponent<Animator>();
+            navMeshAgent = GetComponent<NavMeshAgent>();
+            mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
+            leavingMap = false;
 
-        // Forcefully sets the NavMeshAgent to the NPC type if it isn't already one
-        if(navMeshAgent.agentTypeID != -1372625422)
-            navMeshAgent.agentTypeID = -1372625422;
+            // Forcefully sets the NavMeshAgent to the NPC type if it isn't already one
+            if(navMeshAgent.agentTypeID != -1372625422)
+                navMeshAgent.agentTypeID = -1372625422;
 
-        if(isStatic)
-        {
-            movementTargets = new List<Transform>() {transform};
-            movementPosTargets = new List<Vector3>() {spawnPos};
-        }
+            if(isStatic)
+            {
+                movementTargets = new List<Transform>() {transform};
+                movementPosTargets = new List<Vector3>() {spawnPos};
+            }
 
-        else
-        {
-            movementPosTargets = new List<Vector3>();
-            foreach(Transform t in movementTargets)
-                movementPosTargets.Add(t.position);
+            else
+            {
+                movementPosTargets = new List<Vector3>();
+                foreach(Transform t in movementTargets)
+                    movementPosTargets.Add(t.position);
+            }
         }
     }
 
@@ -207,13 +212,18 @@ public class EnemyMovement : MonoBehaviour
         // ------------ Knocked Out ------------ 
         else if (currentStatus == Status.KnockedOut)
         {
-            if(!body.enabled && body.HasDisguise)
-                body.enabled = true;
+            if(!bodyDisguise.enabled && bodyDisguise.HasDisguise)
+                bodyDisguise.enabled = true;
                 
-            else if(body.enabled && !body.HasDisguise)
-                body.enabled = false;
+            else if(bodyDisguise.enabled && !bodyDisguise.HasDisguise)
+                bodyDisguise.enabled = false;
+
+            if(!bodyCarry.enabled)
+                bodyCarry.enabled = true;
+
 
             navMeshAgent.speed = 0f;
+            navMeshAgent.enabled = false;
 
             movementPosTargets = new List<Vector3>{transform.position};
 
@@ -391,11 +401,15 @@ public class EnemyMovement : MonoBehaviour
             stuckTimer = 0;
             tasedTimer = tasedTime;
             spawnPos = oldSpawnPos;
-            body = GetComponentInChildren<Body>();
+            bodyDisguise = GetComponentInChildren<BodyDisguise>();
+            bodyCarry = GetComponentInChildren<BodyCarry>();
             animator = GetComponent<Animator>();
-            body.ResetNPC();
-            body.enabled = false;
+            bodyCarry.ResetNPC();
+            bodyDisguise.ResetNPC();
+            bodyCarry.enabled = false;
+            bodyDisguise.enabled = false;
             navMeshAgent = GetComponent<NavMeshAgent>();
+            navMeshAgent.enabled = true;
             mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
             leavingMap = false;
         }

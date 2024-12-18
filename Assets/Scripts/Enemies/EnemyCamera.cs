@@ -49,8 +49,18 @@ public class EnemyCamera : Enemy, IJammable
     {
         base.Update();
 
+        if(!isOn || jammed)
+        {
+            detection.gameObject.SetActive(false);
+            detection.DetectionMeter = 0;
+        }
+        
+        else if(!detection.gameObject.activeSelf)
+            detection.gameObject.SetActive(true);
+        
         if(isOn && !jammed)
         {
+           
             if(cameraOperator.IsKnockedOut || 
                 (cameraOperator.transform.position - cameraOperatorStartPos).magnitude > 2f)
             {
