@@ -67,15 +67,15 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out _hit, raycastDistance))
         {
-            var temp =  _hit.collider.gameObject;
-            if(_lastHitObject == temp) return;
+            if(_lastHitObject == _hit.collider.gameObject) return;
             
-            _lastHitObject = temp;
+            _lastHitObject = _hit.collider.gameObject;
             _hitInteractables = _lastHitObject.GetComponentsInParent<InteractiveObject>();
         }
         else
         {
             _hitInteractables = null;
+            _lastHitObject = null;
             ActiveInteractiveObject = null;
         }
     }
@@ -112,9 +112,9 @@ public class PlayerInteraction : MonoBehaviour
         _uiManager.ToggleInteractingBar(false);
     }   
     
-    private bool CheckValidInteraction()
+    private bool CheckValidInteraction(InteractiveObject interactiveObject)
     {
-        return ActiveInteractiveObject != null && CheckCanInteract(ActiveInteractiveObject) && ActiveInteractiveObject.enabled;
+        return interactiveObject != null && CheckCanInteract(interactiveObject) && interactiveObject.enabled;
     }
 
     private bool CheckCanInteract(InteractiveObject interactiveObject)
@@ -143,7 +143,7 @@ public class PlayerInteraction : MonoBehaviour
                 break;
             default: ActiveInteractiveObject = null; break;
         }
-        if(!CheckValidInteraction()) return;
+        if(!CheckValidInteraction(ActiveInteractiveObject)) return;
         Interact(ActiveInteractiveObject.InteractiveType);
     }
 
@@ -187,6 +187,8 @@ public class PlayerInteraction : MonoBehaviour
         
         _finishedInteraction = true;
         _interactionReady = false;
+        _lastHitObject = null;
+        _hitInteractables = null;
         ActiveInteractiveObject = null;
     }
 
@@ -198,30 +200,13 @@ public class PlayerInteraction : MonoBehaviour
             DisableInteractionUI();
             return;
         }
-
-        switch (_hitInteractables.Length)
-        {
-            case 1:
-                if (!_hitInteractables[0].enabled)
-                {
-                    _uiManager.ToggleInteractionMessage(false,0);
-                    return;
-                }
-                
-                _uiManager.UpdateInteractionUi(_hitInteractables, CheckCanInteract(_hitInteractables[0]), false);
-                break;
-            case 2:
-                if (!_hitInteractables[1].enabled && !_hitInteractables[0].enabled) return;
-                
-                _uiManager.ToggleInteractionMessage(!_hitInteractables[0].enabled, 0);
-                _uiManager.ToggleInteractionMessage(!_hitInteractables[1].enabled, 1);
-                
-                _uiManager.UpdateInteractionUi(_hitInteractables, CheckCanInteract(_hitInteractables[0]), CheckCanInteract(_hitInteractables[1]));
-                break;
-        }
         
+        _uiManager.UpdateInteractionUi(_hitInteractables, CheckValidInteraction(GetInteractiveObject(0)), CheckValidInteraction(GetInteractiveObject(1)));
+    }
 
-        
+    private InteractiveObject GetInteractiveObject(int index)
+    {
+        return _hitInteractables.Length > index ? _hitInteractables[index] : null;
     }
 
     private void DisableInteractionUI()
