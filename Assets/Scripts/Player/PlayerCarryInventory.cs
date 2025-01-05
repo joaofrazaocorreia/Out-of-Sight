@@ -2,9 +2,13 @@ using UnityEngine;
 
 public class PlayerCarryInventory : MonoBehaviour
 {
+    [SerializeField] private Transform bagCarryPosition;
+    [SerializeField] private Transform bodyCarryPosition;
+
     private enum CarriableType {None, Bag, Body};
     private GameObject storedCarriable;
     private CarriableType storedCarriableType;
+    private Transform storedCarriableParent;
     public bool CarryingBag {get => storedCarriable != null && storedCarriableType == CarriableType.Bag;}
     public bool CarryingBody {get => storedCarriable != null && storedCarriableType == CarriableType.Body;}
     private Player player;
@@ -13,6 +17,7 @@ public class PlayerCarryInventory : MonoBehaviour
     {
         storedCarriable = null;
         storedCarriableType = CarriableType.None;
+        storedCarriableParent = null;
         
         player = GetComponent<Player>();
     }
@@ -23,10 +28,12 @@ public class PlayerCarryInventory : MonoBehaviour
         {
             storedCarriable = go;
             storedCarriableType = CarriableType.Bag;
+            storedCarriableParent = go.transform.parent;
             player.status.Add(Player.Status.Doubtful);
 
-            go.transform.position = new Vector3(0, 100, 10);
-            go.SetActive(false);
+            go.transform.parent = bagCarryPosition;
+            go.transform.position = Vector3.zero;
+            go.transform.rotation = Quaternion.identity;
         }
     }
 
@@ -36,10 +43,12 @@ public class PlayerCarryInventory : MonoBehaviour
         {
             storedCarriable = go;
             storedCarriableType = CarriableType.Body;
+            storedCarriableParent = go.transform.parent;
             player.status.Add(Player.Status.Suspicious);
 
-            go.transform.position = new Vector3(0, 100, -10);
-            go.SetActive(false);
+            go.transform.parent = bodyCarryPosition;
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localRotation = Quaternion.identity;
         }
     }
 
@@ -60,13 +69,13 @@ public class PlayerCarryInventory : MonoBehaviour
                 default: break;
             }
 
+            storedCarriable.transform.parent = storedCarriableParent;
             storedCarriable.transform.position = transform.GetChild(0).position + (transform.GetChild(0).forward * 3);
             storedCarriable.transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y + 90f, 0f);
-            Debug.Log(storedCarriable.transform.GetChild(1).rotation.eulerAngles);
-            storedCarriable.SetActive(true);
 
             storedCarriable = null;
             storedCarriableType = CarriableType.None;
+            storedCarriableParent = null;
         }
     }
 }
