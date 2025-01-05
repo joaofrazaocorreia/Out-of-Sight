@@ -3,7 +3,7 @@ using UnityEngine;
 public class BodyCarry : InteractiveObject
 {
     private EnemyMovement enemyMovement;
-    private PlayerBodyInventory playerBodyInventory;
+    private PlayerCarryInventory playerBodyInventory;
     private GameObject thisBody;
     private bool hasBeenDetected;
     public bool HasBeenDetected {get => hasBeenDetected; set{ if(!hasBeenDetected) hasBeenDetected = value;}}
@@ -11,7 +11,7 @@ public class BodyCarry : InteractiveObject
     private void Start()
     {
         enemyMovement = GetComponentInParent<EnemyMovement>();
-        playerBodyInventory = FindAnyObjectByType<PlayerBodyInventory>();
+        playerBodyInventory = FindAnyObjectByType<PlayerCarryInventory>();
         thisBody = transform.parent.gameObject;
         hasBeenDetected = false;
         enabled = false;

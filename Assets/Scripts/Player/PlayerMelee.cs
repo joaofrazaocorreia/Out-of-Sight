@@ -11,7 +11,7 @@ public class PlayerMelee : MonoBehaviour
     [SerializeField] private Transform enemiesParent;
 
     private PlayerInput playerInput;
-    private PlayerBodyInventory playerBodyInventory;
+    private PlayerCarryInventory playerBodyInventory;
     private List<Transform> allEnemies;
     private List<Transform> enemiesInRange;
     private Transform closestEnemy;
@@ -20,7 +20,7 @@ public class PlayerMelee : MonoBehaviour
     private void Start()
     {
         playerInput = FindAnyObjectByType<PlayerInput>();
-        playerBodyInventory = FindAnyObjectByType<PlayerBodyInventory>();
+        playerBodyInventory = FindAnyObjectByType<PlayerCarryInventory>();
         allEnemies = new List<Transform>();
         enemiesInRange = new List<Transform>();
 
@@ -42,7 +42,7 @@ public class PlayerMelee : MonoBehaviour
             {
                 Debug.Log("Player dropped a body");
 
-                playerBodyInventory.DropBody();
+                playerBodyInventory.DropCarriable();
             }
 
             else
