@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public enum Status {Normal, Trespassing, Suspicious};
+    public enum Status {Normal, Doubtful, Trespassing, Suspicious};
     public enum Disguise {Civillian, Employee, Guard_Tier1, Guard_Tier2}
 
     public List<Status> status;
@@ -51,6 +51,9 @@ public class Player : MonoBehaviour
             
             else if(status.Contains(Status.Trespassing))
                 uiManager.UpdateStatusText("Trespassing", Color.yellow);
+            
+            else if(status.Contains(Status.Doubtful))
+                uiManager.UpdateStatusText("Doubtful", new Color(0.75f, 0.75f, 0.3f));
 
             else
                 uiManager.UpdateStatusText("Concealed", Color.white);

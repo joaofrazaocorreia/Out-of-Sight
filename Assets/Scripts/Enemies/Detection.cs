@@ -174,6 +174,7 @@ public class Detection : MonoBehaviour
         // Multiple sources of detection stack with each other
         int sourceMultiplier = 0;
 
+        // Detection increases per status if the enemy sees the player or is too close to them
         if(seesPlayer || tooCloseToPlayer)
         {
             TrackPlayer();
@@ -188,7 +189,7 @@ public class Detection : MonoBehaviour
                 sourceMultiplier++;
         }
 
-        // Seeing a bodyCarry increases the multiplier thrice as much
+        // Seeing a body increases the multiplier thrice as much
         if(seesBody)
         {
             sourceMultiplier += 3;
@@ -197,10 +198,16 @@ public class Detection : MonoBehaviour
         // Increases detection based on the number of sources that increase it
         if (sourceMultiplier != 0)
         {
-            DetectionMeter += Time.deltaTime * baseDetectionRate * globalDetectionMultiplier * sourceMultiplier;
+            float amountToIncrease = Time.deltaTime * baseDetectionRate * globalDetectionMultiplier * sourceMultiplier;
+
+            // If the enemy sees the player with the doubtful status, the detection increase is boosted by 25%
+            if((seesPlayer || tooCloseToPlayer) && player.status.Contains(Player.Status.Doubtful))
+                amountToIncrease *= 1.25f;
+
+            DetectionMeter += amountToIncrease;
         }
 
-        // If there are no sources of detection, it's decreased instead
+        // If there are no sources of detection, the meter is decreased instead
         else
         {
             DetectionMeter -= Time.deltaTime;

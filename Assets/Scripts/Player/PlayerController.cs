@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _maxBackwardVelocity = -2;
     [SerializeField] private float _maxStrafeVelocity = 5;
     [SerializeField] private float _maxFallVelocity = -10;
+    [SerializeField] private float _bodyCarryVelocityPercent = 50;
     
     [Header("Camera Variables")]
     [SerializeField] private float verticalLookSensitivity = 2f;
@@ -97,9 +98,11 @@ public class PlayerController : MonoBehaviour
     /*
     private float _footstepTimer;
     */
+    private Player _player;
     private PlayerInput _playerInput;
     private PlayerInteraction _playerInteraction;
     private PlayerEquipment _playerEquipment; 
+    private PlayerCarryInventory _playerBodyInventory;
     private UIManager _uiManager;
     private Animator _animator;
     private Vector2 _movementVector;
@@ -127,9 +130,11 @@ public class PlayerController : MonoBehaviour
         */
         _uiManager = FindAnyObjectByType<UIManager>();
         SpeedBoost      = 1f;
+        _player = GetComponent<Player>();
         _playerInput = GetComponent<PlayerInput>();
         _playerInteraction = GetComponent<PlayerInteraction>();
         _playerEquipment = GetComponent<PlayerEquipment>();
+        _playerBodyInventory = GetComponent<PlayerCarryInventory>();
         _animator = GetComponentInChildren<Animator>();
         _selectedEquipment = new float[9];
         _horizontalRotationPivot = transform;
@@ -430,6 +435,9 @@ public class PlayerController : MonoBehaviour
     {
         _motion = _velocity * Time.fixedDeltaTime;
 
+        if(_playerBodyInventory.CarryingBody)
+            _motion *= _bodyCarryVelocityPercent / 100;
+
         _motion = transform.TransformVector(_motion);
 
         _controller.Move(_motion);
@@ -451,7 +459,18 @@ public class PlayerController : MonoBehaviour
 
     private void OnRun()
     {
-        if (IsRunning == 1) IsCrouching = 0;
+        if (IsRunning == 1)
+        {
+            IsCrouching = 0;
+
+            if(!_player.status.Contains(Player.Status.Doubtful))
+                _player.status.Add(Player.Status.Doubtful);
+        }
+
+        else if(_player.status.Contains(Player.Status.Doubtful))
+        {
+            _player.status.Remove(Player.Status.Doubtful);
+        }
     }
 
     private void TriggerHeadbob()
