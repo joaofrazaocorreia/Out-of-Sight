@@ -1,10 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Detection : MonoBehaviour
 {
+    [SerializeField] private GameObject selfDetection;
+    [SerializeField] private GameObject detectionIcon;
+    [SerializeField] private Image detectionFill;
+    [SerializeField] private GameObject alarmedIcon;
+    [SerializeField] private GameObject tasedIcon;
+    [SerializeField] private Image tasedFill;
     [SerializeField] [Range(10f, 180f)] private float detectionMaxAngle = 75.0f;
     [SerializeField] private float detectionRange = 12f;
     [SerializeField] private float proximityDetectionRange = 0f;
@@ -15,6 +21,7 @@ public class Detection : MonoBehaviour
     public static float globalDetectionMultiplier = 1.0f;
 
     private Player player;
+    private Alarm alarm;
     private float detectionMeter;
     public float DetectionMeter
     {
@@ -35,7 +42,9 @@ public class Detection : MonoBehaviour
     private void Start()
     {
         player = FindAnyObjectByType<Player>();
+        alarm = FindAnyObjectByType<Alarm>();
         DetectionMeter = 0;
+        selfDetection.SetActive(false);
         seesPlayer = false;
         seesBody = false;
         tooCloseToPlayer = false;
@@ -50,7 +59,7 @@ public class Detection : MonoBehaviour
         if((enemyMovement != null && enemyCamera == null &&
             enemyMovement.currentStatus != EnemyMovement.Status.Tased &&
                 enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut) ||
-                    (enemyCamera != null && enemyMovement == null))
+                    (enemyCamera != null && enemyMovement == null && !enemyCamera.Jammed && enemyCamera.IsOn))
         {
             Vector3 distanceToPlayer = player.transform.position - transform.position;
 
@@ -166,6 +175,8 @@ public class Detection : MonoBehaviour
 
             UpdateDetection();
         }
+
+        UpdateSelfDetectionUI();
     }
 
     // Checks if the NPC sees the player or if it's too close to them, and raises/decreases detection accordingly
@@ -234,6 +245,73 @@ public class Detection : MonoBehaviour
             foreach(BodyCarry b in bodies)
             {
                 allBodies.Add(b);
+            }
+        }
+    }
+
+    private void UpdateSelfDetectionUI()
+    {
+        if(enemyMovement != null && enemyCamera == null)
+        {
+            if(enemyMovement.currentStatus == EnemyMovement.Status.Tased)
+            {
+                selfDetection.SetActive(true);
+                tasedIcon.SetActive(true);
+                alarmedIcon.SetActive(false);
+                detectionIcon.SetActive(false);
+
+                tasedFill.fillAmount = enemyMovement.TasedTimer / enemyMovement.TasedTime;
+            }
+
+            else if(enemyMovement != null && alarm.IsOn)
+            {
+                selfDetection.SetActive(true);
+                tasedIcon.SetActive(false);
+                alarmedIcon.SetActive(true);
+                detectionIcon.SetActive(false);
+            }
+
+            else if(DetectionMeter > 0)
+            {
+                selfDetection.SetActive(true);
+                tasedIcon.SetActive(false);
+                alarmedIcon.SetActive(false);
+                detectionIcon.SetActive(true);
+
+                detectionFill.fillAmount = DetectionMeter / DetectionLimit;
+            }
+
+            else
+            {
+                selfDetection.SetActive(false);
+            }
+        }
+
+        else if (enemyMovement == null && enemyCamera != null)
+        {
+            if(enemyCamera.Jammed)
+            {
+                selfDetection.SetActive(true);
+                tasedIcon.SetActive(true);
+                alarmedIcon.SetActive(false);
+                detectionIcon.SetActive(false);
+
+                tasedFill.fillAmount = 1f;
+            }
+
+            else if(DetectionMeter > 0 && enemyCamera.IsOn)
+            {
+                selfDetection.SetActive(true);
+                tasedIcon.SetActive(false);
+                alarmedIcon.SetActive(false);
+                detectionIcon.SetActive(true);
+
+                detectionFill.fillAmount = DetectionMeter / DetectionLimit;
+            }
+
+            else
+            {
+                selfDetection.SetActive(false);
             }
         }
     }

@@ -51,12 +51,8 @@ public class EnemyCamera : Enemy, IJammable
 
         if(!isOn || jammed)
         {
-            detection.gameObject.SetActive(false);
             detection.DetectionMeter = 0;
         }
-        
-        else if(!detection.gameObject.activeSelf)
-            detection.gameObject.SetActive(true);
         
         if(isOn && !jammed)
         {
