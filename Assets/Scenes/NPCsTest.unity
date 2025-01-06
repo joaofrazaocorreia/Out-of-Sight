@@ -4592,6 +4592,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 291502267}
     m_Modifications:
+    - target: {fileID: 1240934235257555749, guid: 42b4fabd37c54db4fb66cb5aa8415f60, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1240934235257555749, guid: 42b4fabd37c54db4fb66cb5aa8415f60, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1240934235257555749, guid: 42b4fabd37c54db4fb66cb5aa8415f60, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
     - target: {fileID: 2428613158228009669, guid: 42b4fabd37c54db4fb66cb5aa8415f60, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10.345
@@ -4643,6 +4655,18 @@ PrefabInstance:
     - target: {fileID: 4791972704642225648, guid: 42b4fabd37c54db4fb66cb5aa8415f60, type: 3}
       propertyPath: startsRotatingToTheLeft
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6593529154393664100, guid: 42b4fabd37c54db4fb66cb5aa8415f60, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6593529154393664100, guid: 42b4fabd37c54db4fb66cb5aa8415f60, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6593529154393664100, guid: 42b4fabd37c54db4fb66cb5aa8415f60, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7074652552604685895, guid: 42b4fabd37c54db4fb66cb5aa8415f60, type: 3}
       propertyPath: m_Name
@@ -4921,7 +4945,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.5019608, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5163,7 +5187,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -20}
+  m_AnchoredPosition: {x: 0, y: 30}
   m_SizeDelta: {x: 850, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &534378148
@@ -5186,12 +5210,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Welcome to Hotel Gallant, a five-star hotel with luxurious hospitality...
-    but also serves as a farce for a criminal organization that operates within.
+  m_text: 'Welcome to Hotel Gallant, a luxurious five-star hotel with the finest
+    and richest hospitality... which also serves as a facade for a criminal organization
+    that is secretly operating within.
 
-    Your
-    task is to infiltrate the hotel, find any evidence of criminal activity, and
-    retrieve it back to us.'
+    Your job is to infiltrate the hotel,
+    find any evidence of criminal activity (like files or data), and retrieve it
+    back to us.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7087,7 +7112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.5019608, b: 1, a: 0.19607843}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.19607843}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8274,7 +8299,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 250}
+  m_AnchoredPosition: {x: 0, y: 300}
   m_SizeDelta: {x: 500, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &957432507
@@ -9033,15 +9058,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 2
-  requiredItem: {fileID: 472050123}
-  requiredEquipment: {fileID: 0}
-  consumeItemRequirement: 1
+  interactiveType: 3
+  requiredItem: {fileID: 0}
+  requiredEquipment: {fileID: 1874783438}
+  consumeItemRequirement: 0
   oneTimeRequirement: 1
-  firstInteractionDurationUnique: 0
-  interactionDuration: 0
+  firstInteractionDurationUnique: 1
+  interactionDuration: 3
   secondInteractionDuration: 0
-  isInteractionSuspicious: 0
+  isInteractionSuspicious: 1
   isSecondInteractionSuspicious: 0
   objectName: Door
   hasCustomInteractionMessage: 0
@@ -12118,11 +12143,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14.020004
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.0188731
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -15097,11 +15122,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 17.74
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.37
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -16770,8 +16795,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 500, y: 50}
-  m_SizeDelta: {x: 925, y: 500}
+  m_AnchoredPosition: {x: 500, y: 25}
+  m_SizeDelta: {x: 925, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1776104677
 MonoBehaviour:
@@ -16837,11 +16862,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 63178fbc543436241afe066d7e593f31, type: 2}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.94
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.4237622
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -23058,11 +23083,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.5100021
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8662069
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.z

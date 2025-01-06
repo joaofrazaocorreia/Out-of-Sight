@@ -38,6 +38,8 @@ public class EnemyMovement : MonoBehaviour
     private float turnTimer;
     private float searchTimer;
     private float tasedTimer;
+    public float TasedTimer {get => tasedTimer;}
+    public float TasedTime {get => tasedTime;}
     private Vector3 lastTarget;
     public Vector3 LastTarget {get => lastTarget;}
     private Vector3 spawnPos;
