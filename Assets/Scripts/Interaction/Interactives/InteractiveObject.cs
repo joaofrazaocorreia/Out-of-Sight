@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Interaction;
 using UnityEngine;
 
@@ -5,63 +6,70 @@ public abstract class InteractiveObject : MonoBehaviour
 {
     [Header("Interactive Type")]
     [SerializeField] private InteractiveType interactiveType;
+    [SerializeField] protected bool updateIfIndirect; 
     [Header("Requirements")]
-    [SerializeField] private Item requiredItem;
-    [SerializeField] private EquipmentObject requiredEquipment;
+    [SerializeField] protected Item requiredItem;
+    [SerializeField] protected EquipmentObject requiredEquipment;
     [Header("Requirement Options")]
-    [SerializeField] private bool consumeItemRequirement;
-    [SerializeField] private bool oneTimeRequirement;
+    [SerializeField] protected bool consumeItemRequirement;
+    [SerializeField] protected bool oneTimeRequirement;
     [Header("Interaction Options")]
-    [SerializeField] private bool firstInteractionDurationUnique;
-    [SerializeField] private float interactionDuration;
-    [SerializeField] private float secondInteractionDuration;
+    [SerializeField] protected bool firstInteractionDurationUnique;
+    [SerializeField] protected float interactionDuration;
+    [SerializeField] protected float secondInteractionDuration; 
     [Header("Detection Options")]
-    [SerializeField] private bool isInteractionSuspicious;
-    [SerializeField] private bool isSecondInteractionSuspicious;
+    [SerializeField] protected bool isInteractionSuspicious;
+    [SerializeField] protected bool isSecondInteractionSuspicious;
     [Header("UI Options")]
     [SerializeField] protected string objectName;
-    [SerializeField] private bool hasCustomInteractionMessage;
-    [SerializeField] private string customInteractionMessage;
+    [SerializeField] protected string customInteractionMessage;
 
     public InteractiveType InteractiveType
     {
         get => interactiveType;
         protected set => interactiveType = value;
     }
-
+    
+    public Item RequiredItem => requiredItem;
+    public EquipmentObject RequiredEquipment => requiredEquipment;
+    public bool ConsumeItemRequirement => consumeItemRequirement;
+    public bool OneTimeRequirement => oneTimeRequirement;
+    public bool HasRequirement { get; protected set; }
+    
+    public bool FirstInteractionDurationUnique => firstInteractionDurationUnique;
     public float InteractionDuration
     {
         get => interactionDuration;
         private set => interactionDuration = value;
     }
-    
-    public Item RequirementObject => requiredItem;
-    
-    public EquipmentObject RequirementEquipment => requiredEquipment;
-
-    public bool HasRequirement { get; private set; }
-    
-    public bool ConsumeItemRequirement => consumeItemRequirement;
-    
-    public bool OneTimeRequirement => oneTimeRequirement;
+    public float SecondInteractionDuration => secondInteractionDuration;
     
     public bool IsInteractionSuspicious => isInteractionSuspicious;
+    public bool IsSecondInteractionSuspicious => isSecondInteractionSuspicious;
+    
+    public string ObjectName => objectName;
+    public string CustomInteractionMessage => customInteractionMessage;
+    
     
     private void Start()
     {
-        HasRequirement = requiredItem != null || requiredEquipment != null;
+        HasRequirement = RequiredItem != null || RequiredEquipment != null;
     }
 
     public virtual void Interact()
     {
+        if (InteractiveType == InteractiveType.Indirect)
+        {
+            if(!updateIfIndirect) return;
+        }
         OneTimeRequirementCheck();
         UniqueFirstInteractionDurationCheck();
-        isInteractionSuspicious = isSecondInteractionSuspicious;
+        isInteractionSuspicious = IsSecondInteractionSuspicious;
     }
 
     private void OneTimeRequirementCheck()
     {
-        if (HasRequirement && oneTimeRequirement)
+        if (HasRequirement && OneTimeRequirement)
         {
             interactiveType = InteractiveType.DirectNoRequirement;
             HasRequirement = false;
@@ -70,14 +78,16 @@ public abstract class InteractiveObject : MonoBehaviour
 
     private void UniqueFirstInteractionDurationCheck()
     {
-        if (firstInteractionDurationUnique) InteractionDuration = secondInteractionDuration;
+        if (FirstInteractionDurationUnique) InteractionDuration = secondInteractionDuration;
     }
 
     public virtual string GetInteractionText(bool requirementsMet)
     {
+        if(CustomInteractionMessage.Length > 0) return CustomInteractionMessage;
+        
         if (!requirementsMet) return "Requires " + GetRequirementNames();
         
-        switch (interactiveType)
+        switch (InteractiveType)
         {
             case InteractiveType.Item:
             {
@@ -94,15 +104,15 @@ public abstract class InteractiveObject : MonoBehaviour
     {
         string names = string.Empty;
         
-        if (requiredItem != null)
+        if (RequiredItem != null)
         {
-            names += requiredItem.name;
-            if (requiredEquipment != null)
-                names += " and " + requiredEquipment.name;
+            names += RequiredItem.name;
+            if (RequiredEquipment != null)
+                names += " and " + RequiredEquipment.name;
         }
-        else if (requiredEquipment != null)
+        else if (RequiredEquipment != null)
         {
-            names += requiredEquipment.name;
+            names += RequiredEquipment.name;
         }
 
         return names;
