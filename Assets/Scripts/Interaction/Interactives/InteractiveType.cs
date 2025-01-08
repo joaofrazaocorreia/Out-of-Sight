@@ -5,6 +5,7 @@
         Item,
         DirectNoRequirement,
         DirectItemRequirement,
-        DirectEquipmentRequirement
+        DirectEquipmentRequirement,
+        Indirect
     }
 }

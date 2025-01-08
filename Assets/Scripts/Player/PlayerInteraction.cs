@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Interaction;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
@@ -29,6 +31,7 @@ public class PlayerInteraction : MonoBehaviour
     private GameObject _activeObject;
     
     private GameObject _lastHitObject;
+    private List<InteractiveObject> _tempHitInteractableObjects = new List<InteractiveObject>();
     private InteractiveObject[] _hitInteractables;
     private int _hitIndex;
     
@@ -70,7 +73,13 @@ public class PlayerInteraction : MonoBehaviour
             if(_lastHitObject == _hit.collider.gameObject) return;
             
             _lastHitObject = _hit.collider.gameObject;
-            _hitInteractables = _lastHitObject.GetComponentsInParent<InteractiveObject>();
+            _tempHitInteractableObjects = _lastHitObject.GetComponentsInParent<InteractiveObject>().ToList();
+            for (int i = 0; i < _tempHitInteractableObjects.Count; i++)
+            {
+                if (_tempHitInteractableObjects[i].InteractiveType == InteractiveType.Indirect) _tempHitInteractableObjects.Remove(_tempHitInteractableObjects[i]);
+            }
+            _hitInteractables = _tempHitInteractableObjects.ToArray();
+            
         }
         else
         {
@@ -119,16 +128,17 @@ public class PlayerInteraction : MonoBehaviour
 
     private bool CheckCanInteract(InteractiveObject interactiveObject)
     {
-        if(!interactiveObject.HasRequirement) return true;
+        
         switch (interactiveObject.InteractiveType)
            {
             case InteractiveType.DirectItemRequirement:
-                return _playerInventory.HasItem(interactiveObject.RequirementObject);
+                return _playerInventory.HasItem(interactiveObject.RequiredItem);
             
             case InteractiveType.DirectEquipmentRequirement:
-                return _playerEquipment.CurrentEquipment == interactiveObject.RequirementEquipment && _playerEquipment.CurrentEquipment.CanBeUsed;
-            }
-        return false;
+                return _playerEquipment.CurrentEquipment == interactiveObject.RequiredEquipment && _playerEquipment.CurrentEquipment.CanBeUsed;
+           }
+        
+        return !interactiveObject.HasRequirement;
     }
 
     private void StartInteract(bool isPrimaryInteraction)
@@ -168,7 +178,7 @@ public class PlayerInteraction : MonoBehaviour
                 break;
             
             case InteractiveType.DirectItemRequirement:
-                if(ActiveInteractiveObject.ConsumeItemRequirement) _playerInventory.RemoveItem(ActiveInteractiveObject.RequirementObject);
+                if(ActiveInteractiveObject.ConsumeItemRequirement) _playerInventory.RemoveItem(ActiveInteractiveObject.RequiredItem);
                 InteractAnimation();
                 break;
             
