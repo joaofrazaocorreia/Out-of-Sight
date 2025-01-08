@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2774086561317901907}
   - component: {fileID: 3522572727396331244}
   - component: {fileID: 3819727203590473242}
+  - component: {fileID: 7179108647552887694}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -86,6 +87,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7179108647552887694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1680230918654912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38da47e2eac354f448ed53d384bd9de7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 1
+  updateIfIndirect: 0
+  requiredItem: {fileID: 0}
+  requiredEquipment: {fileID: 0}
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  objectName: 
+  customInteractionMessage: 
+  LinkedInteractiveObject: {fileID: 4347284025844133007}
 --- !u!1 &14184973121362047
 GameObject:
   m_ObjectHideFlags: 0
@@ -4960,7 +4987,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 2
+  interactiveType: 4
+  updateIfIndirect: 0
   requiredItem: {fileID: 0}
   requiredEquipment: {fileID: 0}
   consumeItemRequirement: 1
@@ -4971,7 +4999,6 @@ MonoBehaviour:
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
   objectName: Door
-  hasCustomInteractionMessage: 0
   customInteractionMessage: 
 --- !u!1 &1693916798096225142
 GameObject:
@@ -4984,6 +5011,7 @@ GameObject:
   - component: {fileID: 8372825056900926358}
   - component: {fileID: 3789389304934077593}
   - component: {fileID: 726983268018611393}
+  - component: {fileID: 1700340601194078922}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -5059,6 +5087,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1700340601194078922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693916798096225142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38da47e2eac354f448ed53d384bd9de7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 1
+  updateIfIndirect: 0
+  requiredItem: {fileID: 0}
+  requiredEquipment: {fileID: 0}
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  objectName: 
+  customInteractionMessage: 
+  LinkedInteractiveObject: {fileID: 8461290669584892262}
 --- !u!1 &1714537325821162239
 GameObject:
   m_ObjectHideFlags: 0
@@ -7134,6 +7188,7 @@ GameObject:
   - component: {fileID: 773558008010287089}
   - component: {fileID: 4328911194713062430}
   - component: {fileID: 2492026260285029410}
+  - component: {fileID: 8489565060192291855}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -7209,6 +7264,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8489565060192291855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2458623074853853630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38da47e2eac354f448ed53d384bd9de7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 1
+  updateIfIndirect: 0
+  requiredItem: {fileID: 0}
+  requiredEquipment: {fileID: 0}
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  objectName: 
+  customInteractionMessage: 
+  LinkedInteractiveObject: {fileID: 8448566393941712400}
 --- !u!1 &2471015613986414423
 GameObject:
   m_ObjectHideFlags: 0
@@ -7330,7 +7411,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 1
+  interactiveType: 4
+  updateIfIndirect: 0
   requiredItem: {fileID: 0}
   requiredEquipment: {fileID: 0}
   consumeItemRequirement: 0
@@ -7341,7 +7423,6 @@ MonoBehaviour:
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
   objectName: Door
-  hasCustomInteractionMessage: 0
   customInteractionMessage: 
 --- !u!1 &2498370302338164578
 GameObject:
@@ -7440,6 +7521,7 @@ GameObject:
   - component: {fileID: 331551352308933277}
   - component: {fileID: 512310526513144458}
   - component: {fileID: 7535039706427271541}
+  - component: {fileID: 3212204497241655951}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -7515,6 +7597,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3212204497241655951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2539178156683089811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38da47e2eac354f448ed53d384bd9de7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 1
+  updateIfIndirect: 0
+  requiredItem: {fileID: 0}
+  requiredEquipment: {fileID: 0}
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  objectName: 
+  customInteractionMessage: 
+  LinkedInteractiveObject: {fileID: 5686652515168425988}
 --- !u!1 &2542287306438882668
 GameObject:
   m_ObjectHideFlags: 0
@@ -9329,7 +9437,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 1
+  interactiveType: 4
+  updateIfIndirect: 0
   requiredItem: {fileID: 0}
   requiredEquipment: {fileID: 0}
   consumeItemRequirement: 0
@@ -9340,7 +9449,6 @@ MonoBehaviour:
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
   objectName: Door
-  hasCustomInteractionMessage: 0
   customInteractionMessage: 
 --- !u!1 &3050166029492730871
 GameObject:
@@ -9862,7 +9970,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 1
+  interactiveType: 4
+  updateIfIndirect: 0
   requiredItem: {fileID: 0}
   requiredEquipment: {fileID: 0}
   consumeItemRequirement: 0
@@ -9873,7 +9982,6 @@ MonoBehaviour:
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
   objectName: Door
-  hasCustomInteractionMessage: 0
   customInteractionMessage: 
 --- !u!1 &3277766453926647092
 GameObject:
@@ -15080,6 +15188,7 @@ GameObject:
   - component: {fileID: 2704837596262610502}
   - component: {fileID: 7219362543159333192}
   - component: {fileID: 6394660898883437538}
+  - component: {fileID: 180633243877266824}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -15155,6 +15264,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &180633243877266824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5022841561941042699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38da47e2eac354f448ed53d384bd9de7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 1
+  updateIfIndirect: 0
+  requiredItem: {fileID: 0}
+  requiredEquipment: {fileID: 0}
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  objectName: 
+  customInteractionMessage: 
+  LinkedInteractiveObject: {fileID: 7584982314508632914}
 --- !u!1 &5060903213765293334
 GameObject:
   m_ObjectHideFlags: 0
@@ -16563,6 +16698,7 @@ GameObject:
   - component: {fileID: 2323999422644895534}
   - component: {fileID: 3390333984805913770}
   - component: {fileID: 5055035508379697318}
+  - component: {fileID: 6056854623604220873}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -16638,6 +16774,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6056854623604220873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5508457677250406504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38da47e2eac354f448ed53d384bd9de7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 1
+  updateIfIndirect: 0
+  requiredItem: {fileID: 0}
+  requiredEquipment: {fileID: 0}
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  objectName: 
+  customInteractionMessage: 
+  LinkedInteractiveObject: {fileID: 4098865276386818127}
 --- !u!1 &5541736106081085690
 GameObject:
   m_ObjectHideFlags: 0
@@ -16899,7 +17061,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 2
+  interactiveType: 4
+  updateIfIndirect: 0
   requiredItem: {fileID: 0}
   requiredEquipment: {fileID: 0}
   consumeItemRequirement: 1
@@ -16910,7 +17073,6 @@ MonoBehaviour:
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
   objectName: Door
-  hasCustomInteractionMessage: 0
   customInteractionMessage: 
 --- !u!1 &5585705686963099639
 GameObject:
@@ -17577,7 +17739,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 3
+  interactiveType: 4
+  updateIfIndirect: 0
   requiredItem: {fileID: 0}
   requiredEquipment: {fileID: 0}
   consumeItemRequirement: 0
@@ -17588,7 +17751,6 @@ MonoBehaviour:
   isInteractionSuspicious: 1
   isSecondInteractionSuspicious: 0
   objectName: Door
-  hasCustomInteractionMessage: 0
   customInteractionMessage: 
 --- !u!1 &5789395962308082129
 GameObject:
@@ -19262,7 +19424,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 1
+  interactiveType: 4
+  updateIfIndirect: 0
   requiredItem: {fileID: 0}
   requiredEquipment: {fileID: 0}
   consumeItemRequirement: 0
@@ -19273,7 +19436,6 @@ MonoBehaviour:
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
   objectName: Door
-  hasCustomInteractionMessage: 0
   customInteractionMessage: 
 --- !u!1 &6202294017856949550
 GameObject:
@@ -20856,6 +21018,7 @@ GameObject:
   - component: {fileID: 2707575390062801492}
   - component: {fileID: 3558699360335065943}
   - component: {fileID: 2299899837811583436}
+  - component: {fileID: 7568761681741986236}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -20931,6 +21094,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7568761681741986236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6680047982183237869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38da47e2eac354f448ed53d384bd9de7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 1
+  updateIfIndirect: 0
+  requiredItem: {fileID: 0}
+  requiredEquipment: {fileID: 0}
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  objectName: 
+  customInteractionMessage: 
+  LinkedInteractiveObject: {fileID: 5014368424728877796}
 --- !u!1 &6709642214115666655
 GameObject:
   m_ObjectHideFlags: 0
@@ -21268,7 +21457,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 3
+  interactiveType: 4
+  updateIfIndirect: 0
   requiredItem: {fileID: 0}
   requiredEquipment: {fileID: 0}
   consumeItemRequirement: 0
@@ -21279,7 +21469,6 @@ MonoBehaviour:
   isInteractionSuspicious: 1
   isSecondInteractionSuspicious: 0
   objectName: Door
-  hasCustomInteractionMessage: 0
   customInteractionMessage: 
 --- !u!1 &6739819964822075958
 GameObject:
@@ -21508,6 +21697,8 @@ GameObject:
   - component: {fileID: 3030693791509511716}
   - component: {fileID: 6118437066108793992}
   - component: {fileID: 1359159074364881243}
+  - component: {fileID: 8161958501199406723}
+  - component: {fileID: 8166931008467724730}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -21583,6 +21774,53 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8161958501199406723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6829556680609006462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38da47e2eac354f448ed53d384bd9de7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 1
+  updateIfIndirect: 0
+  requiredItem: {fileID: 0}
+  requiredEquipment: {fileID: 0}
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  objectName: 
+  customInteractionMessage: 
+  LinkedInteractiveObject: {fileID: 2628961943440762800}
+--- !u!65 &8166931008467724730
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6829556680609006462}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0000004, y: 2.0000005, z: 1.0000002}
+  m_Center: {x: 0.000015318394, y: 0.000015258789, z: 0.0000013411045}
 --- !u!1 &6860723689747758274
 GameObject:
   m_ObjectHideFlags: 0
@@ -22183,6 +22421,7 @@ GameObject:
   - component: {fileID: 1249040474254191744}
   - component: {fileID: 8647750115525378663}
   - component: {fileID: 3749713856263579471}
+  - component: {fileID: 5348633353403070312}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -22258,6 +22497,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5348633353403070312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7061940002406029542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38da47e2eac354f448ed53d384bd9de7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 1
+  updateIfIndirect: 0
+  requiredItem: {fileID: 0}
+  requiredEquipment: {fileID: 0}
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  objectName: 
+  customInteractionMessage: 
+  LinkedInteractiveObject: {fileID: 2724683391261198873}
 --- !u!1 &7077408301904080784
 GameObject:
   m_ObjectHideFlags: 0
@@ -26671,7 +26936,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 3
+  interactiveType: 4
+  updateIfIndirect: 0
   requiredItem: {fileID: 0}
   requiredEquipment: {fileID: 0}
   consumeItemRequirement: 0
@@ -26682,7 +26948,6 @@ MonoBehaviour:
   isInteractionSuspicious: 1
   isSecondInteractionSuspicious: 0
   objectName: Door
-  hasCustomInteractionMessage: 0
   customInteractionMessage: 
 --- !u!1 &8615458591357024288
 GameObject:
@@ -27470,6 +27735,7 @@ GameObject:
   - component: {fileID: 2247195512232527578}
   - component: {fileID: 2017127159202551629}
   - component: {fileID: 3306044725666919257}
+  - component: {fileID: 4514647152491003051}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -27545,6 +27811,32 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4514647152491003051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8794618341283622835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38da47e2eac354f448ed53d384bd9de7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 1
+  updateIfIndirect: 0
+  requiredItem: {fileID: 0}
+  requiredEquipment: {fileID: 0}
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  objectName: 
+  customInteractionMessage: 
+  LinkedInteractiveObject: {fileID: 8110716881368546920}
 --- !u!1 &8795085264786199870
 GameObject:
   m_ObjectHideFlags: 0
@@ -28457,7 +28749,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 3
+  interactiveType: 4
+  updateIfIndirect: 0
   requiredItem: {fileID: 0}
   requiredEquipment: {fileID: 0}
   consumeItemRequirement: 0
@@ -28468,7 +28761,6 @@ MonoBehaviour:
   isInteractionSuspicious: 1
   isSecondInteractionSuspicious: 0
   objectName: Door
-  hasCustomInteractionMessage: 0
   customInteractionMessage: 
 --- !u!1 &9089588238294549219
 GameObject:
