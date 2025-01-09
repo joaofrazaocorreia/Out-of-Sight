@@ -251,7 +251,8 @@ public class Detection : MonoBehaviour
 
     private void UpdateSelfDetectionUI()
     {
-        if(enemyMovement != null && enemyCamera == null)
+        if(enemyMovement != null && enemyCamera == null &&
+            enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut)
         {
             if(enemyMovement.currentStatus == EnemyMovement.Status.Tased)
             {
@@ -279,6 +280,9 @@ public class Detection : MonoBehaviour
                 detectionIcon.SetActive(true);
 
                 detectionFill.fillAmount = DetectionMeter / DetectionLimit;
+
+                float colorDifference = 1 - (DetectionMeter / DetectionLimit);
+                detectionFill.GetComponentInChildren<Image>().color = new Color(1, colorDifference, colorDifference, 1);
             }
 
             else
@@ -313,6 +317,11 @@ public class Detection : MonoBehaviour
             {
                 selfDetection.SetActive(false);
             }
+        }
+
+        else
+        {
+            selfDetection.SetActive(false);
         }
     }
 }

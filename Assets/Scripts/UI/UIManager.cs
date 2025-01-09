@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
+using Unity.Cinemachine;
 
 public class UIManager : MonoBehaviour
 {
@@ -32,6 +33,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject interactingBar;
     [SerializeField] private RectTransform interactingBarFill;
     [SerializeField] private GameObject globalDetection;
+    [SerializeField] private GameObject detectionArrowPrefab;
+    [SerializeField] private Transform detectionArrowsParent;
     [SerializeField] private GameObject detectionIcon;
     [SerializeField] private GameObject alarmIcon;
     [SerializeField] private Image detectionFill;
@@ -41,9 +44,10 @@ public class UIManager : MonoBehaviour
 
     public static bool gamePaused;
     private bool settingsActive;
-    private Dictionary<Transform,Vector3> originalUIPositions;
+    private Dictionary<Transform, Vector3> originalUIPositions;
     private PlayerInput playerInput;
     private List<Detection> enemyDetections;
+    private Dictionary<Detection, GameObject> detectionArrows;
     private Alarm alarm;
     private float deltaTime;
     private float timer;
@@ -69,6 +73,7 @@ public class UIManager : MonoBehaviour
         
         playerInput = FindAnyObjectByType<PlayerInput>();
         enemyDetections = new List<Detection>();
+        detectionArrows = new Dictionary<Detection, GameObject>();
         alarm = FindAnyObjectByType<Alarm>();
         deltaTime = Time.fixedDeltaTime * UISpeed;
         timer = 0;
@@ -87,6 +92,7 @@ public class UIManager : MonoBehaviour
             UpdateTimerText();
 
             UpdateGlobalDetectionFill();
+            UpdateDetectionArrows();
         }
         
         if(playerInput.actions["Pause Game"].WasPressedThisFrame())
@@ -407,26 +413,65 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void UpdateEnemyDetectionsList()
+    private bool CheckEnemyDetectionsForUpdate()
     {
         int detectionCount = NPCsParent.childCount + CamerasParent.childCount;
 
+        for(int i = 0; i < NPCsParent.childCount; i++)
+        {
+            EnemyMovement em = NPCsParent.GetChild(i).GetComponent<EnemyMovement>();
+            if(em == null || em.currentStatus == EnemyMovement.Status.KnockedOut) 
+                detectionCount--;
+        }
+        for(int i = 0; i < CamerasParent.childCount; i++)
+        {
+            EnemyCamera ec = CamerasParent.GetChild(i).GetComponent<EnemyCamera>();
+            if(ec == null || !ec.IsOn) 
+                detectionCount--;
+        }
+
         if(enemyDetections.Count != detectionCount)
+            Debug.Log("Detection check returned true: Updating detection list...");
+
+        return enemyDetections.Count != detectionCount;
+    }
+
+    private void UpdateEnemyDetectionsList()
+    {
+        if(CheckEnemyDetectionsForUpdate())
         {
             enemyDetections = new List<Detection>();
+            detectionArrows = new Dictionary<Detection, GameObject>();
+            for(int i = detectionArrowsParent.childCount-1; i >= 0; i--)
+            {
+                Destroy(detectionArrowsParent.GetChild(i).gameObject);
+            }
+
 
             for(int i = 0; i < NPCsParent.childCount; i++)
             {
                 EnemyMovement em = NPCsParent.GetChild(i).GetComponent<EnemyMovement>();
                 if(em != null && em.currentStatus != EnemyMovement.Status.KnockedOut)
-                    enemyDetections.Add(NPCsParent.GetChild(i).GetComponentInChildren<Detection>());
+                {
+                    Detection d = NPCsParent.GetChild(i).GetComponentInChildren<Detection>();
+
+                    enemyDetections.Add(d);
+                    detectionArrows.Add(d, Instantiate(detectionArrowPrefab, detectionArrowsParent));
+                    detectionArrows[d].name = d.transform.parent.name + " Arrow";
+                }
             }
 
             for(int i = 0; i < CamerasParent.childCount; i++)
             {
                 EnemyCamera ec = CamerasParent.GetChild(i).GetComponent<EnemyCamera>();
                 if(ec != null && ec.IsOn)
-                    enemyDetections.Add(CamerasParent.GetChild(i).GetComponentInChildren<Detection>());
+                {
+                    Detection d = CamerasParent.GetChild(i).GetComponentInChildren<Detection>();
+
+                    enemyDetections.Add(d);
+                    detectionArrows.Add(d, Instantiate(detectionArrowPrefab, detectionArrowsParent));
+                    detectionArrows[d].name = d.transform.parent.parent.parent.parent.parent.parent.name + " Arrow";
+                }
             }
         }
     }
@@ -440,7 +485,7 @@ public class UIManager : MonoBehaviour
             UpdateEnemyDetectionsList();
             foreach(Detection d in enemyDetections)
             {
-                if(d.DetectionMeter > fill)
+                if(d.DetectionMeter / d.DetectionLimit > fill)
                 {
                     fill = d.DetectionMeter / d.DetectionLimit;
                 }
@@ -450,6 +495,9 @@ public class UIManager : MonoBehaviour
             {
                 ToggleGlobalDetection(true, alarm.IsOn);
                 detectionFill.fillAmount = fill;
+
+                float colorDifference = 1 - fill;
+                detectionFill.GetComponentInChildren<Image>().color = new Color(1, colorDifference, colorDifference, 1);
             }
 
             else
@@ -461,6 +509,50 @@ public class UIManager : MonoBehaviour
         else
         {
             ToggleGlobalDetection(true, alarm.IsOn);
+        }
+    }
+
+    public void UpdateDetectionArrows()
+    {
+        if(!alarm.IsOn)
+        {
+            Transform player = playerInput.transform;
+            float cameraAngle = playerInput.transform.eulerAngles.y + 90;
+
+            UpdateEnemyDetectionsList();
+            foreach(Detection d in enemyDetections)
+            {
+                if(d.DetectionMeter > 0)
+                {
+                    Vector3 direction =  d.transform.position - player.transform.position;
+                    float angle = Vector2.Angle(
+                        new Vector2(direction.x, direction.z), new Vector2(player.position.x, player.position.z));
+                    
+                    if(direction.z < 0)
+                        angle *= -1;
+
+                    detectionArrows[d].SetActive(true);
+                    detectionArrows[d].transform.eulerAngles = new Vector3(0, 0, cameraAngle - angle);
+
+                    float colorDifference = 1 - (d.DetectionMeter / d.DetectionLimit);
+                    detectionArrows[d].GetComponentInChildren<Image>().color = new Color(1, colorDifference, colorDifference, 1);
+                }
+
+                else if(detectionArrows[d].activeSelf)
+                {
+                    detectionArrows[d].SetActive(false);
+                    detectionArrows[d].transform.eulerAngles = Vector3.zero;
+                }
+            }
+        }
+
+        else
+        {
+            foreach(KeyValuePair<Detection, GameObject> kv in detectionArrows)
+            {
+                if(kv.Value.activeSelf)
+                    kv.Value.SetActive(false);
+            }
         }
     }
 
