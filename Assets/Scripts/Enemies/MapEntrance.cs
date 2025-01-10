@@ -7,7 +7,8 @@ using UnityEngine.AI;
 public class MapEntrance : MonoBehaviour
 {
     [SerializeField] private List<Item> objectiveItems;
-    [SerializeField] private float characterDetectionDistance = 4f;
+    [SerializeField] private float playerDetectionDistance = 6f;
+    [SerializeField] private float npcDetectionDistance = 4f;
     [SerializeField] private float minCivillianSpawnTime = 3f;
     [SerializeField] private float maxCivillianSpawnTime = 15f;
     [SerializeField] private float minWorkerSpawnTime = 2f;
@@ -101,7 +102,7 @@ public class MapEntrance : MonoBehaviour
 
 
         // If the player has the objective in their inventory and comes close to the exit, they complete the mission
-        if((transform.position - player.position).magnitude <= characterDetectionDistance)
+        if((transform.position - player.position).magnitude <= playerDetectionDistance)
         {
             if(PlayerHasAllObjectives)
             {
@@ -113,7 +114,7 @@ public class MapEntrance : MonoBehaviour
         UpdateEnemies();
         foreach(Enemy e in enemies)
         {
-            if((transform.position - e.transform.position).magnitude <= characterDetectionDistance && e.EnemyMovement &&
+            if((transform.position - e.transform.position).magnitude <= npcDetectionDistance && e.EnemyMovement &&
                 (e.EnemyMovement.currentStatus == EnemyMovement.Status.Fleeing || e.EnemyMovement.LeavingMap))
             {
                 // Tells the game that one more civillian needs to be spawned in and stores
@@ -167,7 +168,7 @@ public class MapEntrance : MonoBehaviour
     {
         // Calculates the position in the navmesh to spawn the NPC
         NavMesh.SamplePosition(transform.position, out NavMeshHit navHit,
-            characterDetectionDistance, NavMesh.AllAreas);
+            npcDetectionDistance, NavMesh.AllAreas);
 
         // Spawns the NPC in the navmesh position nearest to this exit's position
         GameObject newNPC = Instantiate(prefab, navHit.position, transform.rotation, parent:enemiesGameObject);
@@ -195,7 +196,7 @@ public class MapEntrance : MonoBehaviour
         
         // Calculates the position in the navmesh to spawn the NPC
         NavMesh.SamplePosition(transform.position, out NavMeshHit navHit,
-            characterDetectionDistance, NavMesh.AllAreas);
+            npcDetectionDistance, NavMesh.AllAreas);
 
         // Respawns a random NPC of the given type in the navmesh position nearest to this exit's position
         int index = Random.Range(0, QueuedEnemiesGameObject.childCount);
