@@ -20,7 +20,7 @@ public class MainMenuScripts : MonoBehaviour
         originalUIPositions = new Dictionary<Transform, Vector3>();
         
         #if UNITY_EDITOR
-            UISpeed *= 3;
+            UISpeed *= 8;
         #endif
 
         for(int i = 0; i < transform.childCount; i++)
