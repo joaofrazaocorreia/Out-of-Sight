@@ -34,12 +34,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 _currentCharHeadPos;
     private Vector3 _startCamPos;
     
-    /*
-    [Header("Audio Variables")]
-    [SerializeField] private AudioSource playerAudioSource;
-    [SerializeField] private AudioClip[] footstepSounds;
-    [SerializeField] [Range(0.1f, 2f)] private float footstepInterval = 0.45f;
-    */
     [Header("Crouch Variables")]
     [SerializeField] private bool isCrouchToggle;
     private int _isCrouching;
@@ -95,9 +89,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 _velocity;
     private Vector3 _motion;
     private float   _sinPI4;
-    /*
-    private float _footstepTimer;
-    */
     private Player _player;
     private PlayerInput _playerInput;
     private PlayerInteraction _playerInteraction;
@@ -125,9 +116,6 @@ public class PlayerController : MonoBehaviour
         _motion         = Vector3.zero;
         _sinPI4         = Mathf.Sin(Mathf.PI / 4);
         _startCamPos    = _head.transform.localPosition;
-        /*
-        _footstepTimer  = Time.time;
-        */
         _uiManager = FindAnyObjectByType<UIManager>();
         SpeedBoost      = 1f;
         _player = GetComponent<Player>();
@@ -495,17 +483,5 @@ public class PlayerController : MonoBehaviour
 
             _head.transform.localPosition += pos;
         }
-
-        /*
-        if(_footstepTimer + footstepInterval <= Time.time)
-        {
-            int index = UnityEngine.Random.Range(0, footstepSounds.Length);
-            float pitch = UnityEngine.Random.Range(0.8f, 1.2f);
-
-            playerAudioSource.pitch = pitch;
-            playerAudioSource.PlayOneShot(footstepSounds[index]);
-            _footstepTimer = Time.time;
-        }
-        */
     }
 }

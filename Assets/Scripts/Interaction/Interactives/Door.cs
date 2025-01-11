@@ -5,6 +5,8 @@ public class Door : InteractiveObject
 {
     [Header("Door Properties")]
     [SerializeField] private NavMeshLink navMeshLink;
+    [SerializeField] private PlayAudio doorOpenPlayer;
+    [SerializeField] private PlayAudio doorClosePlayer;
     
     private Animator animator;
     private bool _opened;
@@ -44,5 +46,11 @@ public class Door : InteractiveObject
     {
         _opened = !_opened;
         animator.SetTrigger(_opened ? "Open" : "Close");   
+        PlayAudio(_opened ? doorOpenPlayer : doorClosePlayer);
+    }
+
+    private void PlayAudio(PlayAudio audioplayer)
+    {
+        audioplayer.Play();
     }
 }

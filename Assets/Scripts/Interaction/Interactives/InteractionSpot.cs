@@ -49,6 +49,8 @@ public class InteractionSpot : InteractiveObject
         isSecondInteractionSuspicious = LinkedObject.IsSecondInteractionSuspicious;
         objectName = LinkedObject.ObjectName;
         customInteractionMessage = LinkedObject.CustomInteractionMessage;
+        onInteractAudioPlayer = linkedObject.OnInteractAudioPlayer;
+        whileInteractAudioPlayer = linkedObject.WhileInteractAudioPlayer;
         
         HasRequirement = RequiredItem != null || RequiredEquipment != null;
     }

@@ -9,6 +9,7 @@ namespace Interaction.Equipments
         [SerializeField] private float raycastDistance;
         [SerializeField] private int maxAmmo;
         [SerializeField] private LayerMask raycastMask;
+        [SerializeField] private PlayAudio taserShotPlayer;
 
         public int MaxAmmo 
         { 
@@ -57,6 +58,8 @@ namespace Interaction.Equipments
                     hitenemy.GetTased();
                 }
             }
+            
+            taserShotPlayer.Play();
         }
 
         private void Reload()

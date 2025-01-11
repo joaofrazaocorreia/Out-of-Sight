@@ -9,6 +9,7 @@ public class PlayerMelee : MonoBehaviour
     [SerializeField] private float attackRange = 4f;
     [SerializeField] private float frontalAngle = 120f;
     [SerializeField] private Transform enemiesParent;
+    [SerializeField] private PlayAudio meleeAttackPlayer;
 
     private PlayerInput playerInput;
     private PlayerCarryInventory playerBodyInventory;
@@ -101,6 +102,8 @@ public class PlayerMelee : MonoBehaviour
                     }
                 }
             }
+            
+            meleeAttackPlayer.Play();
         }
     }
 

@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerEquipment : MonoBehaviour
 {
     [SerializeField] private GameObject[] equipments;
+    [SerializeField] private PlayAudio equipingPlayer;
 
     private UIManager uIManager;
     private EquipmentObject[] _equipmentObjects;
@@ -45,7 +46,7 @@ public class PlayerEquipment : MonoBehaviour
             CurrentEquipmentNum = index;
             GetComponent<Player>().GainStatus(Player.Status.Suspicious);
         }
-
+        equipingPlayer.Play();
     }
 
     private void Unequip()
