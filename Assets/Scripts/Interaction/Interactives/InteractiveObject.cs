@@ -24,6 +24,10 @@ public abstract class InteractiveObject : MonoBehaviour
     [SerializeField] protected string objectName;
     [SerializeField] protected string customInteractionMessage;
 
+    [Header("Audio Options")] 
+    [SerializeField] protected PlayAudio onInteractAudioPlayer;
+    [SerializeField] protected PlayAudio whileInteractAudioPlayer;
+
     public InteractiveType InteractiveType
     {
         get => interactiveType;
@@ -50,6 +54,9 @@ public abstract class InteractiveObject : MonoBehaviour
     public string ObjectName => objectName;
     public string CustomInteractionMessage => customInteractionMessage;
     
+    public PlayAudio OnInteractAudioPlayer => onInteractAudioPlayer;
+    public PlayAudio WhileInteractAudioPlayer => whileInteractAudioPlayer;
+    
     
     private void Start()
     {
@@ -65,6 +72,8 @@ public abstract class InteractiveObject : MonoBehaviour
         OneTimeRequirementCheck();
         UniqueFirstInteractionDurationCheck();
         isInteractionSuspicious = IsSecondInteractionSuspicious;
+
+        if (onInteractAudioPlayer != null) onInteractAudioPlayer.Play();
     }
 
     private void OneTimeRequirementCheck()

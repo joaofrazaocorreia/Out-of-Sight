@@ -25,9 +25,23 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float searchRadius = 20f;
     [SerializeField] private float stuckTime = 3f;
     [SerializeField] protected float tasedTime = 5f;
+    [SerializeField] protected PlayAudio taserLoopPlayer;
+    [SerializeField] protected PlayAudio knockoutPlayer;
+    [SerializeField] protected PlayAudio footstepPlayer;
+    [SerializeField] [Range(0.1f, 2f)] private float footstepInterval = 0.45f;
 
     private Status status;
-    public Status currentStatus {get => status; set {if(status != Status.KnockedOut) status = value;}}
+
+    public Status currentStatus
+    { 
+        get => status;
+        set
+        {
+            if(status != Status.KnockedOut && value == Status.KnockedOut) knockoutPlayer.Play();
+            if(status != Status.KnockedOut) status = value;
+            _footstepTimer = Time.time - footstepInterval;
+        }
+    }
     public bool halted = false;
     public List<Transform> MovementTargets {get => movementTargets;}
     private List<Vector3> movementPosTargets;
@@ -57,6 +71,7 @@ public class EnemyMovement : MonoBehaviour
     private Vector3 chosenNearestExit;
     private bool leavingMap;
     public bool LeavingMap {get => leavingMap; set{leavingMap = value;}}
+    private float _footstepTimer;
 
     private void Start()
     {
@@ -95,6 +110,8 @@ public class EnemyMovement : MonoBehaviour
                     movementPosTargets.Add(t.position);
             }
         }
+        
+        _footstepTimer  = Time.time;
     }
 
 
@@ -118,7 +135,7 @@ public class EnemyMovement : MonoBehaviour
         else if (currentStatus == Status.Fleeing)
         {
             navMeshAgent.speed = runSpeed;
-
+            
             ExitMap();
         }
         
@@ -203,6 +220,7 @@ public class EnemyMovement : MonoBehaviour
 
             else
             {
+                taserLoopPlayer.Play();
                 animator.SetBool("Tased", false);
                 animator.applyRootMotion = true;
 
@@ -237,6 +255,12 @@ public class EnemyMovement : MonoBehaviour
         if(currentStatus != Status.Tased && currentStatus != Status.KnockedOut)
         {
             lastSelfPos = transform.position;
+        }
+        
+        if(_footstepTimer + footstepInterval * navMeshAgent.speed / walkSpeed <= Time.time && navMeshAgent.velocity.magnitude >= 1)
+        {
+            footstepPlayer.Play();
+            _footstepTimer = Time.time;
         }
     }
 
@@ -389,6 +413,7 @@ public class EnemyMovement : MonoBehaviour
             currentStatus = Status.Tased;
             tasedTimer = tasedTime;
             leavingMap = false;
+            taserLoopPlayer.Play();
         }
     }
 

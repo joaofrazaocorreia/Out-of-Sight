@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private PlayAudio alarmAudioPlayer;
     public enum Type {Civillian, Worker, Guard, Police, Camera};
 
     protected Type type;
@@ -54,6 +55,7 @@ public class Enemy : MonoBehaviour
             Debug.Log($"{name} triggered the alarm!");
 
         alarm.TriggerAlarm(!alarm.IsOn);
+        if(alarmAudioPlayer != null) alarmAudioPlayer.Play();
     }
 
     public void ResetNPC()

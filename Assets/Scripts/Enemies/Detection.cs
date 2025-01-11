@@ -16,7 +16,8 @@ public class Detection : MonoBehaviour
     [SerializeField] private float proximityDetectionRange = 0f;
     [SerializeField] [Range(0f, 20f)] private float baseDetectionRate = 1.0f;
     [SerializeField] private float detectionLimit = 5.0f;
-
+    [SerializeField] private PlayAudio detectionAudioPlayer;
+    
     public static Vector3 lastPlayerPos;
     public static float globalDetectionMultiplier = 1.0f;
 
@@ -37,6 +38,7 @@ public class Detection : MonoBehaviour
     private bool tooCloseToPlayer;
     private EnemyCamera enemyCamera;
     private EnemyMovement enemyMovement;
+    private bool isDetectionReset;
 
 
     private void Start()
@@ -222,6 +224,17 @@ public class Detection : MonoBehaviour
         else
         {
             DetectionMeter -= Time.deltaTime;
+        }
+        
+        switch (DetectionMeter)
+        {
+            case > 0 when isDetectionReset:
+                isDetectionReset = false;
+                if(detectionAudioPlayer != null) detectionAudioPlayer.Play();
+                break;
+            case 0 when !isDetectionReset:
+                isDetectionReset = true;
+                break;
         }
     }
 

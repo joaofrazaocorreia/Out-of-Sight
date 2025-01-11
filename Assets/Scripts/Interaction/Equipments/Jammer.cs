@@ -7,6 +7,8 @@ using UnityEngine;
 public class Jammer : EquipmentObject, IHasAmmo
 {
     [SerializeField] private int maxAmmo;
+    [SerializeField] private PlayAudio jammerPickupPlayer;
+    [SerializeField] private PlayAudio jammerPlacePlayer;
 
     public int MaxAmmo 
     { 
@@ -38,5 +40,12 @@ public class Jammer : EquipmentObject, IHasAmmo
         CurrentAmmo--;
         
         base.Used(activeInteractiveObject);
+        jammerPlacePlayer.Play();
+    }
+
+    public void Pickup()
+    {
+        CurrentAmmo++;
+        jammerPickupPlayer.Play();
     }
 }

@@ -15,6 +15,9 @@ public class Alarm : MonoBehaviour
     [SerializeField] private GameObject policePrefab;
     [SerializeField] private float policeSpawnTime = 10f;
     [SerializeField] private int maxPoliceNPCS = 6;
+    [SerializeField] private PlayAudio alarmLoopPlayer;
+    [SerializeField] private PlayAudio alarmEndPlayer;
+    [SerializeField] private MusicPlayer musicPlayer;
 
     private Transform player;
     private int currentTier;
@@ -105,6 +108,10 @@ public class Alarm : MonoBehaviour
                 {
                     extraGuards.Remove(g);
                 }
+                
+                alarmLoopPlayer.Stop();
+                //alarmEndPlayer.Play();
+                musicPlayer.SwitchTrack();
             }
         }
     }
@@ -140,6 +147,9 @@ public class Alarm : MonoBehaviour
                     newGuard.GetComponent<EnemyMovement>().currentStatus = EnemyMovement.Status.Chasing;
                 }
             }
+            
+            alarmLoopPlayer.Play();
+            musicPlayer.SwitchTrack();
         }
 
         enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();

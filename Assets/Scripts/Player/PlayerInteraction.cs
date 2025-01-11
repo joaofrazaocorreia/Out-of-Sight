@@ -34,6 +34,7 @@ public class PlayerInteraction : MonoBehaviour
     private List<InteractiveObject> _tempHitInteractableObjects = new List<InteractiveObject>();
     private InteractiveObject[] _hitInteractables;
     private int _hitIndex;
+    private bool _interactionAudioPlaying;
     
     private InteractiveObject ActiveInteractiveObject
     {
@@ -42,11 +43,18 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (value == _activeInteractiveObject) return;
 
+            if (_interactionAudioPlaying && _activeInteractiveObject != null)
+            {
+                _activeInteractiveObject.WhileInteractAudioPlayer.Stop();
+                _interactionAudioPlaying = false;
+            }
+            
             _activeInteractiveObject = value;
             
             _interactionDuration = _activeInteractiveObject ? _activeInteractiveObject.InteractionDuration : 0;
         }
     }
+    
     
     [CanBeNull] private InteractiveObject _activeInteractiveObject;
 
@@ -163,6 +171,12 @@ public class PlayerInteraction : MonoBehaviour
 
         if(ActiveInteractiveObject.IsInteractionSuspicious) _player.GainStatus(Player.Status.Suspicious);
 
+        if (ActiveInteractiveObject.WhileInteractAudioPlayer != null && !_interactionAudioPlaying)
+        {
+            ActiveInteractiveObject.WhileInteractAudioPlayer.Play();
+            _interactionAudioPlaying = true;
+        }
+
         if (_interactionDuration > 0f)
         {
             _uiManager.UpdateInteractingBarFillSize(1 - _interactionDuration / ActiveInteractiveObject.InteractionDuration);
@@ -195,11 +209,14 @@ public class PlayerInteraction : MonoBehaviour
         
         _uiManager.ToggleInteractingBar(false);
         
+        if(ActiveInteractiveObject.WhileInteractAudioPlayer != null) ActiveInteractiveObject.WhileInteractAudioPlayer.Stop();
+        
         _finishedInteraction = true;
         _interactionReady = false;
         _lastHitObject = null;
         _hitInteractables = null;
         ActiveInteractiveObject = null;
+        _interactionAudioPlaying = false;
     }
 
     private void UpdateInteractionUI()
