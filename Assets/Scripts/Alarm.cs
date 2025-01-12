@@ -6,6 +6,7 @@ public class Alarm : MonoBehaviour
 {
     [SerializeField] private float baseDuration = 30f;
     [SerializeField] private float durationIncreasePerTier = 30f;
+    [SerializeField] private float maxDuration = 300f;
     [SerializeField] private int maxTier = 3;
     [SerializeField] private int extraGuardsPerTier = 3;
     [SerializeField] private int maxGuardsRemainPermanent = 2;
@@ -26,6 +27,7 @@ public class Alarm : MonoBehaviour
     private float alarmTimer;
     private float AlarmTime {get => baseDuration + (durationIncreasePerTier * Mathf.Min(currentTier - 1, maxTier));}
     public float AlarmTimer {get => alarmTimer; set => alarmTimer = value;}
+    private float alarmTimeLimit;
     private float policeSpawnTimer;
     private List<Enemy> enemies;
     private List<EnemyGuard> nonStaticGuards;
@@ -37,6 +39,7 @@ public class Alarm : MonoBehaviour
         currentTier = 0;
         isOn = false;
         alarmTimer = AlarmTime;
+        alarmTimeLimit = maxDuration;
         policeSpawnTimer = 0f;
         enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
         enemies = enemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
@@ -58,9 +61,17 @@ public class Alarm : MonoBehaviour
                 if(currentTier < maxTier)
                 {
                     alarmTimer -= Time.deltaTime;
+                    alarmTimeLimit -= Time.deltaTime;
+
+                    // If the alarm is still active after reaching its time limit, the alarm tier is maxxed instantly
+                    if(alarmTimeLimit <= 0)
+                    {
+                        Debug.Log("alarm time limit reached - maxxed out the alarm tier");
+                        currentTier = maxTier;
+                    }
                 }
 
-                // If it's the last tier, starts generating police NPCs procedurally until the maximum amount is hit.
+                // If it's the maximum tier, starts generating police NPCs procedurally until the maximum amount is hit.
                 else if(policeGuards.Count < maxPoliceNPCS)
                 {
                     if(policeSpawnTimer <= 0)
@@ -129,6 +140,7 @@ public class Alarm : MonoBehaviour
 
             isOn = true;
             ++currentTier;
+            alarmTimeLimit = maxDuration;
 
             // Every time the alarm is raised, global detection is raised by 10%
             if(currentTier > 0)

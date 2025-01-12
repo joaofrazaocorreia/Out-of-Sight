@@ -4,7 +4,12 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public enum Status {Normal, Doubtful, Trespassing, Suspicious};
-    public enum Disguise {Civillian, Employee, Guard_Tier1, Guard_Tier2}
+    public enum Disguise {Civillian, Employee, Guard_Tier1, Guard_Tier2};
+
+    [SerializeField] private Sprite civillianDisguiseSprite;
+    [SerializeField] private Sprite workerDisguiseSprite;
+    [SerializeField] private Sprite guardTier1DisguiseSprite;
+    [SerializeField] private Sprite guardTier2DisguiseSprite;
 
     public List<Status> status;
     public Disguise disguise;
@@ -65,35 +70,47 @@ public class Player : MonoBehaviour
         if(uiManager)
         {
             string newText;
+            Sprite newImage;
 
             switch(disguise)
             {
                 case Disguise.Civillian:
                 {
                     newText = "Disguised as: Civilian";
+                    newImage = civillianDisguiseSprite;
+                    break;
+                }
+                case Disguise.Employee:
+                {
+                    newText = "Disguised as: Hotel Employee";
+                    newImage = workerDisguiseSprite;
                     break;
                 }
                 
                 case Disguise.Guard_Tier1:
                 {
                     newText = "Disguised as: Hotel Security";
+                    newImage = guardTier1DisguiseSprite;
                     break;
                 }
                 
                 case Disguise.Guard_Tier2:
                 {
                     newText = "Disguised as: Elite Security";
+                    newImage = guardTier2DisguiseSprite;
                     break;
                 }
                 
                 default:
                 {
                     newText = $"Disguised as: {disguise}";
+                    newImage = civillianDisguiseSprite;
                     break;
                 }
             }
 
             uiManager.UpdateDisguiseText(newText);
+            uiManager.UpdateDisguiseImage(newImage);
         }
     }
 }
