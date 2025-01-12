@@ -82,8 +82,6 @@ public class MapRandomizer : MonoBehaviour
 
     private void FillObjectSpawns()
     {
-        Debug.Log("Starting object spawns in Fill mode...");
-
         List<int> usedPosIndexes = new List<int>();
         List<int> usedObjectIndexes = new List<int>();
         while(spawnedObjects.Count < objectSpawnPositions.Count)
@@ -129,15 +127,11 @@ public class MapRandomizer : MonoBehaviour
             }
         }
 
-        Debug.Log("Object spawns in Fill mode complete.");
-
         StartCoroutine(UpdateNavMesh());
     }
 
     private void SpawnSetObjects()
     {
-        Debug.Log("Starting object spawns in Set mode...");
-
         List<int> usedPosIndexes = new List<int>();
         while(spawnedObjects.Count < numOfSpawns)
         {
@@ -164,8 +158,6 @@ public class MapRandomizer : MonoBehaviour
                 usedPosIndexes.Add(randomPosIndex);
             }
         }
-
-        Debug.Log("Object spawns in Set mode complete.");
 
         StartCoroutine(UpdateNavMesh());
     }
@@ -197,7 +189,6 @@ public class MapRandomizer : MonoBehaviour
     {
         if(!navmeshUpdateQueued)
         {
-            Debug.Log("Updating navmesh...");
             NavMeshSurface navMeshSurface = FindAnyObjectByType<NavMeshSurface>();
             navmeshUpdateQueued = true;
 
@@ -207,7 +198,6 @@ public class MapRandomizer : MonoBehaviour
             navMeshSurface.BuildNavMesh();
 
             navmeshUpdateQueued = false;
-            Debug.Log("Navmesh updated!");
         }
 
         yield return null;

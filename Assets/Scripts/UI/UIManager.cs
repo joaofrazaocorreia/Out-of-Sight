@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CanvasGroup UIBackground;
     [SerializeField] private CanvasGroup missionBriefingScreen;
     [SerializeField] private TextMeshProUGUI disguiseText;
+    [SerializeField] private Image disguiseImage;
     [SerializeField] private TextMeshProUGUI statusText;
     [SerializeField] private TextMeshProUGUI missionTimer;
     [SerializeField] private GameObject ammoDisplay;
@@ -311,6 +312,12 @@ public class UIManager : MonoBehaviour
     {
         if(disguiseText.text != text)
             disguiseText.text = text;
+    }
+
+    public void UpdateDisguiseImage(Sprite sprite)
+    {
+        if(disguiseImage.sprite != sprite)
+            disguiseImage.sprite = sprite;
     }
 
     private void UpdateTimerText()
