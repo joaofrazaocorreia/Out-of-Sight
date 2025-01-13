@@ -12716,6 +12716,10 @@ PrefabInstance:
       propertyPath: onKnockOut.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 3427036616974600107, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
+      propertyPath: ignoresAlarm
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4718002219197336456, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 18.33
@@ -12794,6 +12798,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: beaf0eac2a7c9634e8413a67f429e2de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1648582076 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 152042297698266454, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
+  m_PrefabInstance: {fileID: 1648582067}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 96708146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f71f3ce5527b824c8dede7862098647, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1658181728
@@ -15768,6 +15783,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 1648582069}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1648582076}
+        m_TargetAssemblyTypeName: EnemyMovement, Assembly-CSharp
+        m_MethodName: ResetNPC
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

@@ -3,13 +3,17 @@ using UnityEngine;
 public class EnemyGuard : Enemy
 {
     /// <summary>
-    /// How long this enemy stays at the last seen player position before searching around it.
+    /// How long this enemy stays at the last seen player position before searching around it
     /// </summary>
     [SerializeField] private float aggroTime = 5f;
     /// <summary>
     /// How close this enemy needs to be to the player while chasing to catch them
     /// </summary>
     [SerializeField] private float playerCatchDistance = 1.5f;
+    /// <summary>
+    /// If true, this enemy won't chase the player during alarms
+    /// </summary>
+    [SerializeField] private bool ignoresAlarm = false;
 
     private float aggroTimer;
     private Vector3 prevPlayerPos;
@@ -136,8 +140,11 @@ public class EnemyGuard : Enemy
         {
             base.BecomeAlarmed();
 
-            enemyMovement.currentStatus = EnemyMovement.Status.Chasing;
-            aggroTimer = aggroTime;
+            if(!ignoresAlarm)
+            {
+                enemyMovement.currentStatus = EnemyMovement.Status.Chasing;
+                aggroTimer = aggroTime;
+            }
         }
     }
 }

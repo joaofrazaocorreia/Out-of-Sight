@@ -455,4 +455,31 @@ public class EnemyMovement : MonoBehaviour
             taserLoopPlayer.Stop();
         }
     }
+
+    public void ResetNPC()
+    {
+        if(currentStatus != Status.KnockedOut)
+        {
+            currentStatus = Status.Normal;
+            moveTimer = 0;
+            turnTimer = 0;
+            searchTimer = 0;
+            stuckTimer = 0;
+            tasedTimer = tasedTime;
+            spawnPos = transform.position;
+            bodyDisguise = GetComponentInChildren<BodyDisguise>();
+            bodyCarry = GetComponentInChildren<BodyCarry>();
+            animator = GetComponent<Animator>();
+            bodyCarry.ResetNPC();
+            bodyDisguise.ResetNPC();
+            bodyCarry.enabled = false;
+            bodyDisguise.enabled = false;
+            navMeshAgent = GetComponent<NavMeshAgent>();
+            navMeshAgent.enabled = true;
+            mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
+            leavingMap = false;
+            knockedOut = false;
+            taserLoopPlayer.Stop();
+        }
+    }
 }
