@@ -36,6 +36,7 @@ public class PlayAudio : MonoBehaviour
 
 	public void Play()
 	{
+		if(_audioSource == null) return;
 		ChooseAVariant();
 		_audioSource.Play();
 	}

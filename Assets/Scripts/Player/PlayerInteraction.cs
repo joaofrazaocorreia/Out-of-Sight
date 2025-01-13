@@ -47,6 +47,8 @@ public class PlayerInteraction : MonoBehaviour
             {
                 _activeInteractiveObject.WhileInteractAudioPlayer.Stop();
                 _interactionAudioPlaying = false;
+                
+                if(_activeInteractiveObject.IsInteractionSuspicious) _player.LoseStatus(Player.Status.Suspicious);
             }
             
             _activeInteractiveObject = value;

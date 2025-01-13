@@ -3884,7 +3884,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7251117296863433122}
-  - {fileID: 1883688580205996098}
+  - {fileID: 2224570974585082737}
   - {fileID: 6917145374455746574}
   - {fileID: 1330146483481986630}
   - {fileID: 6486685614255112308}
@@ -6871,6 +6871,38 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &5170367106638738981
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2224570974585082737}
+  m_Layer: 0
+  m_Name: DoorAdjustment
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2224570974585082737
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5170367106638738981}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0.0054656467, y: -0.008526182, z: -0.03834211}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1883688580205996098}
+  m_Father: {fileID: 8142877668711101476}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &5224333295890481566
 GameObject:
   m_ObjectHideFlags: 0
@@ -12790,9 +12822,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8052516494518689603}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.0054656467, y: -0.008526182, z: -0.03834211}
-  m_LocalScale: {x: 0.077053264, y: 0.073109984, z: 0.07537951}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.07705327, y: 0.073109984, z: 0.075379506}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7322461873713730722}
@@ -12801,8 +12833,8 @@ Transform:
   - {fileID: 5198455993841002119}
   - {fileID: 4487031321387838309}
   - {fileID: 8532992651086855325}
-  m_Father: {fileID: 8142877668711101476}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 2224570974585082737}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!95 &9207059652693048261
 Animator:
   serializedVersion: 7
