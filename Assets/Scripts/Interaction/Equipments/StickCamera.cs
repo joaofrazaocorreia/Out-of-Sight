@@ -4,30 +4,17 @@ using UnityEngine;
 
 namespace Interaction.Equipments
 {
-    public class StickCamera : EquipmentObject, IFreeUseEquipment
+    public class StickCamera : EquipmentObject
     {
-        [SerializeField] private CinemachineCamera localCamera;
-
         private PlayerController player;
         private bool _inUse;
 
         protected override void Start()
         {
+            base.Start();
             player = FindFirstObjectByType<PlayerController>();
             CanBeUsed = true;
         }
 
-        public override void Used(InteractiveObject activeInteractiveObject)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void FreeUse()
-        {
-            _inUse = !_inUse;
-            localCamera.enabled = _inUse;
-            player.ToggleControls(!_inUse, true);
-            //player.ExtendedCameraInUse(_inUse, transform);
-        }
     }
 }
