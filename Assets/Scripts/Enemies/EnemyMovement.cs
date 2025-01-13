@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 
 [RequireComponent(typeof(NavMeshAgent))] 
@@ -25,6 +25,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float searchRadius = 20f;
     [SerializeField] private float stuckTime = 3f;
     [SerializeField] protected float tasedTime = 5f;
+    [SerializeField] protected UnityEvent onKnockOut;
     [SerializeField] protected PlayAudio taserLoopPlayer;
     [SerializeField] protected PlayAudio knockoutPlayer;
     [SerializeField] protected PlayAudio footstepPlayer;
@@ -70,13 +71,14 @@ public class EnemyMovement : MonoBehaviour
     private List<MapEntrance> mapEntrances;
     private Vector3 chosenNearestExit;
     private bool leavingMap;
+    private bool knockedOut;
     public bool LeavingMap {get => leavingMap; set{leavingMap = value;}}
     private float _footstepTimer;
 
     private void Start()
     {
         if(status != Status.KnockedOut)
-            {
+        {
             moveTimer = 0;
             turnTimer = 0;
             searchTimer = 0;
@@ -92,6 +94,7 @@ public class EnemyMovement : MonoBehaviour
             navMeshAgent = GetComponent<NavMeshAgent>();
             mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
             leavingMap = false;
+            knockedOut = false;
 
             // Forcefully sets the NavMeshAgent to the NPC type if it isn't already one
             if(navMeshAgent.agentTypeID != -1372625422)
@@ -242,17 +245,22 @@ public class EnemyMovement : MonoBehaviour
             if(!bodyCarry.enabled)
                 bodyCarry.enabled = true;
 
+            if(!knockedOut)
+            {
+                navMeshAgent.speed = 0f;
+                navMeshAgent.enabled = false;
+                leavingMap = false;
+                MoveTo(transform.position);
 
-            navMeshAgent.speed = 0f;
-            navMeshAgent.enabled = false;
-            leavingMap = false;
-            MoveTo(transform.position);
+                movementPosTargets = new List<Vector3>{transform.position};
 
-            movementPosTargets = new List<Vector3>{transform.position};
-
-            taserLoopPlayer.Stop();
-            animator.SetBool("KO", true);
-            animator.applyRootMotion = false;
+                taserLoopPlayer.Stop();
+                animator.SetBool("KO", true);
+                animator.applyRootMotion = false;
+                
+                onKnockOut?.Invoke();
+                knockedOut = true;
+            }
         }
 
 
@@ -443,6 +451,7 @@ public class EnemyMovement : MonoBehaviour
             navMeshAgent.enabled = true;
             mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
             leavingMap = false;
+            knockedOut = false;
             taserLoopPlayer.Stop();
         }
     }

@@ -44,8 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00eff8f5b169d3441ab5930b94edd90c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterDetectionDistance: 4
-  civillianPrefabs:
-  - {fileID: 3013677490251117298, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
-  minNPCSpawnTime: 3
-  maxNPCSpawnTime: 12
+  objectiveItems: 03000000
+  playerDetectionDistance: 6
+  npcDetectionDistance: 4
+  minCivillianSpawnTime: 3
+  maxCivillianSpawnTime: 15
+  minWorkerSpawnTime: 2
+  maxWorkerSpawnTime: 10
+  enemiesGameObject: {fileID: 0}
+  QueuedCivilliansParent: {fileID: 0}
+  QueuedWorkersParent: {fileID: 0}

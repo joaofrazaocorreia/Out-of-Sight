@@ -1,10 +1,14 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MapArea : MonoBehaviour
 {
     [SerializeField] private List<Player.Disguise> whitelistedDisguises;
+
+    [Header("Events")]
+    [SerializeField] private UnityEvent onEnterArea;
+    [SerializeField] private UnityEvent onExitArea;
 
     private Player player;
     private Player.Disguise lastPlayerDisguise;
@@ -31,6 +35,7 @@ public class MapArea : MonoBehaviour
             playerIsHere = true;
             CheckWhitelist();
             UpdatePlayerStatus();
+            onEnterArea?.Invoke();
         }
     }
 
@@ -51,6 +56,7 @@ public class MapArea : MonoBehaviour
             playerIsHere = false;
             CheckWhitelist();
             UpdatePlayerStatus();
+            onExitArea?.Invoke();
         }
     }
 
