@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MapRandomizer : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class MapRandomizer : MonoBehaviour
     [SerializeField] private List<Transform> objectSpawnPositions;
     [SerializeField] private string fetchSpawnPositionsWithTag;
     [SerializeField] private bool destroyPreviousChildren;
+    [SerializeField] private UnityEvent onFinishLoading;
     
     [Header("Set Spawns variables")]
     [SerializeField] private GameObject objectToSpawn;
@@ -77,6 +79,7 @@ public class MapRandomizer : MonoBehaviour
             }
         }
 
+        onFinishLoading?.Invoke();
         StartCoroutine(UpdateNavMesh());
     }
 
