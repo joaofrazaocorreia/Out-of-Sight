@@ -1,13 +1,15 @@
 
 public class HotelObjectivesUpdater : ObjectiveUpdater
 {
-    private bool hasFoundWorkerHalls;
+    private static bool hasFoundWorkerHalls;
+    private static bool hasFoundSafeCode;
     
     protected override void Start()
     {
         base.Start();
 
         hasFoundWorkerHalls = false;
+        hasFoundSafeCode = false;
     }
 
     public void ObjectiveEditCameras(string text)
@@ -37,5 +39,27 @@ public class HotelObjectivesUpdater : ObjectiveUpdater
             ObjectiveEditMain(text);
             hasFoundWorkerHalls = true;
         }
+    }
+
+    public void ObjectiveEditMain2(string text)
+    {
+        uiManager.EditObjective("main2", text);
+    }
+
+    public void ObjectiveFindSafeCode(string text)
+    {
+        if(!hasFoundSafeCode)
+        {
+            ObjectiveEditMain2("- Search the Staff rooms");
+            uiManager.RemoveObjective("main");
+            ObjectiveEditMain(text);
+        }
+    }
+
+    public void ObjectiveOpenSafe(string text)
+    {
+        hasFoundSafeCode = true;
+        uiManager.RemoveObjective("main2");
+        ObjectiveEditMain(text);
     }
 }
