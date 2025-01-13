@@ -77,6 +77,12 @@ MonoBehaviour:
   firstInteractionDurationUnique: 0
   interactionDuration: 0
   secondInteractionDuration: 0
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
   objectName: 
@@ -161,6 +167,12 @@ MonoBehaviour:
   firstInteractionDurationUnique: 0
   interactionDuration: 0
   secondInteractionDuration: 0
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
   objectName: 
@@ -619,6 +631,12 @@ MonoBehaviour:
   firstInteractionDurationUnique: 1
   interactionDuration: 3
   secondInteractionDuration: 0
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
   isInteractionSuspicious: 1
   isSecondInteractionSuspicious: 0
   objectName: Door
@@ -928,6 +946,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 113767160510167393}
+  - component: {fileID: 556922377339769058}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -952,6 +971,18 @@ Transform:
   - {fileID: 8741506096250169365}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &556922377339769058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6668104032356561019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beaf0eac2a7c9634e8413a67f429e2de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7006008769481801620
 GameObject:
   m_ObjectHideFlags: 0
@@ -1280,6 +1311,12 @@ MonoBehaviour:
   firstInteractionDurationUnique: 0
   interactionDuration: 0
   secondInteractionDuration: 0
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
   objectName: 
