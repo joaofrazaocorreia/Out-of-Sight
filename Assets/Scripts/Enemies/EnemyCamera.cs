@@ -19,7 +19,7 @@ public class EnemyCamera : Enemy, IJammable
     private bool canRotate;
     private bool positiveRotationDirection;
     private float rotationIdleTimer;
-    private Vector3 cameraOperatorStartPos;
+    private static Vector3 cameraOperatorStartPos;
 
 
     protected override void Start()
@@ -41,7 +41,7 @@ public class EnemyCamera : Enemy, IJammable
         positiveRotationDirection = !startsRotatingToTheLeft;
         rotationIdleTimer = 1f;
 
-        cameraOperatorStartPos = cameraOperator.transform.position;
+        UpdateCamOpStartPos();
     }
 
 
@@ -132,6 +132,14 @@ public class EnemyCamera : Enemy, IJammable
         {
             isOn = true;
         }
+    }
+
+    public void UpdateCamOpStartPos(Transform pos = null)
+    {
+        if(pos == null)
+            cameraOperatorStartPos = cameraOperator.transform.position;
+        else
+            cameraOperatorStartPos = pos.position;
     }
 
     public override void BecomeAlarmed()

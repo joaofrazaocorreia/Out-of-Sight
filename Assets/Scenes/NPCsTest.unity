@@ -174,6 +174,9 @@ MonoBehaviour:
   - {fileID: 660726637}
   fetchSpawnPositionsWithTag: 
   destroyPreviousChildren: 1
+  onFinishLoading:
+    m_PersistentCalls:
+      m_Calls: []
   objectToSpawn: {fileID: 0}
   numOfSpawns: 0
   moveExistingObject: 0
@@ -964,59 +967,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5892113209513531551, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
   m_PrefabInstance: {fileID: 1648582067}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &96708148
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 96708146}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: cac62a0e7c37ec74982adc01f56b548f, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &96708149
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 96708146}
-  m_Mesh: {fileID: -7416845060522377498, guid: 9ed9de92ce6f1744bb361e1df0efe45b, type: 3}
 --- !u!1 &100662605
 GameObject:
   m_ObjectHideFlags: 0
@@ -3159,6 +3109,9 @@ MonoBehaviour:
   objectSpawnPositions: []
   fetchSpawnPositionsWithTag: Keycard F0 Spawn
   destroyPreviousChildren: 0
+  onFinishLoading:
+    m_PersistentCalls:
+      m_Calls: []
   objectToSpawn: {fileID: 3155911457579689877, guid: 3a4c3f9f77f65784d9e2ada0fe767be7, type: 3}
   numOfSpawns: 1
   moveExistingObject: 0
@@ -7363,6 +7316,9 @@ MonoBehaviour:
   objectSpawnPositions: []
   fetchSpawnPositionsWithTag: Safe Code F0 Spawn
   destroyPreviousChildren: 0
+  onFinishLoading:
+    m_PersistentCalls:
+      m_Calls: []
   objectToSpawn: {fileID: 6001814877589796143, guid: 3246616919ad03c46a0988c7c760b32d, type: 3}
   numOfSpawns: 1
   moveExistingObject: 0
@@ -11881,6 +11837,9 @@ MonoBehaviour:
   objectSpawnPositions: []
   fetchSpawnPositionsWithTag: Safe F0 Spawn
   destroyPreviousChildren: 0
+  onFinishLoading:
+    m_PersistentCalls:
+      m_Calls: []
   objectToSpawn: {fileID: 318677923}
   numOfSpawns: 1
   moveExistingObject: 1
@@ -12805,12 +12764,6 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5892113209513531551, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 96708149}
-    - targetCorrespondingSourceObject: {fileID: 5892113209513531551, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 96708148}
     - targetCorrespondingSourceObject: {fileID: 5892113209513531551, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1648582073}
@@ -15805,6 +15758,21 @@ MonoBehaviour:
   objectSpawnPositions: []
   fetchSpawnPositionsWithTag: Cam Op F0 Spawn
   destroyPreviousChildren: 0
+  onFinishLoading:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9211458165444107636}
+        m_TargetAssemblyTypeName: EnemyCamera, Assembly-CSharp
+        m_MethodName: UpdateCamOpStartPos
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1648582069}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   objectToSpawn: {fileID: 96708146}
   numOfSpawns: 1
   moveExistingObject: 1
@@ -19285,6 +19253,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2428613158228009669, guid: 42b4fabd37c54db4fb66cb5aa8415f60, type: 3}
   m_PrefabInstance: {fileID: 9211458165444107634}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9211458165444107636 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4791972704642225648, guid: 42b4fabd37c54db4fb66cb5aa8415f60, type: 3}
+  m_PrefabInstance: {fileID: 9211458165444107634}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbc1ee22d6fd8f2409291185b3c7d162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

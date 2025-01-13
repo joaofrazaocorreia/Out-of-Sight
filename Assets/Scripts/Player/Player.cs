@@ -14,10 +14,12 @@ public class Player : MonoBehaviour
     public List<Status> status;
     public Disguise disguise;
     private UIManager uiManager;
+    public bool detectable;
 
     private void Start()
     {
         uiManager = FindAnyObjectByType<UIManager>();
+        detectable = true;
 
         disguise = Disguise.Civillian;
         status.Add(Status.Normal);
@@ -76,34 +78,34 @@ public class Player : MonoBehaviour
             {
                 case Disguise.Civillian:
                 {
-                    newText = "Disguised as: Civilian";
+                    newText = "Disguise: Civilian";
                     newImage = civillianDisguiseSprite;
                     break;
                 }
                 case Disguise.Employee:
                 {
-                    newText = "Disguised as: Hotel Employee";
+                    newText = "Disguise: Hotel Employee";
                     newImage = workerDisguiseSprite;
                     break;
                 }
                 
                 case Disguise.Guard_Tier1:
                 {
-                    newText = "Disguised as: Hotel Security";
+                    newText = "Disguise: Hotel Security";
                     newImage = guardTier1DisguiseSprite;
                     break;
                 }
                 
                 case Disguise.Guard_Tier2:
                 {
-                    newText = "Disguised as: Elite Security";
+                    newText = "Disguise: Elite Security";
                     newImage = guardTier2DisguiseSprite;
                     break;
                 }
                 
                 default:
                 {
-                    newText = $"Disguised as: {disguise}";
+                    newText = $"Disguise: {disguise}";
                     newImage = civillianDisguiseSprite;
                     break;
                 }
