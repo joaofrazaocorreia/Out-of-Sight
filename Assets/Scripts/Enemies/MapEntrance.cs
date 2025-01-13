@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Interaction;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class MapEntrance : MonoBehaviour
 {
-    [SerializeField] private List<Item> objectiveItems;
+    [SerializeField] private List<ItemType> objectiveItems;
     [SerializeField] private float playerDetectionDistance = 6f;
     [SerializeField] private float npcDetectionDistance = 4f;
     [SerializeField] private float minCivillianSpawnTime = 3f;
@@ -29,7 +30,7 @@ public class MapEntrance : MonoBehaviour
     private float workersSpawnTimer;
     private bool PlayerHasAllObjectives {get
     {
-        foreach(Item i in objectiveItems)
+        foreach(ItemType i in objectiveItems)
         {
             if(!playerInventory.HasItem(i))
                 return false;

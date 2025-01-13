@@ -2570,6 +2570,38 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1053459570554937098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8104192297243692778}
+  m_Layer: 0
+  m_Name: DoorAdjustment
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8104192297243692778
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1053459570554937098}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0.76989657, y: -0.17186049, z: 0.108584166}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4685497073753216250}
+  m_Father: {fileID: 6201838881783502383}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &1116437905512399587
 GameObject:
   m_ObjectHideFlags: 0
@@ -6461,7 +6493,7 @@ Transform:
   m_LocalScale: {x: 19.49794, y: 19.79826, z: 19.28501}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4685497073753216250}
+  - {fileID: 8104192297243692778}
   - {fileID: 3055442082704324215}
   - {fileID: 5188530900227821998}
   - {fileID: 8498735064235060687}
@@ -13331,8 +13363,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactiveType: 1
   updateIfIndirect: 0
-  requiredItem: {fileID: 0}
-  requiredEquipment: {fileID: 0}
+  requiredItem: 0
+  requiredEquipment: 0
   consumeItemRequirement: 0
   oneTimeRequirement: 0
   firstInteractionDurationUnique: 0
@@ -17905,9 +17937,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6258719791369630817}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0.7698964, y: -0.17186049, z: 0.108584166}
-  m_LocalScale: {x: 1.4697453, y: 1.4474506, z: 1.4859729}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.4697453, y: 1.4474508, z: 1.4859729}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8933092601357207026}
@@ -17918,7 +17950,7 @@ Transform:
   - {fileID: 1367068589216675912}
   - {fileID: 8796116782707342956}
   - {fileID: 5320039286767798386}
-  m_Father: {fileID: 6201838881783502383}
+  m_Father: {fileID: 8104192297243692778}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &604754182908166632
 Animator:
@@ -18281,8 +18313,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactiveType: 4
   updateIfIndirect: 0
-  requiredItem: {fileID: 0}
-  requiredEquipment: {fileID: 0}
+  requiredItem: 0
+  requiredEquipment: 3
   consumeItemRequirement: 0
   oneTimeRequirement: 1
   firstInteractionDurationUnique: 1

@@ -145,7 +145,8 @@ public class PlayerInteraction : MonoBehaviour
                 return _playerInventory.HasItem(interactiveObject.RequiredItem);
             
             case InteractiveType.DirectEquipmentRequirement:
-                return _playerEquipment.CurrentEquipment == interactiveObject.RequiredEquipment && _playerEquipment.CurrentEquipment.CanBeUsed;
+                if(_playerEquipment.CurrentEquipment == null) return false;
+                return _playerEquipment.CurrentEquipment.EquipmentType == interactiveObject.RequiredEquipment && _playerEquipment.CurrentEquipment.CanBeUsed;
            }
         
         return !interactiveObject.HasRequirement;

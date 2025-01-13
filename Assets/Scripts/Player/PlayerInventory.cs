@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Interaction;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
@@ -18,8 +19,15 @@ public class PlayerInventory : MonoBehaviour
     {
         uIManager = FindFirstObjectByType<UIManager>();
     }
-    
-    public bool HasItem(Item item) => Inventory.Contains(item);
+
+    public bool HasItem(ItemType itemType)
+    {
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if(itemType == inventory[i].ItemType) return true;
+        }   
+        return false;
+    }
     
     public void AddItem(Item newItem)
     {
@@ -27,9 +35,16 @@ public class PlayerInventory : MonoBehaviour
         uIManager.UpdateInventoryIcon(newItem.Icon, Inventory.IndexOf(newItem));
     }
 
-    public void RemoveItem(Item item)
+    public void RemoveItem(ItemType itemType)
     {
-        uIManager.UpdateInventoryIcon(emptySlotSprite, Inventory.IndexOf(item));
-        Inventory.Remove(item);
+        for (int i = 0; i < Inventory.Count; i++)
+        {
+            if (itemType == Inventory[i].ItemType)
+            {
+                uIManager.UpdateInventoryIcon(Inventory[i].Icon, Inventory.IndexOf(Inventory[i]));
+                Inventory.RemoveAt(i);
+                break;
+            }
+        }
     }
 }
