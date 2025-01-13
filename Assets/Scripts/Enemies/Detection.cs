@@ -58,108 +58,118 @@ public class Detection : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if((enemyMovement != null && enemyCamera == null &&
-            enemyMovement.currentStatus != EnemyMovement.Status.Tased &&
-                enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut) ||
-                    (enemyCamera != null && enemyMovement == null && !enemyCamera.Jammed && enemyCamera.IsOn))
-        {
-            Vector3 distanceToPlayer = player.transform.position - transform.position;
-
-            // Checks if the player is too close to the NPC
-            tooCloseToPlayer = distanceToPlayer.magnitude <= proximityDetectionRange;
-
-            // Checks if the player is within range of this NPC's detection range
-            if(distanceToPlayer.magnitude <= detectionRange)
+        if(player.detectable)
+        { 
+            if((enemyMovement != null && enemyCamera == null &&
+                enemyMovement.currentStatus != EnemyMovement.Status.Tased &&
+                    enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut) ||
+                        (enemyCamera != null && enemyMovement == null && !enemyCamera.Jammed && enemyCamera.IsOn))
             {
-                // Checks if the player is within this NPC's field of view
-                if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distanceToPlayer) <= detectionMaxAngle)
+                Vector3 distanceToPlayer = player.transform.position - transform.position;
+
+                // Checks if the player is too close to the NPC
+                tooCloseToPlayer = distanceToPlayer.magnitude <= proximityDetectionRange;
+
+                // Checks if the player is within range of this NPC's detection range
+                if(distanceToPlayer.magnitude <= detectionRange)
                 {
-                    // Sends a raycast towards the player and checks if it hits anything
-                    if (Physics.Raycast(transform.position, distanceToPlayer, out RaycastHit hit, detectionRange))
+                    // Checks if the player is within this NPC's field of view
+                    if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distanceToPlayer) <= detectionMaxAngle)
                     {
-                        // Checks if the raycast hit the player
-                        if (hit.transform.tag == "Player")
+                        // Sends a raycast towards the player and checks if it hits anything
+                        if (Physics.Raycast(transform.position, distanceToPlayer, out RaycastHit hit, detectionRange))
                         {
-                            seesPlayer = true;
-                            Debug.DrawRay(transform.position, distanceToPlayer * hit.distance, Color.red);
-                            TrackPlayer();
+                            // Checks if the raycast hit the player
+                            if (hit.transform.tag == "Player")
+                            {
+                                seesPlayer = true;
+                                Debug.DrawRay(transform.position, distanceToPlayer * hit.distance, Color.red);
+                                TrackPlayer();
+                            }
+
+                            // If the raycast detects an obstacle between the NPC and the player:
+                            else
+                            {
+                                seesPlayer = false;
+                                Debug.DrawRay(transform.position, distanceToPlayer * hit.distance, Color.yellow);
+                            }
                         }
 
-                        // If the raycast detects an obstacle between the NPC and the player:
+                        // If the raycast doesn't reach the player:
                         else
                         {
                             seesPlayer = false;
-                            Debug.DrawRay(transform.position, distanceToPlayer * hit.distance, Color.yellow);
+                            Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
                         }
                     }
-
-                    // If the raycast doesn't reach the player:
+                    
+                    // If the player is not within the enemy's field of view:
                     else
                     {
                         seesPlayer = false;
                         Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
                     }
                 }
-                
-                // If the player is not within the enemy's field of view:
+
+                // If the player is too far away to be detected:
                 else
                 {
                     seesPlayer = false;
                     Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
                 }
-            }
-
-            // If the player is too far away to be detected:
-            else
-            {
-                seesPlayer = false;
-                Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
-            }
 
 
-            UpdateAllBodies();
+                UpdateAllBodies();
 
-            foreach(BodyCarry b in allBodies)
-            {
-                if (!b.enabled || b.HasBeenDetected)
-                    continue;
-                
-                Vector3 distance = b.transform.position - transform.position;
-
-                // Checks if the bodyCarry is within range of this NPC's detection range
-                if(distance.magnitude <= detectionRange)
+                foreach(BodyCarry b in allBodies)
                 {
-                    // Checks if the bodyCarry is within this NPC's field of view
-                    if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distance) <= detectionMaxAngle)
+                    if (!b.enabled || b.HasBeenDetected)
+                        continue;
+                    
+                    Vector3 distance = b.transform.position - transform.position;
+
+                    // Checks if the bodyCarry is within range of this NPC's detection range
+                    if(distance.magnitude <= detectionRange)
                     {
-                        // Sends a raycast towards the bodyCarry and checks if it hits anything
-                        if (Physics.Raycast(transform.position, distance, out RaycastHit hit, detectionRange))
+                        // Checks if the bodyCarry is within this NPC's field of view
+                        if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distance) <= detectionMaxAngle)
                         {
-                            // Checks if the raycast hit an bodyCarry
-                            if (b.enabled && !b.HasBeenDetected)
+                            // Sends a raycast towards the bodyCarry and checks if it hits anything
+                            if (Physics.Raycast(transform.position, distance, out RaycastHit hit, detectionRange))
                             {
-                                seesBody = true;
-                                Debug.DrawRay(transform.position, distance * hit.distance, Color.red);
-                                break;
+                                // Checks if the raycast hit an bodyCarry
+                                if (b.enabled && !b.HasBeenDetected)
+                                {
+                                    seesBody = true;
+                                    Debug.DrawRay(transform.position, distance * hit.distance, Color.red);
+                                    break;
+                                }
+
+                                // If the raycast detects an obstacle between the NPC and the bodyCarry:
+                                else
+                                {
+                                    seesBody = false;
+                                    Debug.DrawRay(transform.position, distance * hit.distance, Color.yellow);
+                                }
                             }
 
-                            // If the raycast detects an obstacle between the NPC and the bodyCarry:
+                            // If the raycast doesn't reach the bodyCarry:
                             else
                             {
                                 seesBody = false;
-                                Debug.DrawRay(transform.position, distance * hit.distance, Color.yellow);
+                                Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
                             }
                         }
-
-                        // If the raycast doesn't reach the bodyCarry:
+                        
+                        // If the bodyCarry is not within the enemy's field of view:
                         else
                         {
                             seesBody = false;
                             Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
                         }
                     }
-                    
-                    // If the bodyCarry is not within the enemy's field of view:
+
+                    // If the bodyCarry is too far away to be detected:
                     else
                     {
                         seesBody = false;
@@ -167,18 +177,11 @@ public class Detection : MonoBehaviour
                     }
                 }
 
-                // If the bodyCarry is too far away to be detected:
-                else
-                {
-                    seesBody = false;
-                    Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
-                }
+                UpdateDetection();
             }
 
-            UpdateDetection();
+            UpdateSelfDetectionUI();
         }
-
-        UpdateSelfDetectionUI();
     }
 
     // Checks if the NPC sees the player or if it's too close to them, and raises/decreases detection accordingly
@@ -193,13 +196,13 @@ public class Detection : MonoBehaviour
             TrackPlayer();
 
             if(tooCloseToPlayer)
-                sourceMultiplier++;
+                sourceMultiplier += 1;
 
             if(seesPlayer && player.status.Contains(Player.Status.Suspicious))
-                sourceMultiplier++;
+                sourceMultiplier += 2;
 
             if(seesPlayer && player.status.Contains(Player.Status.Trespassing))
-                sourceMultiplier++;
+                sourceMultiplier += 1;
         }
 
         // Seeing a body increases the multiplier thrice as much
