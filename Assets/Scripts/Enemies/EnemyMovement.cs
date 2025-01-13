@@ -118,7 +118,7 @@ public class EnemyMovement : MonoBehaviour
     // Checks this enemy's status and moves accordingly.
     private void Update()
     {
-        if(leavingMap)
+        if(leavingMap && currentStatus != Status.KnockedOut && currentStatus != Status.Tased)
         {
             ExitMap();
         }
@@ -208,7 +208,8 @@ public class EnemyMovement : MonoBehaviour
         else if (currentStatus == Status.Tased)
         {
             navMeshAgent.speed = 0f;
-
+            navMeshAgent.enabled = false;
+            leavingMap = false;
             MoveTo(transform.position);
 
             if(tasedTimer > 0)
@@ -244,9 +245,12 @@ public class EnemyMovement : MonoBehaviour
 
             navMeshAgent.speed = 0f;
             navMeshAgent.enabled = false;
+            leavingMap = false;
+            MoveTo(transform.position);
 
             movementPosTargets = new List<Vector3>{transform.position};
 
+            taserLoopPlayer.Stop();
             animator.SetBool("KO", true);
             animator.applyRootMotion = false;
         }
@@ -439,6 +443,7 @@ public class EnemyMovement : MonoBehaviour
             navMeshAgent.enabled = true;
             mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
             leavingMap = false;
+            taserLoopPlayer.Stop();
         }
     }
 }
