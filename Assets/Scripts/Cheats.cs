@@ -13,7 +13,6 @@ public class Cheats : MonoBehaviour
     private PlayerInventory playerInventory;
 
     private bool speedBoost;
-    private bool trespassing;
 
     private void Start()
     {
@@ -30,6 +29,8 @@ public class Cheats : MonoBehaviour
     {
         if(playerInput.actions["ToggleSpeedBoost"].WasPressedThisFrame())
         {
+            Debug.Log("Toggled Speed Boost");
+
             speedBoost = !speedBoost;
 
             if(speedBoost)
@@ -41,35 +42,68 @@ public class Cheats : MonoBehaviour
 
         if(playerInput.actions["ToggleAlarm"].WasPressedThisFrame())
         {
+            Debug.Log("Toggled Alarm");
+            
             if(alarm.IsOn)
                 alarm.AlarmTimer = 0f;
             else
                 alarm.TriggerAlarm(true);
         }
 
-        if(playerInput.actions["ToggleTrespassing"].WasPressedThisFrame())
+        if(playerInput.actions["ToggleDetection"].WasPressedThisFrame())
         {
-            trespassing = !trespassing;
-
-            if(trespassing)
-                player.GainStatus(Player.Status.Trespassing);
-            else
-                player.LoseStatus(Player.Status.Trespassing);
+            Debug.Log("Toggled Detection");
+            
+            player.detectable = !player.detectable;
         }
 
         if(playerInput.actions["GetKeycard"].WasPressedThisFrame())
         {
+            Debug.Log("Obtained Keycard");
+            
             playerInventory.AddItem(keycard);
         }
 
         if(playerInput.actions["GetCode"].WasPressedThisFrame())
         {
+            Debug.Log("Obtained Safe Code");
+            
             playerInventory.AddItem(code);
         }
 
         if(playerInput.actions["GetFiles"].WasPressedThisFrame())
         {
+            Debug.Log("Obtained Secret Files");
+            
             playerInventory.AddItem(files);
+        }
+
+        if(playerInput.actions["DisguiseCivillian"].WasPressedThisFrame())
+        {
+            Debug.Log("Disguised as Civillian");
+            
+            player.GainDisguise(Player.Disguise.Civillian);
+        }
+
+        if(playerInput.actions["DisguiseEmployee"].WasPressedThisFrame())
+        {
+            Debug.Log("Disguised as Employee");
+            
+            player.GainDisguise(Player.Disguise.Employee);
+        }
+
+        if(playerInput.actions["DisguiseGuardT1"].WasPressedThisFrame())
+        {
+            Debug.Log("Disguised as Security Guard");
+            
+            player.GainDisguise(Player.Disguise.Guard_Tier1);
+        }
+
+        if(playerInput.actions["DisguiseGuardT2"].WasPressedThisFrame())
+        {
+            Debug.Log("Disguised as Elite Guard");
+            
+            player.GainDisguise(Player.Disguise.Guard_Tier2);
         }
     }
 }

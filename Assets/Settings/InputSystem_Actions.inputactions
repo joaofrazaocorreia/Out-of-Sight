@@ -195,7 +195,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ToggleTrespassing",
+                    "name": "ToggleDetection",
                     "type": "Button",
                     "id": "eedfe059-e5d4-456d-bba1-b541ce81807f",
                     "expectedControlType": "",
@@ -225,6 +225,42 @@
                     "name": "GetFiles",
                     "type": "Button",
                     "id": "0db4f581-d277-4f29-9b4f-128e8d77c2a0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DisguiseCivillian",
+                    "type": "Button",
+                    "id": "8718b39a-9aee-49f2-af70-5ccf42f5a0d3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DisguiseEmployee",
+                    "type": "Button",
+                    "id": "64f38546-ab07-4158-a0a3-154c59a76b24",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DisguiseGuardT1",
+                    "type": "Button",
+                    "id": "8a8135bb-85d3-4f6c-aa0e-e2a57bbd9279",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DisguiseGuardT2",
+                    "type": "Button",
+                    "id": "2d91b68e-f719-4e81-930d-1d6f1406dd87",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -712,7 +748,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "ToggleTrespassing",
+                    "action": "ToggleDetection",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -757,6 +793,50 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "InteractSecondary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f9151012-b9ba-4527-8eb6-2924a22cbdd4",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DisguiseCivillian",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "859b34fa-0875-451f-a2a7-4318964fa4a7",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DisguiseEmployee",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f39a5723-76b5-4026-b156-16e2d1eafac2",
+                    "path": "<Keyboard>/comma",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DisguiseGuardT1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "df0b30dc-9c15-45bf-aa00-214198afec2c",
+                    "path": "<Keyboard>/period",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DisguiseGuardT2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
