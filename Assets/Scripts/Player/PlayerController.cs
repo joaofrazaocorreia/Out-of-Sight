@@ -141,6 +141,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        CheckHeadActiveCamera();
         GetInputs();
         CheckEquipmentChanged();
 
@@ -150,6 +151,11 @@ public class PlayerController : MonoBehaviour
             UpdateHeadRotation();
             TriggerHeadbob();
         }
+    }
+
+    private void CheckHeadActiveCamera()
+    {
+        ToggleControls(_head.IsLive, _head.IsLive);
     }
     
     private void GetInputs()
@@ -281,13 +287,6 @@ public class PlayerController : MonoBehaviour
         _canMove = canMovePlayer;
     }
 
-    /*
-    public void ExtendedCameraInUse(bool isInUse, Transform cameraTransform)
-    {
-        _horizontalRotationPivot = isInUse ? cameraTransform : _originalHorizontalRotationPivot;
-        _verticalRotationPivot = isInUse ? cameraTransform : _originalVerticalRotationPivot;
-    } */
-
     private void UpdateBodyRotation()
     {
         float rotation = _lookVector.x * horizontalLookSensitivity;
@@ -311,8 +310,12 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        UpdateAcceleration();
-        UpdateVelocity();
+        if (_canMove)
+        {
+            UpdateAcceleration();
+            UpdateVelocity();  
+        }
+        
         UpdatePosition();
         UpdateStamina();
         UpdateAnimator();

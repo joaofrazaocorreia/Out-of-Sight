@@ -138,7 +138,6 @@ public class PlayerInteraction : MonoBehaviour
 
     private bool CheckCanInteract(InteractiveObject interactiveObject)
     {
-        
         switch (interactiveObject.InteractiveType)
            {
             case InteractiveType.DirectItemRequirement:
