@@ -285,6 +285,7 @@ public class PlayerController : MonoBehaviour
     {
         _canLook = canMoveCamera;
         _canMove = canMovePlayer;
+        if (!canMovePlayer){ _velocity = Vector3.zero;}
     }
 
     private void UpdateBodyRotation()
