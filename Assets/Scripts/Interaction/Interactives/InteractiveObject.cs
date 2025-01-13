@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Interaction;
+using Interaction.Equipments;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public abstract class InteractiveObject : MonoBehaviour
@@ -8,8 +10,8 @@ public abstract class InteractiveObject : MonoBehaviour
     [SerializeField] private InteractiveType interactiveType;
     [SerializeField] protected bool updateIfIndirect; 
     [Header("Requirements")]
-    [SerializeField] protected Item requiredItem;
-    [SerializeField] protected EquipmentObject requiredEquipment;
+    [SerializeField] [CanBeNull] protected ItemType requiredItem;
+    [SerializeField] protected EquipmentType requiredEquipment;
     [Header("Requirement Options")]
     [SerializeField] protected bool consumeItemRequirement;
     [SerializeField] protected bool oneTimeRequirement;
@@ -34,8 +36,8 @@ public abstract class InteractiveObject : MonoBehaviour
         protected set => interactiveType = value;
     }
     
-    public Item RequiredItem => requiredItem;
-    public EquipmentObject RequiredEquipment => requiredEquipment;
+    public ItemType RequiredItem => requiredItem;
+    public EquipmentType RequiredEquipment => requiredEquipment;
     public bool ConsumeItemRequirement => consumeItemRequirement;
     public bool OneTimeRequirement => oneTimeRequirement;
     public bool HasRequirement { get; protected set; }
@@ -60,7 +62,7 @@ public abstract class InteractiveObject : MonoBehaviour
     
     private void Start()
     {
-        HasRequirement = RequiredItem != null || RequiredEquipment != null;
+        HasRequirement = RequiredItem != ItemType.None || RequiredEquipment != EquipmentType.None;
     }
 
     public virtual void Interact()
@@ -113,15 +115,15 @@ public abstract class InteractiveObject : MonoBehaviour
     {
         string names = string.Empty;
         
-        if (RequiredItem != null)
+        if (RequiredItem != ItemType.None)
         {
-            names += RequiredItem.name;
-            if (RequiredEquipment != null)
-                names += " and " + RequiredEquipment.name;
+            names += RequiredItem.ToString();
+            if (RequiredEquipment != EquipmentType.None)
+                names += " and " + RequiredEquipment.ToString();
         }
-        else if (RequiredEquipment != null)
+        else if (RequiredEquipment != EquipmentType.None)
         {
-            names += RequiredEquipment.name;
+            names += RequiredEquipment.ToString();
         }
 
         return names;

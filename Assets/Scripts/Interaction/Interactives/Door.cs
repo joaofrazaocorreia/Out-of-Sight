@@ -51,6 +51,6 @@ public class Door : InteractiveObject
 
     private void PlayAudio(PlayAudio audioplayer)
     {
-        audioplayer.Play();
+        if(audioplayer != null) audioplayer.Play();
     }
 }

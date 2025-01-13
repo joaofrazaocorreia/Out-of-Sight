@@ -1,4 +1,5 @@
 using Interaction;
+using Interaction.Equipments;
 using UnityEngine;
 
 public class InteractionSpot : InteractiveObject
@@ -29,13 +30,13 @@ public class InteractionSpot : InteractiveObject
 
     private void CloneLinkedObjectParameters()
     {
-        if (LinkedObject.RequiredItem != null)
+        if (LinkedObject.RequiredItem != ItemType.None)
         {
             requiredItem = LinkedObject.RequiredItem;
             InteractiveType = InteractiveType.DirectItemRequirement;
         }
 
-        if (LinkedObject.RequiredEquipment != null)
+        if (LinkedObject.RequiredEquipment != EquipmentType.None)
         {
             requiredEquipment = LinkedObject.RequiredEquipment;
             InteractiveType = InteractiveType.DirectEquipmentRequirement;
@@ -52,6 +53,6 @@ public class InteractionSpot : InteractiveObject
         onInteractAudioPlayer = linkedObject.OnInteractAudioPlayer;
         whileInteractAudioPlayer = linkedObject.WhileInteractAudioPlayer;
         
-        HasRequirement = RequiredItem != null || RequiredEquipment != null;
+        HasRequirement = RequiredItem != ItemType.None || RequiredEquipment != EquipmentType.None;
     }
 }
