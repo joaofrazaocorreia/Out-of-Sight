@@ -102,9 +102,9 @@ public abstract class InteractiveObject : MonoBehaviour
 
     public virtual string GetInteractionText(bool requirementsMet)
     {
-        if(CustomInteractionMessage.Length > 0) return CustomInteractionMessage;
-        
         if (!requirementsMet) return "Requires " + GetRequirementNames();
+        
+        if(CustomInteractionMessage.Length > 0) return CustomInteractionMessage;
         
         switch (InteractiveType)
         {

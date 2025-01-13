@@ -5,6 +5,7 @@
         None,
         Jammer,
         Taser,
-        Lockpick
+        Lockpick,
+        StickCamera
     }
 }
