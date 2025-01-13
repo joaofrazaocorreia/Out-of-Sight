@@ -583,6 +583,7 @@ GameObject:
   - component: {fileID: 6721959621666895681}
   - component: {fileID: 5692047308626413028}
   - component: {fileID: 2959786210640382223}
+  - component: {fileID: 353567301417824275}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -890,7 +891,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   raycastDistance: 5
-  interactionCooldown: 0.5
+  interactionCooldown: 0.05
   whatIsInteractable:
     serializedVersion: 2
     m_Bits: 256
@@ -958,6 +959,22 @@ MonoBehaviour:
   cooldownInSeconds: 1
   enemiesParent: {fileID: 0}
   meleeAttackPlayer: {fileID: 3570666203943423559}
+--- !u!208 &353567301417824275
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6061762206571335386}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.25, y: 2, z: 0.25}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: -1, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &6290793974875613221
 GameObject:
   m_ObjectHideFlags: 0
