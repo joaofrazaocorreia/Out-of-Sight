@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput _playerInput;
     private PlayerInteraction _playerInteraction;
     private PlayerEquipment _playerEquipment; 
-    private PlayerCarryInventory _playerBodyInventory;
+    private PlayerCarryInventory _playerCarryInventory;
     private UIManager _uiManager;
     private Animator _animator;
     private Vector2 _movementVector;
@@ -122,7 +122,7 @@ public class PlayerController : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _playerInteraction = GetComponent<PlayerInteraction>();
         _playerEquipment = GetComponent<PlayerEquipment>();
-        _playerBodyInventory = GetComponent<PlayerCarryInventory>();
+        _playerCarryInventory = GetComponent<PlayerCarryInventory>();
         _animator = GetComponentInChildren<Animator>();
         _selectedEquipment = new float[9];
         _horizontalRotationPivot = transform;
@@ -423,7 +423,7 @@ public class PlayerController : MonoBehaviour
     {
         _motion = _velocity * Time.fixedDeltaTime;
 
-        if(_playerBodyInventory.CarryingBody)
+        if(_playerCarryInventory.CarryingBody)
             _motion *= _bodyCarryVelocityPercent / 100;
 
         _motion = transform.TransformVector(_motion);

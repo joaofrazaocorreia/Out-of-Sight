@@ -3,7 +3,7 @@ using UnityEngine;
 public class BodyCarry : InteractiveObject
 {
     private EnemyMovement enemyMovement;
-    private PlayerCarryInventory playerBodyInventory;
+    private PlayerCarryInventory playerCarryInventory;
     private GameObject thisBody;
     private bool hasBeenDetected;
     public bool HasBeenDetected {get => hasBeenDetected; set{ if(!hasBeenDetected) hasBeenDetected = value;}}
@@ -11,7 +11,7 @@ public class BodyCarry : InteractiveObject
     private void Start()
     {
         enemyMovement = GetComponentInParent<EnemyMovement>();
-        playerBodyInventory = FindAnyObjectByType<PlayerCarryInventory>();
+        playerCarryInventory = FindAnyObjectByType<PlayerCarryInventory>();
         thisBody = transform.parent.gameObject;
         hasBeenDetected = false;
         enabled = false;
@@ -19,11 +19,11 @@ public class BodyCarry : InteractiveObject
 
     public override void Interact()
     {
-        if(enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut && !playerBodyInventory.CarryingBody)
+        if(enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut && !playerCarryInventory.CarryingBody)
         {
             base.Interact();
 
-            playerBodyInventory.PickUpBody(thisBody);
+            playerCarryInventory.PickUpBody(thisBody);
         }
     }
 
@@ -31,7 +31,7 @@ public class BodyCarry : InteractiveObject
     {
         if (!requirementsMet) return "Requires " + GetRequirementNames();
 
-        else if(playerBodyInventory.CarryingBody) return "Already carrying a body!";
+        else if(playerCarryInventory.CarryingBody) return "Already carrying a body!";
 
         return "Carry Body";
     }
