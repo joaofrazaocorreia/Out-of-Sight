@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using Interaction;
 using Interaction.Equipments;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class InteractiveObject : MonoBehaviour
 {
@@ -18,7 +18,10 @@ public abstract class InteractiveObject : MonoBehaviour
     [Header("Interaction Options")]
     [SerializeField] protected bool firstInteractionDurationUnique;
     [SerializeField] protected float interactionDuration;
-    [SerializeField] protected float secondInteractionDuration; 
+    [SerializeField] protected float secondInteractionDuration;
+    [Header("Interaction Events")]
+    public UnityEvent onInteractionComplete;
+    public UnityEvent onSecondInteractionComplete;
     [Header("Detection Options")]
     [SerializeField] protected bool isInteractionSuspicious;
     [SerializeField] protected bool isSecondInteractionSuspicious;
@@ -71,9 +74,9 @@ public abstract class InteractiveObject : MonoBehaviour
         {
             if(!updateIfIndirect) return;
         }
+        onInteractionComplete?.Invoke();
         OneTimeRequirementCheck();
         UniqueFirstInteractionDurationCheck();
-        isInteractionSuspicious = IsSecondInteractionSuspicious;
 
         if (onInteractAudioPlayer != null) onInteractAudioPlayer.Play();
     }
@@ -89,7 +92,12 @@ public abstract class InteractiveObject : MonoBehaviour
 
     private void UniqueFirstInteractionDurationCheck()
     {
-        if (FirstInteractionDurationUnique) InteractionDuration = secondInteractionDuration;
+        if (FirstInteractionDurationUnique)
+        {
+            InteractionDuration = secondInteractionDuration;
+            isInteractionSuspicious = isSecondInteractionSuspicious;
+            onInteractionComplete = onSecondInteractionComplete;
+        }
     }
 
     public virtual string GetInteractionText(bool requirementsMet)

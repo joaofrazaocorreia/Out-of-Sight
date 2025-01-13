@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
-using Unity.Cinemachine;
 
 public class UIManager : MonoBehaviour
 {
@@ -33,6 +32,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] interactionMessages;
     [SerializeField] private GameObject interactingBar;
     [SerializeField] private RectTransform interactingBarFill;
+    [SerializeField] private TextMeshProUGUI objectivesTitle;
+    [SerializeField] private Transform objectivesTextParent;
+    [SerializeField] private GameObject objectiveTextPrefab;
     [SerializeField] private GameObject globalDetection;
     [SerializeField] private GameObject detectionArrowPrefab;
     [SerializeField] private Transform detectionArrowsParent;
@@ -47,13 +49,14 @@ public class UIManager : MonoBehaviour
     private bool settingsActive;
     private Dictionary<Transform, Vector3> originalUIPositions;
     private PlayerInput playerInput;
+    private Dictionary<string, TextMeshProUGUI> objectiveTexts;
     private List<Detection> enemyDetections;
     private Dictionary<Detection, GameObject> detectionArrows;
     private Alarm alarm;
     private float deltaTime;
     private float timer;
 
-    private void Start()
+    private void Awake()
     {
         // Game begins with timeScale = 0f to show the mission briefing before starting the level
         gamePaused = false;
@@ -73,6 +76,7 @@ public class UIManager : MonoBehaviour
         }
         
         playerInput = FindAnyObjectByType<PlayerInput>();
+        objectiveTexts = new Dictionary<string, TextMeshProUGUI>();
         enemyDetections = new List<Detection>();
         detectionArrows = new Dictionary<Detection, GameObject>();
         alarm = FindAnyObjectByType<Alarm>();
@@ -397,6 +401,56 @@ public class UIManager : MonoBehaviour
     public void UpdateInteractingBarFillSize(float scale)
     {
         interactingBarFill.localScale = new Vector3(scale, 1f, 1f);
+    }
+
+    public void ChangeObjectivesTitle(string newText)
+    {
+        objectivesTitle.text = newText;
+    }
+
+    public void EditObjective(string objectiveName, string newText, float textOpacity = 1f)
+    {
+        if(objectiveTexts.Keys.Contains(objectiveName))
+        {
+            objectiveTexts[objectiveName].text = newText;
+            objectiveTexts[objectiveName].alpha = textOpacity;
+        }
+
+        else
+        {
+            Debug.Log($"Objective edit failed: \"{objectiveName}\"" +
+                " not found. Creating new objective...");
+
+            TextMeshProUGUI newObjective = Instantiate
+                (objectiveTextPrefab, objectivesTextParent).GetComponent<TextMeshProUGUI>();
+
+            newObjective.text = newText;
+            newObjective.alpha = textOpacity;
+
+            objectiveTexts.Add(objectiveName, newObjective);
+        }
+    }
+
+    public void RemoveObjective(string objectiveName)
+    {
+        if(objectiveTexts.Keys.Contains(objectiveName))
+        {
+            Destroy(objectiveTexts[objectiveName].gameObject);
+            objectiveTexts.Remove(objectiveName);
+        }
+
+        else
+        {
+            Debug.Log($"Tried to delete an objective that wasn't found. (\"{objectiveName}\")");
+        }
+    }
+
+    public void RemoveAllObjectives()
+    {
+        while(objectiveTexts.Count > 0)
+        {
+            RemoveObjective(objectiveTexts.First().Key);
+        }
     }
 
     public void ToggleGlobalDetection(bool? toggle, bool alarm = false)

@@ -13,6 +13,8 @@ public class Item : InteractiveObject
     
     public override void Interact()
     {
+        onInteractionComplete?.Invoke();
+        
         Destroy(gameObject);
     }
 }
