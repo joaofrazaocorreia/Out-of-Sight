@@ -20,7 +20,7 @@ public class Door : InteractiveObject
         {
             if(occupied == value) return;
             occupied = value;
-            OpenDoor();
+            if(occupied != _opened) OpenDoor();
         }
     }
     
