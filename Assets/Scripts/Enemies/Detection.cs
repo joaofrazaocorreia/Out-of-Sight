@@ -327,6 +327,9 @@ public class Detection : MonoBehaviour
                 detectionIcon.SetActive(true);
 
                 detectionFill.fillAmount = DetectionMeter / DetectionLimit;
+
+                float colorDifference = 1 - (DetectionMeter / DetectionLimit);
+                detectionFill.GetComponentInChildren<Image>().color = new Color(1, colorDifference, colorDifference, 1);
             }
 
             else

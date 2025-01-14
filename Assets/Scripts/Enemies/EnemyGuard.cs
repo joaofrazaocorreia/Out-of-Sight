@@ -37,27 +37,6 @@ public class EnemyGuard : Enemy
             {
                 BecomeAlarmed();
             }
-
-
-            if(detection.DetectionMeter >= detection.DetectionLimit * 2 / 3 &&
-                enemyMovement.currentStatus == EnemyMovement.Status.Normal)
-            {
-                enemyMovement.halted = true;
-                //transform.LookAt(Detection.lastPlayerPos);
-                //enemyMovement.MoveTo(Detection.lastPlayerPos);
-            }
-
-            else if(detection.DetectionMeter >= detection.DetectionLimit * 1 / 3 &&
-                enemyMovement.currentStatus == EnemyMovement.Status.Normal)
-            {
-                enemyMovement.halted = true;
-                //transform.LookAt(Detection.lastPlayerPos);
-            }
-
-            else
-                enemyMovement.halted = false;
-
-            
         }
 
         // ------------ Chasing ------------ 

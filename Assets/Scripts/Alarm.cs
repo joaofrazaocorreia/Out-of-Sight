@@ -143,15 +143,15 @@ public class Alarm : MonoBehaviour
             alarmTimeLimit = maxDuration;
 
             // Every time the alarm is raised, global detection is raised by 10%
-            if(currentTier > 0)
+            if(currentTier >= 1)
             {
                 Detection.globalDetectionMultiplier += 0.1f;
             }
 
-            // Whenever the alarm is raised after the second time, extra guards spawn at the entrance of the level
-            if(currentTier > 1)
+            // Whenever the alarm is raised starting at the second time, extra guards spawn at the entrance of the level
+            if(currentTier >= 2)
             {
-                for(int i = 0; i < (extraGuardsPerTier * currentTier - 1); i++)
+                for(int i = 0; i < (extraGuardsPerTier * (currentTier - 1)); i++)
                 {
                     GameObject newGuard = mapEntrance.SpawnEnemy(guardPrefab, movementTargets);
                     extraGuards.Add(newGuard.GetComponent<EnemyGuard>());
@@ -174,7 +174,7 @@ public class Alarm : MonoBehaviour
                 e.GetComponentInChildren<BodyCarry>().HasBeenDetected = true;
         }
 
-        // Alerts all enemies in the level;
+        // Alerts all enemies in the level
         if(alertEnemies)
         {
             foreach(Enemy e in enemies)

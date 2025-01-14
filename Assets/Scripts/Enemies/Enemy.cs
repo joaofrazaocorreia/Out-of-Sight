@@ -3,6 +3,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private PlayAudio alarmAudioPlayer;
+    [SerializeField] protected float alarmedTime; 
     public enum Type {Civillian, Worker, Guard, Police, Camera};
 
     protected Type type;
@@ -14,6 +15,9 @@ public class Enemy : MonoBehaviour
     protected EnemyMovement enemyMovement;
     public EnemyMovement EnemyMovement {get=> enemyMovement;}
     protected Player player;
+    protected float alarmedTimer;
+    public float AlarmedTimer {get => alarmedTimer; set => alarmedTimer = value;}
+    public bool IsAlarmed {get => alarmedTimer > 0;}
     public bool IsKnockedOut {get => enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut;}
     public bool IsTased {get => enemyMovement.currentStatus == EnemyMovement.Status.Tased;}
 
@@ -26,6 +30,7 @@ public class Enemy : MonoBehaviour
         enemyMovement = GetComponent<EnemyMovement>();
         player = FindAnyObjectByType<Player>();
 
+        alarmedTimer = 0f;
 
         if(detection == null)
             detection= GetComponentInChildren<Detection>();
@@ -52,7 +57,10 @@ public class Enemy : MonoBehaviour
             Start();
 
         if(!alarm.IsOn)
-            Debug.Log($"{name} triggered the alarm!");
+        {
+            Debug.Log($"{name} was alarmed!");
+            alarmedTimer = alarmedTime;
+        }
 
         alarm.TriggerAlarm(!alarm.IsOn);
         if(alarmAudioPlayer != null) alarmAudioPlayer.Play();
