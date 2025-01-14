@@ -38,6 +38,7 @@ public class EnemyCivillian : Enemy
         else if(enemyMovement.currentStatus == EnemyMovement.Status.Tased ||
             enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
         {
+            // Drops all items this enemy is carrying
             enemyItemInventory.DropAllItems();
         }
 
@@ -47,13 +48,15 @@ public class EnemyCivillian : Enemy
     }
     
 
+    /// <summary>
+    /// Alarms this enemy and makes it flee.
+    /// </summary>
     public override void BecomeAlarmed()
     {
-        if(!IsKnockedOut && !IsTased)
+        if(enemyMovement.IsConscious)
         {
             base.BecomeAlarmed();
 
-            enemyMovement.CheckNearestExit();
             enemyMovement.currentStatus = EnemyMovement.Status.Fleeing;
         }
     }

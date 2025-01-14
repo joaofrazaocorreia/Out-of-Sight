@@ -21,6 +21,9 @@ public class UIFaceCamera : MonoBehaviour
         transform.rotation = Quaternion.Euler(rotation);
     }
 
+    /// <summary>
+    /// Updates the camera to rotate towards.
+    /// </summary>
     public static void UpdateActiveCamera()
     {
         activePlayerCamera = FindAnyObjectByType<Camera>().transform;

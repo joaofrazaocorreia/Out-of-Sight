@@ -205,9 +205,12 @@ public class EnemyMovement : MonoBehaviour
         {
             navMeshAgent.speed = runSpeed;
             
+            // Begins leaving the map during an alarm
             if(alarm.IsOn)
                 ExitMap();
             
+            // When alarm is off, attempts to raise it by either escaping or
+            // pressing a panic button, whichever is closer
             else
             {
                 CheckNearestExit();
@@ -237,6 +240,7 @@ public class EnemyMovement : MonoBehaviour
             else
                 MoveTo(Detection.lastPlayerPos);
 
+            // Checks if the enemy is stuck somewhere and makes it start searching after a while
             if((transform.position - lastSelfPos).magnitude < navMeshAgent.speed * Time.deltaTime
                 && IsConscious)
             {
@@ -250,17 +254,20 @@ public class EnemyMovement : MonoBehaviour
                 }
             }
 
+            // Resets the stuck timer if the enemy is not stuck
             else
             {
                 stuckTimer = 0f;
             }
 
 
+            // The enemy turns around faster and more often if it's looking for the player
             if(IsAtDestination)
             {
                 CheckForTurning(aggro:true);
             }
 
+            // Resets the turn timer with a faster cooldown
             else
             {
                 turnTimer = aggroTurnTime;
@@ -272,6 +279,7 @@ public class EnemyMovement : MonoBehaviour
         {
             navMeshAgent.speed = walkSpeed;
 
+            // If this enemy is at its destination, decreases the movement timer and looks around
             if(IsAtDestination)
             {
                 if(searchTimer > 0)
@@ -281,6 +289,8 @@ public class EnemyMovement : MonoBehaviour
                     CheckForTurning();
                 }
 
+                // Resets the timers with random values and picks a random position nearby
+                // (outside of the movement targets)
                 else
                 {
                     searchTimer = Random.Range(minSearchTime, maxSearchTime);
@@ -294,11 +304,13 @@ public class EnemyMovement : MonoBehaviour
         // ------------ Tased ------------ 
         else if (currentStatus == Status.Tased)
         {
+            // Stops this enemy from moving when tased
             navMeshAgent.speed = 0f;
             navMeshAgent.enabled = false;
             leavingMap = false;
             MoveTo(transform.position);
 
+            // Decreases the tased timer while tased
             if(tasedTimer > 0)
             {
                 animator.SetBool("Tased", true);
@@ -306,6 +318,7 @@ public class EnemyMovement : MonoBehaviour
                 tasedTimer -= Time.deltaTime;
             }
 
+            // After the tased timer ends, the enemy becomes alarmed
             else
             {
                 taserLoopPlayer.Play();
@@ -320,6 +333,7 @@ public class EnemyMovement : MonoBehaviour
         // ------------ Knocked Out ------------ 
         else if (currentStatus == Status.KnockedOut)
         {
+            // Enables this enemy's body and disguise when knocked out
             if(!bodyDisguise.enabled && bodyDisguise.HasDisguise)
                 bodyDisguise.enabled = true;
                 
@@ -329,8 +343,10 @@ public class EnemyMovement : MonoBehaviour
             if(!bodyCarry.enabled)
                 bodyCarry.enabled = true;
 
+            // Runs this code on the first frame of being knocked out
             if(!knockedOut)
             {
+                // Stops this enemy
                 navMeshAgent.speed = 0f;
                 navMeshAgent.enabled = false;
                 leavingMap = false;
@@ -342,17 +358,20 @@ public class EnemyMovement : MonoBehaviour
                 animator.SetBool("KO", true);
                 animator.applyRootMotion = false;
                 
+                // Invokes an event from the inspector when knocked out
                 onKnockOut?.Invoke();
                 knockedOut = true;
             }
         }
 
 
+        // Updates its last position when conscious to check when it's stuck
         if(IsConscious)
         {
             lastSelfPos = transform.position;
         }
         
+        // Plays footsteps when walking and running
         if(_footstepTimer + footstepInterval * navMeshAgent.speed / walkSpeed <= Time.time && navMeshAgent.velocity.magnitude >= 1)
         {
             footstepPlayer.Play();
@@ -360,8 +379,12 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Makes this enemy move around the map unless its halted or static.
+    /// </summary>
     private void Patrol()
     {
+        // Stops this enemy when it's seeing something suspicious
         if(halted)
         {
             MoveTo(transform.position);
@@ -378,6 +401,7 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
+        // Checks if this enemy can move or if it was ordered to move
         if(moveTimer <= 0 && ((!halted && !isStatic) || movingToSetTarget))
         {
             // Rolls a random index within the number of available targets and
@@ -403,6 +427,7 @@ public class EnemyMovement : MonoBehaviour
                 }
             }
 
+            // The enemy is only forced to move once
             if(movingToSetTarget)
                 movingToSetTarget = false;
 
@@ -410,12 +435,17 @@ public class EnemyMovement : MonoBehaviour
             MoveTo(movementPosTargets[index]);
         }
 
+        // Static enemies that arent being forced to move will remain in their spawn position
         else if(isStatic && !movingToSetTarget)
         {
             MoveTo(spawnPos);
         }
     }
 
+    /// <summary>
+    /// Tells this enemy to move to a given position.
+    /// </summary>
+    /// <param name="destination">The position to move this enemy.</param>
     public void MoveTo(Vector3 destination)
     {
         if(destination != null && destination != lastTarget && IsConscious)
@@ -432,7 +462,12 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    // Picks a random position within the NavMesh on a radius around the given position, and then moves to it
+    /// <summary>
+    /// Picks a random position within the NavMesh on a radius around the given position, and then moves to it
+    /// </summary>
+    /// <param name="center">The center of the wandering area.</param>
+    /// <param name="radius">The radius of the wandering area.</param>
+    /// <param name="layermask">Which layers should be ignored when picking a position.</param>
     public void Wander(Vector3 center, float radius, int layermask = NavMesh.AllAreas)
     {
         Vector3 randomDirection = center + (Random.insideUnitSphere * radius);
@@ -442,13 +477,19 @@ public class EnemyMovement : MonoBehaviour
         MoveTo(navHit.position);
     }
 
+    /// <summary>
+    /// Checks if this enemy can turn around and calculates how much it turns.
+    /// </summary>
+    /// <param name="aggro"></param>
     private void CheckForTurning(bool aggro = false)
     {
+        // Decreases the turn timer if it's not ready to turn around.
         if(turnTimer > 0)
         {
             turnTimer -= Time.deltaTime;
         }
 
+        // Calculates a random angle to rotate and turns around in place.
         else
         {
             float turnAngle = Random.Range(-maxTurnAngle, maxTurnAngle);
@@ -459,10 +500,12 @@ public class EnemyMovement : MonoBehaviour
             else if(turnAngle > -minTurnAngle)
                 turnAngle -= minTurnAngle;
 
+            // Stops any other rotations and begins rotating to the chosen angle
             StopAllCoroutines();
             StartCoroutine(TurnTo(transform.eulerAngles.y + turnAngle));
 
 
+            // Resets the timer to a faster one when chasing, otherwise uses a random timer.
             if(aggro)
                 turnTimer = aggroTurnTime;
             else
@@ -470,8 +513,17 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    private IEnumerator TurnTo(float targetRotation)
+    /// <summary>
+    /// Coroutine to progressively rotate with a given angle.
+    /// </summary>
+    /// <param name="givenRotation">The rotation angle.</param>
+    /// <returns></returns>
+    private IEnumerator TurnTo(float givenRotation)
     {
+        // Calculates the target rotation
+        float targetRotation = transform.rotation.y + givenRotation;
+
+        // Rotates until the rotation becomes the calculated one
         while(transform.rotation.y != targetRotation)
         {
             float rotation = transform.eulerAngles.y;
@@ -490,6 +542,9 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the list of panic buttons and registers the nearest one.
+    /// </summary>
     public void CheckNearestPanicButton()
     {
         float distanceToNearestButton = float.MaxValue;
@@ -511,6 +566,9 @@ public class EnemyMovement : MonoBehaviour
         chosenNearestButton = mapButtons[chosenButtonIndex].transform.position;
     }
 
+    /// <summary>
+    /// Updates the list of exits and registers the nearest one.
+    /// </summary>
     public void CheckNearestExit()
     {
         float distanceToNearestExit = float.MaxValue;
@@ -532,6 +590,10 @@ public class EnemyMovement : MonoBehaviour
         chosenNearestExit = mapEntrances[chosenExitIndex].transform.position;
     }
 
+    /// <summary>
+    /// Sets this enemy's movement targets to a given list.
+    /// </summary>
+    /// <param name="newMovementTargets">The given list of new movement targets.</param>
     public void SetMovementTargets(List<Transform> newMovementTargets)
     {
         if(!leavingMap && IsConscious)
@@ -544,6 +606,9 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Makes this enemy begin leaving the map if it's conscious.
+    /// </summary>
     public void ExitMap()
     {
         if(IsConscious)
@@ -554,6 +619,9 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Causes this enemy to be tased and stop moving.
+    /// </summary>
     public void GetTased()
     {
         if(currentStatus != Status.KnockedOut)
