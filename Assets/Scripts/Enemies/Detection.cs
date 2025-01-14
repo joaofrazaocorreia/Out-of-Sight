@@ -139,7 +139,7 @@ public class Detection : MonoBehaviour
                             if (Physics.Raycast(transform.position, distance, out RaycastHit hit, detectionRange))
                             {
                                 // Checks if the raycast hit an bodyCarry
-                                if (b.enabled && !b.HasBeenDetected)
+                                if (hit.transform.GetComponent<BodyCarry>() && b.enabled && !b.HasBeenDetected)
                                 {
                                     seesBody = true;
                                     Debug.DrawRay(transform.position, distance * hit.distance, Color.red);
