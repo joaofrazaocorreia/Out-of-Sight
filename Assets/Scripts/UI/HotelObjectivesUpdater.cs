@@ -36,7 +36,7 @@ public class HotelObjectivesUpdater : ObjectiveUpdater
 
     public void ObjectiveCompleteReception()
     {
-        uiManager.EditObjective("reception", "- Luggage Clerk distracted (completed)", 0.65f);
+        uiManager.EditObjective("reception", "- Luggage Clerk distracted", 0.65f);
     }
 
     public void ObjectiveManagerRoom(string text)
