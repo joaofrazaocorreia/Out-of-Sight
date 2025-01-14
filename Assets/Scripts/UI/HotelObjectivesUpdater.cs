@@ -67,7 +67,7 @@ public class HotelObjectivesUpdater : ObjectiveUpdater
     {
         if(!hasFoundKeycard)
         {
-            ObjectiveEditMain2(text);
+            ObjectiveEditCameras(text);
             hasFoundKeycard = true;
         }
     }

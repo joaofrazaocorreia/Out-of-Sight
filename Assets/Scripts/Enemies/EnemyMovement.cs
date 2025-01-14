@@ -68,10 +68,13 @@ public class EnemyMovement : MonoBehaviour
     private BodyCarry bodyCarry;
     private Animator animator;
     private NavMeshAgent navMeshAgent;
+    private Alarm alarm;
     public bool IsAtDestination {get => (new Vector3(lastTarget.x, 0f, lastTarget.z) -
         new Vector3(transform.position.x, 0f, transform.position.z)).magnitude <= navMeshAgent.stoppingDistance * 3f;}
     private float stuckTimer;
     private Vector3 lastSelfPos;
+    private List<PanicButton> mapButtons;
+    private Vector3 chosenNearestButton;
     private List<MapEntrance> mapEntrances;
     private Vector3 chosenNearestExit;
     private bool leavingMap;
@@ -118,6 +121,8 @@ public class EnemyMovement : MonoBehaviour
             bodyDisguise.enabled = false;
             navMeshAgent = GetComponent<NavMeshAgent>();
             navMeshAgent.enabled = true;
+            alarm = FindAnyObjectByType<Alarm>();
+            mapButtons = FindObjectsByType<PanicButton>(FindObjectsSortMode.None).ToList();
             mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
             leavingMap = false;
             knockedOut = false;
@@ -192,7 +197,23 @@ public class EnemyMovement : MonoBehaviour
         {
             navMeshAgent.speed = runSpeed;
             
-            ExitMap();
+            if(alarm.IsOn)
+                ExitMap();
+            
+            else
+            {
+                CheckNearestExit();
+                CheckNearestPanicButton();
+
+                float distanceToButton = (chosenNearestButton - transform.position).magnitude;
+                float distanceToExit = (chosenNearestExit - transform.position).magnitude;
+
+                if(distanceToButton <= distanceToExit)
+                    MoveTo(chosenNearestButton);
+                
+                else
+                    MoveTo(chosenNearestExit);
+            }
         }
         
         // ------------ Chasing ------------ 
@@ -432,10 +453,32 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    public void CheckNearestPanicButton()
+    {
+        float distanceToNearestButton = float.MaxValue;
+        int chosenButtonIndex = 0;
+        mapButtons = FindObjectsByType<PanicButton>(FindObjectsSortMode.None).ToList();
+
+        for(int i = 0; i < mapButtons.Count; i++)
+        {
+            int index = i;
+            float distanceToButton = (mapButtons[i].transform.position - transform.position).magnitude;
+
+            if(distanceToButton < distanceToNearestButton)
+            {
+                distanceToNearestButton = distanceToButton;
+                chosenButtonIndex = index;
+            }
+        }
+
+        chosenNearestButton = mapButtons[chosenButtonIndex].transform.position;
+    }
+
     public void CheckNearestExit()
     {
         float distanceToNearestExit = float.MaxValue;
         int chosenExitIndex = 0;
+        mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
 
         for(int i = 0; i < mapEntrances.Count; i++)
         {

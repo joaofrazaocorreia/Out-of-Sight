@@ -63,9 +63,9 @@ public class EnemyCamera : Enemy, IJammable
                 isOn = false;
             }
 
-            else if (detection.DetectionMeter >= detection.DetectionLimit)
+            else if (detection.DetectionMeter >= detection.DetectionLimit || (detection.SeesPlayer && alarm.IsOn))
             {
-                cameraOperator.BecomeAlarmed();
+                BecomeAlarmed();
             }
 
 
