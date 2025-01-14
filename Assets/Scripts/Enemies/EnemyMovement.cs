@@ -60,6 +60,7 @@ public class EnemyMovement : MonoBehaviour
     private Vector3 spawnPos;
     public Vector3 SpawnPos {get=> spawnPos;}
     private Player player;
+    private Detection detection;
     private BodyDisguise bodyDisguise;
     private BodyCarry bodyCarry;
     private Animator animator;
@@ -77,35 +78,61 @@ public class EnemyMovement : MonoBehaviour
 
     private void Start()
     {
-        if(status != Status.KnockedOut)
+        currentStatus = Status.Normal;
+        ResetNPC();
+    }
+
+    // Default version to be called from the inspector
+    public void ResetNPC()
+    {
+        ResetNPC(transform.position);
+    }
+
+    // (Re)Initializes all the variables in the NPC (used for respawned enemies)
+    public void ResetNPC(Vector3 oldSpawnPos)
+    {
+        // Only works on living enemies
+        if(currentStatus != Status.KnockedOut)
         {
+            // Sets up all the variables
+            currentStatus = Status.Normal;
             moveTimer = 0;
             turnTimer = 0;
             searchTimer = 0;
             stuckTimer = 0;
             tasedTimer = tasedTime;
+            spawnPos = oldSpawnPos;
             lastSelfPos = transform.position;
             lastTarget = Vector3.zero;
-            spawnPos = transform.position;
             player = FindAnyObjectByType<Player>();
+            detection = GetComponentInChildren<Detection>();
             bodyDisguise = GetComponentInChildren<BodyDisguise>();
             bodyCarry = GetComponentInChildren<BodyCarry>();
             animator = GetComponent<Animator>();
+            bodyCarry.ResetNPC();
+            bodyDisguise.ResetNPC();
+            bodyCarry.enabled = false;
+            bodyDisguise.enabled = false;
             navMeshAgent = GetComponent<NavMeshAgent>();
+            navMeshAgent.enabled = true;
             mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
             leavingMap = false;
             knockedOut = false;
+            taserLoopPlayer.Stop();
+            _footstepTimer  = Time.time;
 
             // Forcefully sets the NavMeshAgent to the NPC type if it isn't already one
             if(navMeshAgent.agentTypeID != -1372625422)
                 navMeshAgent.agentTypeID = -1372625422;
 
+            // Static enemies use their position as their target
             if(isStatic)
             {
                 movementTargets = new List<Transform>() {transform};
                 movementPosTargets = new List<Vector3>() {spawnPos};
             }
 
+            // Converts the transform list into Vector3 positions
             else
             {
                 movementPosTargets = new List<Vector3>();
@@ -113,10 +140,7 @@ public class EnemyMovement : MonoBehaviour
                     movementPosTargets.Add(t.position);
             }
         }
-        
-        _footstepTimer  = Time.time;
     }
-
 
     // Checks this enemy's status and moves accordingly.
     private void Update()
@@ -129,8 +153,34 @@ public class EnemyMovement : MonoBehaviour
         // ------------ Normal ------------ 
         else if(currentStatus == Status.Normal)
         {
-            navMeshAgent.speed = walkSpeed;
+            /*
+            // Calculates the direction towards the current most suspicious object
+            Vector3 suspicionLookPos = new Vector3(Detection.suspiciousObjPos.x,
+            transform.position.y, Detection.suspiciousObjPos.z);
+            */
 
+            // At 2 thirds of detection, moves towards the suspicious object to see it better
+            if(detection.DetectionMeter >= detection.DetectionLimit * 2 / 3 &&
+                currentStatus == Status.Normal)
+            {
+                halted = true;
+                //halted = false;
+                //transform.LookAt(suspicionLookPos);
+                //MoveTo(Detection.lastPlayerPos);
+            }
+
+            // At 1 third of detection, stops in place and looks at the suspicious object
+            else if(detection.DetectionMeter >= detection.DetectionLimit * 1 / 3 &&
+                currentStatus == Status.Normal)
+            {
+                halted = true;
+                //transform.LookAt(suspicionLookPos);
+            }
+
+            else
+                halted = false;
+            
+            navMeshAgent.speed = walkSpeed;
             Patrol();
         }
 
@@ -147,9 +197,11 @@ public class EnemyMovement : MonoBehaviour
         {
             navMeshAgent.speed = runSpeed;
 
+            // Police always know where the player is
             if(GetComponent<EnemyPolice>())
                 MoveTo(player.transform.position);
 
+            // Others will check on the last place the player was seen
             else
                 MoveTo(Detection.lastPlayerPos);
 
@@ -280,8 +332,6 @@ public class EnemyMovement : MonoBehaviour
     {
         if(halted)
         {
-            // -turn towards Detection.lastPlayerPos
-
             MoveTo(transform.position);
         }
 
@@ -426,60 +476,6 @@ public class EnemyMovement : MonoBehaviour
             tasedTimer = tasedTime;
             leavingMap = false;
             taserLoopPlayer.Play();
-        }
-    }
-
-    public void ResetNPC(Vector3 oldSpawnPos)
-    {
-        if(currentStatus != Status.KnockedOut)
-        {
-            currentStatus = Status.Normal;
-            moveTimer = 0;
-            turnTimer = 0;
-            searchTimer = 0;
-            stuckTimer = 0;
-            tasedTimer = tasedTime;
-            spawnPos = oldSpawnPos;
-            bodyDisguise = GetComponentInChildren<BodyDisguise>();
-            bodyCarry = GetComponentInChildren<BodyCarry>();
-            animator = GetComponent<Animator>();
-            bodyCarry.ResetNPC();
-            bodyDisguise.ResetNPC();
-            bodyCarry.enabled = false;
-            bodyDisguise.enabled = false;
-            navMeshAgent = GetComponent<NavMeshAgent>();
-            navMeshAgent.enabled = true;
-            mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
-            leavingMap = false;
-            knockedOut = false;
-            taserLoopPlayer.Stop();
-        }
-    }
-
-    public void ResetNPC()
-    {
-        if(currentStatus != Status.KnockedOut)
-        {
-            currentStatus = Status.Normal;
-            moveTimer = 0;
-            turnTimer = 0;
-            searchTimer = 0;
-            stuckTimer = 0;
-            tasedTimer = tasedTime;
-            spawnPos = transform.position;
-            bodyDisguise = GetComponentInChildren<BodyDisguise>();
-            bodyCarry = GetComponentInChildren<BodyCarry>();
-            animator = GetComponent<Animator>();
-            bodyCarry.ResetNPC();
-            bodyDisguise.ResetNPC();
-            bodyCarry.enabled = false;
-            bodyDisguise.enabled = false;
-            navMeshAgent = GetComponent<NavMeshAgent>();
-            navMeshAgent.enabled = true;
-            mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
-            leavingMap = false;
-            knockedOut = false;
-            taserLoopPlayer.Stop();
         }
     }
 }
