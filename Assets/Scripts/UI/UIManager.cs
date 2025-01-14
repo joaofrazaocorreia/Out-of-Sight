@@ -64,7 +64,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = startingTimeScale;
 
         #if UNITY_EDITOR
-            UISpeed *= 3;
+            UISpeed *= 2;
         #endif
 
         originalUIPositions = new Dictionary<Transform, Vector3>();

@@ -700,13 +700,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactiveType: 1
   updateIfIndirect: 0
-  requiredItem: {fileID: 0}
-  requiredEquipment: {fileID: 0}
+  requiredItem: 0
+  requiredEquipment: 0
   consumeItemRequirement: 0
   oneTimeRequirement: 0
   firstInteractionDurationUnique: 1
   interactionDuration: 3
   secondInteractionDuration: 0
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
   isInteractionSuspicious: 1
   isSecondInteractionSuspicious: 0
   objectName: 
@@ -728,13 +734,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactiveType: 1
   updateIfIndirect: 0
-  requiredItem: {fileID: 0}
-  requiredEquipment: {fileID: 0}
+  requiredItem: 0
+  requiredEquipment: 0
   consumeItemRequirement: 0
   oneTimeRequirement: 0
   firstInteractionDurationUnique: 1
   interactionDuration: 5
   secondInteractionDuration: 1
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
   objectName: 
@@ -1296,6 +1308,9 @@ MonoBehaviour:
   searchRadius: 20
   stuckTime: 3
   tasedTime: 5
+  onKnockOut:
+    m_PersistentCalls:
+      m_Calls: []
   taserLoopPlayer: {fileID: 2719472879654398134}
   knockoutPlayer: {fileID: 7904041714685882488}
   footstepPlayer: {fileID: 5926605809366126095}
@@ -1821,7 +1836,7 @@ MonoBehaviour:
   tasedIcon: {fileID: 8815639088117196135}
   tasedFill: {fileID: 6109748577925545662}
   detectionMaxAngle: 50
-  detectionRange: 20
+  detectionRange: 35
   proximityDetectionRange: 2
   baseDetectionRate: 1
   detectionLimit: 5
