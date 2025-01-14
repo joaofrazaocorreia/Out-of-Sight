@@ -65,6 +65,7 @@ public class Enemy : MonoBehaviour
             Debug.Log($"{name} was alarmed!");
             if(alarmAudioPlayer != null) alarmAudioPlayer.Play();
             alarmedTimer = alarmedTime;
+            detection.DetectionMeter = detection.DetectionLimit;
         }
     }
 
