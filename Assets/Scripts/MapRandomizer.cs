@@ -46,7 +46,8 @@ public class MapRandomizer : MonoBehaviour
             }
         }
 
-        Random.InitState(seed);
+        if(seed != 0)
+            Random.InitState(seed);
 
         if(spawnOrder <= 0)
             SpawnObjects();
