@@ -16,8 +16,13 @@ public class EnemyPolice : Enemy
     }
 
 
-    // Checks this enemy's status and proceeds accordingly.
     protected override void Update()
+    {
+        CheckStatus();
+    }
+
+    // Checks this enemy's status and proceeds accordingly.
+    private void CheckStatus()
     {
         // ------------ Chasing ------------ 
         if(enemyMovement.currentStatus == EnemyMovement.Status.Chasing)

@@ -34,6 +34,7 @@ public class EnemyMovement : MonoBehaviour
     private Status status;
     private bool movingToSetTarget;
     public bool MovingToSetTarget {get => movingToSetTarget; set => movingToSetTarget = value;}
+    public bool IsConscious {get => currentStatus != Status.KnockedOut && currentStatus != Status.Tased;}
 
     public Status currentStatus
     { 
@@ -147,7 +148,7 @@ public class EnemyMovement : MonoBehaviour
     // Checks this enemy's status and moves accordingly.
     private void Update()
     {
-        if(leavingMap && currentStatus != Status.KnockedOut && currentStatus != Status.Tased)
+        if(leavingMap && IsConscious)
         {
             ExitMap();
         }
@@ -208,7 +209,7 @@ public class EnemyMovement : MonoBehaviour
                 MoveTo(Detection.lastPlayerPos);
 
             if((transform.position - lastSelfPos).magnitude < navMeshAgent.speed * Time.deltaTime
-                && currentStatus != Status.Tased && currentStatus != Status.KnockedOut)
+                && IsConscious)
             {
                 stuckTimer += Time.deltaTime;
 
@@ -318,7 +319,7 @@ public class EnemyMovement : MonoBehaviour
         }
 
 
-        if(currentStatus != Status.Tased && currentStatus != Status.KnockedOut)
+        if(IsConscious)
         {
             lastSelfPos = transform.position;
         }
@@ -388,7 +389,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void MoveTo(Vector3 destination)
     {
-        if(destination != null && destination != lastTarget && currentStatus != Status.KnockedOut && currentStatus != Status.Tased)
+        if(destination != null && destination != lastTarget && IsConscious)
         {
             // Moves to the given destination and registers it as the last chosen
             navMeshAgent.SetDestination(destination);
@@ -453,7 +454,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void SetMovementTargets(List<Transform> newMovementTargets)
     {
-        if(!leavingMap && currentStatus != Status.KnockedOut && currentStatus != Status.Tased)
+        if(!leavingMap && IsConscious)
         {
             movementTargets = newMovementTargets;
             movementPosTargets = new List<Vector3>();
@@ -465,7 +466,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void ExitMap()
     {
-        if(currentStatus != Status.KnockedOut && currentStatus != Status.Tased)
+        if(IsConscious)
         {
             leavingMap = true;
             CheckNearestExit();

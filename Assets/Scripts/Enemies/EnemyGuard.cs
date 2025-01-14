@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyGuard : Enemy
 {
@@ -14,6 +15,8 @@ public class EnemyGuard : Enemy
     /// If true, this enemy won't chase the player during alarms
     /// </summary>
     [SerializeField] private bool ignoresAlarm = false;
+    [SerializeField] private GameObject radioIcon;
+    [SerializeField] private Image radioFill;
 
     private float aggroTimer;
     private Vector3 prevPlayerPos;
@@ -27,8 +30,29 @@ public class EnemyGuard : Enemy
     }
 
 
-    // Checks this enemy's status and proceeds accordingly.
     protected override void Update()
+    {
+        CheckStatus();
+
+        if(IsAlarmed && enemyMovement.IsConscious)
+        {
+            alarmedTimer -= Time.deltaTime;
+            radioIcon.SetActive(true);
+            radioFill.fillAmount = alarmedTimer / alarmedTime;
+
+            if(alarmedTimer <= 0)
+            {
+                alarm.TriggerAlarm(!alarm.IsOn);
+                radioIcon.SetActive(false);
+            }
+        }
+
+        else
+            radioIcon.SetActive(false);
+    }
+
+    // Checks this enemy's status and proceeds accordingly.
+    private void CheckStatus()
     {
         // ------------ Normal ------------ 
         if(enemyMovement.currentStatus == EnemyMovement.Status.Normal)
