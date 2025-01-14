@@ -12,6 +12,7 @@ public class MapRandomizer : MonoBehaviour
     
     [Header("General variables")]
     [SerializeField] [EnumButtons] private RandomizerMode randomizerMode;
+    [SerializeField] private int seed;
     [SerializeField] private int spawnOrder;
     [SerializeField] private Transform objectsParent;
     [SerializeField] private List<Transform> objectSpawnPositions;
@@ -44,6 +45,8 @@ public class MapRandomizer : MonoBehaviour
                 Destroy(objectsParent.GetChild(i-1).gameObject);
             }
         }
+
+        Random.InitState(seed);
 
         if(spawnOrder <= 0)
             SpawnObjects();
