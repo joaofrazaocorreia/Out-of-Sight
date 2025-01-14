@@ -50,9 +50,9 @@ public class AudioSettings : MonoBehaviour
     
     private void Start()
     {
-        MasterVolume = PlayerPrefs.GetFloat("MasterVolume", 0.5f);
-        SfxVolume = PlayerPrefs.GetFloat("SfxVolume", 1);
-        MusicVolume = PlayerPrefs.GetFloat("MusicVolume", 1);
+        MasterVolume = PlayerPrefs.GetFloat("MasterVolume");
+        SfxVolume = PlayerPrefs.GetFloat("SfxVolume");
+        MusicVolume = PlayerPrefs.GetFloat("MusicVolume");
         masterVolumeSlider.value = MasterVolume;
         sfxVolumeSlider.value = SfxVolume;
         musicVolumeSlider.value = MusicVolume;
