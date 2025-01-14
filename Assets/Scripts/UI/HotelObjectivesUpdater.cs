@@ -1,4 +1,4 @@
-using UnityEngine;
+
 
 public class HotelObjectivesUpdater : ObjectiveUpdater
 {
@@ -41,10 +41,10 @@ public class HotelObjectivesUpdater : ObjectiveUpdater
 
     public void ObjectiveManagerRoom(string text)
     {
-        if(!hasFoundWorkerHalls)
+        if(!hasFoundWorkerHalls && !hasFoundSafeCode)
         {
-            ObjectiveEditMain(text);
             hasFoundWorkerHalls = true;
+            ObjectiveEditMain(text);
         }
     }
 
@@ -67,16 +67,19 @@ public class HotelObjectivesUpdater : ObjectiveUpdater
     {
         if(!hasFoundKeycard)
         {
-            ObjectiveEditCameras(text);
             hasFoundKeycard = true;
+            ObjectiveEditCameras(text);
         }
     }
 
     public void ObjectiveOpenSafe(string text)
     {
-        hasFoundSafeCode = true;
-        uiManager.RemoveObjective("main2");
-        ObjectiveEditMain(text);
+        if(!hasFoundSafeCode)
+        {
+            hasFoundSafeCode = true;
+            uiManager.RemoveObjective("main2");
+            ObjectiveEditMain(text);
+        }
     }
 
     public void ObjectiveGetLuggage(string text)
