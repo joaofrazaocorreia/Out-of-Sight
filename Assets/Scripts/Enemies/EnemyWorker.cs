@@ -12,7 +12,7 @@ public class EnemyWorker : Enemy
 
     protected override void Update()
     {
-        
+        CheckStatus();
     }
 
     // Checks this enemy's status and proceeds accordingly.

@@ -142,12 +142,20 @@ public class MapEntrance : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ScheduleGameObjectForQueue(GameObject go, Enemy.Type type)
     {
+        Enemy leavingEnemy = go.GetComponent<Enemy>();
+        
+
         go.SetActive(false);
 
         yield return new WaitForEndOfFrame();
 
-        if(go.GetComponent<Enemy>() != null) 
+        if(go.GetComponent<Enemy>() != null)
+        { 
             enemies.Remove(go.GetComponent<Enemy>());
+            
+            if(leavingEnemy.IsAlarmed)
+                alarm.TriggerAlarm(alarm.IsOn);
+        }
 
         if(type == Enemy.Type.Civillian)
             go.transform.parent = QueuedCivilliansParent;

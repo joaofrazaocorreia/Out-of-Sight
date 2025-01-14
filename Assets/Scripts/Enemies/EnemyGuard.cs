@@ -69,6 +69,9 @@ public class EnemyGuard : Enemy
             if(detection.SeesPlayer)
             {
                 BecomeAlarmed();
+
+                if(alarm.IsOn)
+                    alarm.TriggerAlarm(!alarm.IsOn);
             }
 
             if(enemyMovement.IsAtDestination)
