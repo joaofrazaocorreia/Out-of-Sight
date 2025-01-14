@@ -64,10 +64,10 @@ public class Enemy : MonoBehaviour
         {
             Debug.Log($"{name} was alarmed!");
             alarmedTimer = alarmedTime;
+            if(alarmAudioPlayer != null) alarmAudioPlayer.Play();
         }
 
         alarm.TriggerAlarm(!alarm.IsOn);
-        if(alarmAudioPlayer != null) alarmAudioPlayer.Play();
     }
 
     public void ResetNPC()
