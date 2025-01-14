@@ -11,7 +11,6 @@ public class PanicButton : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
         Enemy nearbyEnemy = other.GetComponentInParent<Enemy>();
 
         if(nearbyEnemy != null && nearbyEnemy.IsAlarmed)

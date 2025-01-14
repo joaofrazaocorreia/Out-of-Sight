@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class NPCInteraction : InteractiveObject
 {
+    [Header("Movement Target")]
     [SerializeField] private Transform targetLocation;
+    [SerializeField] private string fetchTargetWithTag;
     private EnemyMovement enemyMovement;
 
     private void Start()
@@ -21,6 +23,9 @@ public class NPCInteraction : InteractiveObject
     public override void Interact()
     {
         base.Interact();
+
+        if(fetchTargetWithTag != "")
+            targetLocation = GameObject.FindGameObjectWithTag(fetchTargetWithTag).transform;
 
         enemyMovement.MovingToSetTarget = true;
         enemyMovement.MoveTo(targetLocation.position);
