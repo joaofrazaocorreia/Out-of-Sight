@@ -1187,6 +1187,10 @@ PrefabInstance:
       propertyPath: 'movementTargets.Array.data[9]'
       value: 
       objectReference: {fileID: 1906147816}
+    - target: {fileID: 5317051434528590399, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
+      propertyPath: itemsParent
+      value: 
+      objectReference: {fileID: 1778978494}
     - target: {fileID: 7588830322911778905, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -1961,7 +1965,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1762310718866197437, guid: b0d21fe61caffbf4a99841959366269b, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 740317350}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b0d21fe61caffbf4a99841959366269b, type: 3}
 --- !u!4 &207128771 stripped
@@ -7200,6 +7207,119 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702271793}
   m_CullTransparentMesh: 1
+--- !u!1 &740317349
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 740317350}
+  - component: {fileID: 740317352}
+  - component: {fileID: 740317351}
+  - component: {fileID: 740317353}
+  m_Layer: 7
+  m_Name: NPCMoveInteractive
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &740317350
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740317349}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 207128771}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &740317351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740317349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beaf0eac2a7c9634e8413a67f429e2de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &740317352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740317349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8727d7afbb366e943844c795bd86e606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 2
+  updateIfIndirect: 0
+  requiredItem: 3
+  requiredEquipment: 0
+  consumeItemRequirement: 1
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 1
+  interactionDuration: 1
+  secondInteractionDuration: 0
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 740317351}
+        m_TargetAssemblyTypeName: HotelObjectivesUpdater, Assembly-CSharp
+        m_MethodName: ObjectiveCompleteReception
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  objectName: 
+  customInteractionMessage: Give "lost" luggage to clerk
+  onInteractAudioPlayer: {fileID: 0}
+  whileInteractAudioPlayer: {fileID: 0}
+  targetLocation: {fileID: 0}
+--- !u!65 &740317353
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740317349}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5, y: 4, z: 1.5}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &752675068
 GameObject:
   m_ObjectHideFlags: 0
@@ -7476,6 +7596,10 @@ PrefabInstance:
       propertyPath: 'movementTargets.Array.data[9]'
       value: 
       objectReference: {fileID: 1906147816}
+    - target: {fileID: 5317051434528590399, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
+      propertyPath: itemsParent
+      value: 
+      objectReference: {fileID: 1778978494}
     - target: {fileID: 7588830322911778905, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -8859,7 +8983,19 @@ MonoBehaviour:
   whitelistedDisguises: 03000000
   onEnterArea:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1012654005}
+        m_TargetAssemblyTypeName: HotelObjectivesUpdater, Assembly-CSharp
+        m_MethodName: ObjectiveFindSafeCode
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: '- Obtain the safe''s combination'
+          m_BoolArgument: 0
+        m_CallState: 2
   onExitArea:
     m_PersistentCalls:
       m_Calls: []
@@ -9930,6 +10066,10 @@ PrefabInstance:
       propertyPath: 'movementTargets.Array.data[9]'
       value: 
       objectReference: {fileID: 1906147816}
+    - target: {fileID: 5317051434528590399, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
+      propertyPath: itemsParent
+      value: 
+      objectReference: {fileID: 1778978494}
     - target: {fileID: 7588830322911778905, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -10493,6 +10633,10 @@ PrefabInstance:
       propertyPath: 'movementTargets.Array.data[9]'
       value: 
       objectReference: {fileID: 1906147816}
+    - target: {fileID: 5317051434528590399, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
+      propertyPath: itemsParent
+      value: 
+      objectReference: {fileID: 1778978494}
     - target: {fileID: 7588830322911778905, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -11423,6 +11567,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Guard  NPC2 Static
       objectReference: {fileID: 0}
+    - target: {fileID: 7948220983007380138, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
+      propertyPath: itemsParent
+      value: 
+      objectReference: {fileID: 1778978494}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14403,6 +14551,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Guard NPC4 Cam Op
       objectReference: {fileID: 0}
+    - target: {fileID: 7948220983007380138, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
+      propertyPath: itemsParent
+      value: 
+      objectReference: {fileID: 1778978494}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15369,6 +15521,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 61cfba8cdcf86cc4faf0e6fa622bec6a, type: 2}
+    - target: {fileID: 7948220983007380138, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
+      propertyPath: itemsParent
+      value: 
+      objectReference: {fileID: 1778978494}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17452,6 +17608,10 @@ PrefabInstance:
       propertyPath: interactingBarText
       value: Taking Disguise...
       objectReference: {fileID: 0}
+    - target: {fileID: 5317051434528590399, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
+      propertyPath: itemsParent
+      value: 
+      objectReference: {fileID: 1778978494}
     - target: {fileID: 7588830322911778905, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -20012,6 +20172,10 @@ PrefabInstance:
       propertyPath: 'movementTargets.Array.data[9]'
       value: 
       objectReference: {fileID: 1906147816}
+    - target: {fileID: 5317051434528590399, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
+      propertyPath: itemsParent
+      value: 
+      objectReference: {fileID: 1778978494}
     - target: {fileID: 7588830322911778905, guid: a2fed7cabf01a214ab6a40b23235c801, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -20470,6 +20634,10 @@ PrefabInstance:
       propertyPath: baseDetectionRate
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7948220983007380138, guid: fd4f258658a8da84d8c3060e8c8f31a1, type: 3}
+      propertyPath: itemsParent
+      value: 
+      objectReference: {fileID: 1778978494}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

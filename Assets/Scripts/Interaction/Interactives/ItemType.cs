@@ -5,6 +5,7 @@
         None,
         Keycard,
         SafeCode,
+        Luggage,
         SecretFiles
     }
 }

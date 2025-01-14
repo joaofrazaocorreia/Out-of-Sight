@@ -30,7 +30,7 @@ public class MapArea : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject == player.gameObject)
+        if(player != null && other.gameObject == player.gameObject)
         {   
             playerIsHere = true;
             CheckWhitelist();
@@ -41,7 +41,7 @@ public class MapArea : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if(lastPlayerDisguise != player.disguise && playerIsHere)
+        if(player != null && lastPlayerDisguise != player.disguise && playerIsHere)
         {
             CheckWhitelist();
             UpdatePlayerStatus();
@@ -51,7 +51,7 @@ public class MapArea : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject == player.gameObject)
+        if(player != null && other.gameObject == player.gameObject)
         {
             playerIsHere = false;
             CheckWhitelist();

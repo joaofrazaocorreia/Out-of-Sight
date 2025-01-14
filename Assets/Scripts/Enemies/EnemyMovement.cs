@@ -32,6 +32,8 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] [Range(0.1f, 2f)] private float footstepInterval = 0.45f;
 
     private Status status;
+    private bool movingToSetTarget;
+    public bool MovingToSetTarget {get => movingToSetTarget; set => movingToSetTarget = value;}
 
     public Status currentStatus
     { 
@@ -346,7 +348,7 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
-        if(moveTimer <= 0 && !halted && !isStatic)
+        if(moveTimer <= 0 && ((!halted && !isStatic) || movingToSetTarget))
         {
             // Rolls a random index within the number of available targets and
             // loops until it gets a value different than the last chosen index
@@ -371,11 +373,14 @@ public class EnemyMovement : MonoBehaviour
                 }
             }
 
+            if(movingToSetTarget)
+                movingToSetTarget = false;
+
             // Tells the NPC to move towards the chosen index position
             MoveTo(movementPosTargets[index]);
         }
 
-        else if(isStatic)
+        else if(isStatic && !movingToSetTarget)
         {
             MoveTo(spawnPos);
         }
@@ -474,6 +479,7 @@ public class EnemyMovement : MonoBehaviour
         {
             currentStatus = Status.Tased;
             tasedTimer = tasedTime;
+            detection.DetectionMeter = 0;
             leavingMap = false;
             taserLoopPlayer.Play();
         }
