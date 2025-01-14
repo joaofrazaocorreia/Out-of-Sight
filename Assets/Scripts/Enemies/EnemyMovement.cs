@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,11 +16,14 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private List<Transform> movementTargets;
     [SerializeField] private float walkSpeed = 4f;
     [SerializeField] private float runSpeed = 7f;
+    [SerializeField] private float turnSpeed = 10f;
     [SerializeField] private float minMovementTime = 5f;
     [SerializeField] private float maxMovementTime = 12f;
     [SerializeField] private float minTurnTime = 2f;
     [SerializeField] private float maxTurnTime = 5f;
     [SerializeField] private float aggroTurnTime = 1.5f;
+    [SerializeField] private float minTurnAngle = 35f;
+    [SerializeField] private float maxTurnAngle = 90f;
     [SerializeField] private float minSearchTime = 4f;
     [SerializeField] private float maxSearchTime = 10f;
     [SerializeField] private float searchRadius = 20f;
@@ -85,7 +89,11 @@ public class EnemyMovement : MonoBehaviour
     private void Start()
     {
         currentStatus = Status.Normal;
-        ResetNPC();
+
+        if(spawnPos != Vector3.zero)
+            ResetNPC(spawnPos);
+            
+        else ResetNPC();
     }
 
     // Default version to be called from the inspector
@@ -360,7 +368,7 @@ public class EnemyMovement : MonoBehaviour
         }
 
         // Progressively decreases the movement timer if the agent is at its target
-        else if(IsAtDestination && moveTimer > 0)
+        else if((IsAtDestination && moveTimer > 0) || (isStatic && !movingToSetTarget))
         {
             moveTimer -= Time.deltaTime;
 
@@ -416,6 +424,9 @@ public class EnemyMovement : MonoBehaviour
             navMeshAgent.SetDestination(destination);
             lastTarget = destination;
 
+            // Stops any rotation coroutines
+            StopAllCoroutines();
+
             // Resets the patrol movement cooldown
             moveTimer = Random.Range(minMovementTime, maxMovementTime);
         }
@@ -440,16 +451,42 @@ public class EnemyMovement : MonoBehaviour
 
         else
         {
-            // -turn to another rotation
+            float turnAngle = Random.Range(-maxTurnAngle, maxTurnAngle);
+
+            if(turnAngle < minTurnAngle)
+                turnAngle += minTurnAngle;
+
+            else if(turnAngle > -minTurnAngle)
+                turnAngle -= minTurnAngle;
+
+            StopAllCoroutines();
+            StartCoroutine(TurnTo(transform.eulerAngles.y + turnAngle));
+
 
             if(aggro)
-            {
                 turnTimer = aggroTurnTime;
-            }
             else
-            {
                 turnTimer = Random.Range(minTurnTime, maxTurnTime);
-            }
+        }
+    }
+
+    private IEnumerator TurnTo(float targetRotation)
+    {
+        while(transform.rotation.y != targetRotation)
+        {
+            float rotation = transform.eulerAngles.y;
+            float increase = Time.deltaTime * turnSpeed;
+            float limit = targetRotation - transform.eulerAngles.y;
+
+            if(targetRotation > rotation)
+                rotation += Mathf.Min(increase, limit);
+
+            else if (targetRotation < rotation)
+                rotation += Mathf.Max(-increase, limit);
+
+            transform.eulerAngles = new Vector3(0f, rotation, 0f);
+
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
         }
     }
 
