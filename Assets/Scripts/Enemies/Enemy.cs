@@ -55,6 +55,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Alarms this enemy, initiating its alarmed behaviour
+    /// </summary>
     public virtual void BecomeAlarmed()
     {
         if(detection == null)
@@ -69,6 +72,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Resets this enemy's variables
+    /// (this is used when respawning enemies at the entrance)
+    /// </summary>
     public void ResetNPC()
     {
         Start();

@@ -92,6 +92,7 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        // Updates the HUD while the game is unpaused
         if(Time.timeScale != 0)
         {
             timer += Time.deltaTime;

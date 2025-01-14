@@ -47,10 +47,13 @@ public class EnemyPolice : Enemy
     }
     
 
+    /// <summary>
+    /// Alarms this enemy if it's conscious and begins chasing the player.
+    /// </summary>
     public override void BecomeAlarmed()
     {
         if(enemyMovement == null) Start();
-        if(!IsKnockedOut && !IsTased)
+        if(enemyMovement.IsConscious)
         {
             base.BecomeAlarmed();
 

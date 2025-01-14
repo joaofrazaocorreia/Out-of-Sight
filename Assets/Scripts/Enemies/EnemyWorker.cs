@@ -48,13 +48,15 @@ public class EnemyWorker : Enemy
     }
     
 
+    /// <summary>
+    /// Alarms this enemy if it's conscious and it begins to flee.
+    /// </summary>
     public override void BecomeAlarmed()
     {
-        if(!IsKnockedOut && !IsTased)
+        if(enemyMovement.IsConscious)
         {
             base.BecomeAlarmed();
 
-            enemyMovement.CheckNearestExit();
             enemyMovement.currentStatus = EnemyMovement.Status.Fleeing;
         }
     }

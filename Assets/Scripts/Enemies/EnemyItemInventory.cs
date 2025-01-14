@@ -23,6 +23,10 @@ public class EnemyItemInventory : MonoBehaviour
             drop2Model.SetActive(Random.Range(0, 101) <= drop2Chance);
     }
 
+    /// <summary>
+    /// Forces a specific item to become active on this enemy.
+    /// </summary>
+    /// <param name="number">The index of the item to enable.</param>
     public void ForceEnableItemDrop(int number)
     {
         switch(Mathf.Clamp(number, 1, 2))
@@ -36,6 +40,10 @@ public class EnemyItemInventory : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Causes a specific item to drop from this enemy.
+    /// </summary>
+    /// <param name="number">The index of the item to drop.</param>
     public void DropItem(int number)
     {
         switch(Mathf.Clamp(number, 1, 2))
@@ -53,6 +61,9 @@ public class EnemyItemInventory : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Drops all items this enemy has.
+    /// </summary>
     public void DropAllItems()
     {
         if(HasDrop1)

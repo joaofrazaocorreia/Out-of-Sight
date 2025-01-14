@@ -60,8 +60,10 @@ public class Detection : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // If this setting is toggled off, all detections are disabled
         if(player.detectable)
         { 
+            // Checks if the enemy is either a conscious NPC or an enabled camera
             if((enemyMovement != null && enemyCamera == null &&
                 enemyMovement.IsConscious) || (enemyCamera != null &&
                     enemyMovement == null && !enemyCamera.Jammed && enemyCamera.IsOn))
@@ -120,8 +122,8 @@ public class Detection : MonoBehaviour
                 }
 
 
+                // Checks all available bodies in the level that haven't been seen already
                 UpdateAllBodies();
-
                 foreach(BodyCarry b in allBodies)
                 {
                     if (!b.enabled || b.HasBeenDetected)
@@ -129,16 +131,16 @@ public class Detection : MonoBehaviour
                     
                     Vector3 distance = b.transform.position - transform.position;
 
-                    // Checks if the bodyCarry is within range of this NPC's detection range
+                    // Checks if the body is within range of this NPC's detection range
                     if(distance.magnitude <= detectionRange)
                     {
-                        // Checks if the bodyCarry is within this NPC's field of view
+                        // Checks if the body is within this NPC's field of view
                         if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distance) <= detectionMaxAngle)
                         {
-                            // Sends a raycast towards the bodyCarry and checks if it hits anything
+                            // Sends a raycast towards the body and checks if it hits anything
                             if (Physics.Raycast(transform.position, distance, out RaycastHit hit, detectionRange))
                             {
-                                // Checks if the raycast hit an bodyCarry
+                                // Checks if the raycast hit an available body that hasn't been seen yet
                                 if (hit.transform.GetComponent<BodyCarry>() && b.enabled && !b.HasBeenDetected)
                                 {
                                     seesBody = true;
@@ -146,7 +148,8 @@ public class Detection : MonoBehaviour
                                     break;
                                 }
 
-                                // If the raycast detects an obstacle between the NPC and the bodyCarry:
+                                // If the raycast detects an obstacle between the NPC and the body, or the body
+                                // was already seen:
                                 else
                                 {
                                     seesBody = false;
@@ -154,7 +157,7 @@ public class Detection : MonoBehaviour
                                 }
                             }
 
-                            // If the raycast doesn't reach the bodyCarry:
+                            // If the raycast doesn't reach the body:
                             else
                             {
                                 seesBody = false;
@@ -162,7 +165,7 @@ public class Detection : MonoBehaviour
                             }
                         }
                         
-                        // If the bodyCarry is not within the enemy's field of view:
+                        // If the body is not within the enemy's field of view:
                         else
                         {
                             seesBody = false;
@@ -170,7 +173,7 @@ public class Detection : MonoBehaviour
                         }
                     }
 
-                    // If the bodyCarry is too far away to be detected:
+                    // If the body is too far away to be detected:
                     else
                     {
                         seesBody = false;
@@ -185,7 +188,9 @@ public class Detection : MonoBehaviour
         }
     }
 
-    // Checks if the NPC sees the player or if it's too close to them, and raises/decreases detection accordingly
+    /// <summary>
+    /// Checks if the NPC sees the player or if it's too close to them, and raises/decreases detection accordingly.
+    /// </summary>
     private void UpdateDetection()
     {
         // Multiple sources of detection stack with each other
@@ -229,7 +234,8 @@ public class Detection : MonoBehaviour
         {
             DetectionMeter -= Time.deltaTime;
         }
-        
+
+        // Plays audio only when the detection is raised from 0
         switch (DetectionMeter)
         {
             case > 0 when isDetectionReset:
@@ -251,6 +257,9 @@ public class Detection : MonoBehaviour
             lastPlayerPos = player.transform.position;
     }
 
+    /// <summary>
+    /// Updates the list of bodies in the level.
+    /// </summary>
     public void UpdateAllBodies()
     {
         BodyCarry[] bodies = FindObjectsByType<BodyCarry>(FindObjectsSortMode.None);
@@ -266,11 +275,16 @@ public class Detection : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Enables and updates the detection UI specific to this enemy.
+    /// </summary>
     private void UpdateSelfDetectionUI()
     {
+        // The UI checks if the enemy is not knocked out and not a camera
         if(enemyMovement != null && enemyCamera == null &&
             enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut)
         {
+            // Enables the tased timer UI when tased
             if(enemyMovement.currentStatus == EnemyMovement.Status.Tased)
             {
                 selfDetection.SetActive(true);
@@ -281,6 +295,7 @@ public class Detection : MonoBehaviour
                 tasedFill.fillAmount = enemyMovement.TasedTimer / enemyMovement.TasedTime;
             }
 
+            // Enables the alarmed icon when alarmed
             else if(enemyMovement != null && (alarm.IsOn || selfEnemy.IsAlarmed))
             {
                 selfDetection.SetActive(true);
@@ -289,6 +304,7 @@ public class Detection : MonoBehaviour
                 detectionIcon.SetActive(false);
             }
 
+            // Enables the detection meter if it's detecting something
             else if(DetectionMeter > 0)
             {
                 selfDetection.SetActive(true);
@@ -298,18 +314,23 @@ public class Detection : MonoBehaviour
 
                 detectionFill.fillAmount = DetectionMeter / DetectionLimit;
 
+                // The color becomes increasingly more red the closer it gets to the limit
+
                 float colorDifference = 1 - (DetectionMeter / DetectionLimit);
                 detectionFill.GetComponentInChildren<Image>().color = new Color(1, colorDifference, colorDifference, 1);
             }
 
+            // If no info needs to be displayed, the UI turns off
             else
             {
                 selfDetection.SetActive(false);
             }
         }
 
+        // Checks if this enemy is a camera
         else if (enemyMovement == null && enemyCamera != null)
         {
+            // Enables the jammed icon when being jammed
             if(enemyCamera.Jammed)
             {
                 selfDetection.SetActive(true);
@@ -320,6 +341,7 @@ public class Detection : MonoBehaviour
                 tasedFill.fillAmount = 1f;
             }
 
+            // Enables the alarmed icon when the alarm is raised (and the camera is turned on)
             else if(alarm.IsOn && enemyCamera.IsOn)
             {
                 selfDetection.SetActive(true);
@@ -328,6 +350,7 @@ public class Detection : MonoBehaviour
                 detectionIcon.SetActive(false);
             }
 
+            // Shows the detection UI if the camera is detecting something (and turned on)
             else if(DetectionMeter > 0 && enemyCamera.IsOn)
             {
                 selfDetection.SetActive(true);
@@ -337,16 +360,20 @@ public class Detection : MonoBehaviour
 
                 detectionFill.fillAmount = DetectionMeter / DetectionLimit;
 
+                // The color becomes increasingly more red the closer it gets to the limit
+
                 float colorDifference = 1 - (DetectionMeter / DetectionLimit);
                 detectionFill.GetComponentInChildren<Image>().color = new Color(1, colorDifference, colorDifference, 1);
             }
 
+            // Disables the UI if no info needs to be shown
             else
             {
                 selfDetection.SetActive(false);
             }
         }
 
+        // If the enemy is neither an active camera or conscious enemy, disables this UI
         else
         {
             selfDetection.SetActive(false);
