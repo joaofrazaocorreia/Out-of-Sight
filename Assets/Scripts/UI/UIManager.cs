@@ -44,6 +44,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Transform NPCsParent;
     [SerializeField] private Transform CamerasParent;
     [SerializeField] private Slider staminaSlider;
+    [SerializeField] private PlayAudio objectiveAudioPlayer;
 
     public static bool gamePaused;
     private bool settingsActive;
@@ -429,6 +430,8 @@ public class UIManager : MonoBehaviour
 
             objectiveTexts.Add(objectiveName, newObjective);
         }
+        
+        objectiveAudioPlayer.Play();
     }
 
     public void RemoveObjective(string objectiveName)
