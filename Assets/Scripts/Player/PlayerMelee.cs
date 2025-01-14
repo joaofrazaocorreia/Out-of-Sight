@@ -141,8 +141,7 @@ public class PlayerMelee : MonoBehaviour
                 Detection d = t.GetComponentInChildren<Detection>();
                 EnemyMovement em = t.GetComponent<EnemyMovement>();
 
-                if(d.SeesPlayer && em.currentStatus != EnemyMovement.Status.Tased &&
-                        em.currentStatus != EnemyMovement.Status.KnockedOut)
+                if(d.SeesPlayer && em.IsConscious)
                     enemiesWatching.Add(d);
             }
         }

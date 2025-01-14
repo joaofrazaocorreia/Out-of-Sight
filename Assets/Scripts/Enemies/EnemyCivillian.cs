@@ -10,8 +10,13 @@ public class EnemyCivillian : Enemy
     }
 
 
-    // Checks this enemy's status and proceeds accordingly.
     protected override void Update()
+    {
+        CheckStatus();
+    }
+
+    // Checks this enemy's status and proceeds accordingly.
+    private void CheckStatus()
     {
         // ------------ Normal ------------ 
         if(enemyMovement.currentStatus == EnemyMovement.Status.Normal)

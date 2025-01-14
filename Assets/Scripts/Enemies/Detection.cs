@@ -22,6 +22,7 @@ public class Detection : MonoBehaviour
     public static float globalDetectionMultiplier = 1.0f;
 
     private Player player;
+    private Enemy selfEnemy;
     private Alarm alarm;
     private float detectionMeter;
     public float DetectionMeter
@@ -44,6 +45,7 @@ public class Detection : MonoBehaviour
     private void Start()
     {
         player = FindAnyObjectByType<Player>();
+        selfEnemy = GetComponentInParent<Enemy>();
         alarm = FindAnyObjectByType<Alarm>();
         DetectionMeter = 0;
         selfDetection.SetActive(false);
@@ -61,9 +63,8 @@ public class Detection : MonoBehaviour
         if(player.detectable)
         { 
             if((enemyMovement != null && enemyCamera == null &&
-                enemyMovement.currentStatus != EnemyMovement.Status.Tased &&
-                    enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut) ||
-                        (enemyCamera != null && enemyMovement == null && !enemyCamera.Jammed && enemyCamera.IsOn))
+                enemyMovement.IsConscious) || (enemyCamera != null &&
+                    enemyMovement == null && !enemyCamera.Jammed && enemyCamera.IsOn))
             {
                 Vector3 distanceToPlayer = player.transform.position - transform.position;
 
@@ -224,7 +225,7 @@ public class Detection : MonoBehaviour
         }
 
         // If there are no sources of detection, the meter is decreased instead
-        else
+        else if(DetectionMeter < DetectionLimit)
         {
             DetectionMeter -= Time.deltaTime;
         }
@@ -280,7 +281,7 @@ public class Detection : MonoBehaviour
                 tasedFill.fillAmount = enemyMovement.TasedTimer / enemyMovement.TasedTime;
             }
 
-            else if(enemyMovement != null && alarm.IsOn)
+            else if(enemyMovement != null && (alarm.IsOn || selfEnemy.IsAlarmed))
             {
                 selfDetection.SetActive(true);
                 tasedIcon.SetActive(false);
@@ -317,6 +318,14 @@ public class Detection : MonoBehaviour
                 detectionIcon.SetActive(false);
 
                 tasedFill.fillAmount = 1f;
+            }
+
+            else if(alarm.IsOn && enemyCamera.IsOn)
+            {
+                selfDetection.SetActive(true);
+                tasedIcon.SetActive(false);
+                alarmedIcon.SetActive(true);
+                detectionIcon.SetActive(false);
             }
 
             else if(DetectionMeter > 0 && enemyCamera.IsOn)

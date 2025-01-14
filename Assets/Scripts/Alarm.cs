@@ -29,6 +29,7 @@ public class Alarm : MonoBehaviour
     public float AlarmTimer {get => alarmTimer; set => alarmTimer = value;}
     private float alarmTimeLimit;
     private float policeSpawnTimer;
+    private List<Enemy> allEnemies;
     private List<Enemy> enemies;
     private List<EnemyGuard> nonStaticGuards;
     private List<EnemyGuard> extraGuards;
@@ -41,8 +42,8 @@ public class Alarm : MonoBehaviour
         alarmTimer = AlarmTime;
         alarmTimeLimit = maxDuration;
         policeSpawnTimer = 0f;
-        enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
-        enemies = enemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
+        allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
+        enemies = allEnemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
         extraGuards = new List<EnemyGuard>();
         policeGuards = new List<EnemyPolice>();
         nonStaticGuards = FindObjectsByType<EnemyGuard>(FindObjectsSortMode.None).ToList();
@@ -96,9 +97,12 @@ public class Alarm : MonoBehaviour
                 Debug.Log("Alarm turned off!");
                 isOn = false;
 
-                foreach(Enemy e in enemies)
+                foreach(Enemy e in allEnemies)
                 {
-                    e.EnemyMovement.currentStatus = EnemyMovement.Status.Normal;
+                    if(enemies.Contains(e))
+                        e.EnemyMovement.currentStatus = EnemyMovement.Status.Normal;
+
+                    e.Detection.DetectionMeter = 0;
                 }
       
                 int enemyCount = 0;
@@ -164,8 +168,8 @@ public class Alarm : MonoBehaviour
             musicPlayer.SwitchTrack();
         }
 
-        enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
-        enemies = enemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
+        allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
+        enemies = allEnemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
         
         // NPCs become aware of the bodies in the level so they don't raise the alarm again
         foreach(Enemy e in enemies)

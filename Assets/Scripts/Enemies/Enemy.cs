@@ -3,7 +3,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private PlayAudio alarmAudioPlayer;
-    [SerializeField] protected float alarmedTime; 
+    [SerializeField] [Min(1)] protected float alarmedTime = 5f; 
 
     public enum Type {Civillian, Worker, Guard, Police, Camera};
 
@@ -60,14 +60,13 @@ public class Enemy : MonoBehaviour
         if(detection == null)
             Start();
 
-        if(!alarm.IsOn)
+        if(!alarm.IsOn && !IsAlarmed)
         {
             Debug.Log($"{name} was alarmed!");
+            if(alarmAudioPlayer != null) alarmAudioPlayer.Play();
             alarmedTimer = alarmedTime;
+            detection.DetectionMeter = 0f;
         }
-
-        alarm.TriggerAlarm(!alarm.IsOn);
-        if(alarmAudioPlayer != null) alarmAudioPlayer.Play();
     }
 
     public void ResetNPC()
