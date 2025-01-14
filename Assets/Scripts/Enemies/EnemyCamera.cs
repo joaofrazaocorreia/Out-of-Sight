@@ -24,7 +24,7 @@ public class EnemyCamera : Enemy, IJammable
 
     protected override void Start()
     {
-        detection = GetComponent<Detection>();
+        base.Start();
 
         if(detection == null)
             detection= GetComponentInChildren<Detection>();
@@ -56,7 +56,6 @@ public class EnemyCamera : Enemy, IJammable
         
         if(isOn && !jammed)
         {
-           
             if(cameraOperator.IsKnockedOut || 
                 (cameraOperator.transform.position - cameraOperatorStartPos).magnitude > 2f)
             {
