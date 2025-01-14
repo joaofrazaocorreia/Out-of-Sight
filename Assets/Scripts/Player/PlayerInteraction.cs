@@ -43,12 +43,13 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (value == _activeInteractiveObject) return;
 
-            if (_interactionAudioPlaying && _activeInteractiveObject != null)
+            if (_activeInteractiveObject != null)
             {
-                _activeInteractiveObject.WhileInteractAudioPlayer.Stop();
-                _interactionAudioPlaying = false;
-                
-                if(_activeInteractiveObject.IsInteractionSuspicious) _player.LoseStatus(Player.Status.Suspicious);
+                if (_interactionAudioPlaying )
+                {
+                    _activeInteractiveObject.WhileInteractAudioPlayer.Stop();
+                    _interactionAudioPlaying = false;
+                }
             }
             
             _activeInteractiveObject = value;
@@ -207,6 +208,8 @@ public class PlayerInteraction : MonoBehaviour
                 break;
         }
         
+        
+        if(ActiveInteractiveObject.IsInteractionSuspicious) _player.LoseStatus(Player.Status.Suspicious);
         ActiveInteractiveObject.Interact();
         
         _uiManager.ToggleInteractingBar(false);
