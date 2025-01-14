@@ -30,7 +30,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4001551414453174986}
-  - {fileID: 7943344612538966469}
   - {fileID: 7006514328793246302}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -53,6 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseDuration: 30
   durationIncreasePerTier: 30
+  maxDuration: 300
   maxTier: 3
   extraGuardsPerTier: 3
   maxGuardsRemainPermanent: 2
@@ -63,7 +63,8 @@ MonoBehaviour:
   policeSpawnTime: 10
   maxPoliceNPCS: 6
   alarmLoopPlayer: {fileID: 7759047195819401880}
-  alarmEndPlayer: {fileID: 5469736813565104288}
+  alarmEndPlayer: {fileID: 0}
+  musicPlayer: {fileID: 0}
 --- !u!1 &6419649307047709735
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,55 +194,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1 &6558366091994755730
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7943344612538966469}
-  - component: {fileID: 5469736813565104288}
-  m_Layer: 0
-  m_Name: AlarmEndPlayer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7943344612538966469
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6558366091994755730}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 930849253181607587}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5469736813565104288
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6558366091994755730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cbfcf147b14804429dcd92c697598aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _audioClip: []
-  _audioMixer: {fileID: -1716365312173152983, guid: adb35eaba413ea2488cebfeb4d8c2cba, type: 2}
-  _audioSource: {fileID: 4766504328631750386}
-  _isLoop: 0
-  _playOnStart: 0
 --- !u!1 &8726723747960969338
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,5 +242,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e1c4a269df4051945b8b448a857d9e93, type: 3}
   _audioMixer: {fileID: -1716365312173152983, guid: adb35eaba413ea2488cebfeb4d8c2cba, type: 2}
   _audioSource: {fileID: 4766504328631750386}
+  _minPitchVariation: 1
+  _maxPitchVariation: 1
   _isLoop: 1
   _playOnStart: 0
