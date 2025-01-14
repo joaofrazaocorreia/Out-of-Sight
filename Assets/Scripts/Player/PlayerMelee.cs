@@ -103,7 +103,7 @@ public class PlayerMelee : MonoBehaviour
                         closestEnemy.GetComponentInChildren<Detection>().DetectionMeter = 0;
                         UpdateEnemiesList();
                 
-                        // Immediately alerts any enemy that sees the player knocking out another NPC
+                        // Immediately alerts any living enemy that sees the player knocking out another NPC
                         foreach(Detection d in enemiesWatching)
                         {
                             Debug.Log($"{d.transform.parent.name} saw the melee attack!");
@@ -139,8 +139,10 @@ public class PlayerMelee : MonoBehaviour
             foreach(Transform t in allEnemies)
             {
                 Detection d = t.GetComponentInChildren<Detection>();
+                EnemyMovement em = t.GetComponent<EnemyMovement>();
 
-                if(d.SeesPlayer)
+                if(d.SeesPlayer && em.currentStatus != EnemyMovement.Status.Tased &&
+                        em.currentStatus != EnemyMovement.Status.KnockedOut)
                     enemiesWatching.Add(d);
             }
         }

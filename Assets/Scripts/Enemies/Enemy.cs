@@ -4,6 +4,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private PlayAudio alarmAudioPlayer;
     [SerializeField] protected float alarmedTime; 
+
     public enum Type {Civillian, Worker, Guard, Police, Camera};
 
     protected Type type;
@@ -14,6 +15,8 @@ public class Enemy : MonoBehaviour
     public Detection Detection {get => detection;}
     protected EnemyMovement enemyMovement;
     public EnemyMovement EnemyMovement {get=> enemyMovement;}
+    protected EnemyItemInventory enemyItemInventory;
+    public EnemyItemInventory EnemyItemInventory {get=> enemyItemInventory;}
     protected Player player;
     protected float alarmedTimer;
     public float AlarmedTimer {get => alarmedTimer; set => alarmedTimer = value;}
@@ -28,6 +31,7 @@ public class Enemy : MonoBehaviour
         uiManager = FindAnyObjectByType<UIManager>();
         detection = GetComponent<Detection>();
         enemyMovement = GetComponent<EnemyMovement>();
+        enemyItemInventory = GetComponent<EnemyItemInventory>();
         player = FindAnyObjectByType<Player>();
 
         alarmedTimer = 0f;

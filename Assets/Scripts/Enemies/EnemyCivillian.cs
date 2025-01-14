@@ -29,16 +29,11 @@ public class EnemyCivillian : Enemy
             // nothing yet
         }
 
-        // ------------ Tased ------------ 
-        else if(enemyMovement.currentStatus == EnemyMovement.Status.Tased)
+        // ------------ Tased && Knocked out ------------ 
+        else if(enemyMovement.currentStatus == EnemyMovement.Status.Tased ||
+            enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
         {
-            // nothing yet
-        }
-
-        // ------------ Knocked Out ------------ 
-        else if(enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
-        {
-            // nothing yet
+            enemyItemInventory.DropAllItems();
         }
 
         // ----- If any other enemyMovement.currentStatus is detected, resets it to normal.
