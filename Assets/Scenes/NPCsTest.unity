@@ -1854,6 +1854,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 804431625}
+        m_TargetAssemblyTypeName: UnityEngine.CanvasGroup, UnityEngine
+        m_MethodName: set_interactable
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &163823805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8107,6 +8119,7 @@ GameObject:
   - component: {fileID: 804431622}
   - component: {fileID: 804431624}
   - component: {fileID: 804431623}
+  - component: {fileID: 804431625}
   m_Layer: 5
   m_Name: Audio Section
   m_TagString: Untagged
@@ -8125,7 +8138,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1761108028}
+  - {fileID: 1448379092}
+  - {fileID: 1610850820}
   m_Father: {fileID: 1873441465}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -8232,6 +8248,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 804431621}
   m_CullTransparentMesh: 1
+--- !u!225 &804431625
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 804431621}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &816901735
 GameObject:
   m_ObjectHideFlags: 0
@@ -13711,6 +13739,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 804431625}
+        m_TargetAssemblyTypeName: UnityEngine.CanvasGroup, UnityEngine
+        m_MethodName: set_interactable
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1391452389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14385,11 +14425,11 @@ RectTransform:
   - {fileID: 1248617997}
   - {fileID: 291380544}
   - {fileID: 1925094509}
-  m_Father: {fileID: 1873441465}
+  m_Father: {fileID: 804431622}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -350.00003, y: 41.29999}
+  m_AnchoredPosition: {x: 197.00003, y: -110.7}
   m_SizeDelta: {x: 106.666664, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1450527244
@@ -15830,11 +15870,11 @@ RectTransform:
   - {fileID: 1363176947}
   - {fileID: 1067490887}
   - {fileID: 2069521520}
-  m_Father: {fileID: 1873441465}
+  m_Father: {fileID: 804431622}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -350.00003, y: -8.7}
+  m_AnchoredPosition: {x: 197.00003, y: -160.69998}
   m_SizeDelta: {x: 106.666664, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1610850821
@@ -17186,11 +17226,11 @@ RectTransform:
   - {fileID: 61024989}
   - {fileID: 188892679}
   - {fileID: 50027126}
-  m_Father: {fileID: 1873441465}
+  m_Father: {fileID: 804431622}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -350.00003, y: 91.29999}
+  m_AnchoredPosition: {x: 197.00003, y: -60.699997}
   m_SizeDelta: {x: 106.666664, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1767181339
@@ -18938,9 +18978,6 @@ RectTransform:
   m_Children:
   - {fileID: 631986343}
   - {fileID: 804431622}
-  - {fileID: 1761108028}
-  - {fileID: 1448379092}
-  - {fileID: 1610850820}
   - {fileID: 1391452387}
   m_Father: {fileID: 1787406196}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
