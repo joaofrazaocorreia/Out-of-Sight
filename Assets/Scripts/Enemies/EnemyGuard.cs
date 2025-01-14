@@ -17,6 +17,7 @@ public class EnemyGuard : Enemy
     [SerializeField] private bool ignoresAlarm = false;
     [SerializeField] private GameObject radioIcon;
     [SerializeField] private Image radioFill;
+    [SerializeField] private PlayAudio radioSoundPlayer;
 
     private float aggroTimer;
     private Vector3 prevPlayerPos;
@@ -139,6 +140,11 @@ public class EnemyGuard : Enemy
         if(enemyMovement == null) Start();
         if(!IsKnockedOut && !IsTased)
         {
+            if (!alarm.IsOn && !IsAlarmed)
+            {
+                radioSoundPlayer.Play();
+            }
+            
             base.BecomeAlarmed();
 
             if(!ignoresAlarm)
