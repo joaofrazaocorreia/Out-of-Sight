@@ -587,8 +587,8 @@ MonoBehaviour:
   alarmedIcon: {fileID: 92954842821975635}
   tasedIcon: {fileID: 1140214806124195974}
   tasedFill: {fileID: 5636692292886729395}
-  detectionMaxAngle: 33
-  detectionRange: 20
+  detectionMaxAngle: 65
+  detectionRange: 35
   proximityDetectionRange: 0
   baseDetectionRate: 1
   detectionLimit: 5
@@ -726,6 +726,12 @@ MonoBehaviour:
   firstInteractionDurationUnique: 0
   interactionDuration: 0
   secondInteractionDuration: 0
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
   objectName: Jammer
