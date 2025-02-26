@@ -243,6 +243,9 @@ public class PlayerController : MonoBehaviour
                 _currentCharHeadPos.y += _crouchCenterYDelta; 
                 _charHead.transform.localPosition = new Vector3(_currentCharHeadPos.x, _currentCharHeadPos.y, _currentCharHeadPos.z);
                 IsRunning = 0;
+                
+                if(!_player.status.Contains(Player.Status.Doubtful))
+                    _player.status.Add(Player.Status.Doubtful);
                 break;
             }
             case 0:
@@ -251,6 +254,9 @@ public class PlayerController : MonoBehaviour
                 _controller.center = new Vector3(_controller.center.x, _defaultPlayerCenterY, _controller.center.z);
                 _currentCharHeadPos = _startCharHeadPos;
                 _charHead.transform.localPosition = new Vector3(_currentCharHeadPos.x, _currentCharHeadPos.y, _currentCharHeadPos.z);
+
+                if(_player.status.Contains(Player.Status.Doubtful))
+                    _player.status.Remove(Player.Status.Doubtful);
                 break;
             }
         }
