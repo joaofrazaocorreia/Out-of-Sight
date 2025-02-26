@@ -6,6 +6,8 @@ public class InteractionSpot : InteractiveObject
 {
     [Header("Interaction Spot Variables")]
     [SerializeField] private InteractiveObject LinkedInteractiveObject;
+    [Header("Interaction UI")]
+    [SerializeField] private SpriteRenderer[] interactionIcons;
 
     public InteractiveObject LinkedObject
     {
@@ -54,5 +56,17 @@ public class InteractionSpot : InteractiveObject
         whileInteractAudioPlayer = linkedObject.WhileInteractAudioPlayer;
         
         HasRequirement = RequiredItem != ItemType.None || RequiredEquipment != EquipmentType.None;
+    }
+
+    public void ChangeInteractionIcons(Sprite sprite)
+    {
+        foreach(SpriteRenderer sr in interactionIcons)
+            sr.sprite = sprite;
+    }
+
+    public void ScaleInteractionIcons(float scale)
+    {
+        foreach(SpriteRenderer sr in interactionIcons)
+            sr.transform.localScale = new Vector3(scale, scale, scale);
     }
 }

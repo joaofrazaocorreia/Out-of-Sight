@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image[] inventoryIcons;
     [SerializeField] private GameObject[] interactionUI;
     [SerializeField] private TextMeshProUGUI[] interactionMessages;
+    [SerializeField] private Image[] interactionIcons;
     [SerializeField] private GameObject interactingBar;
     [SerializeField] private RectTransform interactingBarFill;
     [SerializeField] private TextMeshProUGUI objectivesTitle;
@@ -56,6 +57,8 @@ public class UIManager : MonoBehaviour
     private Alarm alarm;
     private float deltaTime;
     private float timer;
+    private float primaryInteractionTextOffset;
+    private float secondaryInteractionTextOffset;
 
     private void Awake()
     {
@@ -83,6 +86,8 @@ public class UIManager : MonoBehaviour
         alarm = FindAnyObjectByType<Alarm>();
         deltaTime = Time.fixedDeltaTime * UISpeed;
         timer = 0;
+        primaryInteractionTextOffset = interactionMessages[0].transform.localPosition.x;
+        secondaryInteractionTextOffset = interactionMessages[1].transform.localPosition.x;
 
         loadingScreen.gameObject.SetActive(true);
         missionBriefingScreen.gameObject.SetActive(true);
@@ -374,6 +379,7 @@ public class UIManager : MonoBehaviour
             
             ToggleInteractionMessage(true, i);
             UpdateInteractionText(interactiveObjects[i].GetInteractionText(i==0 ? canInteractPrimary : canInteractSecondary), i);
+            ToggleInteractionIcon(i==0 ? canInteractPrimary : canInteractSecondary, i);
         }
     }
     
@@ -384,6 +390,27 @@ public class UIManager : MonoBehaviour
         
         else
             interactionUI[index].SetActive(!interactingBar.activeSelf);
+    }
+    
+    public void ToggleInteractionIcon(bool? toggle, int index)
+    {
+        if(toggle != null)
+            interactionIcons[index].enabled = (bool)toggle;
+        
+        else
+            interactionIcons[index].enabled = !interactingBar.activeSelf;
+
+
+
+        if(interactionIcons[index].enabled)
+        {
+            interactionMessages[index].transform.localPosition = new Vector3(
+                index == 0 ? primaryInteractionTextOffset : secondaryInteractionTextOffset,
+                    interactionMessages[0].transform.localPosition.y, interactionMessages[1].transform.localPosition.z);        
+        }
+
+        else
+            interactionMessages[index].transform.localPosition = Vector3.zero;
     }
 
     private void UpdateInteractionText(string text, int index)
