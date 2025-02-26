@@ -4,6 +4,7 @@ public class HotelObjectivesUpdater : ObjectiveUpdater
 {
     private static bool hasFoundWorkerHalls;
     private static bool hasFoundKeycard;
+    private static bool hasFoundSafe;
     private static bool hasFoundSafeCode;
     private static bool hasFoundLuggage;
     private static bool hasGrabbedLuggage;
@@ -14,6 +15,7 @@ public class HotelObjectivesUpdater : ObjectiveUpdater
 
         hasFoundWorkerHalls = false;
         hasFoundKeycard = false;
+        hasFoundSafe = false;
         hasFoundSafeCode = false;
         hasFoundLuggage = false;
         hasGrabbedLuggage = false;
@@ -31,12 +33,12 @@ public class HotelObjectivesUpdater : ObjectiveUpdater
 
     public void ObjectiveCompleteCameras()
     {
-        uiManager.EditObjective("cameras", "- Cameras offline (completed)", 0.65f);
+        uiManager.RemoveObjective("cameras");
     }
 
     public void ObjectiveCompleteReception()
     {
-        uiManager.EditObjective("reception", "- Luggage Clerk distracted", 0.65f);
+        uiManager.RemoveObjective("reception");
     }
 
     public void ObjectiveManagerRoom(string text)
@@ -53,13 +55,14 @@ public class HotelObjectivesUpdater : ObjectiveUpdater
         uiManager.EditObjective("main2", text);
     }
 
-    public void ObjectiveFindSafeCode(string text)
+    public void ObjectiveFindSafeCode()
     {
-        if(!hasFoundSafeCode)
+        if(!hasFoundSafe && !hasFoundSafeCode)
         {
-            ObjectiveEditMain2("- Search the Staff rooms");
+            hasFoundSafe = true;
             uiManager.RemoveObjective("main");
-            ObjectiveEditMain(text);
+            ObjectiveEditMain2("- Search the Staff rooms");
+            ObjectiveEditMain("- Obtain the safe's combination");
         }
     }
 
@@ -82,12 +85,12 @@ public class HotelObjectivesUpdater : ObjectiveUpdater
         }
     }
 
-    public void ObjectiveGetLuggage(string text)
+    public void ObjectiveGetLuggage()
     {
         if(!hasFoundLuggage)
         {
             hasFoundLuggage = true;
-            ObjectiveEditReception(text);
+            ObjectiveEditReception("- Obtain some luggage");
             uiManager.EditObjective("reception2", "- Distract the Luggage Clerk");
         }
     }
