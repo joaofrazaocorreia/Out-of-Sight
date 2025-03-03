@@ -4,6 +4,7 @@
     {
         None,
         Keycard,
+        Screwdriver,
         SafeCode,
         Luggage,
         SecretFiles
