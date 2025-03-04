@@ -3,7 +3,8 @@
     public enum ItemType
     {
         None,
-        Keycard,
+        SecurityKeycard,
+        ManagerKeycard,
         Screwdriver,
         SafeCode,
         Luggage,
