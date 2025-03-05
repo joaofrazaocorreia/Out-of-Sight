@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Interaction.Equipments;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
@@ -51,6 +53,8 @@ public class UIManager : MonoBehaviour
     private bool settingsActive;
     private Dictionary<Transform, Vector3> originalUIPositions;
     private PlayerInput playerInput;
+    private PlayerController playerController;
+    private PlayerEquipment playerEquipment;
     private Dictionary<string, TextMeshProUGUI> objectiveTexts;
     private List<Detection> enemyDetections;
     private Dictionary<Detection, GameObject> detectionArrows;
@@ -80,6 +84,11 @@ public class UIManager : MonoBehaviour
         }
         
         playerInput = FindAnyObjectByType<PlayerInput>();
+        playerController = FindFirstObjectByType<PlayerController>();
+        playerController.OnStaminaUpdate += OnStaminaUpdate;
+        playerEquipment = FindAnyObjectByType<PlayerEquipment>();
+        playerEquipment.OnEquipmentAdded += OnEquipmentAdded;
+        playerEquipment.OnEquipmentChanged += OnEquipmentChanged;
         objectiveTexts = new Dictionary<string, TextMeshProUGUI>();
         enemyDetections = new List<Detection>();
         detectionArrows = new Dictionary<Detection, GameObject>();
@@ -305,7 +314,7 @@ public class UIManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    public void UnlockCursor()
+    private void UnlockCursor()
     {
         Cursor.lockState = CursorLockMode.None;
     }
@@ -391,8 +400,8 @@ public class UIManager : MonoBehaviour
         else
             interactionUI[index].SetActive(!interactingBar.activeSelf);
     }
-    
-    public void ToggleInteractionIcon(bool? toggle, int index)
+
+    private void ToggleInteractionIcon(bool? toggle, int index)
     {
         if(toggle != null)
             interactionIcons[index].enabled = (bool)toggle;
@@ -484,7 +493,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ToggleGlobalDetection(bool? toggle, bool alarm = false)
+    private void ToggleGlobalDetection(bool? toggle, bool alarm = false)
     {
         if(toggle != null)
             globalDetection.SetActive((bool)toggle);
@@ -568,7 +577,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateGlobalDetectionFill()
+    private void UpdateGlobalDetectionFill()
     {
         if(!alarm.IsOn)
         {
@@ -604,7 +613,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateDetectionArrows()
+    private void UpdateDetectionArrows()
     {
         if(!alarm.IsOn)
         {
@@ -648,5 +657,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateStamina(float stamina) => staminaSlider.value = stamina;
+    private void UpdateStamina(float stamina) => staminaSlider.value = stamina;
+    private void OnStaminaUpdate(object sender, EventArgs e) => UpdateStamina(playerController._currentStamina);
+    private void OnEquipmentAdded(object sender, EventArgs e) => UpdateEquipmentIcon(playerEquipment._recentlyAddedEquipment.Icon, Array.IndexOf(playerEquipment.EquipmentObjects, playerEquipment._recentlyAddedEquipment));
+
+    private void OnEquipmentChanged(object sender, EventArgs e)
+    {
+        var equipment = playerEquipment.CurrentEquipment;
+        if(equipment is not IHasAmmo ammo) ToggleAmmoDisplay(false);
+        else
+        {
+            ToggleAmmoDisplay(true);
+            UpdateAmmoText(ammo.CurrentAmmo + " / " + ammo.MaxAmmo);
+        }
+        
+    }
 }

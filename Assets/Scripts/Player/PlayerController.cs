@@ -70,7 +70,8 @@ public class PlayerController : MonoBehaviour
     private int _canRun;
     [SerializeField] private float runSpeedModifier = 1.5f;
     private const float maxStamina = 1;
-    private float _currentStamina = 1;
+    public float _currentStamina { get; private set; } = 1;
+    public event EventHandler OnStaminaUpdate;
     [SerializeField] private float staminaRegenSpeed = 0.25f;
     [SerializeField] private float staminaUsagePerSecond = 0.1f;
     
@@ -446,7 +447,7 @@ public class PlayerController : MonoBehaviour
         _currentStamina = _isRunning == 1 && _velocity.magnitude > 1f ? _currentStamina -= staminaUsagePerSecond * Time.fixedDeltaTime : _currentStamina += staminaRegenSpeed * Time.fixedDeltaTime;
         _canRun = _currentStamina > 0f ? 1 : 0;
         _currentStamina = math.clamp(_currentStamina, 0f, maxStamina);
-        _uiManager.UpdateStamina(_currentStamina);
+        OnStaminaUpdate?.Invoke(this, EventArgs.Empty);
     }
 
     private void UpdateAnimator()
