@@ -95,7 +95,6 @@ public class PlayerController : MonoBehaviour
     private PlayerInteraction _playerInteraction;
     private PlayerEquipment _playerEquipment; 
     private PlayerCarryInventory _playerCarryInventory;
-    private UIManager _uiManager;
     private Animator _animator;
     private Vector2 _movementVector;
     private Vector3 _lookVector;
@@ -117,7 +116,6 @@ public class PlayerController : MonoBehaviour
         _motion         = Vector3.zero;
         _sinPI4         = Mathf.Sin(Mathf.PI / 4);
         _startCamPos    = _head.transform.localPosition;
-        _uiManager = FindAnyObjectByType<UIManager>();
         SpeedBoost      = 1f;
         _player = GetComponent<Player>();
         _playerInput = GetComponent<PlayerInput>();
