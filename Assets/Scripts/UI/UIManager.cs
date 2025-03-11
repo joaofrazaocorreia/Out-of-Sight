@@ -499,7 +499,6 @@ public class UIManager : MonoBehaviour
     {
         for (int i = 0; i < interactiveObjects.Length; i++)
         {
-            print((interactiveObjects[i] == null || !interactiveObjects[i].enabled));
             if (interactiveObjects[i] == null || !interactiveObjects[i].enabled)
             {
                 ToggleInteractionMessage(false, i);
@@ -507,7 +506,6 @@ public class UIManager : MonoBehaviour
             }
             
             ToggleInteractionMessage(true, i);
-            print(interactionUI[i].activeSelf);
             UpdateInteractionText(interactiveObjects[i].GetInteractionText(i==0 ? canInteractPrimary : canInteractSecondary), i);
             ToggleInteractionIcon(i==0 ? canInteractPrimary : canInteractSecondary, i);
         }
