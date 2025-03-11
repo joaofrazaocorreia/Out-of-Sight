@@ -56,6 +56,7 @@ public class UIManager : MonoBehaviour
     private PlayerController playerController;
     private PlayerEquipment playerEquipment;
     private PlayerInteraction playerInteraction;
+    private PlayerInventory playerInventory;
     private Dictionary<string, TextMeshProUGUI> objectiveTexts;
     private List<Detection> enemyDetections;
     private Dictionary<Detection, GameObject> detectionArrows;
@@ -94,6 +95,8 @@ public class UIManager : MonoBehaviour
         playerInteraction.WhileInteracting += WhileInteracting;
         playerInteraction.OnInteractionStop += OnInteractionStop;
         playerInteraction.OnHitInteractableChanged += OnHitInteractableChanged;
+        playerInventory = FindAnyObjectByType<PlayerInventory>();
+        playerInventory.OnInventoryUpdated += OnInventoryUpdated;
         objectiveTexts = new Dictionary<string, TextMeshProUGUI>();
         enemyDetections = new List<Detection>();
         detectionArrows = new Dictionary<Detection, GameObject>();
@@ -385,9 +388,9 @@ public class UIManager : MonoBehaviour
             UpdateAmmoText(ammo.CurrentAmmo + " / " + ammo.MaxAmmo);
         }
     }
-    
-    
-    public void UpdateInventoryIcon(Sprite newIcon, int index)
+
+
+    private void UpdateInventoryIcon(Sprite newIcon, int index)
     {
         if(index < inventoryIcons.Length && inventoryIcons[index] != null) inventoryIcons[index].sprite = newIcon;
     }
@@ -456,7 +459,7 @@ public class UIManager : MonoBehaviour
         interactionMessages[index].text = text;
     }
 
-    public void ToggleInteractingBar(bool? toggle)
+    private void ToggleInteractingBar(bool? toggle)
     {
         if(toggle != null)
             interactingBar.SetActive((bool)toggle);
@@ -704,5 +707,5 @@ public class UIManager : MonoBehaviour
 
     private void OnHitInteractableChanged(object sender, EventArgs e) => UpdateInteractionUi();
 
-
+    private void OnInventoryUpdated(object sender, EventArgs e) => UpdateInventoryIcon(playerInventory.NewIcon, playerInventory.UpdatedItemIndex);
 }
