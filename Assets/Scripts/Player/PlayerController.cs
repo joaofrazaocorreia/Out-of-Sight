@@ -243,8 +243,8 @@ public class PlayerController : MonoBehaviour
                 _charHead.transform.localPosition = new Vector3(_currentCharHeadPos.x, _currentCharHeadPos.y, _currentCharHeadPos.z);
                 IsRunning = 0;
                 
-                if(!_player.status.Contains(Player.Status.Doubtful))
-                    _player.status.Add(Player.Status.Doubtful);
+                _player.GainStatus(Player.Status.Doubtful);
+                    
                 break;
             }
             case 0:
@@ -254,8 +254,7 @@ public class PlayerController : MonoBehaviour
                 _currentCharHeadPos = _startCharHeadPos;
                 _charHead.transform.localPosition = new Vector3(_currentCharHeadPos.x, _currentCharHeadPos.y, _currentCharHeadPos.z);
 
-                if(_player.status.Contains(Player.Status.Doubtful))
-                    _player.status.Remove(Player.Status.Doubtful);
+                if(_isRunning == 0) _player.LoseStatus(Player.Status.Doubtful);
                 break;
             }
         }
@@ -456,18 +455,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnRun()
     {
+        
         if (IsRunning == 1)
         {
             IsCrouching = 0;
 
-            if(!_player.status.Contains(Player.Status.Doubtful))
-                _player.status.Add(Player.Status.Doubtful);
+            _player.GainStatus(Player.Status.Doubtful);
+            return;
         }
 
-        else if(_player.status.Contains(Player.Status.Doubtful))
-        {
-            _player.status.Remove(Player.Status.Doubtful);
-        }
+        if(_isCrouching == 0) _player.LoseStatus(Player.Status.Doubtful);
     }
 
     private void TriggerHeadbob()
