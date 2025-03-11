@@ -17,10 +17,9 @@ public class PlayerInteraction : MonoBehaviour
     private PlayerInventory _playerInventory;
     private PlayerEquipment _playerEquipment;
     private Player _player;
-    private UIManager _uiManager;
     private Animator _animator;
 
-    private float _interactionDuration;
+    public float _interactionDuration;
     private float _interactionCooldownTimer;
     private bool _finishedInteraction;
     private bool _interactionReady;
@@ -33,13 +32,28 @@ public class PlayerInteraction : MonoBehaviour
     private GameObject _lastHitObject;
     private List<InteractiveObject> _tempHitInteractableObjects = new List<InteractiveObject>();
     private InteractiveObject[] _hitInteractables;
+
+    public InteractiveObject[] HitInteractables
+    {
+        get => _hitInteractables;
+        private set
+        {
+            _hitInteractables = value;
+            OnHitInteractableChanged?.Invoke(this, EventArgs.Empty);
+        } 
+    }
     private int _hitIndex;
     private bool _interactionAudioPlaying;
+
+    public event EventHandler OnInteractionStart;
+    public event EventHandler OnInteractionStop;
+    public event EventHandler WhileInteracting;
+    public event EventHandler OnHitInteractableChanged;
     
-    private InteractiveObject ActiveInteractiveObject
+    public InteractiveObject ActiveInteractiveObject
     {
         get => _activeInteractiveObject;
-        set
+        private set
         {
             if (value == _activeInteractiveObject) return;
 
@@ -55,6 +69,7 @@ public class PlayerInteraction : MonoBehaviour
             _activeInteractiveObject = value;
             
             _interactionDuration = _activeInteractiveObject ? _activeInteractiveObject.InteractionDuration : 0;
+            OnInteractionStart?.Invoke(this, EventArgs.Empty);
         }
     }
     
@@ -66,14 +81,12 @@ public class PlayerInteraction : MonoBehaviour
         _playerInventory = GetComponent<PlayerInventory>();
         _playerEquipment = GetComponent<PlayerEquipment>();
         _player = GetComponent<Player>();
-        _uiManager = FindFirstObjectByType<UIManager>();
         _animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
     {
         GetInteractiveObject();
-        UpdateInteractionUI();
         if (!_interactionReady) InteractionCooldown();
     }
 
@@ -89,12 +102,12 @@ public class PlayerInteraction : MonoBehaviour
             {
                 if (_tempHitInteractableObjects[i].InteractiveType == InteractiveType.Indirect) _tempHitInteractableObjects.Remove(_tempHitInteractableObjects[i]);
             }
-            _hitInteractables = _tempHitInteractableObjects.ToArray();
+            HitInteractables = _tempHitInteractableObjects.ToArray();
             
         }
         else
         {
-            _hitInteractables = null;
+            HitInteractables = null;
             _lastHitObject = null;
             ActiveInteractiveObject = null;
         }
@@ -122,17 +135,17 @@ public class PlayerInteraction : MonoBehaviour
             _interactionCooldownTimer = interactionCooldown;
             return;
         }
-        if(_hitInteractables == null) return;
+        if(HitInteractables == null) return;
         StartInteract(isPrimaryInteraction);
     }
 
     public void ResetInteract()
     {
         ActiveInteractiveObject = null;
-        _uiManager.ToggleInteractingBar(false);
+        OnInteractionStop?.Invoke(this, EventArgs.Empty);
     }   
     
-    private bool CheckValidInteraction(InteractiveObject interactiveObject)
+    public bool CheckValidInteraction(InteractiveObject interactiveObject)
     {
         return interactiveObject != null && CheckCanInteract(interactiveObject) && interactiveObject.enabled;
     }
@@ -154,13 +167,13 @@ public class PlayerInteraction : MonoBehaviour
 
     private void StartInteract(bool isPrimaryInteraction)
     {
-        switch (_hitInteractables.Length)
+        switch (HitInteractables.Length)
         {
             case 1:
-                ActiveInteractiveObject = isPrimaryInteraction ? _hitInteractables[0] : null;
+                ActiveInteractiveObject = isPrimaryInteraction ? HitInteractables[0] : null;
                 break;
             case 2: 
-                ActiveInteractiveObject = isPrimaryInteraction ? _hitInteractables[0] : _hitInteractables[1];
+                ActiveInteractiveObject = isPrimaryInteraction ? HitInteractables[0] : HitInteractables[1];
                 break;
             default: ActiveInteractiveObject = null; break;
         }
@@ -182,8 +195,7 @@ public class PlayerInteraction : MonoBehaviour
 
         if (_interactionDuration > 0f)
         {
-            _uiManager.UpdateInteractingBarFillSize(1 - _interactionDuration / ActiveInteractiveObject.InteractionDuration);
-            _uiManager.ToggleInteractingBar(true);
+            WhileInteracting?.Invoke(this, EventArgs.Empty);
             return;
         }
         
@@ -212,39 +224,21 @@ public class PlayerInteraction : MonoBehaviour
         if(ActiveInteractiveObject.IsInteractionSuspicious) _player.LoseStatus(Player.Status.Suspicious);
         ActiveInteractiveObject.Interact();
         
-        _uiManager.ToggleInteractingBar(false);
-        
         if(ActiveInteractiveObject.WhileInteractAudioPlayer != null) ActiveInteractiveObject.WhileInteractAudioPlayer.Stop();
         
         _finishedInteraction = true;
         _interactionReady = false;
         _lastHitObject = null;
-        _hitInteractables = null;
+        HitInteractables = null;
         ActiveInteractiveObject = null;
         _interactionAudioPlaying = false;
-    }
-
-    private void UpdateInteractionUI()
-    {
         
-        if (_hitInteractables == null || _hitInteractables.Length == 0)
-        {
-            DisableInteractionUI();
-            return;
-        }
-        
-        _uiManager.UpdateInteractionUi(_hitInteractables, CheckValidInteraction(GetInteractiveObject(0)), CheckValidInteraction(GetInteractiveObject(1)));
+        OnInteractionStop?.Invoke(this, EventArgs.Empty);
     }
 
-    private InteractiveObject GetInteractiveObject(int index)
+    public InteractiveObject GetInteractiveObject(int index)
     {
-        return _hitInteractables.Length > index ? _hitInteractables[index] : null;
-    }
-
-    private void DisableInteractionUI()
-    {
-        _uiManager.ToggleInteractionMessage(false, 0);
-        _uiManager.ToggleInteractionMessage(false, 1);
+        return HitInteractables.Length > index ? HitInteractables[index] : null;
     }
     
     private void InteractAnimation()

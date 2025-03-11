@@ -55,6 +55,7 @@ public class UIManager : MonoBehaviour
     private PlayerInput playerInput;
     private PlayerController playerController;
     private PlayerEquipment playerEquipment;
+    private PlayerInteraction playerInteraction;
     private Dictionary<string, TextMeshProUGUI> objectiveTexts;
     private List<Detection> enemyDetections;
     private Dictionary<Detection, GameObject> detectionArrows;
@@ -89,6 +90,10 @@ public class UIManager : MonoBehaviour
         playerEquipment = FindAnyObjectByType<PlayerEquipment>();
         playerEquipment.OnEquipmentAdded += OnEquipmentAdded;
         playerEquipment.OnEquipmentChanged += OnEquipmentChanged;
+        playerInteraction = FindAnyObjectByType<PlayerInteraction>();
+        playerInteraction.WhileInteracting += WhileInteracting;
+        playerInteraction.OnInteractionStop += OnInteractionStop;
+        playerInteraction.OnHitInteractableChanged += OnHitInteractableChanged;
         objectiveTexts = new Dictionary<string, TextMeshProUGUI>();
         enemyDetections = new List<Detection>();
         detectionArrows = new Dictionary<Detection, GameObject>();
@@ -191,7 +196,7 @@ public class UIManager : MonoBehaviour
         FadeToggleScreen(UIBackground);
     }
     
-    public void ToggleAmmoDisplay(bool? toggle = null)
+    private void ToggleAmmoDisplay(bool? toggle = null)
     {
         if(toggle == null)
             ammoDisplay.SetActive(ammoDisplay.activeSelf);
@@ -359,15 +364,26 @@ public class UIManager : MonoBehaviour
             missionTimer.text = text;
     }
 
-    public void UpdateAmmoText(string text)
+    private void UpdateAmmoText(string text)
     {
         if(ammoText.text != text)
             ammoText.text = text;
     }
 
-    public void UpdateEquipmentIcon(Sprite newIcon, int index)
+    private void UpdateEquipmentIcon(Sprite newIcon, int index)
     {
         if(index < equipmentIcons.Length && equipmentIcons[index] != null) equipmentIcons[index].sprite = newIcon;
+    }
+
+    private void UpdateEquipmentUI()
+    {
+        var equipment = playerEquipment.CurrentEquipment;
+        if(equipment is not IHasAmmo ammo) ToggleAmmoDisplay(false);
+        else
+        {
+            ToggleAmmoDisplay(true);
+            UpdateAmmoText(ammo.CurrentAmmo + " / " + ammo.MaxAmmo);
+        }
     }
     
     
@@ -376,7 +392,14 @@ public class UIManager : MonoBehaviour
         if(index < inventoryIcons.Length && inventoryIcons[index] != null) inventoryIcons[index].sprite = newIcon;
     }
 
-    public void UpdateInteractionUi(InteractiveObject[] interactiveObjects, bool canInteractPrimary, bool canInteractSecondary)
+    private void UpdateInteractionUi()
+    {
+        UpdateInteractionUi(playerInteraction.HitInteractables, 
+            playerInteraction.CheckValidInteraction(playerInteraction.GetInteractiveObject(0)), 
+            playerInteraction.CheckValidInteraction(playerInteraction.GetInteractiveObject(1)));
+    }
+
+    private void UpdateInteractionUi(InteractiveObject[] interactiveObjects, bool canInteractPrimary, bool canInteractSecondary)
     {
         for (int i = 0; i < interactiveObjects.Length; i++)
         {
@@ -391,14 +414,20 @@ public class UIManager : MonoBehaviour
             ToggleInteractionIcon(i==0 ? canInteractPrimary : canInteractSecondary, i);
         }
     }
-    
-    public void ToggleInteractionMessage(bool? toggle, int index)
+
+    private void ToggleInteractionMessage(bool? toggle, int index)
     {
         if(toggle != null)
             interactionUI[index].SetActive((bool)toggle);
         
         else
             interactionUI[index].SetActive(!interactingBar.activeSelf);
+    }
+
+    private void DisableInteractionMessage()
+    {
+        ToggleInteractionMessage(false, 0);
+        ToggleInteractionMessage(false, 1);
     }
 
     private void ToggleInteractionIcon(bool? toggle, int index)
@@ -436,8 +465,10 @@ public class UIManager : MonoBehaviour
             interactingBar.SetActive(!interactingBar.activeSelf);
     }
 
-    public void UpdateInteractingBarFillSize(float scale)
+    private void UpdateInteractionBar()
     {
+        var scale = 1 - playerInteraction._interactionDuration /
+            playerInteraction.ActiveInteractiveObject.InteractionDuration;
         interactingBarFill.localScale = new Vector3(scale, 1f, 1f);
     }
 
@@ -661,15 +692,17 @@ public class UIManager : MonoBehaviour
     private void OnStaminaUpdate(object sender, EventArgs e) => UpdateStamina(playerController._currentStamina);
     private void OnEquipmentAdded(object sender, EventArgs e) => UpdateEquipmentIcon(playerEquipment._recentlyAddedEquipment.Icon, Array.IndexOf(playerEquipment.EquipmentObjects, playerEquipment._recentlyAddedEquipment));
 
-    private void OnEquipmentChanged(object sender, EventArgs e)
+    private void OnEquipmentChanged(object sender, EventArgs e) => UpdateEquipmentUI();
+
+    private void WhileInteracting(object sender, EventArgs e) => UpdateInteractionBar();
+
+    private void OnInteractionStop(object sender, EventArgs e)
     {
-        var equipment = playerEquipment.CurrentEquipment;
-        if(equipment is not IHasAmmo ammo) ToggleAmmoDisplay(false);
-        else
-        {
-            ToggleAmmoDisplay(true);
-            UpdateAmmoText(ammo.CurrentAmmo + " / " + ammo.MaxAmmo);
-        }
-        
-    }
+        DisableInteractionMessage();
+        ToggleInteractingBar(false);
+    } 
+
+    private void OnHitInteractableChanged(object sender, EventArgs e) => UpdateInteractionUi();
+
+
 }
