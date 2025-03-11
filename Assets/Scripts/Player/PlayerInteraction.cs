@@ -38,6 +38,7 @@ public class PlayerInteraction : MonoBehaviour
         get => _hitInteractables;
         private set
         {
+            if (_hitInteractables == value) return;
             _hitInteractables = value;
             OnHitInteractableChanged?.Invoke(this, EventArgs.Empty);
         } 
@@ -64,12 +65,12 @@ public class PlayerInteraction : MonoBehaviour
                     _activeInteractiveObject.WhileInteractAudioPlayer.Stop();
                     _interactionAudioPlaying = false;
                 }
+                OnInteractionStop?.Invoke(this, EventArgs.Empty);
             }
             
             _activeInteractiveObject = value;
-            
             _interactionDuration = _activeInteractiveObject ? _activeInteractiveObject.InteractionDuration : 0;
-            OnInteractionStart?.Invoke(this, EventArgs.Empty);
+            if(ActiveInteractiveObject != null) OnInteractionStart?.Invoke(this, EventArgs.Empty);
         }
     }
     
@@ -135,14 +136,17 @@ public class PlayerInteraction : MonoBehaviour
             _interactionCooldownTimer = interactionCooldown;
             return;
         }
-        if(HitInteractables == null) return;
+
+        if (HitInteractables == null)
+        {
+            return;
+        }
         StartInteract(isPrimaryInteraction);
     }
 
     public void ResetInteract()
     {
         ActiveInteractiveObject = null;
-        OnInteractionStop?.Invoke(this, EventArgs.Empty);
     }   
     
     public bool CheckValidInteraction(InteractiveObject interactiveObject)
@@ -177,7 +181,12 @@ public class PlayerInteraction : MonoBehaviour
                 break;
             default: ActiveInteractiveObject = null; break;
         }
-        if(!CheckValidInteraction(ActiveInteractiveObject)) return;
+
+        if (!CheckValidInteraction(ActiveInteractiveObject))
+        {
+            StopInteraction();
+            return;
+        }
         Interact(ActiveInteractiveObject.InteractiveType);
     }
 
@@ -220,9 +229,14 @@ public class PlayerInteraction : MonoBehaviour
                 break;
         }
         
-        
-        if(ActiveInteractiveObject.IsInteractionSuspicious) _player.LoseStatus(Player.Status.Suspicious);
         ActiveInteractiveObject.Interact();
+        
+        StopInteraction();
+    }
+
+    private void StopInteraction()
+    {
+        if(ActiveInteractiveObject.IsInteractionSuspicious) _player.LoseStatus(Player.Status.Suspicious);
         
         if(ActiveInteractiveObject.WhileInteractAudioPlayer != null) ActiveInteractiveObject.WhileInteractAudioPlayer.Stop();
         
