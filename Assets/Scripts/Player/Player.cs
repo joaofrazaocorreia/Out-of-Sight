@@ -84,21 +84,21 @@ public class Player : MonoBehaviour
                 }
                 case Disguise.Employee:
                 {
-                    newText = "Disguise: Hotel Employee";
+                    newText = "Disguise: Employee";
                     newImage = workerDisguiseSprite;
                     break;
                 }
                 
                 case Disguise.Guard_Tier1:
                 {
-                    newText = "Disguise: Hotel Security";
+                    newText = "Disguise: Security";
                     newImage = guardTier1DisguiseSprite;
                     break;
                 }
                 
                 case Disguise.Guard_Tier2:
                 {
-                    newText = "Disguise: Elite Security";
+                    newText = "Disguise: Bodyguard";
                     newImage = guardTier2DisguiseSprite;
                     break;
                 }
