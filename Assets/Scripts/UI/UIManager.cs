@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
+using static Player.Status;
+using static Player.Disguise;
 
 public class UIManager : MonoBehaviour
 {
@@ -48,10 +50,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Transform CamerasParent;
     [SerializeField] private Slider staminaSlider;
     [SerializeField] private PlayAudio objectiveAudioPlayer;
+    
+    [SerializeField] private Sprite civillianDisguiseSprite;
+    [SerializeField] private Sprite workerDisguiseSprite;
+    [SerializeField] private Sprite guardTier1DisguiseSprite;
+    [SerializeField] private Sprite guardTier2DisguiseSprite;
 
-    public static bool gamePaused;
+    private static bool gamePaused;
     private bool settingsActive;
     private Dictionary<Transform, Vector3> originalUIPositions;
+    private Player player;
     private PlayerInput playerInput;
     private PlayerController playerController;
     private PlayerEquipment playerEquipment;
@@ -84,7 +92,10 @@ public class UIManager : MonoBehaviour
             originalUIPositions.Add(
                 transform.GetChild(i), transform.GetChild(i).localPosition);
         }
-        
+
+        player = FindAnyObjectByType<Player>();
+        player.OnStatusChanged += OnStatusChanged;
+        player.OnDisguiseChanged += OnDisguiseChanged;
         playerInput = FindAnyObjectByType<PlayerInput>();
         playerController = FindFirstObjectByType<PlayerController>();
         playerController.OnStaminaUpdate += OnStaminaUpdate;
@@ -326,8 +337,27 @@ public class UIManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
     }
+    
+    private void UpdateStatusUI()
+    {
+        var status = player.status;
+        
+        
+        if(status.Contains(Suspicious))
+            UpdateStatusText("Suspicious", Color.red);
+        
+        else if(status.Contains(Trespassing))
+            UpdateStatusText("Trespassing", Color.yellow);
+        
+        else if(status.Contains(Doubtful))
+            UpdateStatusText("Doubtful", new Color(0.75f, 0.75f, 0.3f));
 
-    public void UpdateStatusText(string text, Color color)
+        else
+            UpdateStatusText("Concealed", Color.white);
+        
+    }
+
+    private void UpdateStatusText(string text, Color color)
     {
         if(statusText.text != text)
             statusText.text = text;
@@ -335,14 +365,62 @@ public class UIManager : MonoBehaviour
         if(statusText.color != color)
             statusText.color = color;
     }
+    
+    private void UpdateDisguiseUI()
+    {
+        
+        string newText;
+        Sprite newImage;
 
-    public void UpdateDisguiseText(string text)
+        switch(player.disguise)
+        {
+            case Civillian:
+            {
+                newText = "Disguise: Civilian";
+                newImage = civillianDisguiseSprite;
+                break;
+            }
+            case Employee:
+            {
+                newText = "Disguise: Employee";
+                newImage = workerDisguiseSprite;
+                break;
+            }
+            
+            case Guard_Tier1:
+            {
+                newText = "Disguise: Security";
+                newImage = guardTier1DisguiseSprite;
+                break;
+            }
+            
+            case Guard_Tier2:
+            {
+                newText = "Disguise: Bodyguard";
+                newImage = guardTier2DisguiseSprite;
+                break;
+            }
+            
+            default:
+            {
+                newText = $"Disguise: {player.disguise}";
+                newImage = civillianDisguiseSprite;
+                break;
+            }
+            
+        }
+        UpdateDisguiseText(newText);
+        UpdateDisguiseImage(newImage);
+    }
+
+
+    private void UpdateDisguiseText(string text)
     {
         if(disguiseText.text != text)
             disguiseText.text = text;
     }
 
-    public void UpdateDisguiseImage(Sprite sprite)
+    private void UpdateDisguiseImage(Sprite sprite)
     {
         if(disguiseImage.sprite != sprite)
             disguiseImage.sprite = sprite;
@@ -708,4 +786,8 @@ public class UIManager : MonoBehaviour
     private void OnHitInteractableChanged(object sender, EventArgs e) => UpdateInteractionUi();
 
     private void OnInventoryUpdated(object sender, EventArgs e) => UpdateInventoryIcon(playerInventory.NewIcon, playerInventory.UpdatedItemIndex);
+    
+    private void OnStatusChanged(object sender, EventArgs e) => UpdateStatusUI();
+    
+    private void OnDisguiseChanged(object sender, EventArgs e) => UpdateDisguiseUI();
 }
