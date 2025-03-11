@@ -13,7 +13,10 @@ public class EnemyMovement : MonoBehaviour
 
     [SerializeField] private bool isStatic = false;
     [SerializeField] private bool looksAround = true;
+    [SerializeField] private bool chooseTargetsAsSequence = false;
     [SerializeField] private List<Transform> movementTargets;
+    [SerializeField] private int startingTargetIndex;
+
     [SerializeField] private float walkSpeed = 4f;
     [SerializeField] private float runSpeed = 7f;
     [SerializeField] private float turnSpeed = 10f;
@@ -36,6 +39,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] [Range(0.1f, 2f)] private float footstepInterval = 0.45f;
 
     private Status status;
+    private int movementTargetIndex;
     private bool movingToSetTarget;
     public bool MovingToSetTarget {get => movingToSetTarget; set => movingToSetTarget = value;}
     public bool IsConscious {get => currentStatus != Status.KnockedOut && currentStatus != Status.Tased;}
@@ -110,6 +114,7 @@ public class EnemyMovement : MonoBehaviour
         {
             // Sets up all the variables
             currentStatus = Status.Normal;
+            movementTargetIndex = startingTargetIndex;
             moveTimer = 0;
             turnTimer = 0;
             searchTimer = 0;
@@ -404,26 +409,34 @@ public class EnemyMovement : MonoBehaviour
         // Checks if this enemy can move or if it was ordered to move
         if(moveTimer <= 0 && ((!halted && !isStatic) || movingToSetTarget))
         {
-            // Rolls a random index within the number of available targets and
-            // loops until it gets a value different than the last chosen index
-            int index = Random.Range(0, movementPosTargets.Count());
-
-            if(movementPosTargets[index] == null)
+            if(chooseTargetsAsSequence)
             {
-                Start();
+                movementTargetIndex++;
             }
 
-            
-            int loop = 0;
-            while(movementPosTargets[index] == lastTarget)
+            else
             {
-                index = Random.Range(0, movementPosTargets.Count());
+                // Rolls a random index within the number of available targets and
+                // loops until it gets a value different than the last chosen index
+                movementTargetIndex = Random.Range(0, movementPosTargets.Count());
 
-                // If it loops for too long, breaks out of the loop
-                if (++loop >= 100)
+                if(movementPosTargets[movementTargetIndex] == null)
                 {
-                    index = 0;
-                    break;
+                    Start();
+                }
+
+                
+                int loop = 0;
+                while(movementPosTargets[movementTargetIndex] == lastTarget)
+                {
+                    movementTargetIndex = Random.Range(0, movementPosTargets.Count());
+
+                    // If it loops for too long, breaks out of the loop
+                    if (++loop >= 100)
+                    {
+                        movementTargetIndex = 0;
+                        break;
+                    }
                 }
             }
 
@@ -432,7 +445,7 @@ public class EnemyMovement : MonoBehaviour
                 movingToSetTarget = false;
 
             // Tells the NPC to move towards the chosen index position
-            MoveTo(movementPosTargets[index]);
+            MoveTo(movementPosTargets[movementTargetIndex]);
         }
 
         // Static enemies that arent being forced to move will remain in their spawn position
