@@ -77,6 +77,7 @@ public class PlayerEquipment : MonoBehaviour
         for (int i = 0; i < equipments.Length; i++)
         {
             _equipmentObjects[i] = equipments[i].GetComponent<EquipmentObject>();
+            _recentlyAddedEquipment = _equipmentObjects[i];
             OnEquipmentAdded?.Invoke(this, EventArgs.Empty);
         }
         
