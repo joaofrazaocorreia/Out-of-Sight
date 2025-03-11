@@ -139,6 +139,15 @@ public class UIManager : MonoBehaviour
         {
             TogglePause();
         }
+
+        for (int i = 0; i < interactionUI.Length; i++)
+        {
+            if (interactionUI[i].activeSelf)
+            {
+                UpdateInteractionUi();
+                break;
+            }
+        }
     }
 
     
@@ -475,7 +484,13 @@ public class UIManager : MonoBehaviour
 
     private void UpdateInteractionUi()
     {
-        UpdateInteractionUi(playerInteraction.HitInteractables, 
+        var hitInteractables = playerInteraction.HitInteractables;
+        if (hitInteractables == null || hitInteractables.Length == 0)
+        {
+            DisableInteractionMessage();
+            return;
+        }
+        UpdateInteractionUi(hitInteractables, 
             playerInteraction.CheckValidInteraction(playerInteraction.GetInteractiveObject(0)), 
             playerInteraction.CheckValidInteraction(playerInteraction.GetInteractiveObject(1)));
     }
@@ -484,6 +499,7 @@ public class UIManager : MonoBehaviour
     {
         for (int i = 0; i < interactiveObjects.Length; i++)
         {
+            print((interactiveObjects[i] == null || !interactiveObjects[i].enabled));
             if (interactiveObjects[i] == null || !interactiveObjects[i].enabled)
             {
                 ToggleInteractionMessage(false, i);
@@ -491,6 +507,7 @@ public class UIManager : MonoBehaviour
             }
             
             ToggleInteractionMessage(true, i);
+            print(interactionUI[i].activeSelf);
             UpdateInteractionText(interactiveObjects[i].GetInteractionText(i==0 ? canInteractPrimary : canInteractSecondary), i);
             ToggleInteractionIcon(i==0 ? canInteractPrimary : canInteractSecondary, i);
         }
@@ -551,6 +568,7 @@ public class UIManager : MonoBehaviour
         var scale = 1 - playerInteraction._interactionDuration /
             playerInteraction.ActiveInteractiveObject.InteractionDuration;
         interactingBarFill.localScale = new Vector3(scale, 1f, 1f);
+        ToggleInteractingBar(true);
     }
 
     public void ChangeObjectivesTitle(string newText)
