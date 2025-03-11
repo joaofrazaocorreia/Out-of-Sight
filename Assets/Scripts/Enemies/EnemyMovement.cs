@@ -114,7 +114,7 @@ public class EnemyMovement : MonoBehaviour
         {
             // Sets up all the variables
             currentStatus = Status.Normal;
-            movementTargetIndex = startingTargetIndex;
+            movementTargetIndex = startingTargetIndex - 1;
             moveTimer = 0;
             turnTimer = 0;
             searchTimer = 0;
