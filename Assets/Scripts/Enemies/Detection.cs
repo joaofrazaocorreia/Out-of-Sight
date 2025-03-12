@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +24,7 @@ public class Detection : MonoBehaviour
     public static float globalDetectionMultiplier = 1.0f;
 
     private Player player;
+    private PlayerInteraction playerInteraction;
     private Enemy selfEnemy;
     private Alarm alarm;
     private float detectionMeter;
@@ -45,6 +48,8 @@ public class Detection : MonoBehaviour
     private void Start()
     {
         player = FindAnyObjectByType<Player>();
+        playerInteraction = FindAnyObjectByType<PlayerInteraction>();
+        playerInteraction.OnSuspiciousAction += OnSuspiciousAction;
         selfEnemy = GetComponentInParent<Enemy>();
         alarm = FindAnyObjectByType<Alarm>();
         DetectionMeter = 0;
@@ -378,6 +383,17 @@ public class Detection : MonoBehaviour
         {
             selfDetection.SetActive(false);
         }
+    }
+
+    private void OnSuspiciousAction(object sender, EventArgs e)
+    {
+        if (seesPlayer) GetActionSuspicion(sender);
+    }
+
+    private void GetActionSuspicion(object sender)
+    {
+        var increase = ((PlayerInteraction)sender).ActiveInteractiveObject.SuspicionIncreaseOnInteraction;
+        if (increase > 0f) detectionMeter += increase;
     }
 }
 

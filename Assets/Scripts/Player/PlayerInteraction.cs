@@ -51,6 +51,8 @@ public class PlayerInteraction : MonoBehaviour
     public event EventHandler WhileInteracting;
     public event EventHandler OnHitInteractableChanged;
     
+    public event EventHandler OnSuspiciousAction;
+    
     public InteractiveObject ActiveInteractiveObject
     {
         get => _activeInteractiveObject;
@@ -236,7 +238,11 @@ public class PlayerInteraction : MonoBehaviour
 
     private void StopInteraction()
     {
-        if(ActiveInteractiveObject.IsInteractionSuspicious) _player.LoseStatus(Player.Status.Suspicious);
+        if (ActiveInteractiveObject.IsInteractionSuspicious)
+        {
+            OnSuspiciousAction?.Invoke(this, EventArgs.Empty);
+            _player.LoseStatus(Player.Status.Suspicious);
+        }
         
         if(ActiveInteractiveObject.WhileInteractAudioPlayer != null) ActiveInteractiveObject.WhileInteractAudioPlayer.Stop();
         

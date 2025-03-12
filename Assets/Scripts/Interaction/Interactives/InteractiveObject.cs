@@ -25,6 +25,7 @@ public abstract class InteractiveObject : MonoBehaviour
     [Header("Detection Options")]
     [SerializeField] protected bool isInteractionSuspicious;
     [SerializeField] protected bool isSecondInteractionSuspicious;
+    [SerializeField] protected float suspicionIncreaseOnInteraction = 2.5f;
     [Header("UI Options")]
     [SerializeField] protected string objectName;
     [SerializeField] protected string customInteractionMessage;
@@ -55,6 +56,8 @@ public abstract class InteractiveObject : MonoBehaviour
     
     public bool IsInteractionSuspicious => isInteractionSuspicious;
     public bool IsSecondInteractionSuspicious => isSecondInteractionSuspicious;
+    
+    public float SuspicionIncreaseOnInteraction => suspicionIncreaseOnInteraction;
     
     public string ObjectName => objectName;
     public string CustomInteractionMessage => customInteractionMessage;
