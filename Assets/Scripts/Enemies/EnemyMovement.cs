@@ -412,6 +412,7 @@ public class EnemyMovement : MonoBehaviour
             if(chooseTargetsAsSequence)
             {
                 movementTargetIndex++;
+                if(movementTargetIndex >= movementTargets.Count) movementTargetIndex = 0;
             }
 
             else
