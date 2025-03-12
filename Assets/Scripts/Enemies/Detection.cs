@@ -214,6 +214,8 @@ public class Detection : MonoBehaviour
 
             if(seesPlayer && player.status.Contains(Player.Status.Trespassing))
                 sourceMultiplier += 1;
+            if(seesPlayer && player.status.Contains(Player.Status.CriticalTrespassing))
+                detectionMeter = 10f;
         }
 
         // Seeing a body increases the multiplier thrice as much
