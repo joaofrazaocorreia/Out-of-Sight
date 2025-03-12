@@ -3,14 +3,10 @@ using UnityEngine;
 public class NPCInteraction : InteractiveObject
 {
     [Header("Movement Target")]
+    [SerializeField] private EnemyMovement enemyMovement;
     [SerializeField] private Transform targetLocation;
     [SerializeField] private string fetchTargetWithTag;
-    private EnemyMovement enemyMovement;
-
-    private void Start()
-    {
-        enemyMovement = GetComponentInParent<EnemyMovement>();
-    }
+    [SerializeField] private string customRequirementMessage;
 
     private void Update()
     {
@@ -29,13 +25,13 @@ public class NPCInteraction : InteractiveObject
 
         enemyMovement.MovingToSetTarget = true;
         enemyMovement.MoveTo(targetLocation.position);
-        gameObject.SetActive(false);
+        enabled = false;
     }
 
     public override string GetInteractionText(bool requirementsMet)
     {
-        if (!requirementsMet) return $"Maybe I can distract them...";
+        if (!requirementsMet) return customRequirementMessage;
 
-        return "Give \"lost\" luggage to clerk";
+        return customInteractionMessage;
     }
 }
