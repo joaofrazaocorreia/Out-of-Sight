@@ -6,7 +6,6 @@ using UnityEngine;
 public class PlayerInventory : MonoBehaviour
 {
     [SerializeField] private Sprite emptySlotSprite;
-    private UIManager uIManager;
     private List<Item> inventory = new List<Item>();
     
     public List<Item> Inventory
@@ -14,12 +13,12 @@ public class PlayerInventory : MonoBehaviour
         get { return inventory; }
         private set { inventory = value; }
     }
-
-    private void Start()
-    {
-        uIManager = FindFirstObjectByType<UIManager>();
-    }
-
+    
+    public Sprite NewIcon {get; private set;}
+    public int UpdatedItemIndex {get; private set;}
+    
+    public event EventHandler OnInventoryUpdated;
+    
     public bool HasItem(ItemType itemType)
     {
         for (int i = 0; i < inventory.Count; i++)
@@ -32,7 +31,9 @@ public class PlayerInventory : MonoBehaviour
     public void AddItem(Item newItem)
     {
         Inventory.Add(newItem);
-        uIManager.UpdateInventoryIcon(newItem.Icon, Inventory.IndexOf(newItem));
+        NewIcon = newItem.Icon;
+        UpdatedItemIndex = Inventory.IndexOf(newItem);
+        OnInventoryUpdated?.Invoke(this, EventArgs.Empty);
     }
 
     public void RemoveItem(ItemType itemType)
@@ -41,8 +42,10 @@ public class PlayerInventory : MonoBehaviour
         {
             if (itemType == Inventory[i].ItemType)
             {
-                uIManager.UpdateInventoryIcon(Inventory[i].Icon, Inventory.IndexOf(Inventory[i]));
+                NewIcon = Inventory[i].Icon;
+                UpdatedItemIndex = Inventory.IndexOf(Inventory[i]);
                 Inventory.RemoveAt(i);
+                OnInventoryUpdated?.Invoke(this, EventArgs.Empty);
                 break;
             }
         }

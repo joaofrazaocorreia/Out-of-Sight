@@ -1,11 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Interaction.Equipments;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
+using static Player.Status;
+using static Player.Disguise;
 
 public class UIManager : MonoBehaviour
 {
@@ -46,11 +50,21 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Transform CamerasParent;
     [SerializeField] private Slider staminaSlider;
     [SerializeField] private PlayAudio objectiveAudioPlayer;
+    
+    [SerializeField] private Sprite civillianDisguiseSprite;
+    [SerializeField] private Sprite workerDisguiseSprite;
+    [SerializeField] private Sprite guardTier1DisguiseSprite;
+    [SerializeField] private Sprite guardTier2DisguiseSprite;
 
-    public static bool gamePaused;
+    private static bool gamePaused;
     private bool settingsActive;
     private Dictionary<Transform, Vector3> originalUIPositions;
+    private Player player;
     private PlayerInput playerInput;
+    private PlayerController playerController;
+    private PlayerEquipment playerEquipment;
+    private PlayerInteraction playerInteraction;
+    private PlayerInventory playerInventory;
     private Dictionary<string, TextMeshProUGUI> objectiveTexts;
     private List<Detection> enemyDetections;
     private Dictionary<Detection, GameObject> detectionArrows;
@@ -78,8 +92,22 @@ public class UIManager : MonoBehaviour
             originalUIPositions.Add(
                 transform.GetChild(i), transform.GetChild(i).localPosition);
         }
-        
+
+        player = FindAnyObjectByType<Player>();
+        player.OnStatusChanged += OnStatusChanged;
+        player.OnDisguiseChanged += OnDisguiseChanged;
         playerInput = FindAnyObjectByType<PlayerInput>();
+        playerController = FindFirstObjectByType<PlayerController>();
+        playerController.OnStaminaUpdate += OnStaminaUpdate;
+        playerEquipment = FindAnyObjectByType<PlayerEquipment>();
+        playerEquipment.OnEquipmentAdded += OnEquipmentAdded;
+        playerEquipment.OnEquipmentChanged += OnEquipmentChanged;
+        playerInteraction = FindAnyObjectByType<PlayerInteraction>();
+        playerInteraction.WhileInteracting += WhileInteracting;
+        playerInteraction.OnInteractionStop += OnInteractionStop;
+        playerInteraction.OnHitInteractableChanged += OnHitInteractableChanged;
+        playerInventory = FindAnyObjectByType<PlayerInventory>();
+        playerInventory.OnInventoryUpdated += OnInventoryUpdated;
         objectiveTexts = new Dictionary<string, TextMeshProUGUI>();
         enemyDetections = new List<Detection>();
         detectionArrows = new Dictionary<Detection, GameObject>();
@@ -110,6 +138,15 @@ public class UIManager : MonoBehaviour
         if(playerInput.actions["Pause Game"].WasPressedThisFrame())
         {
             TogglePause();
+        }
+
+        for (int i = 0; i < interactionUI.Length; i++)
+        {
+            if (interactionUI[i].activeSelf)
+            {
+                UpdateInteractionUi();
+                break;
+            }
         }
     }
 
@@ -182,7 +219,7 @@ public class UIManager : MonoBehaviour
         FadeToggleScreen(UIBackground);
     }
     
-    public void ToggleAmmoDisplay(bool? toggle = null)
+    private void ToggleAmmoDisplay(bool? toggle = null)
     {
         if(toggle == null)
             ammoDisplay.SetActive(ammoDisplay.activeSelf);
@@ -305,12 +342,34 @@ public class UIManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    public void UnlockCursor()
+    private void UnlockCursor()
     {
         Cursor.lockState = CursorLockMode.None;
     }
+    
+    private void UpdateStatusUI()
+    {
+        var status = player.status;
+        
+        
+        if (status.Contains(CriticalTrespassing))
+            UpdateStatusText("Get out!", new Color(0.4f, 0f ,0f));
+        
+        else if(status.Contains(Suspicious))
+            UpdateStatusText("Suspicious", Color.red);
+        
+        else if(status.Contains(Trespassing))
+            UpdateStatusText("Trespassing", Color.yellow);
+        
+        else if(status.Contains(Doubtful))
+            UpdateStatusText("Doubtful", new Color(0.75f, 0.75f, 0.3f));
 
-    public void UpdateStatusText(string text, Color color)
+        else
+            UpdateStatusText("Concealed", Color.white);
+        
+    }
+
+    private void UpdateStatusText(string text, Color color)
     {
         if(statusText.text != text)
             statusText.text = text;
@@ -318,14 +377,62 @@ public class UIManager : MonoBehaviour
         if(statusText.color != color)
             statusText.color = color;
     }
+    
+    private void UpdateDisguiseUI()
+    {
+        
+        string newText;
+        Sprite newImage;
 
-    public void UpdateDisguiseText(string text)
+        switch(player.disguise)
+        {
+            case Civillian:
+            {
+                newText = "Disguise: Civilian";
+                newImage = civillianDisguiseSprite;
+                break;
+            }
+            case Employee:
+            {
+                newText = "Disguise: Employee";
+                newImage = workerDisguiseSprite;
+                break;
+            }
+            
+            case Guard_Tier1:
+            {
+                newText = "Disguise: Security";
+                newImage = guardTier1DisguiseSprite;
+                break;
+            }
+            
+            case Guard_Tier2:
+            {
+                newText = "Disguise: Bodyguard";
+                newImage = guardTier2DisguiseSprite;
+                break;
+            }
+            
+            default:
+            {
+                newText = $"Disguise: {player.disguise}";
+                newImage = civillianDisguiseSprite;
+                break;
+            }
+            
+        }
+        UpdateDisguiseText(newText);
+        UpdateDisguiseImage(newImage);
+    }
+
+
+    private void UpdateDisguiseText(string text)
     {
         if(disguiseText.text != text)
             disguiseText.text = text;
     }
 
-    public void UpdateDisguiseImage(Sprite sprite)
+    private void UpdateDisguiseImage(Sprite sprite)
     {
         if(disguiseImage.sprite != sprite)
             disguiseImage.sprite = sprite;
@@ -350,24 +457,48 @@ public class UIManager : MonoBehaviour
             missionTimer.text = text;
     }
 
-    public void UpdateAmmoText(string text)
+    private void UpdateAmmoText(string text)
     {
         if(ammoText.text != text)
             ammoText.text = text;
     }
 
-    public void UpdateEquipmentIcon(Sprite newIcon, int index)
+    private void UpdateEquipmentIcon(Sprite newIcon, int index)
     {
         if(index < equipmentIcons.Length && equipmentIcons[index] != null) equipmentIcons[index].sprite = newIcon;
     }
-    
-    
-    public void UpdateInventoryIcon(Sprite newIcon, int index)
+
+    private void UpdateEquipmentUI()
+    {
+        var equipment = playerEquipment.CurrentEquipment;
+        if(equipment is not IHasAmmo ammo) ToggleAmmoDisplay(false);
+        else
+        {
+            ToggleAmmoDisplay(true);
+            UpdateAmmoText(ammo.CurrentAmmo + " / " + ammo.MaxAmmo);
+        }
+    }
+
+
+    private void UpdateInventoryIcon(Sprite newIcon, int index)
     {
         if(index < inventoryIcons.Length && inventoryIcons[index] != null) inventoryIcons[index].sprite = newIcon;
     }
 
-    public void UpdateInteractionUi(InteractiveObject[] interactiveObjects, bool canInteractPrimary, bool canInteractSecondary)
+    private void UpdateInteractionUi()
+    {
+        var hitInteractables = playerInteraction.HitInteractables;
+        if (hitInteractables == null || hitInteractables.Length == 0)
+        {
+            DisableInteractionMessage();
+            return;
+        }
+        UpdateInteractionUi(hitInteractables, 
+            playerInteraction.CheckValidInteraction(playerInteraction.GetInteractiveObject(0)), 
+            playerInteraction.CheckValidInteraction(playerInteraction.GetInteractiveObject(1)));
+    }
+
+    private void UpdateInteractionUi(InteractiveObject[] interactiveObjects, bool canInteractPrimary, bool canInteractSecondary)
     {
         for (int i = 0; i < interactiveObjects.Length; i++)
         {
@@ -382,8 +513,8 @@ public class UIManager : MonoBehaviour
             ToggleInteractionIcon(i==0 ? canInteractPrimary : canInteractSecondary, i);
         }
     }
-    
-    public void ToggleInteractionMessage(bool? toggle, int index)
+
+    private void ToggleInteractionMessage(bool? toggle, int index)
     {
         if(toggle != null)
             interactionUI[index].SetActive((bool)toggle);
@@ -391,8 +522,14 @@ public class UIManager : MonoBehaviour
         else
             interactionUI[index].SetActive(!interactingBar.activeSelf);
     }
-    
-    public void ToggleInteractionIcon(bool? toggle, int index)
+
+    private void DisableInteractionMessage()
+    {
+        ToggleInteractionMessage(false, 0);
+        ToggleInteractionMessage(false, 1);
+    }
+
+    private void ToggleInteractionIcon(bool? toggle, int index)
     {
         if(toggle != null)
             interactionIcons[index].enabled = (bool)toggle;
@@ -418,7 +555,7 @@ public class UIManager : MonoBehaviour
         interactionMessages[index].text = text;
     }
 
-    public void ToggleInteractingBar(bool? toggle)
+    private void ToggleInteractingBar(bool? toggle)
     {
         if(toggle != null)
             interactingBar.SetActive((bool)toggle);
@@ -427,9 +564,12 @@ public class UIManager : MonoBehaviour
             interactingBar.SetActive(!interactingBar.activeSelf);
     }
 
-    public void UpdateInteractingBarFillSize(float scale)
+    private void UpdateInteractionBar()
     {
+        var scale = 1 - playerInteraction._interactionDuration /
+            playerInteraction.ActiveInteractiveObject.InteractionDuration;
         interactingBarFill.localScale = new Vector3(scale, 1f, 1f);
+        ToggleInteractingBar(true);
     }
 
     public void ChangeObjectivesTitle(string newText)
@@ -484,7 +624,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ToggleGlobalDetection(bool? toggle, bool alarm = false)
+    private void ToggleGlobalDetection(bool? toggle, bool alarm = false)
     {
         if(toggle != null)
             globalDetection.SetActive((bool)toggle);
@@ -568,7 +708,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateGlobalDetectionFill()
+    private void UpdateGlobalDetectionFill()
     {
         if(!alarm.IsOn)
         {
@@ -604,7 +744,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateDetectionArrows()
+    private void UpdateDetectionArrows()
     {
         if(!alarm.IsOn)
         {
@@ -648,5 +788,25 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateStamina(float stamina) => staminaSlider.value = stamina;
+    private void UpdateStamina(float stamina) => staminaSlider.value = stamina;
+    private void OnStaminaUpdate(object sender, EventArgs e) => UpdateStamina(playerController._currentStamina);
+    private void OnEquipmentAdded(object sender, EventArgs e) => UpdateEquipmentIcon(playerEquipment._recentlyAddedEquipment.Icon, Array.IndexOf(playerEquipment.EquipmentObjects, playerEquipment._recentlyAddedEquipment));
+
+    private void OnEquipmentChanged(object sender, EventArgs e) => UpdateEquipmentUI();
+
+    private void WhileInteracting(object sender, EventArgs e) => UpdateInteractionBar();
+
+    private void OnInteractionStop(object sender, EventArgs e)
+    {
+        DisableInteractionMessage();
+        ToggleInteractingBar(false);
+    } 
+
+    private void OnHitInteractableChanged(object sender, EventArgs e) => UpdateInteractionUi();
+
+    private void OnInventoryUpdated(object sender, EventArgs e) => UpdateInventoryIcon(playerInventory.NewIcon, playerInventory.UpdatedItemIndex);
+    
+    private void OnStatusChanged(object sender, EventArgs e) => UpdateStatusUI();
+    
+    private void OnDisguiseChanged(object sender, EventArgs e) => UpdateDisguiseUI();
 }

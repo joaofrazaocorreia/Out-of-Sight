@@ -5,6 +5,7 @@ using UnityEngine.Events;
 public class MapArea : MonoBehaviour
 {
     [SerializeField] private List<Player.Disguise> whitelistedDisguises;
+    [SerializeField] private bool isCriticalArea;
 
     [Header("Events")]
     [SerializeField] private UnityEvent onEnterArea;
@@ -85,9 +86,9 @@ public class MapArea : MonoBehaviour
     private void UpdatePlayerStatus()
     {
         if(!whitelisted)
-            player.GainStatus(Player.Status.Trespassing);
+            player.GainStatus(isCriticalArea ? Player.Status.CriticalTrespassing : Player.Status.Trespassing);
         
         else
-            player.LoseStatus(Player.Status.Trespassing);
+            player.LoseStatus(isCriticalArea ? Player.Status.CriticalTrespassing : Player.Status.Trespassing);
     }
 }

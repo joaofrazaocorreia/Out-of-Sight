@@ -70,7 +70,8 @@ public class PlayerController : MonoBehaviour
     private int _canRun;
     [SerializeField] private float runSpeedModifier = 1.5f;
     private const float maxStamina = 1;
-    private float _currentStamina = 1;
+    public float _currentStamina { get; private set; } = 1;
+    public event EventHandler OnStaminaUpdate;
     [SerializeField] private float staminaRegenSpeed = 0.25f;
     [SerializeField] private float staminaUsagePerSecond = 0.1f;
     
@@ -94,7 +95,6 @@ public class PlayerController : MonoBehaviour
     private PlayerInteraction _playerInteraction;
     private PlayerEquipment _playerEquipment; 
     private PlayerCarryInventory _playerCarryInventory;
-    private UIManager _uiManager;
     private Animator _animator;
     private Vector2 _movementVector;
     private Vector3 _lookVector;
@@ -116,7 +116,6 @@ public class PlayerController : MonoBehaviour
         _motion         = Vector3.zero;
         _sinPI4         = Mathf.Sin(Mathf.PI / 4);
         _startCamPos    = _head.transform.localPosition;
-        _uiManager = FindAnyObjectByType<UIManager>();
         SpeedBoost      = 1f;
         _player = GetComponent<Player>();
         _playerInput = GetComponent<PlayerInput>();
@@ -244,8 +243,8 @@ public class PlayerController : MonoBehaviour
                 _charHead.transform.localPosition = new Vector3(_currentCharHeadPos.x, _currentCharHeadPos.y, _currentCharHeadPos.z);
                 IsRunning = 0;
                 
-                if(!_player.status.Contains(Player.Status.Doubtful))
-                    _player.status.Add(Player.Status.Doubtful);
+                _player.GainStatus(Player.Status.Doubtful);
+                    
                 break;
             }
             case 0:
@@ -255,8 +254,7 @@ public class PlayerController : MonoBehaviour
                 _currentCharHeadPos = _startCharHeadPos;
                 _charHead.transform.localPosition = new Vector3(_currentCharHeadPos.x, _currentCharHeadPos.y, _currentCharHeadPos.z);
 
-                if(_player.status.Contains(Player.Status.Doubtful))
-                    _player.status.Remove(Player.Status.Doubtful);
+                if(_isRunning == 0) _player.LoseStatus(Player.Status.Doubtful);
                 break;
             }
         }
@@ -446,7 +444,7 @@ public class PlayerController : MonoBehaviour
         _currentStamina = _isRunning == 1 && _velocity.magnitude > 1f ? _currentStamina -= staminaUsagePerSecond * Time.fixedDeltaTime : _currentStamina += staminaRegenSpeed * Time.fixedDeltaTime;
         _canRun = _currentStamina > 0f ? 1 : 0;
         _currentStamina = math.clamp(_currentStamina, 0f, maxStamina);
-        _uiManager.UpdateStamina(_currentStamina);
+        OnStaminaUpdate?.Invoke(this, EventArgs.Empty);
     }
 
     private void UpdateAnimator()
@@ -457,18 +455,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnRun()
     {
+        
         if (IsRunning == 1)
         {
             IsCrouching = 0;
 
-            if(!_player.status.Contains(Player.Status.Doubtful))
-                _player.status.Add(Player.Status.Doubtful);
+            _player.GainStatus(Player.Status.Doubtful);
+            return;
         }
 
-        else if(_player.status.Contains(Player.Status.Doubtful))
-        {
-            _player.status.Remove(Player.Status.Doubtful);
-        }
+        if(_isCrouching == 0) _player.LoseStatus(Player.Status.Doubtful);
     }
 
     private void TriggerHeadbob()
