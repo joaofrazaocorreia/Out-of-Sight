@@ -353,7 +353,7 @@ public class UIManager : MonoBehaviour
         
         
         if (status.Contains(CriticalTrespassing))
-            UpdateStatusText("Get out!", new Color(160, 0 ,0));
+            UpdateStatusText("Get out!", new Color(0.4f, 0f ,0f));
         
         else if(status.Contains(Suspicious))
             UpdateStatusText("Suspicious", Color.red);

@@ -8,6 +8,7 @@
         Screwdriver,
         SafeCode,
         Luggage,
-        SecretFiles
+        SecretFiles,
+        LockInteraction
     }
 }
