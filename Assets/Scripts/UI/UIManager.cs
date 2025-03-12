@@ -352,7 +352,10 @@ public class UIManager : MonoBehaviour
         var status = player.status;
         
         
-        if(status.Contains(Suspicious))
+        if (status.Contains(CriticalTrespassing))
+            UpdateStatusText("Get out!", new Color(160, 0 ,0));
+        
+        else if(status.Contains(Suspicious))
             UpdateStatusText("Suspicious", Color.red);
         
         else if(status.Contains(Trespassing))

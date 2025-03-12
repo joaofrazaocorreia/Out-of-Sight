@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public enum Status {Normal, Doubtful, Trespassing, Suspicious};
+    public enum Status {Normal, Doubtful, CriticalTrespassing, Trespassing, Suspicious};
     public enum Disguise {Civillian, Employee, Guard_Tier1, Guard_Tier2};
 
     public List<Status> status;
