@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class DoorStickCameraSpot : InteractiveObject
 {
+    [Header("StickCameraSpot Properties")]
     [SerializeField] private CinemachineCamera LinkedCamera;
     private bool _onUse;
     private EquipmentType _requirement;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HackableLaptops : InteractiveObject, IDelayBetweenInteractions
 {
+    [Header("Hackable Object Properties")]
     public float DelayBetweenInteractions => delayBetweenInteractions;
     public float DelayTimer { get; private set;}
     public bool TimerStarted { get; private set; }
