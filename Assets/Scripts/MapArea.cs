@@ -1,101 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class MapArea : MonoBehaviour
 {
     [SerializeField] private List<Player.Disguise> whitelistedDisguises;
     [SerializeField] private bool isCriticalArea;
 
-    [Header("Events")]
-    [SerializeField] private UnityEvent onEnterArea;
-    [SerializeField] private UnityEvent onExitArea;
-
-    private Player player;
-    private Player.Disguise lastPlayerDisguise;
-    private bool whitelisted;
-    private bool playerIsHere;
+    public List<Player.Disguise> WhitelistedDisguises {get => whitelistedDisguises;}
+    public bool IsCriticalArea {get => isCriticalArea;}
 
     private void Start()
     {
-        player = FindAnyObjectByType<Player>();
-        lastPlayerDisguise = player.disguise;
-
-        playerIsHere = false;
-
         foreach(BoxCollider bc in GetComponentsInChildren<BoxCollider>())
         {
             bc.isTrigger = true;
         }
-    }
-
-   private void OnTriggerEnter(Collider other)
-    {
-        if(player != null && other.gameObject == player.gameObject)
-        {   
-            playerIsHere = true;
-            CheckWhitelist();
-            UpdatePlayerStatus();
-            onEnterArea?.Invoke();
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if(player != null && lastPlayerDisguise != player.disguise && playerIsHere)
-        {
-            CheckWhitelist();
-            UpdatePlayerStatus();
-            lastPlayerDisguise = player.disguise;
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if(player != null && other.gameObject == player.gameObject)
-        {
-            playerIsHere = false;
-            onExitArea?.Invoke();
-        }
-    }
-
-    private void CheckWhitelist()
-    {
-        whitelisted = false;
-
-        if(whitelistedDisguises.Count > 0)
-        {
-            foreach(Player.Disguise d in whitelistedDisguises)
-            {
-                if(player.disguise == d)
-                {
-                    whitelisted = true;
-                    break;
-                }
-            }
-        }
-
-        else
-        {
-            whitelisted = true;
-        }
-    }
-
-    private void UpdatePlayerStatus()
-    { 
-        if(!whitelisted)
-            PlayerGainTrespassing();
-        
-        else
-            PlayerLoseTrespassing();
-    }
-
-    private void PlayerGainTrespassing()
-    {
-        player.GainStatus(isCriticalArea ? Player.Status.CriticalTrespassing : Player.Status.Trespassing);
-    }
-
-    private void PlayerLoseTrespassing()
-    {
-        player.LoseStatus(isCriticalArea ? Player.Status.CriticalTrespassing : Player.Status.Trespassing);
     }
 }

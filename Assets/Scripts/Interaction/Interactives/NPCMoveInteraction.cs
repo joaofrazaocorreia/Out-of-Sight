@@ -6,7 +6,6 @@ public class NPCInteraction : InteractiveObject
     [SerializeField] private EnemyMovement enemyMovement;
     [SerializeField] private Transform targetLocation;
     [SerializeField] private string fetchTargetWithTag;
-    [SerializeField] private string customRequirementMessage;
 
     private void Update()
     {
@@ -26,12 +25,5 @@ public class NPCInteraction : InteractiveObject
         enemyMovement.MovingToSetTarget = true;
         enemyMovement.MoveTo(targetLocation.position);
         enabled = false;
-    }
-
-    public override string GetInteractionText(bool requirementsMet)
-    {
-        if (!requirementsMet) return customRequirementMessage;
-
-        return customInteractionMessage;
     }
 }
