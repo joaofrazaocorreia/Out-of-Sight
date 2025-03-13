@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class BodyDisguise : InteractiveObject
 {
+    [Header("Disguise Properties")]
     [SerializeField] private Player.Disguise disguise;
 
     private Player player;

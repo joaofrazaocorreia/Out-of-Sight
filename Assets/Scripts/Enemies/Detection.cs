@@ -143,23 +143,33 @@ public class Detection : MonoBehaviour
                         if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distance) <= detectionMaxAngle)
                         {
                             // Sends a raycast towards the body and checks if it hits anything
-                            if (Physics.Raycast(transform.position, distance, out RaycastHit hit, detectionRange))
+                            RaycastHit[] hits = new RaycastHit[10];
+                            Physics.RaycastNonAlloc(new Ray(transform.position, distance), hits, detectionRange);
+
+                            // Validates the detection if the only raycast collision was the body
+                            if (hits.Count() == 1)
                             {
                                 // Checks if the raycast hit an available body that hasn't been seen yet
-                                if (hit.transform.GetComponent<BodyCarry>() && b.enabled && !b.HasBeenDetected)
+                                if (hits[0].transform.GetComponent<BodyCarry>() && b.enabled && !b.HasBeenDetected)
                                 {
                                     seesBody = true;
-                                    Debug.DrawRay(transform.position, distance * hit.distance, Color.red);
+                                    Debug.DrawRay(transform.position, distance * hits[0].distance, Color.red);
                                     break;
                                 }
 
-                                // If the raycast detects an obstacle between the NPC and the body, or the body
-                                // was already seen:
+                                // If the body was already seen, draws a debug ray
                                 else
                                 {
                                     seesBody = false;
-                                    Debug.DrawRay(transform.position, distance * hit.distance, Color.yellow);
+                                    Debug.DrawRay(transform.position, distance * hits[0].distance, Color.yellow);
                                 }
+                            }
+
+                            // If the raycast hit obstacles other than the body
+                            else if(hits.Count() != 0)
+                            {
+                                seesBody = false;
+                                Debug.DrawRay(transform.position, distance * detectionRange, Color.yellow);
                             }
 
                             // If the raycast doesn't reach the body:
@@ -221,7 +231,7 @@ public class Detection : MonoBehaviour
         // Seeing a body increases the multiplier thrice as much
         if(seesBody)
         {
-            sourceMultiplier += 3;
+            sourceMultiplier += 5;
         }
 
         // Increases detection based on the number of sources that increase it
