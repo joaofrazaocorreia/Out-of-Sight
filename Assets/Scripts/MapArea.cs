@@ -49,16 +49,14 @@ public class MapArea : MonoBehaviour
             lastPlayerDisguise = player.disguise;
         }
     }
-   /* private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if(player != null && other.gameObject == player.gameObject)
         {
             playerIsHere = false;
-            CheckWhitelist(); 
-            PlayerLoseTrespassing();
             onExitArea?.Invoke();
         }
-    }*/
+    }
 
     private void CheckWhitelist()
     {
