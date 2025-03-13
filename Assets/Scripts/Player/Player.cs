@@ -80,13 +80,8 @@ public class Player : MonoBehaviour
         
         foreach(MapArea a in currentAreas)
         {
-            if(a.WhitelistedDisguises.Count > 0 && !a.WhitelistedDisguises.Contains(disguise))
-            {
-                Debug.Log("player is not whitelisted in " + a.name);
+            if(a != null && a.UseWhitelist && !a.WhitelistedDisguises.Contains(disguise))
                 GainStatus(a.IsCriticalArea ? Status.CriticalTrespassing : Status.Trespassing);
-            }
-
-            else Debug.Log("player is whitelisted in " + a.name);
         }
     }
 }
