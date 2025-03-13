@@ -5,11 +5,11 @@ public class EnemyCamera : Enemy, IJammable
 {
     [SerializeField] private EnemyGuard cameraOperator;
     [SerializeField] private Transform cameraBody;
-    [SerializeField] [Range(0, 90)] private int rightRotationAngle = 45;
-    [SerializeField] [Range(0, 90)] private int leftRotationAngle = 45;
+    [SerializeField] [Range(-90, 90)] private int maxRotationAngle = 45;
+    [SerializeField] [Range(-90, 90)] private int minRotationAngle = -45;
     [SerializeField] private float rotationSpeed = 25f;
     [SerializeField] private float rotationIdleTime = 6f;
-    [SerializeField] private bool startsRotatingToTheLeft = false;
+    [SerializeField] private bool invertedRotation = false;
 
     private bool isOn;
     public bool IsOn {get => isOn;}
@@ -38,9 +38,13 @@ public class EnemyCamera : Enemy, IJammable
         else
             isOn = false;
 
-        canRotate = rightRotationAngle != 0 || leftRotationAngle != 0;
-        positiveRotationDirection = !startsRotatingToTheLeft;
-        rotationIdleTimer = 1f;
+        canRotate = maxRotationAngle != minRotationAngle;
+        positiveRotationDirection = !invertedRotation;
+        rotationIdleTimer = 0f;
+        
+        int startingRotation = positiveRotationDirection ? maxRotationAngle : minRotationAngle;
+        cameraBody.localRotation = Quaternion.RotateTowards(cameraBody.localRotation,
+            Quaternion.Euler(0f, startingRotation, 0f), 180f);
 
         UpdateCamOpStartPos();
     }
@@ -98,10 +102,10 @@ public class EnemyCamera : Enemy, IJammable
                     if(newRotationY >= 180f)
                         newRotationY -= 360f;
 
-                    newRotationY = Mathf.Clamp(newRotationY, -leftRotationAngle , rightRotationAngle);
+                    newRotationY = Mathf.Clamp(newRotationY, minRotationAngle , maxRotationAngle);
 
-                    if((positiveRotationDirection && newRotationY >= rightRotationAngle) ||
-                        (!positiveRotationDirection && newRotationY <= -leftRotationAngle))
+                    if((positiveRotationDirection && newRotationY >= maxRotationAngle) ||
+                        (!positiveRotationDirection && newRotationY <= minRotationAngle))
                     {
                         rotationIdleTimer = rotationIdleTime;
                         positiveRotationDirection = !positiveRotationDirection;
