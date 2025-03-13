@@ -29,16 +29,16 @@ public class MapArea : MonoBehaviour
         }
     }
 
-   /* private void OnTriggerEnter(Collider other)
+   private void OnTriggerEnter(Collider other)
     {
         if(player != null && other.gameObject == player.gameObject)
         {   
             playerIsHere = true;
             CheckWhitelist();
-            PlayerGainTrespassing();
+            UpdatePlayerStatus();
             onEnterArea?.Invoke();
         }
-    }*/
+    }
 
     private void OnTriggerStay(Collider other)
     {
@@ -49,8 +49,7 @@ public class MapArea : MonoBehaviour
             lastPlayerDisguise = player.disguise;
         }
     }
-/*
-    private void OnTriggerExit(Collider other)
+   /* private void OnTriggerExit(Collider other)
     {
         if(player != null && other.gameObject == player.gameObject)
         {
@@ -84,7 +83,7 @@ public class MapArea : MonoBehaviour
     }
 
     private void UpdatePlayerStatus()
-    {
+    { 
         if(!whitelisted)
             PlayerGainTrespassing();
         
