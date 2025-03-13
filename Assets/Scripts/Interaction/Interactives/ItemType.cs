@@ -6,7 +6,7 @@
         SecurityKeycard,
         ManagerKeycard,
         Screwdriver,
-        SafeCode,
+        Password,
         Luggage,
         SecretFiles,
         LockInteraction

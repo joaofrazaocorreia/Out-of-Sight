@@ -29,6 +29,7 @@ public abstract class InteractiveObject : MonoBehaviour
     [Header("UI Options")]
     [SerializeField] protected string objectName;
     [SerializeField] protected string customInteractionMessage;
+    [SerializeField] private string customRequirementMessage;
 
     [Header("Audio Options")] 
     [SerializeField] protected PlayAudio onInteractAudioPlayer;
@@ -61,6 +62,7 @@ public abstract class InteractiveObject : MonoBehaviour
     
     public string ObjectName => objectName;
     public string CustomInteractionMessage => customInteractionMessage;
+    public string CustomRequirementMessage => customRequirementMessage;
     
     public PlayAudio OnInteractAudioPlayer => onInteractAudioPlayer;
     public PlayAudio WhileInteractAudioPlayer => whileInteractAudioPlayer;
@@ -105,19 +107,29 @@ public abstract class InteractiveObject : MonoBehaviour
 
     public virtual string GetInteractionText(bool requirementsMet)
     {
-        if (!requirementsMet) return "Requires " + GetRequirementNames();
-        
-        if(CustomInteractionMessage.Length > 0) return CustomInteractionMessage;
-        
-        switch (InteractiveType)
+        if (!requirementsMet)
         {
-            case InteractiveType.Item:
+            if(CustomRequirementMessage.Length > 0)
+                return CustomRequirementMessage;
+
+            else return "Requires " + GetRequirementNames();
+        }
+
+        else if(CustomInteractionMessage.Length > 0)
+            return CustomInteractionMessage;
+        
+        else
+        {
+            switch (InteractiveType)
             {
-                return "Pick up " + objectName; 
-            }
-            default:
-            {
-                return "Use " + objectName;
+                case InteractiveType.Item:
+                {
+                    return "Pick up " + objectName; 
+                }
+                default:
+                {
+                    return "Use " + objectName;
+                }
             }
         }
     }
