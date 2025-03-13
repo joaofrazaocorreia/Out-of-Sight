@@ -749,7 +749,7 @@ public class UIManager : MonoBehaviour
         if(!alarm.IsOn)
         {
             Transform player = playerInput.transform;
-            float cameraAngle = playerInput.transform.eulerAngles.y + 90;
+            float cameraAngle = player.eulerAngles.y - 90;
 
             UpdateEnemyDetectionsList();
             foreach(Detection d in enemyDetections)
@@ -758,13 +758,13 @@ public class UIManager : MonoBehaviour
                 {
                     Vector3 direction =  d.transform.position - player.transform.position;
                     float angle = Vector2.Angle(
-                        new Vector2(direction.x, direction.z), new Vector2(player.position.x, player.position.z));
+                        new Vector2(direction.x, direction.z), new Vector2(player.eulerAngles.y, 0f));
                     
                     if(direction.z < 0)
                         angle *= -1;
 
                     detectionArrows[d].SetActive(true);
-                    detectionArrows[d].transform.eulerAngles = new Vector3(0, 0, cameraAngle - angle);
+                    detectionArrows[d].transform.eulerAngles = new Vector3(0, 0, cameraAngle + angle);
 
                     float colorDifference = 1 - (d.DetectionMeter / d.DetectionLimit);
                     detectionArrows[d].GetComponentInChildren<Image>().color = new Color(1, colorDifference, colorDifference, 1);
