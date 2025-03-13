@@ -50,7 +50,6 @@ public class PlayerInteraction : MonoBehaviour
     public event EventHandler OnInteractionStop;
     public event EventHandler WhileInteracting;
     public event EventHandler OnHitInteractableChanged;
-    
     public event EventHandler OnSuspiciousAction;
     
     public InteractiveObject ActiveInteractiveObject
@@ -67,7 +66,8 @@ public class PlayerInteraction : MonoBehaviour
                     _activeInteractiveObject.WhileInteractAudioPlayer.Stop();
                     _interactionAudioPlaying = false;
                 }
-                OnInteractionStop?.Invoke(this, EventArgs.Empty);
+                
+                if(value == null) StopInteraction();
             }
             
             _activeInteractiveObject = value;
@@ -186,7 +186,7 @@ public class PlayerInteraction : MonoBehaviour
 
         if (!CheckValidInteraction(ActiveInteractiveObject))
         {
-            StopInteraction();
+            ActiveInteractiveObject = null;
             return;
         }
         Interact(ActiveInteractiveObject.InteractiveType);
@@ -232,25 +232,27 @@ public class PlayerInteraction : MonoBehaviour
         }
         
         ActiveInteractiveObject.Interact();
-        
-        StopInteraction();
+        _finishedInteraction = true;
+
+        ActiveInteractiveObject = null;
     }
 
     private void StopInteraction()
     {
-        if (ActiveInteractiveObject.IsInteractionSuspicious)
+        if (ActiveInteractiveObject != null)
         {
-            OnSuspiciousAction?.Invoke(this, EventArgs.Empty);
-            _player.LoseStatus(Player.Status.Suspicious);
-        }
+            if (ActiveInteractiveObject.IsInteractionSuspicious)
+            {
+                if(_finishedInteraction) OnSuspiciousAction?.Invoke(this, EventArgs.Empty);
+                _player.LoseStatus(Player.Status.Suspicious);
+            }
         
-        if(ActiveInteractiveObject.WhileInteractAudioPlayer != null) ActiveInteractiveObject.WhileInteractAudioPlayer.Stop();
-        
+            if(ActiveInteractiveObject.WhileInteractAudioPlayer != null) ActiveInteractiveObject.WhileInteractAudioPlayer.Stop();
+        }     
         _finishedInteraction = true;
         _interactionReady = false;
         _lastHitObject = null;
         HitInteractables = null;
-        ActiveInteractiveObject = null;
         _interactionAudioPlaying = false;
         
         OnInteractionStop?.Invoke(this, EventArgs.Empty);
