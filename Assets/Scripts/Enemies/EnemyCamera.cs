@@ -5,7 +5,8 @@ public class EnemyCamera : Enemy, IJammable
 {
     [SerializeField] private EnemyGuard cameraOperator;
     [SerializeField] private Transform cameraBody;
-    [SerializeField] [Range(0, 90)] private int rotationAngles = 45;
+    [SerializeField] [Range(0, 90)] private int rightRotationAngle = 45;
+    [SerializeField] [Range(0, 90)] private int leftRotationAngle = 45;
     [SerializeField] private float rotationSpeed = 25f;
     [SerializeField] private float rotationIdleTime = 6f;
     [SerializeField] private bool startsRotatingToTheLeft = false;
@@ -37,7 +38,7 @@ public class EnemyCamera : Enemy, IJammable
         else
             isOn = false;
 
-        canRotate = rotationAngles != 0;
+        canRotate = rightRotationAngle != 0 || leftRotationAngle != 0;
         positiveRotationDirection = !startsRotatingToTheLeft;
         rotationIdleTimer = 1f;
 
@@ -91,36 +92,19 @@ public class EnemyCamera : Enemy, IJammable
                 // Checks if the camera is ready to rotate
                 else if(rotationIdleTimer <= 0)
                 {
-                    // Calculates the rotation to the right
-                    if(positiveRotationDirection)
+                    newRotationY = positiveRotationDirection ? cameraBody.localEulerAngles.y +
+                        Time.deltaTime * rotationSpeed : cameraBody.localEulerAngles.y - (Time.deltaTime * rotationSpeed);
+
+                    if(newRotationY >= 180f)
+                        newRotationY -= 360f;
+
+                    newRotationY = Mathf.Clamp(newRotationY, -leftRotationAngle , rightRotationAngle);
+
+                    if((positiveRotationDirection && newRotationY >= rightRotationAngle) ||
+                        (!positiveRotationDirection && newRotationY <= -leftRotationAngle))
                     {
-                        newRotationY = cameraBody.localEulerAngles.y + (Time.deltaTime * rotationSpeed);
-                        if(newRotationY >= 180f)
-                            newRotationY -= 360f;
-
-                        newRotationY = Mathf.Clamp(newRotationY, -rotationAngles , rotationAngles);
-
-                        if(newRotationY >= rotationAngles)
-                        {
-                            rotationIdleTimer = rotationIdleTime;
-                            positiveRotationDirection = !positiveRotationDirection;
-                        }
-                    }
-
-                    // Calculates the rotation to the left
-                    else
-                    {
-                        newRotationY = cameraBody.localEulerAngles.y - (Time.deltaTime * rotationSpeed);
-                        if(newRotationY >= 180f)
-                            newRotationY -= 360f;
-
-                        newRotationY = Mathf.Clamp(newRotationY, -rotationAngles , rotationAngles);
-
-                        if(newRotationY <= -rotationAngles)
-                        {
-                            rotationIdleTimer = rotationIdleTime;
-                            positiveRotationDirection = !positiveRotationDirection;
-                        }
+                        rotationIdleTimer = rotationIdleTime;
+                        positiveRotationDirection = !positiveRotationDirection;
                     }
 
                     // Updates the rotation
