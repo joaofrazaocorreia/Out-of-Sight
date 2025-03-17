@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NPCInteraction : InteractiveObject
+public class NPCMoveInteraction : InteractiveObject
 {
     [Header("Movement Target")]
     [SerializeField] private EnemyMovement enemyMovement;
@@ -24,6 +24,7 @@ public class NPCInteraction : InteractiveObject
 
         enemyMovement.MovingToSetTarget = true;
         enemyMovement.MoveTo(targetLocation.position);
+        enemyMovement.RotateTo(targetLocation.eulerAngles.y);
         enabled = false;
     }
 }

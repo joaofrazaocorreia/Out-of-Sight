@@ -11,10 +11,6 @@ public class EnemyGuard : Enemy
     /// How close this enemy needs to be to the player while chasing to catch them
     /// </summary>
     [SerializeField] private float playerCatchDistance = 1.5f;
-    /// <summary>
-    /// If true, this enemy won't chase the player during alarms
-    /// </summary>
-    [SerializeField] private bool ignoresAlarm = false;
     [SerializeField] private GameObject radioIcon;
     [SerializeField] private Image radioFill;
     [SerializeField] private PlayAudio radioSoundPlayer;

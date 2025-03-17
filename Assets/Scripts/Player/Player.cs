@@ -19,8 +19,10 @@ public class Player : MonoBehaviour
         detectable = true;
         currentAreas = new List<MapArea>();
 
-        disguise = Disguise.Civillian;
         GainStatus(Status.Normal);
+
+        // Calls the disguise change event to update the UI
+        OnDisguiseChanged?.Invoke(this, EventArgs.Empty);
     }
 
     private void Update()

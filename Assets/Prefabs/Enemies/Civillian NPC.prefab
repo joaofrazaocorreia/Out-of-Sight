@@ -681,6 +681,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isStatic: 0
   looksAround: 0
+  chooseTargetsAsSequence: 0
   movementTargets:
   - {fileID: 0}
   - {fileID: 0}
@@ -692,9 +693,10 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  startingTargetIndex: 0
   walkSpeed: 5
   runSpeed: 12
-  turnSpeed: 10
+  turnSpeed: 2.5
   minMovementTime: 5
   maxMovementTime: 12
   minTurnTime: 2
@@ -1479,8 +1481,10 @@ MonoBehaviour:
       m_Calls: []
   isInteractionSuspicious: 1
   isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 7746998301078923039}
   disguise: 0
@@ -1513,8 +1517,10 @@ MonoBehaviour:
       m_Calls: []
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 7746998301078923039}
 --- !u!1 &5846338866025556157

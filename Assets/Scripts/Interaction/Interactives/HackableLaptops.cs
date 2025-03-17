@@ -1,5 +1,4 @@
-﻿using System;
-using Interaction;
+﻿using Interaction;
 using UnityEngine;
 
 public class HackableLaptops : InteractiveObject, IDelayBetweenInteractions
@@ -9,8 +8,6 @@ public class HackableLaptops : InteractiveObject, IDelayBetweenInteractions
     public float DelayTimer { get; private set;}
     public bool TimerStarted { get; private set; }
     public bool TimerFinished { get; private set; }
-    
-    [SerializeField] private string customRequirementMessage;
     [SerializeField] private float delayBetweenInteractions;
 
     private void Update()
@@ -40,13 +37,6 @@ public class HackableLaptops : InteractiveObject, IDelayBetweenInteractions
         {
             SuccessfulHack();
         }
-    }
-    
-    public override string GetInteractionText(bool requirementsMet)
-    {
-        if (!requirementsMet) return customRequirementMessage;
-
-        return customInteractionMessage;
     }
 
     private void SuccessfulHack()

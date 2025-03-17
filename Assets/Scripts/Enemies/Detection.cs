@@ -270,7 +270,7 @@ public class Detection : MonoBehaviour
     /// </summary>
     public void TrackPlayer()
     {
-        if(enemyCamera == null || enemyCamera.IsOn)
+        if(player.detectable && (enemyCamera == null || enemyCamera.IsOn))
             lastPlayerPos = player.transform.position;
     }
 

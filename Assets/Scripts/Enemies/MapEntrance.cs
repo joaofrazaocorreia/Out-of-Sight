@@ -209,13 +209,15 @@ public class MapEntrance : MonoBehaviour
 
         // Respawns a random NPC of the given type in the navmesh position nearest to this exit's position
         int index = Random.Range(0, QueuedEnemiesGameObject.childCount);
-        Enemy newNPC = Instantiate(QueuedEnemiesGameObject.GetChild(index), navHit.position, Quaternion.identity, enemiesGameObject).GetComponent<Enemy>();
+        Enemy newNPC = Instantiate(QueuedEnemiesGameObject.GetChild(index), navHit.position,
+            Quaternion.identity, enemiesGameObject).GetComponent<Enemy>();
         enemies.Add(newNPC);
 
         newNPC.transform.parent = enemiesGameObject;
         newNPC.transform.position = navHit.position;
         newNPC.ResetNPC();
-        newNPC.EnemyMovement.ResetNPC(QueuedEnemiesGameObject.GetChild(index).GetComponent<EnemyMovement>().SpawnPos);
+        newNPC.EnemyMovement.ResetNPC(QueuedEnemiesGameObject.GetChild(index).GetComponent<EnemyMovement>().SpawnPos,
+            QueuedEnemiesGameObject.GetChild(index).GetComponent<EnemyMovement>().SpawnRot);
         newNPC.gameObject.SetActive(true);
 
         Destroy(QueuedEnemiesGameObject.GetChild(index).gameObject);
