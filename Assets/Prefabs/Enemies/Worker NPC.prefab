@@ -715,8 +715,10 @@ MonoBehaviour:
       m_Calls: []
   isInteractionSuspicious: 1
   isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 7319968640571948815}
   disguise: 1
@@ -749,8 +751,10 @@ MonoBehaviour:
       m_Calls: []
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 7319968640571948815}
 --- !u!1 &1633240968880588183
@@ -1302,7 +1306,7 @@ MonoBehaviour:
   startingTargetIndex: 0
   walkSpeed: 5
   runSpeed: 12
-  turnSpeed: 10
+  turnSpeed: 2.5
   minMovementTime: 5
   maxMovementTime: 12
   minTurnTime: 2

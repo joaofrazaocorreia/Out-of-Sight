@@ -1,5 +1,4 @@
-﻿using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Interaction
 {
@@ -8,7 +7,7 @@ namespace Interaction
         public bool Jammed {get => _jammed;}
         private bool _jammed;
         private bool _working = true;
-        [SerializeField] private NPCInteraction npcInteraction;
+        [SerializeField] private NPCMoveInteraction npcInteraction;
         
         public void ToggleJammed()
         {

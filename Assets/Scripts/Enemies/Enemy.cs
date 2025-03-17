@@ -4,6 +4,10 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private PlayAudio alarmAudioPlayer;
     [SerializeField] [Min(1)] protected float alarmedTime = 5f; 
+    /// <summary>
+    /// If true, this enemy won't change behaviour during alarms.
+    /// </summary>
+    [SerializeField] protected bool ignoresAlarm = false;
 
     public enum Type {Civillian, Worker, Guard, Police, Camera};
 

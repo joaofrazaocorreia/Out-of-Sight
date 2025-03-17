@@ -57,7 +57,8 @@ public class EnemyWorker : Enemy
         {
             base.BecomeAlarmed();
 
-            enemyMovement.currentStatus = EnemyMovement.Status.Fleeing;
+            if(!ignoresAlarm)
+                enemyMovement.currentStatus = EnemyMovement.Status.Fleeing;
         }
     }
 }
