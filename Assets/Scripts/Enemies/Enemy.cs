@@ -24,6 +24,7 @@ public class Enemy : MonoBehaviour
     protected Player player;
     protected float alarmedTimer;
     public float AlarmedTimer {get => alarmedTimer; set => alarmedTimer = value;}
+    public bool IgnoresAlarm {get => ignoresAlarm; set => ignoresAlarm = value;}
     public bool IsAlarmed {get => alarmedTimer > 0;}
     public bool IsKnockedOut {get => enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut;}
     public bool IsTased {get => enemyMovement.currentStatus == EnemyMovement.Status.Tased;}

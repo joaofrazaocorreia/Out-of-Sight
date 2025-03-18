@@ -130,8 +130,8 @@ public class EnemyMovement : MonoBehaviour
             spawnPos = oldSpawnPos;
             spawnRot = oldSpawnRot;
             lastSelfPos = transform.position;
-            lastTargetPos = Vector3.zero;
-            lastTargetRot = 0f;
+            lastTargetPos = transform.position;
+            lastTargetRot = spawnRot;
             player = FindAnyObjectByType<Player>();
             detection = GetComponentInChildren<Detection>();
             bodyDisguise = GetComponentInChildren<BodyDisguise>();
@@ -414,16 +414,17 @@ public class EnemyMovement : MonoBehaviour
         if(halted)
         {
             MoveTo(transform.position);
-            RotateTo(null);
+            if(!isStatic) RotateTo(null);
         }
 
         else if(Time.timeScale != 0 && lastTargetRot != null && IsAtDestination
-            && !IsFacingTarget && moveTimer > 0 && !isStatic)
+            && !IsFacingTarget && (moveTimer > 0 || isStatic))
         {
             Vector3 difference = Vector3.up * Mathf.Clamp((float)lastTargetRot - transform.eulerAngles.y, -turnSpeed, turnSpeed);
             transform.rotation = Quaternion.Euler(transform.eulerAngles + difference);
 
-            if(IsFacingTarget) lastTargetRot = null;
+            if(IsFacingTarget && !isStatic)
+                RotateTo(null);
         }
 
         // Progressively decreases the movement timer if the agent is at its target
@@ -485,7 +486,6 @@ public class EnemyMovement : MonoBehaviour
         else if(isStatic && !movingToSetTarget)
         {
             MoveTo(spawnPos);
-            RotateTo(null);
         }
     }
 
