@@ -881,13 +881,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alarmAudioPlayer: {fileID: 0}
   alarmedTime: 5
+  ignoresAlarm: 0
   cameraOperator: {fileID: 0}
   cameraBody: {fileID: 6593529154393664100}
-  rightRotationAngle: 45
-  leftRotationAngle: 45
+  maxRotationAngle: 45
+  minRotationAngle: -45
   rotationSpeed: 25
   rotationIdleTime: 6
-  startsRotatingToTheLeft: 0
+  invertedRotation: 0
 --- !u!1 &8091219387399576783
 GameObject:
   m_ObjectHideFlags: 0
@@ -960,6 +961,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2428613158228009669}
     m_Modifications:
+    - target: {fileID: 836493076993780400, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 836493076993780400, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.08300018
+      objectReference: {fileID: 0}
+    - target: {fileID: 836493076993780400, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.064
+      objectReference: {fileID: 0}
+    - target: {fileID: 836493076993780400, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.32134426
+      objectReference: {fileID: 0}
+    - target: {fileID: 836493076993780400, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 836493076993780400, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.9469625
+      objectReference: {fileID: 0}
+    - target: {fileID: 836493076993780400, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 836493076993780400, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 142.512
+      objectReference: {fileID: 0}
     - target: {fileID: 2833539672936798729, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
       propertyPath: m_Name
       value: Jamming Spot
@@ -1011,6 +1044,10 @@ PrefabInstance:
     - target: {fileID: 8262473364280708146, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
       propertyPath: interactionDuration
       value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8262473364280708146, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: customInteractionMessage
+      value: Disable camera
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

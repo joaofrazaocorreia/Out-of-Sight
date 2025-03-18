@@ -24,6 +24,7 @@ public class PlayerInteraction : MonoBehaviour
     private bool _finishedInteraction;
     private bool _interactionReady;
     private bool _startedInteraction;
+    private bool _isInteractionSuspicious;
 
     private RaycastHit _hit;
 
@@ -194,9 +195,10 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Interact(InteractiveType interactiveType)
     {
+        _isInteractionSuspicious = ActiveInteractiveObject.IsInteractionSuspicious;
         _interactionDuration = Mathf.Max(_interactionDuration - Time.deltaTime, 0f);
 
-        if(ActiveInteractiveObject.IsInteractionSuspicious) _player.GainStatus(Player.Status.Suspicious);
+        if(_isInteractionSuspicious) _player.GainStatus(Player.Status.Suspicious);
 
         if (ActiveInteractiveObject.WhileInteractAudioPlayer != null && !_interactionAudioPlaying)
         {
@@ -233,15 +235,15 @@ public class PlayerInteraction : MonoBehaviour
         
         ActiveInteractiveObject.Interact();
         _finishedInteraction = true;
-
         ActiveInteractiveObject = null;
     }
 
     private void StopInteraction()
     {
+        
         if (ActiveInteractiveObject != null)
         {
-            if (ActiveInteractiveObject.IsInteractionSuspicious)
+            if (_isInteractionSuspicious)
             {
                 if(_finishedInteraction) OnSuspiciousAction?.Invoke(this, EventArgs.Empty);
                 _player.LoseStatus(Player.Status.Suspicious);
