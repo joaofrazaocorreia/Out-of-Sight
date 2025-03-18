@@ -9,6 +9,7 @@
         Password,
         Luggage,
         SecretFiles,
+        CleaningProduct,
         LockInteraction
     }
 }
