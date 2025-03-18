@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 940390272902252497}
   - component: {fileID: 7996486251967945289}
   - component: {fileID: 7584421201091049683}
+  - component: {fileID: 4597966409810136632}
   m_Layer: 0
   m_Name: FuseBox
   m_TagString: Untagged
@@ -109,6 +110,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4597966409810136632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560042745432640676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae28d5e9ef7486f943a139b04cac86a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npcInteraction: {fileID: 0}
 --- !u!1001 &4362269120845471339
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -137,9 +151,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Jamming Spot
       objectReference: {fileID: 0}
+    - target: {fileID: 4962931236666812076, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 4962931236666812076, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.106
+      objectReference: {fileID: 0}
+    - target: {fileID: 4962931236666812076, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.094
+      objectReference: {fileID: 0}
+    - target: {fileID: 5734224746754046998, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6598027472160933986, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.229
       objectReference: {fileID: 0}
     - target: {fileID: 6598027472160933986, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
       propertyPath: m_LocalPosition.y

@@ -29,7 +29,7 @@ public abstract class InteractiveObject : MonoBehaviour
     [Header("UI Options")]
     [SerializeField] protected string objectName;
     [SerializeField] protected string customInteractionMessage;
-    [SerializeField] private string customRequirementMessage;
+    [SerializeField] protected string customRequirementMessage;
 
     [Header("Audio Options")] 
     [SerializeField] protected PlayAudio onInteractAudioPlayer;
