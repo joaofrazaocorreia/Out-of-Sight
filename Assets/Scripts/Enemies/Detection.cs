@@ -28,6 +28,8 @@ public class Detection : MonoBehaviour
     private Enemy selfEnemy;
     private Alarm alarm;
     private float detectionMeter;
+    private LayerMask detectionLayers;
+
     public float DetectionMeter
     {
         get => detectionMeter;
@@ -59,6 +61,7 @@ public class Detection : MonoBehaviour
         tooCloseToPlayer = false;
         enemyMovement = GetComponentInParent<EnemyMovement>();
         enemyCamera = GetComponentInParent<EnemyCamera>();
+        detectionLayers = LayerMask.GetMask("Default", "Player", "Interactables");
 
         allBodies = new List<BodyCarry>();
     }
@@ -85,7 +88,7 @@ public class Detection : MonoBehaviour
                     if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distanceToPlayer) <= detectionMaxAngle)
                     {
                         // Sends a raycast towards the player and checks if it hits anything
-                        if (Physics.Raycast(transform.position, distanceToPlayer, out RaycastHit hit, detectionRange))
+                        if (Physics.Raycast(transform.position, distanceToPlayer, out RaycastHit hit, detectionRange, detectionLayers))
                         {
                             // Checks if the raycast hit the player
                             if (hit.transform.tag == "Player")
@@ -144,7 +147,7 @@ public class Detection : MonoBehaviour
                         {
                             // Sends a raycast towards the body and checks if it hits anything
                             RaycastHit[] hits = new RaycastHit[10];
-                            Physics.RaycastNonAlloc(new Ray(transform.position, distance), hits, detectionRange);
+                            Physics.RaycastNonAlloc(new Ray(transform.position, distance), hits, detectionRange, detectionLayers);
 
                             // Validates the detection if the only raycast collision was the body
                             if (hits.Count() == 1)
