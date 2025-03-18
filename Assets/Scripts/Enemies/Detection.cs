@@ -131,7 +131,7 @@ public class Detection : MonoBehaviour
                 UpdateAllBodies();
                 foreach(BodyCarry b in allBodies)
                 {
-                    if (!b.enabled || b.HasBeenDetected)
+                    if (b != null && (!b.enabled || b.HasBeenDetected))
                         continue;
                     
                     Vector3 distance = b.transform.position - transform.position;
@@ -399,7 +399,7 @@ public class Detection : MonoBehaviour
 
     private void OnSuspiciousAction(object sender, EventArgs e)
     {
-        if (seesPlayer) GetActionSuspicion(sender);
+        if (seesPlayer && player.detectable) GetActionSuspicion(sender);
     }
 
     private void GetActionSuspicion(object sender)

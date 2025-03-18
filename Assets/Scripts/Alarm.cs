@@ -99,7 +99,7 @@ public class Alarm : MonoBehaviour
 
                 foreach(Enemy e in allEnemies)
                 {
-                    if(enemies.Contains(e))
+                    if(e != null && e.EnemyMovement != null)
                         e.EnemyMovement.currentStatus = EnemyMovement.Status.Normal;
 
                     e.Detection.DetectionMeter = 0;

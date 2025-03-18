@@ -103,11 +103,14 @@ public class PlayerMelee : MonoBehaviour
                         closestEnemy.GetComponentInChildren<Detection>().DetectionMeter = 0;
                         UpdateEnemiesList();
                 
-                        // Immediately alerts any living enemy that sees the player knocking out another NPC
-                        foreach(Detection d in enemiesWatching)
+                        if(GetComponent<Player>().detectable)
                         {
-                            Debug.Log($"{d.transform.parent.name} saw the melee attack!");
-                            d.DetectionMeter = d.DetectionLimit;
+                            // Immediately alerts any conscious enemy that sees the player knocking out another NPC
+                            foreach(Detection d in enemiesWatching)
+                            {
+                                Debug.Log($"{d.transform.parent.name} saw the melee attack!");
+                                d.DetectionMeter = d.DetectionLimit;
+                            }
                         }
                     }
                 }
