@@ -1,15 +1,23 @@
-﻿using Interaction;
+﻿using System;
+using Interaction;
 using UnityEngine;
 
 public class HackableLaptops : InteractiveObject, IDelayBetweenInteractions
 {
-    [Header("Hackable Object Properties")]
     public float DelayBetweenInteractions => delayBetweenInteractions;
     public float DelayTimer { get; private set;}
     public bool TimerStarted { get; private set; }
     public bool TimerFinished { get; private set; }
+    
+    private NPCMoveInteraction npcInteraction;
+    
     [SerializeField] private float delayBetweenInteractions;
 
+    private void Start()
+    {
+        npcInteraction = GetComponent<NPCMoveInteraction>();
+    }
+    
     private void Update()
     {
         if (TimerStarted && !TimerFinished)
@@ -41,7 +49,7 @@ public class HackableLaptops : InteractiveObject, IDelayBetweenInteractions
 
     private void SuccessfulHack()
     {
-        
+        npcInteraction.Interact();
     }
 }
 
