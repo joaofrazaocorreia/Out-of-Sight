@@ -132,20 +132,21 @@ Shader "Custom/NoirShader"
                 // Calculate light intensity with shadows
                 float lightIntensity = max(0, NdotL) * mainLight.shadowAttenuation;
                 
-                // Use smoothstep to create a controllable soft edge for shadows
+                // Inverted the shadow factor calculation to fix lighting       
+                // Use the lightIntensity directly to interpolate between shadow and light
                 float shadowFactor = smoothstep(_ShadowThreshold - _ShadowSharpness, 
                                                _ShadowThreshold + _ShadowSharpness, 
                                                lightIntensity);
                 
-                // Use lerp with float parameter for color interpolation
-                float3 shadedColor = lerp(_ShadowColor.rgb, _LightColor.rgb, shadowFactor);
+                // Swap the order in the lerp function to fix lighting
+                float3 shadedColor = lerp(_LightColor.rgb, _ShadowColor.rgb, 1.0 - shadowFactor);
                 float3 finalColor = texColor.rgb * shadedColor;
                 
                 // Apply the Telltale style post-processing
                 finalColor = ApplyTelltaleStyle(finalColor);
                 
-                // Add a slight blue tint to shadows for the noir feel
-                finalColor = lerp(finalColor * float3(0.9, 0.95, 1.1), finalColor, shadowFactor);
+                // Modified blue tint in shadows to make it more visible in lit areas
+                finalColor = lerp(finalColor, finalColor * float3(0.9, 0.95, 1.1), shadowFactor);
                 
                 return half4(finalColor, texColor.a);
             }
