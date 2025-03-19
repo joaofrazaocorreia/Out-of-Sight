@@ -45,11 +45,13 @@ Shader "Custom/NoirShader"
         TEXTURE2D(_MainTex);
         SAMPLER(sampler_MainTex);
 
+        // Common vertex attributes structure for main passes
         struct Attributes
         {
             float4 positionOS : POSITION;
             float3 normalOS : NORMAL;
             float2 uv : TEXCOORD0;
+            UNITY_VERTEX_INPUT_INSTANCE_ID
         };
 
         struct Varyings
@@ -58,6 +60,7 @@ Shader "Custom/NoirShader"
             float4 positionCS : SV_POSITION;
             float3 normalWS : TEXCOORD1;
             float3 positionWS : TEXCOORD2;
+            UNITY_VERTEX_OUTPUT_STEREO
         };
         ENDHLSL
         
@@ -77,6 +80,9 @@ Shader "Custom/NoirShader"
             Varyings vert(Attributes input)
             {
                 Varyings output;
+                UNITY_SETUP_INSTANCE_ID(input);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
+                
                 VertexPositionInputs vertexInput = GetVertexPositionInputs(input.positionOS.xyz);
                 VertexNormalInputs normalInput = GetVertexNormalInputs(input.normalOS);
                 
@@ -123,22 +129,23 @@ Shader "Custom/NoirShader"
                 float3 normalWS = normalize(input.normalWS);
                 float NdotL = dot(normalWS, mainLight.direction);
                 
-                // Hard shadows with Unity's shadow system
-                float shadowAttenuation = mainLight.shadowAttenuation;
-                float hardShadow = smoothstep(_ShadowThreshold - _ShadowSharpness, 
-                                             _ShadowThreshold + _ShadowSharpness, 
-                                             NdotL * shadowAttenuation);
+                // Calculate light intensity with shadows
+                float lightIntensity = max(0, NdotL) * mainLight.shadowAttenuation;
                 
-                // Uses a very stylized two-tone lighting
-                // Make sure the texture color has priority and is visible
-                float3 shadedColor = lerp(_ShadowColor.rgb, _LightColor.rgb, hardShadow);
+                // Use smoothstep to create a controllable soft edge for shadows
+                float shadowFactor = smoothstep(_ShadowThreshold - _ShadowSharpness, 
+                                               _ShadowThreshold + _ShadowSharpness, 
+                                               lightIntensity);
+                
+                // Use lerp with float parameter for color interpolation
+                float3 shadedColor = lerp(_ShadowColor.rgb, _LightColor.rgb, shadowFactor);
                 float3 finalColor = texColor.rgb * shadedColor;
                 
                 // Apply the Telltale style post-processing
                 finalColor = ApplyTelltaleStyle(finalColor);
                 
                 // Add a slight blue tint to shadows for the noir feel
-                finalColor = lerp(finalColor * float3(0.9, 0.95, 1.1), finalColor, hardShadow);
+                finalColor = lerp(finalColor * float3(0.9, 0.95, 1.1), finalColor, shadowFactor);
                 
                 return half4(finalColor, texColor.a);
             }
@@ -159,6 +166,8 @@ Shader "Custom/NoirShader"
             Varyings vert(Attributes input)
             {
                 Varyings output;
+                UNITY_SETUP_INSTANCE_ID(input);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
                 
                 // Calculate scale-independent outline width
                 float3 positionOS = input.positionOS.xyz;
@@ -209,16 +218,9 @@ Shader "Custom/NoirShader"
             #pragma vertex ShadowPassVertex
             #pragma fragment ShadowPassFragment
             
-            // Shadow caster specific input
-            struct Attributes
-            {
-                float4 positionOS   : POSITION;
-                float3 normalOS     : NORMAL;
-                float2 texcoord     : TEXCOORD0;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
+            // We include our common Attributes structure via HLSLINCLUDE
             
-            struct Varyings
+            struct ShadowVaryings
             {
                 float4 positionCS   : SV_POSITION;
                 UNITY_VERTEX_OUTPUT_STEREO
@@ -228,9 +230,9 @@ Shader "Custom/NoirShader"
             
             float3 _LightDirection;
             
-            Varyings ShadowPassVertex(Attributes input)
+            ShadowVaryings ShadowPassVertex(Attributes input)
             {
-                Varyings output;
+                ShadowVaryings output;
                 UNITY_SETUP_INSTANCE_ID(input);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
                 
@@ -250,7 +252,7 @@ Shader "Custom/NoirShader"
                 return output;
             }
             
-            half4 ShadowPassFragment(Varyings input) : SV_TARGET
+            half4 ShadowPassFragment(ShadowVaryings input) : SV_TARGET
             {
                 return 0;
             }
@@ -271,14 +273,7 @@ Shader "Custom/NoirShader"
             #pragma vertex DepthOnlyVertex
             #pragma fragment DepthOnlyFragment
             
-            struct Attributes
-            {
-                float4 position     : POSITION;
-                float2 texcoord     : TEXCOORD0;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
-            
-            struct Varyings
+            struct DepthVaryings
             {
                 float2 uv           : TEXCOORD0;
                 float4 positionCS   : SV_POSITION;
@@ -286,18 +281,18 @@ Shader "Custom/NoirShader"
                 UNITY_VERTEX_OUTPUT_STEREO
             };
             
-            Varyings DepthOnlyVertex(Attributes input)
+            DepthVaryings DepthOnlyVertex(Attributes input)
             {
-                Varyings output = (Varyings)0;
+                DepthVaryings output = (DepthVaryings)0;
                 UNITY_SETUP_INSTANCE_ID(input);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
                 
-                output.uv = TRANSFORM_TEX(input.texcoord, _MainTex);
-                output.positionCS = TransformObjectToHClip(input.position.xyz);
+                output.uv = TRANSFORM_TEX(input.uv, _MainTex);
+                output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
                 return output;
             }
             
-            half4 DepthOnlyFragment(Varyings input) : SV_TARGET
+            half4 DepthOnlyFragment(DepthVaryings input) : SV_TARGET
             {
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
                 return 0;
