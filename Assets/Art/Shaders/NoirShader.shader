@@ -2,192 +2,307 @@ Shader "Custom/NoirShader"
 {
     Properties
     {
-        [Toggle(_USE_TEXTURE)] _UseTexture ("Use Texture", Float) = 1
-        [MainTexture] _MainTex ("Texture", 2D) = "white" {}
-        [MainColor] _BaseColor ("Base Color", Color) = (1,1,1,1)
-        [MainColor] _ColorTint ("Color Tint", Color) = (1,1,1,1)
-        _ColorBrightness ("Color Brightness", Range(0, 2)) = 1.0
-        _ColorContrast ("Color Contrast", Range(0, 2)) = 1.0
-        _ColorSaturation ("Color Saturation", Range(0, 2)) = 1.0
+        _MainTex ("Texture", 2D) = "white" {}
+        _BaseColor ("Base Color", Color) = (1,1,1,1)
         
-        // Cel-shading properties
-        _CelShadingLevels ("Cel Shading Levels", Range(1, 8)) = 3
-        _CelSpecularLevels ("Cel Specular Levels", Range(1, 8)) = 2
-        _SpecularPower ("Specular Power", Range(1, 100)) = 30
+        // Lighting Control
+        _ShadowColor ("Shadow Color", Color) = (0.1, 0.1, 0.2, 1)
+        _LightColor ("Light Color", Color) = (1.0, 0.95, 0.8, 1)
+        _ShadowThreshold ("Shadow Threshold", Range(0, 1)) = 0.3
+        _ShadowSharpness ("Shadow Sharpness", Range(0.001, 0.5)) = 0.01
         
-        // Outline properties
-        [HDR] _OutlineColor ("Outline Color", Color) = (0,0,0,1)
+        // Comic Book Style Controls
+        _ContrastAmount ("Contrast", Range(0, 2)) = 1.2
+        _SaturationAmount ("Saturation", Range(0, 2)) = 0.8
+        
+        // Outline
+        _OutlineColor ("Outline Color", Color) = (0,0,0,1)
         _OutlineWidth ("Outline Width", Range(0.0001, 0.01)) = 0.003
-        
-        // Hard shadow properties
-        [HDR] _ShadowColor ("Shadow Color", Color) = (0.1,0.1,0.2,1)
-        _ShadowThreshold ("Shadow Threshold", Range(0, 1)) = 0.5
     }
     
     SubShader
     {
-        // Main pass for the model
-        Pass
-        {
-            Tags 
-            { 
-                "LightMode" = "UniversalForward" 
-                "RenderType"="Opaque"
-                "Queue"="Geometry"
-            }
-            
-            CGPROGRAM
-            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
-            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
-            #pragma shader_feature_local _USE_TEXTURE
-            #pragma vertex vert
-            #pragma fragment frag
-            #include "UnityCG.cginc"
-            #include "Lighting.cginc"
-            
-            struct appdata
-            {
-                float4 vertex : POSITION;
-                float3 normal : NORMAL;
-                float2 uv : TEXCOORD0;
-            };
-            
-            struct v2f
-            {
-                float2 uv : TEXCOORD0;
-                float4 pos : SV_POSITION;
-                float3 worldNormal : TEXCOORD1;
-                float3 worldPos : TEXCOORD2;
-            };
-            
-            sampler2D _MainTex;
+        Tags { "RenderType"="Opaque" "RenderPipeline"="UniversalPipeline" }
+        LOD 100
+
+        HLSLINCLUDE
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+
+        CBUFFER_START(UnityPerMaterial)
             float4 _MainTex_ST;
             float4 _BaseColor;
-            float4 _ColorTint;
-            float _ColorBrightness;
-            float _ColorContrast;
-            float _ColorSaturation;
-            int _CelShadingLevels;
-            int _CelSpecularLevels;
-            float _SpecularPower;
             float4 _ShadowColor;
+            float4 _LightColor;
             float _ShadowThreshold;
+            float _ShadowSharpness;
+            float _ContrastAmount;
+            float _SaturationAmount;
+            float4 _OutlineColor;
+            float _OutlineWidth;
+        CBUFFER_END
+
+        TEXTURE2D(_MainTex);
+        SAMPLER(sampler_MainTex);
+
+        struct Attributes
+        {
+            float4 positionOS : POSITION;
+            float3 normalOS : NORMAL;
+            float2 uv : TEXCOORD0;
+        };
+
+        struct Varyings
+        {
+            float2 uv : TEXCOORD0;
+            float4 positionCS : SV_POSITION;
+            float3 normalWS : TEXCOORD1;
+            float3 positionWS : TEXCOORD2;
+        };
+        ENDHLSL
+        
+        // Main Pass - Stylized Lighting
+        Pass
+        {
+            Name "ForwardLit"
+            Tags { "LightMode"="UniversalForward" }
             
-            v2f vert (appdata v)
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile _ _SHADOWS_SOFT
+            
+            Varyings vert(Attributes input)
             {
-                v2f o;
-                o.pos = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                o.worldNormal = UnityObjectToWorldNormal(v.normal);
-                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-                return o;
+                Varyings output;
+                VertexPositionInputs vertexInput = GetVertexPositionInputs(input.positionOS.xyz);
+                VertexNormalInputs normalInput = GetVertexNormalInputs(input.normalOS);
+                
+                output.positionCS = vertexInput.positionCS;
+                output.positionWS = vertexInput.positionWS;
+                output.normalWS = normalInput.normalWS;
+                output.uv = TRANSFORM_TEX(input.uv, _MainTex);
+                return output;
             }
             
-            float3 ApplyColorAdjustments(float3 col)
+            // Apply color adjustments
+            float3 ApplyTelltaleStyle(float3 color)
             {
-                // Apply brightness
-                col *= _ColorBrightness;
+                // Convert to grayscale
+                float luminance = dot(color, float3(0.299, 0.587, 0.114));
                 
-                // Apply contrast
-                float3 contrast = (col - 0.5) * _ColorContrast + 0.5;
-                col = contrast;
+                // Apply saturation control
+                color = lerp(luminance.xxx, color, _SaturationAmount);
                 
-                // Apply saturation
-                float luminance = dot(col, float3(0.299, 0.587, 0.114));
-                col = lerp(luminance, col, _ColorSaturation);
+                // Apply contrast enhancement
+                color = ((color - 0.5) * _ContrastAmount) + 0.5;
                 
-                return col;
+                return saturate(color);
             }
             
-            fixed4 frag (v2f i) : SV_Target
+            half4 frag(Varyings input) : SV_Target
             {
-                // Sample texture or use base color
-                fixed4 col;
-                #ifdef _USE_TEXTURE
-                    col = tex2D(_MainTex, i.uv) * _ColorTint;
-                #else
-                    col = _BaseColor * _ColorTint;
-                #endif
+                // Sample the texture with better error handling
+                half4 texColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv);
+                
+                // Debug: If texture is missing or black, use base color instead
+                if (all(texColor.rgb < 0.01))
+                {
+                    texColor = half4(1,1,1,1); // Fallback to white if texture is missing
+                }
+                
+                // Apply base color tint
+                texColor *= _BaseColor;
+                
+                // Get main light
+                Light mainLight = GetMainLight(TransformWorldToShadowCoord(input.positionWS));
                 
                 // Calculate lighting
-                float3 worldNormal = normalize(i.worldNormal);
-                float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
-                float NdotL = dot(worldNormal, lightDir);
+                float3 normalWS = normalize(input.normalWS);
+                float NdotL = dot(normalWS, mainLight.direction);
                 
-                // Apply cel-shading to diffuse lighting
-                float celDiffuse = ceil(NdotL * _CelShadingLevels) / _CelShadingLevels;
+                // Hard shadows with Unity's shadow system
+                float shadowAttenuation = mainLight.shadowAttenuation;
+                float hardShadow = smoothstep(_ShadowThreshold - _ShadowSharpness, 
+                                             _ShadowThreshold + _ShadowSharpness, 
+                                             NdotL * shadowAttenuation);
                 
-                // Apply hard shadows
-                float shadow = step(_ShadowThreshold, NdotL);
-                float3 diffuseLight = lerp(_ShadowColor.rgb, _LightColor0.rgb, shadow) * celDiffuse;
+                // Uses a very stylized two-tone lighting
+                // Make sure the texture color has priority and is visible
+                float3 shadedColor = lerp(_ShadowColor.rgb, _LightColor.rgb, hardShadow);
+                float3 finalColor = texColor.rgb * shadedColor;
                 
-                // Calculate specular lighting
-                float3 viewDir = normalize(_WorldSpaceCameraPos - i.worldPos);
-                float3 halfVector = normalize(lightDir + viewDir);
-                float NdotH = max(0, dot(worldNormal, halfVector));
-                float specular = pow(NdotH, _SpecularPower);
+                // Apply the Telltale style post-processing
+                finalColor = ApplyTelltaleStyle(finalColor);
                 
-                // Apply cel-shading to specular
-                float celSpecular = ceil(specular * _CelSpecularLevels) / _CelSpecularLevels;
-                celSpecular *= step(0.1, celDiffuse);
+                // Add a slight blue tint to shadows for the noir feel
+                finalColor = lerp(finalColor * float3(0.9, 0.95, 1.1), finalColor, hardShadow);
                 
-                // Combine lighting with texture color
-                float3 finalColor = col.rgb * diffuseLight + celSpecular * _LightColor0.rgb;
-                
-                // Apply color style adjustments
-                finalColor = ApplyColorAdjustments(finalColor);
-                
-                return fixed4(finalColor, col.a);
+                return half4(finalColor, texColor.a);
             }
-            ENDCG
+            ENDHLSL
         }
         
-        // Outline pass
+        // Outline Pass
         Pass
         {
             Name "Outline"
-            Tags
-            {
-                "LightMode" = "SRPDefaultUnlit"
-                "RenderType"="Opaque"
-                "Queue"="Geometry+1"
-            }
+            Tags { "LightMode"="SRPDefaultUnlit" }
             Cull Front
             
-            CGPROGRAM
+            HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
             
-            struct appdata
+            Varyings vert(Attributes input)
             {
-                float4 vertex : POSITION;
-                float3 normal : NORMAL;
-            };
-            
-            struct v2f
-            {
-                float4 pos : SV_POSITION;
-            };
-            
-            float4 _OutlineColor;
-            float _OutlineWidth;
-            
-            v2f vert(appdata v)
-            {
-                v2f o;
-                // Expand vertex along normal direction
-                float3 normal = normalize(v.normal);
-                v.vertex.xyz += normal * _OutlineWidth;
-                o.pos = UnityObjectToClipPos(v.vertex);
-                return o;
+                Varyings output;
+                
+                // Calculate scale-independent outline width
+                float3 positionOS = input.positionOS.xyz;
+                float3 normalOS = normalize(input.normalOS);
+                
+                // Get object scale to adjust outline width
+                float3 objectScale = float3(
+                    length(unity_ObjectToWorld._m00_m10_m20),
+                    length(unity_ObjectToWorld._m01_m11_m21),
+                    length(unity_ObjectToWorld._m02_m12_m22)
+                );
+                float scaleAvg = (objectScale.x + objectScale.y + objectScale.z) / 3.0;
+                
+                // Apply the outline offset in object space
+                float adjustedWidth = _OutlineWidth / scaleAvg;
+                positionOS += normalOS * adjustedWidth;
+                
+                // Transform to clip space
+                VertexPositionInputs vertexInput = GetVertexPositionInputs(positionOS);
+                output.positionCS = vertexInput.positionCS;
+                
+                // We don't use these in the fragment shader for outline, but need to set them
+                output.normalWS = float3(0, 0, 0);
+                output.positionWS = float3(0, 0, 0);
+                output.uv = float2(0, 0);
+                
+                return output;
             }
             
-            fixed4 frag(v2f i) : SV_Target
+            half4 frag(Varyings input) : SV_Target
             {
                 return _OutlineColor;
             }
-            ENDCG
+            ENDHLSL
+        }
+        
+        // Shadow casting pass
+        Pass
+        {
+            Name "ShadowCaster"
+            Tags { "LightMode"="ShadowCaster" }
+            
+            ZWrite On
+            ZTest LEqual
+            Cull Back
+            
+            HLSLPROGRAM
+            #pragma vertex ShadowPassVertex
+            #pragma fragment ShadowPassFragment
+            
+            // Shadow caster specific input
+            struct Attributes
+            {
+                float4 positionOS   : POSITION;
+                float3 normalOS     : NORMAL;
+                float2 texcoord     : TEXCOORD0;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+            
+            struct Varyings
+            {
+                float4 positionCS   : SV_POSITION;
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+            
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
+            
+            float3 _LightDirection;
+            
+            Varyings ShadowPassVertex(Attributes input)
+            {
+                Varyings output;
+                UNITY_SETUP_INSTANCE_ID(input);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
+                
+                float3 positionWS = TransformObjectToWorld(input.positionOS.xyz);
+                float3 normalWS = TransformObjectToWorldNormal(input.normalOS);
+                
+                // Apply shadow bias and light direction
+                float4 positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, _LightDirection));
+                
+                #if UNITY_REVERSED_Z
+                    positionCS.z = min(positionCS.z, positionCS.w * UNITY_NEAR_CLIP_VALUE);
+                #else
+                    positionCS.z = max(positionCS.z, positionCS.w * UNITY_NEAR_CLIP_VALUE);
+                #endif
+                
+                output.positionCS = positionCS;
+                return output;
+            }
+            
+            half4 ShadowPassFragment(Varyings input) : SV_TARGET
+            {
+                return 0;
+            }
+            ENDHLSL
+        }
+        
+        // Depth pass
+        Pass
+        {
+            Name "DepthOnly"
+            Tags{"LightMode" = "DepthOnly"}
+            
+            ZWrite On
+            ColorMask 0
+            Cull Back
+            
+            HLSLPROGRAM
+            #pragma vertex DepthOnlyVertex
+            #pragma fragment DepthOnlyFragment
+            
+            struct Attributes
+            {
+                float4 position     : POSITION;
+                float2 texcoord     : TEXCOORD0;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+            
+            struct Varyings
+            {
+                float2 uv           : TEXCOORD0;
+                float4 positionCS   : SV_POSITION;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+            
+            Varyings DepthOnlyVertex(Attributes input)
+            {
+                Varyings output = (Varyings)0;
+                UNITY_SETUP_INSTANCE_ID(input);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
+                
+                output.uv = TRANSFORM_TEX(input.texcoord, _MainTex);
+                output.positionCS = TransformObjectToHClip(input.position.xyz);
+                return output;
+            }
+            
+            half4 DepthOnlyFragment(Varyings input) : SV_TARGET
+            {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+                return 0;
+            }
+            ENDHLSL
         }
     }
     FallBack "Universal Render Pipeline/Lit"
