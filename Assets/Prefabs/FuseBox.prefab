@@ -81,6 +81,7 @@ GameObject:
   - component: {fileID: 7584421201091049683}
   - component: {fileID: 4597966409810136632}
   - component: {fileID: 7482705240983241437}
+  - component: {fileID: 2625856535423321017}
   m_Layer: 0
   m_Name: FuseBox
   m_TagString: Untagged
@@ -244,6 +245,18 @@ MonoBehaviour:
   targetLocation: {fileID: 2276278760960514620}
   fetchTargetWithTag: 
   timeAtTargetLocation: 2
+--- !u!114 &2625856535423321017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560042745432640676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beaf0eac2a7c9634e8413a67f429e2de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5121152768247049863
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,12 +397,44 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8262473364280708146, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8262473364280708146, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
       propertyPath: onSecondInteractionComplete.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8262473364280708146, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8262473364280708146, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2625856535423321017}
+    - target: {fileID: 8262473364280708146, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8262473364280708146, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ObjectiveRemove
+      objectReference: {fileID: 0}
+    - target: {fileID: 8262473364280708146, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
       propertyPath: onSecondInteractionComplete.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8262473364280708146, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ObjectiveUpdater, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8262473364280708146, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: distraction1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8262473364280708146, guid: 60b5d6e616889d64584b2c59b18463f7, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

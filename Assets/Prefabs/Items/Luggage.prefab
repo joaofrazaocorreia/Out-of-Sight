@@ -46,13 +46,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4485ef967e523cd40b8e5643aece7b6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useWhitelist: 0
   whitelistedDisguises: 
+  isCriticalArea: 0
   onEnterArea:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3854578348532080743}
         m_TargetAssemblyTypeName: HotelObjectivesUpdater, Assembly-CSharp
-        m_MethodName: ObjectiveGetLuggage
+        m_MethodName: ObjectiveFoundLuggage
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -175,8 +177,10 @@ MonoBehaviour:
       m_Calls: []
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
   objectName: Luggage
   customInteractionMessage: 
+  customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   icon: {fileID: 21300000, guid: 16c1806a3f9f4ca4881afd366eb092fc, type: 3}

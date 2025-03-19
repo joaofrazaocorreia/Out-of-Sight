@@ -59,14 +59,28 @@ MonoBehaviour:
   secondInteractionDuration: 0
   onInteractionComplete:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1327330264348298300}
+        m_TargetAssemblyTypeName: HotelObjectivesUpdater, Assembly-CSharp
+        m_MethodName: ObjectiveGotManagerKeycard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onSecondInteractionComplete:
     m_PersistentCalls:
       m_Calls: []
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
   objectName: Manager Keycard
   customInteractionMessage: 
+  customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   icon: {fileID: 21300000, guid: 1e274069a2a4b684f850799b7df393dd, type: 3}

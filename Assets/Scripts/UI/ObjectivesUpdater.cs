@@ -1,22 +1,43 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectiveUpdater : MonoBehaviour
 {
-    protected UIManager uiManager;
+    [SerializeField] protected bool setsUpVariables = false;
+    protected static UIManager uiManager;
+    protected static List<string> seenObjectives;
 
     protected virtual void Start()
     {
-        uiManager = FindAnyObjectByType<UIManager>();
+        if(setsUpVariables)
+        {
+            uiManager = FindAnyObjectByType<UIManager>();
+            seenObjectives = new List<string>();
+        }
     }
-
-    public void ObjectiveEditMain(string text)
+    
+    public virtual void ObjectiveEdit(string objective, string text)
     {
-        uiManager.EditObjective("main", text);
+        if(!seenObjectives.Contains(text))
+        {
+            uiManager.EditObjective(objective, text);
+            seenObjectives.Add(text);
+        }
     }
 
-    public void ObjectiveLeave()
+    public virtual void ObjectiveRemove(string objective)
+    {
+        uiManager.RemoveObjective(objective);
+    }
+
+    public virtual void ObjectiveLeave()
     {
         uiManager.RemoveAllObjectives();
         ObjectiveEditMain("- Leave the location");
+    }
+
+    public virtual void ObjectiveEditMain(string text)
+    {
+        ObjectiveEdit("main1", text);
     }
 }

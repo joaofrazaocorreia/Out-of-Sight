@@ -5583,6 +5583,93 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!1 &1063079307074572469
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7091675784241146956}
+  - component: {fileID: 7323290766358675487}
+  - component: {fileID: 8963331205683624305}
+  m_Layer: 0
+  m_Name: Fuse Box trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7091675784241146956
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063079307074572469}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.71, y: 4.55, z: -26.38}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1481660463906127065}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7323290766358675487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063079307074572469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4485ef967e523cd40b8e5643aece7b6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useWhitelist: 0
+  whitelistedDisguises: 
+  isCriticalArea: 0
+  onEnterArea:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6925824962389551342}
+        m_TargetAssemblyTypeName: HotelObjectivesUpdater, Assembly-CSharp
+        m_MethodName: ObjectiveFoundFuseBox
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onExitArea:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!65 &8963331205683624305
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063079307074572469}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5, y: 5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1071546778727307141
 GameObject:
   m_ObjectHideFlags: 0
@@ -18952,6 +19039,93 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!1 &2703063083848179411
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7034136223943700951}
+  - component: {fileID: 3300101949312076496}
+  - component: {fileID: 7526327924455847439}
+  m_Layer: 0
+  m_Name: GM PC trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7034136223943700951
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2703063083848179411}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.57, y: 4.55, z: -10.84}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1481660463906127065}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3300101949312076496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2703063083848179411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4485ef967e523cd40b8e5643aece7b6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useWhitelist: 0
+  whitelistedDisguises: 
+  isCriticalArea: 0
+  onEnterArea:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6925824962389551342}
+        m_TargetAssemblyTypeName: HotelObjectivesUpdater, Assembly-CSharp
+        m_MethodName: ObjectiveFoundPC
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onExitArea:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!65 &7526327924455847439
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2703063083848179411}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 7, y: 7, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2709464800254038887
 GameObject:
   m_ObjectHideFlags: 0
@@ -37209,6 +37383,54 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!1 &5221818557195058200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1481660463906127065}
+  - component: {fileID: 6925824962389551342}
+  m_Layer: 0
+  m_Name: ObjectiveTriggers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1481660463906127065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5221818557195058200}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 27.247591, y: -3.0793974, z: 67.71966}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 9133765771777718964}
+  - {fileID: 7034136223943700951}
+  - {fileID: 7091675784241146956}
+  - {fileID: 3840117966703953626}
+  m_Father: {fileID: 4533296425516091067}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6925824962389551342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5221818557195058200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beaf0eac2a7c9634e8413a67f429e2de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5227737743122047025
 GameObject:
   m_ObjectHideFlags: 0
@@ -51545,6 +51767,93 @@ Transform:
   - {fileID: 8783076219632017746}
   m_Father: {fileID: 2087986429714797139}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6801519997627982008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3840117966703953626}
+  - component: {fileID: 2633551115691832768}
+  - component: {fileID: 4592437949541750272}
+  m_Layer: 0
+  m_Name: Security door trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3840117966703953626
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6801519997627982008}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -40.83, y: 4.55, z: -13.17}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1481660463906127065}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2633551115691832768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6801519997627982008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4485ef967e523cd40b8e5643aece7b6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useWhitelist: 0
+  whitelistedDisguises: 
+  isCriticalArea: 0
+  onEnterArea:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6925824962389551342}
+        m_TargetAssemblyTypeName: HotelObjectivesUpdater, Assembly-CSharp
+        m_MethodName: ObjectiveFoundSecurity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onExitArea:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!65 &4592437949541750272
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6801519997627982008}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5, y: 5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6840163894485060411
 GameObject:
   m_ObjectHideFlags: 0
@@ -64717,6 +65026,93 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!1 &8402865107904943514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9133765771777718964}
+  - component: {fileID: 4822561614670942379}
+  - component: {fileID: 4077118271109869144}
+  m_Layer: 0
+  m_Name: GM Door trigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9133765771777718964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8402865107904943514}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.74, y: 4.55, z: -0.38}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1481660463906127065}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4822561614670942379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8402865107904943514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4485ef967e523cd40b8e5643aece7b6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useWhitelist: 0
+  whitelistedDisguises: 
+  isCriticalArea: 0
+  onEnterArea:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6925824962389551342}
+        m_TargetAssemblyTypeName: HotelObjectivesUpdater, Assembly-CSharp
+        m_MethodName: ObjectiveFoundManagerOffice
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onExitArea:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!65 &4077118271109869144
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8402865107904943514}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5, y: 5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8412631977268515014
 GameObject:
   m_ObjectHideFlags: 0
@@ -65606,6 +66002,7 @@ MonoBehaviour:
   enemyMovement: {fileID: 0}
   targetLocation: {fileID: 0}
   fetchTargetWithTag: 
+  timeAtTargetLocation: 10
 --- !u!1 &8428036140121769032
 GameObject:
   m_ObjectHideFlags: 0
@@ -70110,6 +70507,7 @@ Transform:
   - {fileID: 3940819011271302439}
   - {fileID: 3991064859790874075}
   - {fileID: 5925749152689471022}
+  - {fileID: 1481660463906127065}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8887074668636710734
@@ -71875,6 +72273,7 @@ MonoBehaviour:
   enemyMovement: {fileID: 0}
   targetLocation: {fileID: 0}
   fetchTargetWithTag: 
+  timeAtTargetLocation: 10
 --- !u!1 &9060905726714564713
 GameObject:
   m_ObjectHideFlags: 0
@@ -75912,27 +76311,27 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: d5d99f39feffe1645a976f66d02a8bd2, type: 2}
     - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
       propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
       propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
       propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
-      objectReference: {fileID: 4886562397962873571}
+      objectReference: {fileID: 5386886372017359704}
     - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
       propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
       propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: ScaleInteractionIcons
+      value: ObjectiveEnterGMOffice
       objectReference: {fileID: 0}
     - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
       propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
-      value: InteractionSpot, Assembly-CSharp
+      value: HotelObjectivesUpdater, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
       propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_FloatArgument
@@ -76086,17 +76485,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cbfcf147b14804429dcd92c697598aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4886562397962873571 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
-  m_PrefabInstance: {fileID: 5582358449338014650}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38da47e2eac354f448ed53d384bd9de7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4981529907443475910 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 601642181640748668, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
@@ -76106,6 +76494,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5386886372017359704 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 556922377339769058, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
+  m_PrefabInstance: {fileID: 5582358449338014650}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beaf0eac2a7c9634e8413a67f429e2de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &5542994150839902939 stripped
@@ -77232,6 +77631,38 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: d5d99f39feffe1645a976f66d02a8bd2, type: 2}
+    - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 7449047050205879922}
+    - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: ObjectiveEnteredSecurity
+      objectReference: {fileID: 0}
+    - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: HotelObjectivesUpdater, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_FloatArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1056107248824807769, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1310577902509714356, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
       propertyPath: navMeshLink
       value: 
@@ -77403,6 +77834,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 113767160510167393, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
   m_PrefabInstance: {fileID: 6979102919412731536}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7449047050205879922 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 556922377339769058, guid: 2d2b083f56d6415489676894cace3c29, type: 3}
+  m_PrefabInstance: {fileID: 6979102919412731536}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beaf0eac2a7c9634e8413a67f429e2de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7531064490568888556 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 601642181640748668, guid: 2d2b083f56d6415489676894cace3c29, type: 3}

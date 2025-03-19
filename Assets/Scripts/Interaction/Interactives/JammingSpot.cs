@@ -1,5 +1,4 @@
 using Interaction;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class JammingSpot : InteractiveObject
@@ -23,6 +22,8 @@ public class JammingSpot : InteractiveObject
             ToggleJammerModel();
             if (!Jammable.Jammed) jammer.Pickup();
             UpdateRequirements(Jammable.Jammed);
+
+            onInteractionComplete?.Invoke();
         }
     }
     
