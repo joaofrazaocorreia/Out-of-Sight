@@ -196,9 +196,12 @@ public class PlayerInteraction : MonoBehaviour
     private void Interact(InteractiveType interactiveType)
     {
         _isInteractionSuspicious = ActiveInteractiveObject.IsInteractionSuspicious;
+
+        if(_isInteractionSuspicious && _interactionDuration == _activeInteractiveObject.InteractionDuration)
+            _player.GainStatus(Player.Status.Suspicious);
+
         _interactionDuration = Mathf.Max(_interactionDuration - Time.deltaTime, 0f);
 
-        if(_isInteractionSuspicious) _player.GainStatus(Player.Status.Suspicious);
 
         if (ActiveInteractiveObject.WhileInteractAudioPlayer != null && !_interactionAudioPlaying)
         {
@@ -240,7 +243,6 @@ public class PlayerInteraction : MonoBehaviour
 
     private void StopInteraction()
     {
-        
         if (ActiveInteractiveObject != null)
         {
             if (_isInteractionSuspicious)

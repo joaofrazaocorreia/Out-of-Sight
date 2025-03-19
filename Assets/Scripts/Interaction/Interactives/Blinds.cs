@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Blinds : InteractiveObject
 {
+    [Header("Blinds properties")]
+    [SerializeField] private InteractionSpot interactionSpot;
     private Animator animator;
     private bool closed;
     
@@ -15,12 +17,12 @@ public class Blinds : InteractiveObject
         base.Interact();
         closed = !closed;
         animator.SetTrigger(closed ? "Close" : "Open");
-        enabled = false;
+        interactionSpot.enabled = false;
     }
 
     public void AnimationFinished()
     {
-        closed = true;
+        interactionSpot.enabled = true;
     }
     
 }

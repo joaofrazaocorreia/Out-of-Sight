@@ -50,6 +50,21 @@ public class Player : MonoBehaviour
 
     public void GainStatus(Status newStatus)
     {
+        status.Add(newStatus);
+        OnStatusChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void LoseStatus(Status newStatus)
+    {
+        if (status.Contains(newStatus))
+        {
+            status.Remove(newStatus);
+            OnStatusChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public void GainStatusIfNew(Status newStatus)
+    {
         if (!status.Contains(newStatus))
         {
             status.Add(newStatus);
@@ -57,7 +72,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void LoseStatus(Status newStatus)
+    public void LoseStatusCompletely(Status newStatus)
     {
         while (status.Contains(newStatus))
         {
@@ -77,13 +92,13 @@ public class Player : MonoBehaviour
 
     private void CheckAreaStatus()
     {
-        LoseStatus(Status.Trespassing);
-        LoseStatus(Status.CriticalTrespassing);
+        LoseStatusCompletely(Status.Trespassing);
+        LoseStatusCompletely(Status.CriticalTrespassing);
         
         foreach(MapArea a in currentAreas)
         {
             if(a != null && a.UseWhitelist && !a.WhitelistedDisguises.Contains(disguise))
-                GainStatus(a.IsCriticalArea ? Status.CriticalTrespassing : Status.Trespassing);
+                GainStatusIfNew(a.IsCriticalArea ? Status.CriticalTrespassing : Status.Trespassing);
         }
     }
 }

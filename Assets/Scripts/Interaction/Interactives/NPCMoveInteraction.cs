@@ -6,6 +6,7 @@ public class NPCMoveInteraction : InteractiveObject
     [SerializeField] private EnemyMovement enemyMovement;
     [SerializeField] private Transform targetLocation;
     [SerializeField] private string fetchTargetWithTag;
+    [SerializeField] private float timeAtTargetLocation = 10f;
 
     private void Update()
     {
@@ -25,6 +26,7 @@ public class NPCMoveInteraction : InteractiveObject
         enemyMovement.MovingToSetTarget = true;
         enemyMovement.MoveTo(targetLocation.position);
         enemyMovement.RotateTo(targetLocation.eulerAngles.y);
+        enemyMovement.MoveTimer = timeAtTargetLocation;
         enabled = false;
     }
 }

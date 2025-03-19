@@ -33,7 +33,7 @@ public class HackableLaptops : InteractiveObject, IDelayBetweenInteractions
     {
         base.Interact();
 
-        if (!TimerStarted && !TimerFinished)
+        if (!TimerStarted && !TimerFinished && delayBetweenInteractions != 0)
         {
             TimerStarted = true;
             requiredItem = ItemType.LockInteraction;
@@ -50,6 +50,7 @@ public class HackableLaptops : InteractiveObject, IDelayBetweenInteractions
     private void SuccessfulHack()
     {
         npcInteraction.Interact();
+        enabled = false;
     }
 }
 

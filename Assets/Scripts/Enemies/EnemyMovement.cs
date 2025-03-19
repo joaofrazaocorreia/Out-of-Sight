@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -61,6 +60,7 @@ public class EnemyMovement : MonoBehaviour
     public bool IsStatic {get => isStatic;}
 
     private float moveTimer;
+    public float MoveTimer { get => moveTimer; set => moveTimer = value;}
     private float turnTimer;
     private float searchTimer;
     private float tasedTimer;
@@ -420,9 +420,11 @@ public class EnemyMovement : MonoBehaviour
         else if(Time.timeScale != 0 && lastTargetRot != null && IsAtDestination
             && !IsFacingTarget && (moveTimer > 0 || isStatic))
         {
+            // Calculates how much the enemy will rotate this frame and updates the rotation
             Vector3 difference = Vector3.up * Mathf.Clamp((float)lastTargetRot - transform.eulerAngles.y, -turnSpeed, turnSpeed);
             transform.rotation = Quaternion.Euler(transform.eulerAngles + difference);
 
+            // Stops rotating once the rotation is reached (static enemies preserve their spawning rotation)
             if(IsFacingTarget && !isStatic)
                 RotateTo(null);
         }
