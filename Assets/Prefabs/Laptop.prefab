@@ -226,6 +226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7578726531098782538}
   - component: {fileID: 8814091749507465968}
+  - component: {fileID: 7873526062957214567}
   m_Layer: 0
   m_Name: Laptop
   m_TagString: Untagged
@@ -286,6 +287,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 7873526062957214567}
+        m_TargetAssemblyTypeName: ObjectiveUpdater, Assembly-CSharp
+        m_MethodName: ObjectiveLeave
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onSecondInteractionComplete:
     m_PersistentCalls:
       m_Calls: []
@@ -298,3 +311,15 @@ MonoBehaviour:
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   SecretFiles: {fileID: 1587498487446586499, guid: 9fad021702b74644381ed6cd5dde7547, type: 3}
+--- !u!114 &7873526062957214567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2327483867620907430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beaf0eac2a7c9634e8413a67f429e2de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

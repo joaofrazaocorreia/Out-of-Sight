@@ -2,106 +2,89 @@
 
 public class HotelObjectivesUpdater : ObjectiveUpdater
 {
-    private static bool hasFoundWorkerHalls;
-    private static bool hasFoundKeycard;
-    private static bool hasFoundSafe;
-    private static bool hasFoundSafeCode;
-    private static bool hasFoundLuggage;
-    private static bool hasGrabbedLuggage;
-    
+    public static bool camerasComplete;
+    public static bool conciergeComplete;
+    public static bool gotManagerKeycard;
+
     protected override void Start()
     {
-        base.Start();
-
-        hasFoundWorkerHalls = false;
-        hasFoundKeycard = false;
-        hasFoundSafe = false;
-        hasFoundSafeCode = false;
-        hasFoundLuggage = false;
-        hasGrabbedLuggage = false;
-    }
-
-    public void ObjectiveEditCameras(string text)
-    {
-        uiManager.EditObjective("cameras", text);
-    }
-
-    public void ObjectiveEditReception(string text)
-    {
-        uiManager.EditObjective("reception", text);
-    }
-
-    public void ObjectiveCompleteCameras()
-    {
-        uiManager.RemoveObjective("cameras");
-    }
-
-    public void ObjectiveCompleteReception()
-    {
-        uiManager.RemoveObjective("reception");
-    }
-
-    public void ObjectiveManagerRoom(string text)
-    {
-        if(!hasFoundWorkerHalls && !hasFoundSafeCode)
+        if(setsUpVariables)
         {
-            hasFoundWorkerHalls = true;
-            ObjectiveEditMain(text);
+            base.Start();
+
+            camerasComplete = false;
+            conciergeComplete = false;
+            gotManagerKeycard = false;
         }
     }
 
-    public void ObjectiveEditMain2(string text)
+    public void ObjectiveFoundManagerOffice()
     {
-        uiManager.EditObjective("main2", text);
+        if(!gotManagerKeycard)
+            ObjectiveEdit("main1", "- Find a spare Manager Keycard");
     }
 
-    public void ObjectiveFindSafeCode()
+    public void ObjectiveGotManagerKeycard()
     {
-        if(!hasFoundSafe && !hasFoundSafeCode)
-        {
-            hasFoundSafe = true;
-            uiManager.RemoveObjective("main");
-            ObjectiveEditMain2("- Search the Staff rooms");
-            ObjectiveEditMain("- Obtain the safe's combination");
-        }
+        gotManagerKeycard = true;
+        ObjectiveEdit("main1", "- Enter the Manager's office");
     }
 
-    public void ObjectiveEnterCamRoom(string text)
+    public void ObjectiveEnterGMOffice()
     {
-        if(!hasFoundKeycard)
-        {
-            hasFoundKeycard = true;
-            ObjectiveEditCameras(text);
-        }
+        ObjectiveEdit("main1", "- Search the Manager's PC");
     }
 
-    public void ObjectiveOpenSafe(string text)
+    public void ObjectiveFoundPC()
     {
-        if(!hasFoundSafeCode)
-        {
-            hasFoundSafeCode = true;
-            uiManager.RemoveObjective("main2");
-            ObjectiveEditMain(text);
-        }
+        ObjectiveEdit("main2", "- Search the office for the password");
     }
 
-    public void ObjectiveGetLuggage()
+    public void ObjectiveFoundPassword()
     {
-        if(!hasFoundLuggage)
-        {
-            hasFoundLuggage = true;
-            ObjectiveEditReception("- Obtain some luggage");
-            uiManager.EditObjective("reception2", "- Distract the Luggage Clerk");
-        }
+        ObjectiveEdit("main1", "- Download a copy of the PC's files");
+        ObjectiveRemove("main2");
     }
 
-    public void ObjectiveEnableClerk(string text)
+    public void ObjectiveFoundLuggage()
     {
-        if(!hasGrabbedLuggage)
-        {
-            hasGrabbedLuggage = true;
-            uiManager.RemoveObjective("reception2");
-            ObjectiveEditReception(text);
-        }
+        if(!conciergeComplete)
+            ObjectiveEdit("luggage", "- Distract the concierge with luggage");
+    }
+
+    public void ObjectiveKnockedConcierge()
+    {
+        conciergeComplete = true;
+        ObjectiveRemove("luggage");
+    }
+
+    public void ObjectiveFoundSecurity()
+    {
+        if(!camerasComplete)
+            ObjectiveEdit("cameras1", "- Cameras: Obtain a security keycard ");
+    }
+
+    public void ObjectiveGotSecurityKeycard()
+    {
+        if(!camerasComplete)
+            ObjectiveEdit("cameras1", "- Cameras: Enter the security room");
+    }
+
+    public void ObjectiveEnteredSecurity()
+    {
+        if(!camerasComplete)
+            ObjectiveEdit("cameras1", "- Cameras: Knock out the camera operator");
+    }
+
+    public void ObjectiveFoundFuseBox()
+    {
+        if(!camerasComplete)
+            ObjectiveEdit("distraction1", "- Distraction: Jam the fuse box");
+    }
+
+    public void ObjectiveKnockedCamOp()
+    {
+        camerasComplete = true;
+        ObjectiveRemove("cameras1");
     }
 }
