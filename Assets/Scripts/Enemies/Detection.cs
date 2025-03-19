@@ -160,7 +160,7 @@ public class Detection : MonoBehaviour
                             Physics.RaycastNonAlloc(new Ray(transform.position, distance), hits, range, detectionLayers);
 
                             // Validates the detection if the first raycast collision was the body
-                            if (hits[0].transform.GetComponent<BodyCarry>() != null)
+                            if (hits[0].transform && hits[0].transform.GetComponent<BodyCarry>() != null)
                             {
                                 // Checks if the raycast hit an available body that hasn't been seen yet
                                 if (b.enabled && !b.HasBeenDetected)
