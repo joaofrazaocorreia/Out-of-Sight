@@ -226,6 +226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7578726531098782538}
   - component: {fileID: -2389047854856061576}
+  - component: {fileID: 3553966462170570234}
   m_Layer: 0
   m_Name: Hackable Laptop
   m_TagString: Untagged
@@ -273,7 +274,19 @@ MonoBehaviour:
   secondInteractionDuration: 0
   onInteractionComplete:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3553966462170570234}
+        m_TargetAssemblyTypeName: NPCMoveInteraction, Assembly-CSharp
+        m_MethodName: Interact
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onSecondInteractionComplete:
     m_PersistentCalls:
       m_Calls: []
@@ -282,7 +295,46 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: Hack and lure camera operator
+  customRequirementMessage: Wait until hack completes
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
-  customRequirementMessage: Wait until hack completes
   delayBetweenInteractions: 7.5
+--- !u!114 &3553966462170570234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2327483867620907430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8727d7afbb366e943844c795bd86e606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 4
+  updateIfIndirect: 0
+  requiredItem: 0
+  requiredEquipment: 0
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
+  objectName: 
+  customInteractionMessage: 
+  customRequirementMessage: 
+  onInteractAudioPlayer: {fileID: 0}
+  whileInteractAudioPlayer: {fileID: 0}
+  enemyMovement: {fileID: 0}
+  targetLocation: {fileID: 0}
+  fetchTargetWithTag: 
+  timeAtTargetLocation: 20

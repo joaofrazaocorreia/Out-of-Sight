@@ -1,6 +1,5 @@
 using System;
 using Interaction.Equipments;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
@@ -46,9 +45,11 @@ public class PlayerEquipment : MonoBehaviour
         }
         else
         {
+            if(CurrentEquipment == null) 
+                GetComponent<Player>().GainStatus(Player.Status.Suspicious);
             CurrentEquipmentNum = index;
-            GetComponent<Player>().GainStatus(Player.Status.Suspicious);
         }
+
         equipingPlayer.Play();
     }
 

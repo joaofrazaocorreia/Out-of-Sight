@@ -77,6 +77,11 @@ public class Detection : MonoBehaviour
                     enemyMovement == null && !enemyCamera.Jammed && enemyCamera.IsOn))
             {
                 Vector3 distanceToPlayer = player.transform.position - transform.position;
+                float range = distanceToPlayer.magnitude;
+
+                if(distanceToPlayer.magnitude > detectionRange)
+                    range = detectionRange;
+
 
                 // Checks if the player is too close to the NPC
                 tooCloseToPlayer = distanceToPlayer.magnitude <= proximityDetectionRange;
@@ -88,13 +93,13 @@ public class Detection : MonoBehaviour
                     if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distanceToPlayer) <= detectionMaxAngle)
                     {
                         // Sends a raycast towards the player and checks if it hits anything
-                        if (Physics.Raycast(transform.position, distanceToPlayer, out RaycastHit hit, detectionRange, detectionLayers))
+                        if (Physics.Raycast(transform.position, distanceToPlayer, out RaycastHit hit, range, detectionLayers))
                         {
                             // Checks if the raycast hit the player
                             if (hit.transform.tag == "Player")
                             {
                                 seesPlayer = true;
-                                Debug.DrawRay(transform.position, distanceToPlayer * hit.distance, Color.red);
+                                Debug.DrawRay(transform.position, distanceToPlayer.normalized * range, Color.red);
                                 TrackPlayer();
                             }
 
@@ -102,7 +107,7 @@ public class Detection : MonoBehaviour
                             else
                             {
                                 seesPlayer = false;
-                                Debug.DrawRay(transform.position, distanceToPlayer * hit.distance, Color.yellow);
+                                Debug.DrawRay(transform.position, distanceToPlayer.normalized * range, Color.yellow);
                             }
                         }
 
@@ -138,6 +143,11 @@ public class Detection : MonoBehaviour
                         continue;
                     
                     Vector3 distance = b.transform.position - transform.position;
+                    range = distance.magnitude;
+
+                    if(distance.magnitude > detectionRange)
+                        range = detectionRange;
+
 
                     // Checks if the body is within range of this NPC's detection range
                     if(distance.magnitude <= detectionRange)
@@ -146,39 +156,40 @@ public class Detection : MonoBehaviour
                         if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distance) <= detectionMaxAngle)
                         {
                             // Sends a raycast towards the body and checks if it hits anything
-                            RaycastHit[] hits = new RaycastHit[10];
-                            Physics.RaycastNonAlloc(new Ray(transform.position, distance), hits, detectionRange, detectionLayers);
+                            RaycastHit[] hits = new RaycastHit[3];
+                            Physics.RaycastNonAlloc(new Ray(transform.position, distance), hits, range, detectionLayers);
 
-                            // Validates the detection if the only raycast collision was the body
-                            if (hits.Count() == 1)
+                            // Validates the detection if the first raycast collision was the body
+                            if (hits[0].transform.GetComponent<BodyCarry>() != null)
                             {
                                 // Checks if the raycast hit an available body that hasn't been seen yet
-                                if (hits[0].transform.GetComponent<BodyCarry>() && b.enabled && !b.HasBeenDetected)
+                                if (b.enabled && !b.HasBeenDetected)
                                 {
                                     seesBody = true;
-                                    Debug.DrawRay(transform.position, distance * hits[0].distance, Color.red);
+                                    Debug.DrawRay(transform.position, distance, Color.red);
                                     break;
                                 }
 
-                                // If the body was already seen, draws a debug ray
+                                // If the body is disabled or was already seen, draws a debug ray
                                 else
                                 {
                                     seesBody = false;
-                                    Debug.DrawRay(transform.position, distance * hits[0].distance, Color.yellow);
+                                    Debug.DrawRay(transform.position, distance, Color.yellow);
                                 }
                             }
 
-                            // If the raycast hit obstacles other than the body
-                            else if(hits.Count() != 0)
-                            {
-                                seesBody = false;
-                                Debug.DrawRay(transform.position, distance * detectionRange, Color.yellow);
-                            }
-
-                            // If the raycast doesn't reach the body:
                             else
                             {
                                 seesBody = false;
+
+                                // Checks if the raycast hit obstacles other than the body
+                                foreach(RaycastHit h in hits)
+                                {
+                                    if(h.transform && h.transform.GetComponent<BodyCarry>())
+                                        Debug.DrawRay(transform.position, distance.normalized * detectionRange, Color.yellow);
+                                }
+
+                                // If the raycast doesn't reach the body:
                                 Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
                             }
                         }

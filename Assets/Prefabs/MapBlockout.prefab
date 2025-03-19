@@ -6736,37 +6736,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: beaf0eac2a7c9634e8413a67f429e2de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1191359878865394296
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 80226581349139548}
-  m_Layer: 0
-  m_Name: NPC Move Target
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &80226581349139548
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1191359878865394296}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.573, y: -2.318, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6530163100280913520}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1216538515910600179
 GameObject:
   m_ObjectHideFlags: 0
@@ -26204,6 +26173,7 @@ MonoBehaviour:
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
+  interactionSpot: {fileID: 0}
 --- !u!95 &8611790324358802852
 Animator:
   serializedVersion: 7
@@ -65594,8 +65564,8 @@ MonoBehaviour:
   isSecondInteractionSuspicious: 0
   suspicionIncreaseOnInteraction: 1.5
   objectName: 
-  customInteractionMessage: Spike drink
-  customRequirementMessage: Maybe i could spike his drink
+  customInteractionMessage: Spike Concierge's drink
+  customRequirementMessage: I could put something in this drink...
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
 --- !u!114 &9150272817428347080
@@ -75770,75 +75740,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 1202203330178767493, guid: 08a75798b85b80f468a57a49eb5766e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 80226581349139548}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1560042745432640676, guid: 08a75798b85b80f468a57a49eb5766e4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6653744893502559002}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08a75798b85b80f468a57a49eb5766e4, type: 3}
 --- !u!4 &6530163100280913520 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1202203330178767493, guid: 08a75798b85b80f468a57a49eb5766e4, type: 3}
   m_PrefabInstance: {fileID: 5346011570327758069}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6887899037944752209 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1560042745432640676, guid: 08a75798b85b80f468a57a49eb5766e4, type: 3}
-  m_PrefabInstance: {fileID: 5346011570327758069}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6653744893502559002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6887899037944752209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8727d7afbb366e943844c795bd86e606, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactiveType: 4
-  updateIfIndirect: 0
-  requiredItem: 0
-  requiredEquipment: 0
-  consumeItemRequirement: 0
-  oneTimeRequirement: 0
-  firstInteractionDurationUnique: 1
-  interactionDuration: 0
-  secondInteractionDuration: 0
-  onInteractionComplete:
-    m_PersistentCalls:
-      m_Calls: []
-  onSecondInteractionComplete:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: EnemyGuard, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  isInteractionSuspicious: 0
-  isSecondInteractionSuspicious: 0
-  suspicionIncreaseOnInteraction: 2.5
-  objectName: 
-  customInteractionMessage: 
-  customRequirementMessage: 
-  onInteractAudioPlayer: {fileID: 0}
-  whileInteractAudioPlayer: {fileID: 0}
-  enemyMovement: {fileID: 0}
-  targetLocation: {fileID: 80226581349139548}
-  fetchTargetWithTag: 
 --- !u!1001 &5577384950186977869
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77556,6 +77465,10 @@ PrefabInstance:
     - target: {fileID: 7153180845941234808, guid: 37b253a4d0b95814282d224109abc7be, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8421511387304330728, guid: 37b253a4d0b95814282d224109abc7be, type: 3}
+      propertyPath: customInteractionMessage
+      value: Spike Receptionist's drink
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
