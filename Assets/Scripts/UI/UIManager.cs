@@ -15,6 +15,9 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private float startingTimeScale = 0f;
     [SerializeField] [Range(0.001f, 20f)] private float UISpeed = 3f;
+    [SerializeField] private float UIScaleWidthIncrease = 50f;
+    [SerializeField] private float UIScaleHeightIncrease = 10f;
+    [SerializeField] private float UIScaleFontIncrease = 12f;
     [SerializeField] private CanvasGroup loadingScreen;
     [SerializeField] private CanvasGroup UIBackground;
     [SerializeField] private CanvasGroup missionBriefingScreen;
@@ -59,6 +62,8 @@ public class UIManager : MonoBehaviour
     private static bool gamePaused;
     private bool settingsActive;
     private Dictionary<Transform, Vector3> originalUIPositions;
+    private Dictionary<RectTransform, (Coroutine, float, float, float)> uiButtonScaleUpCoroutines;
+    private Dictionary<RectTransform, (Coroutine, float, float, float)> uiButtonScaleDownCoroutines;
     private Player player;
     private PlayerInput playerInput;
     private PlayerController playerController;
@@ -86,6 +91,8 @@ public class UIManager : MonoBehaviour
         #endif
 
         originalUIPositions = new Dictionary<Transform, Vector3>();
+        uiButtonScaleUpCoroutines = new Dictionary<RectTransform, (Coroutine, float, float, float)>();
+        uiButtonScaleDownCoroutines = new Dictionary<RectTransform, (Coroutine, float, float, float)>();
 
         for(int i = 0; i < transform.childCount; i++)
         {
@@ -315,25 +322,98 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private IEnumerator FadeInUI(CanvasGroup ui)
+    private IEnumerator FadeInUI(CanvasGroup ui, float speed = 1f)
     {
         ui.blocksRaycasts = true;
 
         while(ui.alpha < 1f)
         {
-            ui.alpha += deltaTime;
+            ui.alpha += deltaTime * speed;
             yield return null;
         }
     }
 
-    private IEnumerator FadeOutUI(CanvasGroup ui)
+    private IEnumerator FadeOutUI(CanvasGroup ui, float speed = 1f)
     {
         ui.blocksRaycasts = false;
         
         while(ui.alpha > 0f)
         {
-            ui.alpha -= deltaTime;
+            ui.alpha -= deltaTime * speed;
             yield return null;
+        }
+    }
+
+    private IEnumerator ScaleUI(RectTransform uiTransform, float widthIncrement, float heightIncrement, float textIncrement)
+    {
+        TextMeshProUGUI buttonText = uiTransform.GetComponentInChildren<TextMeshProUGUI>();
+
+        float targetWidth = uiTransform.sizeDelta.x + widthIncrement;
+        float targetHeight = uiTransform.sizeDelta.y + heightIncrement;
+        float targetTextSize = buttonText.fontSize + textIncrement;
+
+        while(uiTransform.sizeDelta.x != targetWidth || uiTransform.sizeDelta.y != targetHeight || buttonText.fontSize != targetTextSize)
+        {
+            float widthDifference = targetWidth - uiTransform.sizeDelta.x;
+            float heightDifference = targetHeight - uiTransform.sizeDelta.y;
+            float textDifference = targetTextSize - buttonText.fontSize;
+
+            if(widthDifference != 0)
+                widthDifference = Mathf.Clamp(widthDifference, -deltaTime*50, deltaTime*50);
+
+            if(heightDifference != 0)
+                heightDifference = Mathf.Clamp(heightDifference, -deltaTime*30, deltaTime*30);
+
+            if(textDifference != 0)
+                textDifference = Mathf.Clamp(textDifference, -deltaTime*30, deltaTime*30);
+
+            uiTransform.sizeDelta += new Vector2(widthDifference, heightDifference);
+            buttonText.fontSize += textDifference;
+            yield return null;
+        }
+    }
+
+    public void HoverScaleUpUI(RectTransform uiTransform)
+    {
+        TextMeshProUGUI buttonText = uiTransform.GetComponentInChildren<TextMeshProUGUI>();
+        if(uiButtonScaleDownCoroutines.Keys.Contains(uiTransform))
+        {
+            StopCoroutine(uiButtonScaleDownCoroutines[uiTransform].Item1);
+
+            uiTransform.sizeDelta = new Vector2(
+                uiButtonScaleDownCoroutines[uiTransform].Item2, uiButtonScaleDownCoroutines[uiTransform].Item3);
+            buttonText.fontSize = uiButtonScaleDownCoroutines[uiTransform].Item4;
+
+            uiButtonScaleDownCoroutines.Remove(uiTransform);
+        }
+
+        if(!uiButtonScaleUpCoroutines.Keys.Contains(uiTransform))
+        {
+            uiButtonScaleUpCoroutines.Add(uiTransform, (StartCoroutine(ScaleUI(uiTransform, UIScaleWidthIncrease,
+                UIScaleHeightIncrease, UIScaleFontIncrease)), uiTransform.sizeDelta.x + UIScaleWidthIncrease,
+                    uiTransform.sizeDelta.y + UIScaleHeightIncrease, buttonText.fontSize + UIScaleFontIncrease));
+        }
+    }
+
+    public void HoverScaleDownUI(RectTransform uiTransform)
+    {
+        TextMeshProUGUI buttonText = uiTransform.GetComponentInChildren<TextMeshProUGUI>();
+        if(uiButtonScaleUpCoroutines.Keys.Contains(uiTransform))
+        {
+            StopCoroutine(uiButtonScaleUpCoroutines[uiTransform].Item1);
+
+            uiTransform.sizeDelta = new Vector2(
+                uiButtonScaleUpCoroutines[uiTransform].Item2, uiButtonScaleUpCoroutines[uiTransform].Item3);
+            buttonText.fontSize = uiButtonScaleUpCoroutines[uiTransform].Item4;
+
+            uiButtonScaleUpCoroutines.Remove(uiTransform);
+        }
+
+        if(!uiButtonScaleDownCoroutines.Keys.Contains(uiTransform))
+        {
+            uiButtonScaleDownCoroutines.Add(uiTransform, (StartCoroutine(ScaleUI(uiTransform, -UIScaleWidthIncrease,
+                -UIScaleHeightIncrease, -UIScaleFontIncrease)), uiTransform.sizeDelta.x - UIScaleWidthIncrease,
+                    uiTransform.sizeDelta.y -UIScaleHeightIncrease, buttonText.fontSize - UIScaleFontIncrease));
         }
     }
 

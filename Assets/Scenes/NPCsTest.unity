@@ -1624,6 +1624,7 @@ GameObject:
   - component: {fileID: 20709821}
   - component: {fileID: 20709820}
   - component: {fileID: 20709819}
+  - component: {fileID: 20709822}
   m_Layer: 5
   m_Name: Quit button
   m_TagString: Untagged
@@ -1745,6 +1746,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 20709817}
   m_CullTransparentMesh: 1
+--- !u!114 &20709822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20709817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 20709818}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 20709818}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!43 &25524277
 Mesh:
   m_ObjectHideFlags: 0
@@ -2283,6 +2329,7 @@ GameObject:
   - component: {fileID: 34227902}
   - component: {fileID: 34227901}
   - component: {fileID: 34227900}
+  - component: {fileID: 34227903}
   m_Layer: 5
   m_Name: Restart button
   m_TagString: Untagged
@@ -2404,6 +2451,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 34227898}
   m_CullTransparentMesh: 1
+--- !u!114 &34227903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34227898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 34227899}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 34227899}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &34550415
 GameObject:
   m_ObjectHideFlags: 0
@@ -6476,6 +6568,7 @@ GameObject:
   - component: {fileID: 163823806}
   - component: {fileID: 163823805}
   - component: {fileID: 163823804}
+  - component: {fileID: 163823807}
   m_Layer: 5
   m_Name: Settings button
   m_TagString: Untagged
@@ -6609,6 +6702,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163823802}
   m_CullTransparentMesh: 1
+--- !u!114 &163823807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163823802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 163823803}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 163823803}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!43 &164379051
 Mesh:
   m_ObjectHideFlags: 0
@@ -20092,6 +20230,7 @@ GameObject:
   - component: {fileID: 509421902}
   - component: {fileID: 509421901}
   - component: {fileID: 509421900}
+  - component: {fileID: 509421903}
   m_Layer: 5
   m_Name: Quit button
   m_TagString: Untagged
@@ -20213,6 +20352,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 509421898}
   m_CullTransparentMesh: 1
+--- !u!114 &509421903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509421898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 509421899}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 509421899}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!43 &511214066
 Mesh:
   m_ObjectHideFlags: 0
@@ -21784,6 +21968,7 @@ GameObject:
   - component: {fileID: 578747035}
   - component: {fileID: 578747034}
   - component: {fileID: 578747033}
+  - component: {fileID: 578747036}
   m_Layer: 5
   m_Name: Cancel button
   m_TagString: Untagged
@@ -21905,6 +22090,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 578747031}
   m_CullTransparentMesh: 1
+--- !u!114 &578747036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578747031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 578747032}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 578747032}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!43 &581497582
 Mesh:
   m_ObjectHideFlags: 0
@@ -34129,6 +34359,7 @@ GameObject:
   - component: {fileID: 945230235}
   - component: {fileID: 945230234}
   - component: {fileID: 945230233}
+  - component: {fileID: 945230236}
   m_Layer: 5
   m_Name: Confirm button
   m_TagString: Untagged
@@ -34250,6 +34481,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 945230231}
   m_CullTransparentMesh: 1
+--- !u!114 &945230236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 945230231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 945230232}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 945230232}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!43 &949987228
 Mesh:
   m_ObjectHideFlags: 0
@@ -36168,6 +36444,7 @@ GameObject:
   - component: {fileID: 990248132}
   - component: {fileID: 990248131}
   - component: {fileID: 990248130}
+  - component: {fileID: 990248133}
   m_Layer: 5
   m_Name: Replay button
   m_TagString: Untagged
@@ -36289,6 +36566,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 990248128}
   m_CullTransparentMesh: 1
+--- !u!114 &990248133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990248128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 990248129}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 990248129}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!43 &998647833
 Mesh:
   m_ObjectHideFlags: 0
@@ -43157,6 +43479,7 @@ GameObject:
   - component: {fileID: 1187638633}
   - component: {fileID: 1187638632}
   - component: {fileID: 1187638631}
+  - component: {fileID: 1187638634}
   m_Layer: 5
   m_Name: Replay button
   m_TagString: Untagged
@@ -43278,6 +43601,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1187638629}
   m_CullTransparentMesh: 1
+--- !u!114 &1187638634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187638629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1187638630}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1187638630}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!43 &1188476619
 Mesh:
   m_ObjectHideFlags: 0
@@ -45183,6 +45551,7 @@ GameObject:
   - component: {fileID: 1244363716}
   - component: {fileID: 1244363715}
   - component: {fileID: 1244363714}
+  - component: {fileID: 1244363717}
   m_Layer: 5
   m_Name: Resume button
   m_TagString: Untagged
@@ -45304,6 +45673,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1244363712}
   m_CullTransparentMesh: 1
+--- !u!114 &1244363717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244363712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1244363713}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1244363713}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &1244449355
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50080,6 +50494,7 @@ GameObject:
   - component: {fileID: 1387283864}
   - component: {fileID: 1387283863}
   - component: {fileID: 1387283866}
+  - component: {fileID: 1387283867}
   m_Layer: 5
   m_Name: Confirm button
   m_TagString: Untagged
@@ -50238,6 +50653,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   setsUpVariables: 0
+--- !u!114 &1387283867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1387283861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1387283862}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1387283862}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1391452386
 GameObject:
   m_ObjectHideFlags: 0
@@ -50250,6 +50710,7 @@ GameObject:
   - component: {fileID: 1391452390}
   - component: {fileID: 1391452389}
   - component: {fileID: 1391452388}
+  - component: {fileID: 1391452391}
   m_Layer: 5
   m_Name: Back button
   m_TagString: Untagged
@@ -50383,6 +50844,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1391452386}
   m_CullTransparentMesh: 1
+--- !u!114 &1391452391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1391452386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1391452387}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1391452387}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1391657890
 GameObject:
   m_ObjectHideFlags: 0
@@ -50727,6 +51233,7 @@ GameObject:
   - component: {fileID: 1397178901}
   - component: {fileID: 1397178900}
   - component: {fileID: 1397178899}
+  - component: {fileID: 1397178902}
   m_Layer: 5
   m_Name: Confirm button
   m_TagString: Untagged
@@ -50848,6 +51355,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1397178897}
   m_CullTransparentMesh: 1
+--- !u!114 &1397178902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397178897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1397178898}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1397178898}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!43 &1417789228
 Mesh:
   m_ObjectHideFlags: 0
@@ -63626,6 +64178,7 @@ GameObject:
   - component: {fileID: 1841931914}
   - component: {fileID: 1841931913}
   - component: {fileID: 1841931912}
+  - component: {fileID: 1841931915}
   m_Layer: 5
   m_Name: Quit to Menu button
   m_TagString: Untagged
@@ -63747,6 +64300,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1841931910}
   m_CullTransparentMesh: 1
+--- !u!114 &1841931915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841931910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1841931911}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1841931911}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1844958887
 GameObject:
   m_ObjectHideFlags: 0
@@ -66074,6 +66672,7 @@ GameObject:
   - component: {fileID: 1896506326}
   - component: {fileID: 1896506325}
   - component: {fileID: 1896506324}
+  - component: {fileID: 1896506327}
   m_Layer: 5
   m_Name: Cancel button
   m_TagString: Untagged
@@ -66195,6 +66794,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1896506322}
   m_CullTransparentMesh: 1
+--- !u!114 &1896506327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896506322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1896506323}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1896506323}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1897101928
 GameObject:
   m_ObjectHideFlags: 0
@@ -70179,6 +70823,7 @@ GameObject:
   - component: {fileID: 2009058386}
   - component: {fileID: 2009058385}
   - component: {fileID: 2009058384}
+  - component: {fileID: 2009058387}
   m_Layer: 5
   m_Name: Cancel button
   m_TagString: Untagged
@@ -70300,6 +70945,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2009058382}
   m_CullTransparentMesh: 1
+--- !u!114 &2009058387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009058382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleUpUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2009058383}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1787406197}
+          m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+          m_MethodName: HoverScaleDownUI
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 2009058383}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.RectTransform, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!43 &2010080286
 Mesh:
   m_ObjectHideFlags: 0

@@ -8,6 +8,9 @@ using UnityEngine.SceneManagement;
 public class MainMenuScripts : MonoBehaviour
 {
     [SerializeField] [Range(0.001f, 20f)] private float UISpeed = 3f;
+    [SerializeField] private float UIScaleWidthIncrease = 100f;
+    [SerializeField] private float UIScaleHeightIncrease = 0f;
+    [SerializeField] private float UIScaleFontIncrease = 12f;
     [SerializeField] private GameObject background;
     [SerializeField] private CanvasGroup loadingScreen;
     [SerializeField] private GameObject mainMenu;
@@ -73,7 +76,8 @@ public class MainMenuScripts : MonoBehaviour
         float targetHeight = uiTransform.sizeDelta.y + heightIncrement;
         float targetTextSize = buttonText.fontSize + textIncrement;
 
-        while(uiTransform.sizeDelta.x != targetWidth || uiTransform.sizeDelta.y != targetHeight || buttonText.fontSize != targetTextSize)
+        while(uiTransform.sizeDelta.x != targetWidth ||uiTransform.sizeDelta.y != targetHeight ||
+            buttonText.fontSize != targetTextSize)
         {
             float widthDifference = targetWidth - uiTransform.sizeDelta.x;
             float heightDifference = targetHeight - uiTransform.sizeDelta.y;
@@ -110,8 +114,9 @@ public class MainMenuScripts : MonoBehaviour
 
         if(!uiButtonScaleUpCoroutines.Keys.Contains(uiTransform))
         {
-            uiButtonScaleUpCoroutines.Add(uiTransform, (StartCoroutine(ScaleUI(uiTransform, 100f, 30f, 20f)),
-                uiTransform.sizeDelta.x + 100f, uiTransform.sizeDelta.y + 30f, buttonText.fontSize + 20f));
+            uiButtonScaleUpCoroutines.Add(uiTransform, (StartCoroutine(ScaleUI(uiTransform, UIScaleWidthIncrease,
+                UIScaleHeightIncrease, UIScaleFontIncrease)), uiTransform.sizeDelta.x + UIScaleWidthIncrease,
+                    uiTransform.sizeDelta.y + UIScaleHeightIncrease, buttonText.fontSize + UIScaleFontIncrease));
         }
     }
 
@@ -131,8 +136,9 @@ public class MainMenuScripts : MonoBehaviour
 
         if(!uiButtonScaleDownCoroutines.Keys.Contains(uiTransform))
         {
-            uiButtonScaleDownCoroutines.Add(uiTransform, (StartCoroutine(ScaleUI(uiTransform, -100f, -30f, -20f)),
-                uiTransform.sizeDelta.x - 100f, uiTransform.sizeDelta.y - 30f, buttonText.fontSize - 20f));
+            uiButtonScaleDownCoroutines.Add(uiTransform, (StartCoroutine(ScaleUI(uiTransform, -UIScaleWidthIncrease,
+                -UIScaleHeightIncrease, -UIScaleFontIncrease)), uiTransform.sizeDelta.x - UIScaleWidthIncrease,
+                    uiTransform.sizeDelta.y - UIScaleHeightIncrease, buttonText.fontSize - UIScaleFontIncrease));
         }
     }
 
@@ -184,7 +190,7 @@ public class MainMenuScripts : MonoBehaviour
 
     private IEnumerator StartLoadingScene(int scene)
     {
-        StartCoroutine(FadeInUI(loadingScreen));
+        StartCoroutine(FadeInUI(loadingScreen, 0.5f));
 
         while(loadingScreen.alpha < 1f)
         {
@@ -194,24 +200,24 @@ public class MainMenuScripts : MonoBehaviour
         SceneManager.LoadScene(scene);
     }
 
-    private IEnumerator FadeInUI(CanvasGroup ui)
+    private IEnumerator FadeInUI(CanvasGroup ui, float speed = 1f)
     {
         ui.blocksRaycasts = true;
 
         while(ui.alpha < 1f)
         {
-            ui.alpha += Time.fixedDeltaTime;
+            ui.alpha += Time.fixedDeltaTime * speed;
             yield return null;
         }
     }
 
-    private IEnumerator FadeOutUI(CanvasGroup ui)
+    private IEnumerator FadeOutUI(CanvasGroup ui, float speed = 1f)
     {
         ui.blocksRaycasts = false;
         
         while(ui.alpha > 0f)
         {
-            ui.alpha -= Time.fixedDeltaTime;
+            ui.alpha -= Time.fixedDeltaTime * speed;
             yield return null;
         }
     }
