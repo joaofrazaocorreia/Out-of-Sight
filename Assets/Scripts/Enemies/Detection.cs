@@ -77,11 +77,7 @@ public class Detection : MonoBehaviour
                     enemyMovement == null && !enemyCamera.Jammed && enemyCamera.IsOn))
             {
                 Vector3 distanceToPlayer = player.transform.position - transform.position;
-                float range = distanceToPlayer.magnitude;
-
-                if(distanceToPlayer.magnitude > detectionRange)
-                    range = detectionRange;
-
+                float range = Mathf.Min(distanceToPlayer.magnitude, detectionRange);
 
                 // Checks if the player is too close to the NPC
                 tooCloseToPlayer = distanceToPlayer.magnitude <= proximityDetectionRange;
@@ -142,55 +138,50 @@ public class Detection : MonoBehaviour
                     if (b != null && (!b.enabled || b.HasBeenDetected))
                         continue;
                     
-                    Vector3 distance = b.transform.position - transform.position;
-                    range = distance.magnitude;
-
-                    if(distance.magnitude > detectionRange)
-                        range = detectionRange;
-
+                    Vector3 distanceToBody = b.transform.position - transform.position;
+                    Vector3 distanceToBodyHorizontal = new Vector3(b.transform.position.x, 0f, b.transform.position.z) - new Vector3(transform.position.x, 0f, transform.position.z);
+                    range = Mathf.Min(distanceToBody.magnitude, detectionRange);
 
                     // Checks if the body is within range of this NPC's detection range
-                    if(distance.magnitude <= detectionRange)
+                    if(distanceToBody.magnitude <= detectionRange)
                     {
                         // Checks if the body is within this NPC's field of view
-                        if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distance) <= detectionMaxAngle)
+                        if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distanceToBodyHorizontal) <= detectionMaxAngle)
                         {
-                            // Sends a raycast towards the body and checks if it hits anything
-                            RaycastHit[] hits = new RaycastHit[3];
-                            Physics.RaycastNonAlloc(new Ray(transform.position, distance), hits, range, detectionLayers);
+                            // Sends a raycast towards the body
+                            Physics.Raycast(transform.position, distanceToBody, out RaycastHit hit, detectionRange, detectionLayers);
 
-                            // Validates the detection if the first raycast collision was the body
-                            if (hits[0].transform && hits[0].transform.GetComponent<BodyCarry>() != null)
+                            // Checks if the raycast hit the body
+                            if(hit.collider == b.GetComponent<Collider>())
                             {
-                                // Checks if the raycast hit an available body that hasn't been seen yet
-                                if (b.enabled && !b.HasBeenDetected)
+                                // Checks if the body is enabled and hasn't been seen yet
+                                if(b.enabled && !b.HasBeenDetected)
                                 {
                                     seesBody = true;
-                                    Debug.DrawRay(transform.position, distance, Color.red);
+                                    Debug.DrawRay(transform.position, distanceToBody.normalized * range, Color.red);
                                     break;
                                 }
 
-                                // If the body is disabled or was already seen, draws a debug ray
+                                // If the body is disabled or was already seen:
                                 else
                                 {
                                     seesBody = false;
-                                    Debug.DrawRay(transform.position, distance, Color.yellow);
+                                    Debug.DrawRay(transform.position, distanceToBody.normalized * range, Color.green);
                                 }
                             }
 
+                            // If the raycast didn't hit the body, draws different debug rays
                             else
                             {
                                 seesBody = false;
 
-                                // Checks if the raycast hit obstacles other than the body
-                                foreach(RaycastHit h in hits)
-                                {
-                                    if(h.transform && h.transform.GetComponent<BodyCarry>())
-                                        Debug.DrawRay(transform.position, distance.normalized * detectionRange, Color.yellow);
-                                }
+                                // If the raycast hit any obstacle other than the body, draws a yellow ray towards the hit
+                                if(hit.transform)
+                                    Debug.DrawRay(transform.position, distanceToBody.normalized * range, Color.yellow);
 
-                                // If the raycast doesn't reach the body:
-                                Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
+                                // If the raycast didn't reach the body, draws a white ray forward
+                                else
+                                    Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
                             }
                         }
                         
