@@ -13307,6 +13307,40 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.40300593, y: 1, z: 0.6316317}
   m_Center: {x: 0.39235213, y: 0, z: -0.5037574}
+--- !u!1 &2004384325404704627
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3587679191387693613}
+  m_Layer: 0
+  m_Name: ExitColliders
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3587679191387693613
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2004384325404704627}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2327501585583315126}
+  - {fileID: 8774397136167955144}
+  - {fileID: 5349918112497905938}
+  m_Father: {fileID: 4533296425516091067}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2016959620422409853
 GameObject:
   m_ObjectHideFlags: 0
@@ -28387,7 +28421,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 2100000, guid: b904a3f3b90b16c49a7165641b526818, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -28439,6 +28473,99 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!1 &3946934165634810928
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5349918112497905938}
+  - component: {fileID: 2630697416436295800}
+  - component: {fileID: 425874666791462478}
+  m_Layer: 0
+  m_Name: Stairs2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5349918112497905938
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3946934165634810928}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0.3420201, w: 0.9396927}
+  m_LocalPosition: {x: -12.55, y: 9.32, z: 7.15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3587679191387693613}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 40}
+--- !u!65 &2630697416436295800
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3946934165634810928}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5, y: 5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &425874666791462478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3946934165634810928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 2
+  updateIfIndirect: 0
+  requiredItem: 8
+  requiredEquipment: 0
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
+  objectName: 
+  customInteractionMessage: 
+  showRequirementMessage: 1
+  customRequirementMessage: My objective isn't upstairs...
+  onInteractAudioPlayer: {fileID: 0}
+  whileInteractAudioPlayer: {fileID: 0}
+  navMeshLink: {fileID: 0}
+  doorOpenPlayer: {fileID: 0}
+  doorClosePlayer: {fileID: 0}
 --- !u!1 &3984160929137252842
 GameObject:
   m_ObjectHideFlags: 0
@@ -30788,6 +30915,99 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!1 &4304850671201450713
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2327501585583315126}
+  - component: {fileID: 2141592918806312873}
+  - component: {fileID: 5894592917804092286}
+  m_Layer: 0
+  m_Name: Entrance
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2327501585583315126
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4304850671201450713}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -39.21, y: 3.97, z: 12.49}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3587679191387693613}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2141592918806312873
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4304850671201450713}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2, y: 10, z: 7}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5894592917804092286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4304850671201450713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 2
+  updateIfIndirect: 0
+  requiredItem: 8
+  requiredEquipment: 0
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
+  objectName: 
+  customInteractionMessage: 
+  showRequirementMessage: 1
+  customRequirementMessage: I can't leave yet...
+  onInteractAudioPlayer: {fileID: 0}
+  whileInteractAudioPlayer: {fileID: 0}
+  navMeshLink: {fileID: 0}
+  doorOpenPlayer: {fileID: 0}
+  doorClosePlayer: {fileID: 0}
 --- !u!1 &4365631247922803054
 GameObject:
   m_ObjectHideFlags: 0
@@ -40533,7 +40753,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 2100000, guid: b904a3f3b90b16c49a7165641b526818, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -45039,6 +45259,99 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!1 &5910300193606116643
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8774397136167955144}
+  - component: {fileID: 2112201676460870415}
+  - component: {fileID: 371690580366065754}
+  m_Layer: 0
+  m_Name: Stairs1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8774397136167955144
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5910300193606116643}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.88, y: 10.75, z: 9.96}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3587679191387693613}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2112201676460870415
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5910300193606116643}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 10, z: 17}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &371690580366065754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5910300193606116643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 2
+  updateIfIndirect: 0
+  requiredItem: 8
+  requiredEquipment: 0
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
+  objectName: 
+  customInteractionMessage: 
+  showRequirementMessage: 1
+  customRequirementMessage: My objective isn't upstairs...
+  onInteractAudioPlayer: {fileID: 0}
+  whileInteractAudioPlayer: {fileID: 0}
+  navMeshLink: {fileID: 0}
+  doorOpenPlayer: {fileID: 0}
+  doorClosePlayer: {fileID: 0}
 --- !u!1 &5956743038524624957
 GameObject:
   m_ObjectHideFlags: 0
@@ -47369,7 +47682,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 2100000, guid: b904a3f3b90b16c49a7165641b526818, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -67020,7 +67333,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 2100000, guid: b904a3f3b90b16c49a7165641b526818, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -71252,6 +71565,7 @@ Transform:
   - {fileID: 3991064859790874075}
   - {fileID: 5925749152689471022}
   - {fileID: 1481660463906127065}
+  - {fileID: 3587679191387693613}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8887074668636710734
@@ -76539,6 +76853,34 @@ PrefabInstance:
     - target: {fileID: 7578726531098782538, guid: a7d10aa5e51f4954f834903f01108302, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8814091749507465968, guid: a7d10aa5e51f4954f834903f01108302, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8814091749507465968, guid: a7d10aa5e51f4954f834903f01108302, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8814091749507465968, guid: a7d10aa5e51f4954f834903f01108302, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 5894592917804092286}
+    - target: {fileID: 8814091749507465968, guid: a7d10aa5e51f4954f834903f01108302, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8814091749507465968, guid: a7d10aa5e51f4954f834903f01108302, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: set_enabled
+      objectReference: {fileID: 0}
+    - target: {fileID: 8814091749507465968, guid: a7d10aa5e51f4954f834903f01108302, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: UnityEngine.Behaviour, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8814091749507465968, guid: a7d10aa5e51f4954f834903f01108302, type: 3}
+      propertyPath: onInteractionComplete.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
