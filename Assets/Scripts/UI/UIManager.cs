@@ -75,7 +75,6 @@ public class UIManager : MonoBehaviour
     private Dictionary<Detection, GameObject> detectionArrows;
     private Alarm alarm;
     private float deltaTime;
-    private float timer;
     private float primaryInteractionTextOffset;
     private float secondaryInteractionTextOffset;
 
@@ -120,7 +119,6 @@ public class UIManager : MonoBehaviour
         detectionArrows = new Dictionary<Detection, GameObject>();
         alarm = FindAnyObjectByType<Alarm>();
         deltaTime = Time.fixedDeltaTime * UISpeed;
-        timer = 0;
         primaryInteractionTextOffset = interactionMessages[0].transform.localPosition.x;
         secondaryInteractionTextOffset = interactionMessages[1].transform.localPosition.x;
 
@@ -135,25 +133,22 @@ public class UIManager : MonoBehaviour
         // Updates the HUD while the game is unpaused
         if(Time.timeScale != 0)
         {
-            timer += Time.deltaTime;
-            UpdateTimerText();
-
             UpdateGlobalDetectionFill();
             UpdateDetectionArrows();
+
+            for (int i = 0; i < interactionUI.Length; i++)
+            {
+                if (interactionUI[i].activeSelf)
+                {
+                    UpdateInteractionUi();
+                    break;
+                }
+            }
         }
         
         if(playerInput.actions["Pause Game"].WasPressedThisFrame())
         {
             TogglePause();
-        }
-
-        for (int i = 0; i < interactionUI.Length; i++)
-        {
-            if (interactionUI[i].activeSelf)
-            {
-                UpdateInteractionUi();
-                break;
-            }
         }
     }
 
@@ -516,25 +511,6 @@ public class UIManager : MonoBehaviour
     {
         if(disguiseImage.sprite != sprite)
             disguiseImage.sprite = sprite;
-    }
-
-    private void UpdateTimerText()
-    {
-        string text = "";
-        int minutes = (int)timer / 60;
-        int seconds = (int)timer % 60;
-
-        if(minutes < 10)
-            text += "0";
-        text += $"{minutes} : ";
-        
-        if(seconds < 10)
-            text += "0";
-        text += $"{seconds}";
-
-
-        if(missionTimer.text != text)
-            missionTimer.text = text;
     }
 
     private void UpdateAmmoText(string text)
