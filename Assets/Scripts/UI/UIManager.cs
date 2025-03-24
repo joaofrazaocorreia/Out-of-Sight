@@ -596,11 +596,22 @@ public class UIManager : MonoBehaviour
 
     private void ToggleInteractionMessage(bool? toggle, int index)
     {
-        if(toggle != null)
-            interactionUI[index].SetActive((bool)toggle);
+        try
+        {
+            if(interactionMessages[index].text == "")
+                interactionUI[index].SetActive(false);
+
+            else if(toggle != null)
+                interactionUI[index].SetActive((bool)toggle);
+            
+            else
+                interactionUI[index].SetActive(!interactingBar.activeSelf);
+        }
+        catch
+        {
+            Debug.LogWarning($"index {index} is outside bounds of the array (interactionMessages.Count == {interactionMessages.Count()}; interactionUI.Count == {interactionUI.Count()})");
+        }
         
-        else
-            interactionUI[index].SetActive(!interactingBar.activeSelf);
     }
 
     private void DisableInteractionMessage()
