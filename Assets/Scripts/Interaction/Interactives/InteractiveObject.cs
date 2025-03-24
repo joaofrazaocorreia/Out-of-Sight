@@ -29,6 +29,7 @@ public abstract class InteractiveObject : MonoBehaviour
     [Header("UI Options")]
     [SerializeField] protected string objectName;
     [SerializeField] protected string customInteractionMessage;
+    [SerializeField] protected bool showRequirementMessage = true;
     [SerializeField] protected string customRequirementMessage;
 
     [Header("Audio Options")] 
@@ -109,10 +110,13 @@ public abstract class InteractiveObject : MonoBehaviour
     {
         if (!requirementsMet)
         {
-            if(CustomRequirementMessage.Length > 0)
+            if(CustomRequirementMessage.Length > 0 && showRequirementMessage)
                 return CustomRequirementMessage;
 
-            else return "Requires " + GetRequirementNames();
+            else if (showRequirementMessage)
+                return "Requires " + GetRequirementNames();
+
+            else return "";
         }
 
         else if(CustomInteractionMessage.Length > 0)
