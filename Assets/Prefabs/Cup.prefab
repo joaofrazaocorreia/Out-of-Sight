@@ -108,10 +108,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
+  m_Radius: 0.1
+  m_Height: 0.1
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8421511387304330728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,6 +144,7 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 4
   objectName: 
   customInteractionMessage: Spike drink
+  showRequirementMessage: 1
   customRequirementMessage: I could put something in this drink...
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
@@ -179,6 +180,7 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
