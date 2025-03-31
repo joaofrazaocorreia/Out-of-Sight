@@ -242,7 +242,6 @@ GameObject:
   - component: {fileID: 5450679917757293125}
   - component: {fileID: 2943787410417910996}
   - component: {fileID: 7121503203964795451}
-  - component: {fileID: 4069291801641072682}
   m_Layer: 0
   m_Name: GMLight (8)
   m_TagString: Untagged
@@ -318,27 +317,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4069291801641072682
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 569346024071719656}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1030776441042594373
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,7 +437,6 @@ GameObject:
   - component: {fileID: 6464211672879887619}
   - component: {fileID: 3952632618319068395}
   - component: {fileID: 6067106404746628809}
-  - component: {fileID: 4017281211330964749}
   m_Layer: 0
   m_Name: GMLight
   m_TagString: Untagged
@@ -535,27 +512,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4017281211330964749
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1284837991572843961}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1514237269193214002
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,6 +525,7 @@ GameObject:
   - component: {fileID: 4770524821660133683}
   - component: {fileID: 2848347574749040651}
   - component: {fileID: 5579808828028021759}
+  - component: {fileID: 8082724343773635780}
   m_Layer: 0
   m_Name: Door2
   m_TagString: Untagged
@@ -673,12 +630,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1514237269193214002}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -698,12 +655,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &8082724343773635780
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1514237269193214002}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9c12d7e34e6777e45bbd82ed74b4e0a7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2549585059251647791
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,7 +695,6 @@ GameObject:
   - component: {fileID: 1577831618175080193}
   - component: {fileID: 1218579594265797520}
   - component: {fileID: 9166945488403104802}
-  - component: {fileID: 4435420298574180160}
   m_Layer: 0
   m_Name: GMLight (9)
   m_TagString: Untagged
@@ -791,27 +770,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4435420298574180160
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2549585059251647791}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2628856026908705446
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,7 +781,6 @@ GameObject:
   - component: {fileID: 6306915015277796215}
   - component: {fileID: 154151543587788307}
   - component: {fileID: 9190409248070198881}
-  - component: {fileID: 3768563615238944880}
   m_Layer: 0
   m_Name: Meeting_Footer
   m_TagString: Untagged
@@ -899,27 +856,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3768563615238944880
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2628856026908705446}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2813140057734394501
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,7 +991,6 @@ GameObject:
   - component: {fileID: 9169127913917871204}
   - component: {fileID: 726039839344035234}
   - component: {fileID: 1842590441086318396}
-  - component: {fileID: 8229152122880394928}
   m_Layer: 0
   m_Name: GMLight (6)
   m_TagString: Untagged
@@ -1131,27 +1066,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8229152122880394928
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3407679533001986713}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3753399112493253142
 GameObject:
   m_ObjectHideFlags: 0
@@ -1163,7 +1077,6 @@ GameObject:
   - component: {fileID: 6065454202066795354}
   - component: {fileID: 7568137181643992687}
   - component: {fileID: 8204752622561840064}
-  - component: {fileID: 8354345979504698080}
   m_Layer: 0
   m_Name: GMLight (3)
   m_TagString: Untagged
@@ -1239,27 +1152,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8354345979504698080
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3753399112493253142}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4133607990250663601
 GameObject:
   m_ObjectHideFlags: 0
@@ -1271,7 +1163,6 @@ GameObject:
   - component: {fileID: 2731279744397225173}
   - component: {fileID: 3943006078068216227}
   - component: {fileID: 589060939912586393}
-  - component: {fileID: 4483680516534865537}
   m_Layer: 0
   m_Name: Meeting_Footer
   m_TagString: Untagged
@@ -1347,27 +1238,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &4483680516534865537
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4133607990250663601}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4405678774337248274
 GameObject:
   m_ObjectHideFlags: 0
@@ -1379,7 +1249,6 @@ GameObject:
   - component: {fileID: 1278429504913187204}
   - component: {fileID: 7201110457872569005}
   - component: {fileID: 1422522643598337468}
-  - component: {fileID: 2308596654739799035}
   m_Layer: 0
   m_Name: GMLight (1)
   m_TagString: Untagged
@@ -1455,27 +1324,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &2308596654739799035
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4405678774337248274}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4712375866967502442
 GameObject:
   m_ObjectHideFlags: 0
@@ -1684,6 +1532,7 @@ GameObject:
   - component: {fileID: 5360474445558549281}
   - component: {fileID: 7910669974516158511}
   - component: {fileID: 951687906744916767}
+  - component: {fileID: 152430737007872431}
   m_Layer: 0
   m_Name: Door5
   m_TagString: Untagged
@@ -1788,12 +1637,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5344472655762065063}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -1813,12 +1662,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &152430737007872431
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5344472655762065063}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9c12d7e34e6777e45bbd82ed74b4e0a7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5563348588465176241
 GameObject:
   m_ObjectHideFlags: 0
@@ -1952,7 +1824,6 @@ GameObject:
   - component: {fileID: 3313752616925803910}
   - component: {fileID: 7853187255966415313}
   - component: {fileID: 4698547110157374486}
-  - component: {fileID: 7542980953206910915}
   m_Layer: 0
   m_Name: Meeting_Footer
   m_TagString: Untagged
@@ -2028,27 +1899,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7542980953206910915
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5809974322154800867}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6021988634097104601
 GameObject:
   m_ObjectHideFlags: 0
@@ -2301,6 +2151,7 @@ GameObject:
   - component: {fileID: 7109852654097866719}
   - component: {fileID: 2901400541899913167}
   - component: {fileID: 1380544812730378860}
+  - component: {fileID: 913809866581673673}
   m_Layer: 0
   m_Name: Door1
   m_TagString: Untagged
@@ -2405,12 +2256,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6571472785985938573}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -2430,12 +2281,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &913809866581673673
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6571472785985938573}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9c12d7e34e6777e45bbd82ed74b4e0a7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6862501211590855366
 GameObject:
   m_ObjectHideFlags: 0
@@ -2449,6 +2323,7 @@ GameObject:
   - component: {fileID: 5541577334227357945}
   - component: {fileID: 6188693013432155720}
   - component: {fileID: 4620478986980802634}
+  - component: {fileID: 416090235217812005}
   m_Layer: 0
   m_Name: Door4
   m_TagString: Untagged
@@ -2553,12 +2428,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6862501211590855366}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -2578,12 +2453,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &416090235217812005
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6862501211590855366}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9c12d7e34e6777e45bbd82ed74b4e0a7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7060342867561040913
 GameObject:
   m_ObjectHideFlags: 0
@@ -2683,6 +2581,7 @@ GameObject:
   - component: {fileID: 5628077755880693676}
   - component: {fileID: 110490124187751716}
   - component: {fileID: 2482061102464483377}
+  - component: {fileID: 637352422059471930}
   m_Layer: 0
   m_Name: Door3
   m_TagString: Untagged
@@ -2787,12 +2686,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7383324756073541200}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -2812,12 +2711,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &637352422059471930
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7383324756073541200}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9c12d7e34e6777e45bbd82ed74b4e0a7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7728748977848758005
 GameObject:
   m_ObjectHideFlags: 0
@@ -2829,6 +2751,7 @@ GameObject:
   - component: {fileID: 1452971143960739179}
   - component: {fileID: 6040694554555213368}
   - component: {fileID: 2015402783577347926}
+  - component: {fileID: 435404727197968332}
   m_Layer: 0
   m_Name: Structure
   m_TagString: Untagged
@@ -2905,6 +2828,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &435404727197968332
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7728748977848758005}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.8303285, y: 0.796617, z: 2.1402886}
+  m_Center: {x: 0.044835526, y: 0.00000030994417, z: 8.589618e-17}
 --- !u!1 &7797744795583819314
 GameObject:
   m_ObjectHideFlags: 0
@@ -3123,7 +3067,6 @@ GameObject:
   - component: {fileID: 5970823310978464953}
   - component: {fileID: 4868114111884492798}
   - component: {fileID: 4294977994383141764}
-  - component: {fileID: 5978763402892070669}
   m_Layer: 0
   m_Name: GMLight (2)
   m_TagString: Untagged
@@ -3199,27 +3142,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5978763402892070669
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7872760621737274549}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8135702422996529744
 GameObject:
   m_ObjectHideFlags: 0
@@ -3233,6 +3155,7 @@ GameObject:
   - component: {fileID: 1173983925896421145}
   - component: {fileID: 2074237827574381003}
   - component: {fileID: 4184620279935986293}
+  - component: {fileID: 8753875073335123130}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -3249,7 +3172,7 @@ Transform:
   m_GameObject: {fileID: 8135702422996529744}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.4313574, y: 0.62594914, z: 0.7078145}
+  m_LocalPosition: {x: -0.4313574, y: 0.6259491, z: 0.7078145}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3337,12 +3260,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8135702422996529744}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -3362,12 +3285,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &8753875073335123130
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8135702422996529744}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9c12d7e34e6777e45bbd82ed74b4e0a7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8252806049592854745
 GameObject:
   m_ObjectHideFlags: 0
@@ -3379,7 +3325,6 @@ GameObject:
   - component: {fileID: 5241486288810262903}
   - component: {fileID: 2273557770382255127}
   - component: {fileID: 3165899125309075976}
-  - component: {fileID: 7158802405435763387}
   m_Layer: 0
   m_Name: Meeting_Footer
   m_TagString: Untagged
@@ -3455,27 +3400,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7158802405435763387
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8252806049592854745}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8263297691876833172
 GameObject:
   m_ObjectHideFlags: 0
@@ -3705,7 +3629,6 @@ GameObject:
   - component: {fileID: 3333070184129374034}
   - component: {fileID: 8677674070928582750}
   - component: {fileID: 9167427414189987499}
-  - component: {fileID: 7841631243377317325}
   m_Layer: 0
   m_Name: GMLight (7)
   m_TagString: Untagged
@@ -3781,27 +3704,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7841631243377317325
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8537638049109770870}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8614934170168772718
 GameObject:
   m_ObjectHideFlags: 0
@@ -3813,7 +3715,6 @@ GameObject:
   - component: {fileID: 1225417276735251084}
   - component: {fileID: 5603461891636511880}
   - component: {fileID: 8504496795282730120}
-  - component: {fileID: 1883647758510052064}
   m_Layer: 0
   m_Name: Meeting_Footer
   m_TagString: Untagged
@@ -3889,27 +3790,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1883647758510052064
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8614934170168772718}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8701232911228533088
 GameObject:
   m_ObjectHideFlags: 0
@@ -4188,12 +4068,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: bace3f03edda145479d0785654283549, type: 2}
     - target: {fileID: -4494048281902103062, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4494048281902103062, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: -4444909955921167639, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4444909955921167639, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -3111565609762313623, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -3111565609762313623, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -4224,6 +4116,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 3c23bc30e52257f49b436efbdfc18726, type: 2}
     - target: {fileID: 2256101048190770027, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256101048190770027, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -4231,6 +4127,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: bace3f03edda145479d0785654283549, type: 2}
+    - target: {fileID: 3100332399246796471, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3100332399246796471, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -4261,24 +4161,39 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -4444909955921167639, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7544489378446287389}
+    - targetCorrespondingSourceObject: {fileID: -4444909955921167639, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7974200578851085089}
     - targetCorrespondingSourceObject: {fileID: -4494048281902103062, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4405241236393992850}
     - targetCorrespondingSourceObject: {fileID: -4494048281902103062, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4909320800402098323}
+    - targetCorrespondingSourceObject: {fileID: -4494048281902103062, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9192196749047770391}
     - targetCorrespondingSourceObject: {fileID: 3100332399246796471, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
       insertIndex: -1
       addedObject: {fileID: 244716177956112351}
     - targetCorrespondingSourceObject: {fileID: 3100332399246796471, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3334367200773955175}
+    - targetCorrespondingSourceObject: {fileID: 3100332399246796471, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1298055735490278562}
     - targetCorrespondingSourceObject: {fileID: 2256101048190770027, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2031095958771148960}
     - targetCorrespondingSourceObject: {fileID: 2256101048190770027, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2443560939944334804}
+    - targetCorrespondingSourceObject: {fileID: 2256101048190770027, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1340048317590228745}
+    - targetCorrespondingSourceObject: {fileID: -3111565609762313623, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4695193090482563806}
   m_SourcePrefab: {fileID: 100100000, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
 --- !u!1 &56101430503304364 stripped
 GameObject:
@@ -4313,12 +4228,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 56101430503304364}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -4338,12 +4253,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &7974200578851085089
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56101430503304364}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &231408578374112175 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -4494048281902103062, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
@@ -4377,12 +4315,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 231408578374112175}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -4402,12 +4340,62 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &9192196749047770391
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 231408578374112175}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 10ed19fa58c185340befcc309ba7fb64, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &1605165573278891052 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -3111565609762313623, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
+  m_PrefabInstance: {fileID: 4798530452450367045}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &4695193090482563806
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1605165573278891052}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6360558719573625917, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
 --- !u!4 &4980268123049406894 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
@@ -4446,12 +4434,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6762306533993663790}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -4471,12 +4459,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &1340048317590228745
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6762306533993663790}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7606960072141287666 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3100332399246796471, guid: 4e205a1a2d2b99c47a465e500987a075, type: 3}
@@ -4510,12 +4521,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7606960072141287666}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -4535,12 +4546,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &1298055735490278562
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7606960072141287666}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 10ed19fa58c185340befcc309ba7fb64, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &6890271520710618730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4797,6 +4831,18 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: -2312572995132689769, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.725
+      objectReference: {fileID: 0}
+    - target: {fileID: -2312572995132689769, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.298224
+      objectReference: {fileID: 0}
+    - target: {fileID: -2312572995132689769, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.32
+      objectReference: {fileID: 0}
     - target: {fileID: -2052933909744669795, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -4989,6 +5035,26 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: bace3f03edda145479d0785654283549, type: 2}
+    - target: {fileID: 5654657937771801205, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5654657937771801205, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5654657937771801205, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5654657937771801205, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5654657937771801205, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5765174242732520303, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -5020,6 +5086,26 @@ PrefabInstance:
     - target: {fileID: 7268238629356746729, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7405636757168360395, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7405636757168360395, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7405636757168360395, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7405636757168360395, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7405636757168360395, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 7.561
       objectReference: {fileID: 0}
     - target: {fileID: 7450690860848637312, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -5059,156 +5145,237 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8068073526183931155, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5734933691493930555}
+    - targetCorrespondingSourceObject: {fileID: -8068073526183931155, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 157063906052848769}
     - targetCorrespondingSourceObject: {fileID: -3357037809688669164, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7799117494332852809}
     - targetCorrespondingSourceObject: {fileID: -3357037809688669164, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1568380303725425806}
+    - targetCorrespondingSourceObject: {fileID: -3357037809688669164, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5986887077061910709}
     - targetCorrespondingSourceObject: {fileID: -8126575363595136504, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1089962228074962642}
     - targetCorrespondingSourceObject: {fileID: -8126575363595136504, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2537056394950370582}
+    - targetCorrespondingSourceObject: {fileID: -8126575363595136504, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5799664882237998657}
     - targetCorrespondingSourceObject: {fileID: -5672779171163736225, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1256290407402225155}
     - targetCorrespondingSourceObject: {fileID: -5672779171163736225, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2997011720606150359}
+    - targetCorrespondingSourceObject: {fileID: -5672779171163736225, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8962507662924701002}
     - targetCorrespondingSourceObject: {fileID: -5198186189804586709, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6553796899347211407}
     - targetCorrespondingSourceObject: {fileID: -5198186189804586709, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8519754161518413640}
+    - targetCorrespondingSourceObject: {fileID: -5198186189804586709, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6772441111270139455}
     - targetCorrespondingSourceObject: {fileID: -8770085981623823516, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8552105500110789052}
     - targetCorrespondingSourceObject: {fileID: -8770085981623823516, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 851295598740478568}
+    - targetCorrespondingSourceObject: {fileID: -8770085981623823516, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9106118558495363481}
     - targetCorrespondingSourceObject: {fileID: 7450690860848637312, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6756639282260675717}
     - targetCorrespondingSourceObject: {fileID: 7450690860848637312, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7967995861398830619}
+    - targetCorrespondingSourceObject: {fileID: 7450690860848637312, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1200773434079149799}
     - targetCorrespondingSourceObject: {fileID: -4444909955921167639, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2042969799724119875}
     - targetCorrespondingSourceObject: {fileID: -4444909955921167639, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9052607863540195392}
+    - targetCorrespondingSourceObject: {fileID: -4444909955921167639, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1129703068373820161}
     - targetCorrespondingSourceObject: {fileID: -4494048281902103062, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3516870209975010736}
     - targetCorrespondingSourceObject: {fileID: -4494048281902103062, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1216428134665651230}
+    - targetCorrespondingSourceObject: {fileID: -4494048281902103062, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5509319657125884454}
     - targetCorrespondingSourceObject: {fileID: 3100332399246796471, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6217442221084808450}
     - targetCorrespondingSourceObject: {fileID: 3100332399246796471, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6231231590037023467}
+    - targetCorrespondingSourceObject: {fileID: 3100332399246796471, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4524201531275412129}
     - targetCorrespondingSourceObject: {fileID: 2256101048190770027, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2748814291210458114}
     - targetCorrespondingSourceObject: {fileID: 2256101048190770027, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2729620619474507816}
+    - targetCorrespondingSourceObject: {fileID: 2256101048190770027, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8010337582501290454}
     - targetCorrespondingSourceObject: {fileID: -7085390956690511202, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2160303496847216311}
     - targetCorrespondingSourceObject: {fileID: -7085390956690511202, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4612550005562592564}
+    - targetCorrespondingSourceObject: {fileID: -7085390956690511202, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4631817920969863544}
     - targetCorrespondingSourceObject: {fileID: 1664480264340232548, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2268290363064086240}
     - targetCorrespondingSourceObject: {fileID: 1664480264340232548, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8715918119876444344}
+    - targetCorrespondingSourceObject: {fileID: 1664480264340232548, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8059449155040959410}
     - targetCorrespondingSourceObject: {fileID: 5765174242732520303, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1180430649912061189}
     - targetCorrespondingSourceObject: {fileID: 5765174242732520303, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4859025203652510232}
+    - targetCorrespondingSourceObject: {fileID: 5765174242732520303, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4547764011560958063}
     - targetCorrespondingSourceObject: {fileID: 1943507286218492600, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2897432291146881570}
     - targetCorrespondingSourceObject: {fileID: 1943507286218492600, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4935505712118193780}
+    - targetCorrespondingSourceObject: {fileID: 1943507286218492600, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6325155420878828118}
     - targetCorrespondingSourceObject: {fileID: 3444035328819020575, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1967265792944548241}
     - targetCorrespondingSourceObject: {fileID: 3444035328819020575, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2340215738024666303}
+    - targetCorrespondingSourceObject: {fileID: 3444035328819020575, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 207306935980144316}
     - targetCorrespondingSourceObject: {fileID: 6234946361216194117, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 384315672242659275}
     - targetCorrespondingSourceObject: {fileID: 6234946361216194117, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8878823730596947168}
+    - targetCorrespondingSourceObject: {fileID: 6234946361216194117, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4180342068811814690}
     - targetCorrespondingSourceObject: {fileID: 1197162975379453978, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7357414366085088011}
     - targetCorrespondingSourceObject: {fileID: 1197162975379453978, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1959535496077713808}
+    - targetCorrespondingSourceObject: {fileID: 1197162975379453978, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1532447843735087859}
     - targetCorrespondingSourceObject: {fileID: -5967929787791669311, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5906914201610959237}
     - targetCorrespondingSourceObject: {fileID: -5967929787791669311, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3331239089794969804}
+    - targetCorrespondingSourceObject: {fileID: -5967929787791669311, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8392170313878088836}
     - targetCorrespondingSourceObject: {fileID: 8391104971252329251, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3008952786158621765}
     - targetCorrespondingSourceObject: {fileID: 8391104971252329251, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3506525618900045074}
+    - targetCorrespondingSourceObject: {fileID: 8391104971252329251, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7129878589150246738}
     - targetCorrespondingSourceObject: {fileID: -7014667902570909977, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2169657049231883605}
     - targetCorrespondingSourceObject: {fileID: -7014667902570909977, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4929867298549651966}
+    - targetCorrespondingSourceObject: {fileID: -7014667902570909977, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6237646018010720347}
     - targetCorrespondingSourceObject: {fileID: 3895197091335218439, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6292687233914876181}
     - targetCorrespondingSourceObject: {fileID: 3895197091335218439, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5513382818922960257}
+    - targetCorrespondingSourceObject: {fileID: 3895197091335218439, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3746157962227444699}
     - targetCorrespondingSourceObject: {fileID: -7118629197103130056, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3808076003596996789}
     - targetCorrespondingSourceObject: {fileID: -7118629197103130056, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5811919850157277398}
+    - targetCorrespondingSourceObject: {fileID: -7118629197103130056, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4702852174398284065}
     - targetCorrespondingSourceObject: {fileID: 3996001955324183369, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7219943743136305542}
     - targetCorrespondingSourceObject: {fileID: 3996001955324183369, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2436638322370656507}
+    - targetCorrespondingSourceObject: {fileID: 3996001955324183369, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2107329187091661684}
     - targetCorrespondingSourceObject: {fileID: -698480957811207722, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9198293868911256453}
     - targetCorrespondingSourceObject: {fileID: -698480957811207722, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 648286245007530565}
+    - targetCorrespondingSourceObject: {fileID: -698480957811207722, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6624207948798967741}
     - targetCorrespondingSourceObject: {fileID: 7718337930986555085, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1217077530869340714}
     - targetCorrespondingSourceObject: {fileID: 7718337930986555085, guid: f9540665630e18843a44e1b94e84079d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8165396991399860205}
+    - targetCorrespondingSourceObject: {fileID: 7718337930986555085, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 164536614259068147}
+    - targetCorrespondingSourceObject: {fileID: -3111565609762313623, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7028003354191930756}
   m_SourcePrefab: {fileID: 100100000, guid: f9540665630e18843a44e1b94e84079d, type: 3}
 --- !u!1 &655788177370757167 stripped
 GameObject:
@@ -5243,12 +5410,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 655788177370757167}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -5268,12 +5435,61 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &4180342068811814690
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 655788177370757167}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &814684108364563459 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -3111565609762313623, guid: f9540665630e18843a44e1b94e84079d, type: 3}
+  m_PrefabInstance: {fileID: 6890271520710618730}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &7028003354191930756
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 814684108364563459}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 25.000006, y: 10.5, z: 2.5060663}
+  m_Center: {x: 1.0658672, y: 0.00000047683716, z: 0}
 --- !u!1 &1078135562155719294 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3357037809688669164, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -5307,12 +5523,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1078135562155719294}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -5332,12 +5548,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &5986887077061910709
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078135562155719294}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1125101784541420805 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5765174242732520303, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -5371,12 +5610,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1125101784541420805}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -5396,12 +5635,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &4547764011560958063
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125101784541420805}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 10ed19fa58c185340befcc309ba7fb64, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2148120818868737155 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -4444909955921167639, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -5435,12 +5697,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2148120818868737155}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -5460,12 +5722,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &1129703068373820161
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2148120818868737155}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2179398712260242304 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -4494048281902103062, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -5499,12 +5784,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2179398712260242304}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -5524,12 +5809,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &5509319657125884454
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2179398712260242304}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 10ed19fa58c185340befcc309ba7fb64, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3013284407541481404 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -698480957811207722, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -5563,12 +5871,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3013284407541481404}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -5588,12 +5896,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &6624207948798967741
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3013284407541481404}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9c12d7e34e6777e45bbd82ed74b4e0a7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3164932067698935113 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8391104971252329251, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -5627,12 +5958,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3164932067698935113}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -5652,12 +5983,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &7129878589150246738
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3164932067698935113}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3783624043778992295 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7718337930986555085, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -5691,12 +6045,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3783624043778992295}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -5716,12 +6070,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &164536614259068147
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3783624043778992295}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9c12d7e34e6777e45bbd82ed74b4e0a7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4105315480897817578 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7450690860848637312, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -5755,12 +6132,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4105315480897817578}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -5780,12 +6157,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &1200773434079149799
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4105315480897817578}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 10ed19fa58c185340befcc309ba7fb64, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4670354319000630529 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2256101048190770027, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -5819,12 +6219,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4670354319000630529}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -5844,12 +6244,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &8010337582501290454
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4670354319000630529}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4700013928441135245 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7014667902570909977, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -5883,12 +6306,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4700013928441135245}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -5908,12 +6331,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &6237646018010720347
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4700013928441135245}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 10ed19fa58c185340befcc309ba7fb64, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4770590763685774580 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7085390956690511202, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -5947,12 +6393,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4770590763685774580}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -5972,12 +6418,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &4631817920969863544
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4770590763685774580}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4803833402145109074 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -7118629197103130056, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6011,12 +6480,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4803833402145109074}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6036,12 +6505,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &4702852174398284065
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4803833402145109074}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5001125226463732946 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1943507286218492600, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6075,12 +6567,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5001125226463732946}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6100,12 +6592,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &6325155420878828118
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5001125226463732946}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 10ed19fa58c185340befcc309ba7fb64, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5225937579531548430 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1664480264340232548, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6139,12 +6654,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5225937579531548430}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6164,12 +6679,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &8059449155040959410
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5225937579531548430}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 10ed19fa58c185340befcc309ba7fb64, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5693117358605833840 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1197162975379453978, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6203,12 +6741,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5693117358605833840}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6228,12 +6766,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &1532447843735087859
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5693117358605833840}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5735150158180564103 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8068073526183931155, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6267,12 +6828,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5735150158180564103}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6292,12 +6853,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &157063906052848769
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5735150158180564103}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5811811423269616738 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8126575363595136504, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6331,12 +6915,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5811811423269616738}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6356,12 +6940,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &5799664882237998657
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5811811423269616738}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 10ed19fa58c185340befcc309ba7fb64, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &6347137632728713601 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6400,12 +7007,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6473163820844956942}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6425,12 +7032,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &9106118558495363481
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6473163820844956942}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7512985228536272705 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5198186189804586709, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6464,12 +7094,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7512985228536272705}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6489,12 +7119,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &6772441111270139455
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7512985228536272705}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 10ed19fa58c185340befcc309ba7fb64, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7560294636018674979 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3996001955324183369, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6528,12 +7181,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7560294636018674979}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6553,12 +7206,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &2107329187091661684
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7560294636018674979}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ed56bf9fa48935e41bab1a17e81316e2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7607050829536283501 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3895197091335218439, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6592,12 +7268,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7607050829536283501}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6617,12 +7293,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &3746157962227444699
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7607050829536283501}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 10ed19fa58c185340befcc309ba7fb64, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7987437504619780405 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5672779171163736225, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6656,12 +7355,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7987437504619780405}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6681,12 +7380,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &8962507662924701002
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7987437504619780405}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8094238000274550133 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3444035328819020575, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6720,12 +7442,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8094238000274550133}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6745,12 +7467,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &207306935980144316
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8094238000274550133}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e80b290286d821040a8f442078828f10, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8264824444741413291 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5967929787791669311, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6784,12 +7529,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8264824444741413291}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6809,12 +7554,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &8392170313878088836
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8264824444741413291}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 75f364f3a3ffdcf468b0a5132d4ea7bf, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8401956127319722205 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3100332399246796471, guid: f9540665630e18843a44e1b94e84079d, type: 3}
@@ -6848,12 +7616,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8401956127319722205}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactiveType: 0
+  interactiveType: 1
   updateIfIndirect: 0
   requiredItem: 0
   requiredEquipment: 0
@@ -6873,12 +7641,35 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   navMeshLink: {fileID: 0}
   doorOpenPlayer: {fileID: 0}
   doorClosePlayer: {fileID: 0}
+--- !u!95 &4524201531275412129
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8401956127319722205}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 10ed19fa58c185340befcc309ba7fb64, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &7200509458503646091
 PrefabInstance:
   m_ObjectHideFlags: 0

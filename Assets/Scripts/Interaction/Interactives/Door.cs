@@ -26,7 +26,7 @@ public class Door : InteractiveObject
     
     private void Awake()
     {
-        animator = GetComponentInParent<Animator>();
+        animator = GetComponentInParent<Animator>() ?? GetComponent<Animator>();
     }
     
     void Update()
