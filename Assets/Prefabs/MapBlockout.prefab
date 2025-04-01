@@ -3228,6 +3228,99 @@ Transform:
   - {fileID: 3550413945074853881}
   m_Father: {fileID: 4533296425516091067}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &920741174897047007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6308940225119193657}
+  - component: {fileID: 4674843300518402308}
+  - component: {fileID: 1969782842275220272}
+  m_Layer: 0
+  m_Name: StairsBlock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6308940225119193657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920741174897047007}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -15.55, y: 8.74, z: 10.34}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7400428706956315614}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4674843300518402308
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920741174897047007}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 6, y: 6, z: 16}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1969782842275220272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920741174897047007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 2
+  updateIfIndirect: 0
+  requiredItem: 8
+  requiredEquipment: 0
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
+  objectName: 
+  customInteractionMessage: 
+  showRequirementMessage: 1
+  customRequirementMessage: I don't need to go upstairs...
+  onInteractAudioPlayer: {fileID: 0}
+  whileInteractAudioPlayer: {fileID: 0}
+  navMeshLink: {fileID: 0}
+  doorOpenPlayer: {fileID: 0}
+  doorClosePlayer: {fileID: 0}
 --- !u!1 &921239240101237290
 GameObject:
   m_ObjectHideFlags: 0
@@ -21977,6 +22070,99 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &5068096454914289168
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2143549232665058938}
+  - component: {fileID: 7368428107520261412}
+  - component: {fileID: 1996073247220304648}
+  m_Layer: 0
+  m_Name: StairsBlock (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2143549232665058938
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5068096454914289168}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: 0.34202084, w: 0.9396924}
+  m_LocalPosition: {x: -12.18, y: 9.8, z: 6.58}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7400428706956315614}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 40}
+--- !u!65 &7368428107520261412
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5068096454914289168}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 6, y: 6, z: 6}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1996073247220304648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5068096454914289168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4ad364f595579d4dbffc1b554023531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactiveType: 2
+  updateIfIndirect: 0
+  requiredItem: 8
+  requiredEquipment: 0
+  consumeItemRequirement: 0
+  oneTimeRequirement: 0
+  firstInteractionDurationUnique: 0
+  interactionDuration: 0
+  secondInteractionDuration: 0
+  onInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onSecondInteractionComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  isInteractionSuspicious: 0
+  isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
+  objectName: 
+  customInteractionMessage: 
+  showRequirementMessage: 1
+  customRequirementMessage: I don't need to go upstairs...
+  onInteractAudioPlayer: {fileID: 0}
+  whileInteractAudioPlayer: {fileID: 0}
+  navMeshLink: {fileID: 0}
+  doorOpenPlayer: {fileID: 0}
+  doorClosePlayer: {fileID: 0}
 --- !u!1 &5070763328546580093
 GameObject:
   m_ObjectHideFlags: 0
@@ -43918,6 +44104,7 @@ Transform:
   - {fileID: 3991064859790874075}
   - {fileID: 5925749152689471022}
   - {fileID: 1481660463906127065}
+  - {fileID: 7400428706956315614}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8887074668636710734
@@ -45441,6 +45628,39 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &9148422363769192582
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7400428706956315614}
+  m_Layer: 0
+  m_Name: InvisWalls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7400428706956315614
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9148422363769192582}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6308940225119193657}
+  - {fileID: 2143549232665058938}
+  m_Father: {fileID: 4533296425516091067}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9173337301543920367
 GameObject:
   m_ObjectHideFlags: 0
