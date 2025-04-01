@@ -2020,6 +2020,7 @@ GameObject:
   - component: {fileID: 220277255619173648}
   - component: {fileID: 9025066607637273262}
   - component: {fileID: 3579051031105577739}
+  - component: {fileID: 6396492798177691259}
   m_Layer: 0
   m_Name: Desk
   m_TagString: Untagged
@@ -2036,7 +2037,7 @@ Transform:
   m_GameObject: {fileID: 6881441309136942648}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.9189, y: -4.3225, z: -19.7847}
+  m_LocalPosition: {x: -0.9189, y: -4.3225, z: -20.39}
   m_LocalScale: {x: 16.621859, y: 1.9544846, z: 1.3007058}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2119,6 +2120,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &6396492798177691259
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6881441309136942648}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.1, y: 1, z: 1}
+  m_Center: {x: -0.065, y: 0.65, z: 0}
 --- !u!1 &7459598999488587801
 GameObject:
   m_ObjectHideFlags: 0
@@ -2749,7 +2771,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 57aa16f075f3e5e48bd98b3934003fe9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -20.889996
+      value: -21.495293
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 57aa16f075f3e5e48bd98b3934003fe9, type: 3}
       propertyPath: m_LocalRotation.w

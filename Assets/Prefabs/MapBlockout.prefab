@@ -12406,6 +12406,60 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!1 &2857108603621355017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4388592954579734952}
+  - component: {fileID: 5574032326826946330}
+  m_Layer: 0
+  m_Name: GM_Floor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &4388592954579734952
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2857108603621355017}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 30.360802, y: -0.9899516, z: 61.450798}
+  m_LocalScale: {x: 1.4622799, y: 1, z: 1.80916}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 5496251619727759237}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &5574032326826946330
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2857108603621355017}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &2908062603993191003
 GameObject:
   m_ObjectHideFlags: 0
@@ -18541,6 +18595,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2345506855193546661}
+  - {fileID: 4388592954579734952}
   m_Father: {fileID: 4533296425516091067}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3732702872984006627
@@ -18562,7 +18617,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 5
+    m_Bits: 1025
   m_UseGeometry: 1
   m_DefaultArea: 0
   m_GenerateLinks: 0
@@ -18573,7 +18628,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.1
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: d4130d4e56f557445a15e1ae54c41204, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 711160bbd07e6504e80c67d7f0ff84b4, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &4389552433047638122
 GameObject:
@@ -40695,7 +40750,7 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 4
   objectName: 
   customInteractionMessage: Spike Concierge's drink
-  showRequirementMessage: 1
+  showRequirementMessage: 0
   customRequirementMessage: I could put something in this drink...
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
@@ -49757,6 +49812,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7153180845941234808, guid: 37b253a4d0b95814282d224109abc7be, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8421511387304330728, guid: 37b253a4d0b95814282d224109abc7be, type: 3}
+      propertyPath: showRequirementMessage
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8421511387304330728, guid: 37b253a4d0b95814282d224109abc7be, type: 3}
