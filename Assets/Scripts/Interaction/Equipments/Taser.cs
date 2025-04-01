@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Interaction.Equipments
 {
@@ -8,6 +7,7 @@ namespace Interaction.Equipments
         [SerializeField] private Transform raycastOrigin;
         [SerializeField] private float raycastDistance;
         [SerializeField] private int maxAmmo;
+        [SerializeField] private bool knocksOutTargets;
         [SerializeField] private LayerMask raycastMask;
         [SerializeField] private PlayAudio taserShotPlayer;
 
@@ -55,7 +55,12 @@ namespace Interaction.Equipments
             
                 if(hit.collider != null && hitenemy != null && hitenemy.currentStatus != EnemyMovement.Status.KnockedOut)
                 {
-                    hitenemy.GetTased();
+                    if(knocksOutTargets)
+                        hitenemy.GetKnockedOut();
+                    else
+                        hitenemy.GetTased();
+                    
+                    FindAnyObjectByType<PlayerMelee>().AlarmNearbyEnemies();
                 }
             }
             
