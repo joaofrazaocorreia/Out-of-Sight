@@ -17,6 +17,7 @@ public class PlayerMelee : MonoBehaviour
     private List<Transform> allEnemies;
     private List<Transform> enemiesInRange;
     private List<Detection> enemiesWatching;
+    public List<Detection> EnemiesWatching {get => enemiesWatching;}
     private Transform closestEnemy;
     private float distanceToClosestEnemy;
     private float cooldownTimer;
@@ -99,25 +100,32 @@ public class PlayerMelee : MonoBehaviour
                     // Knocks out the enemy if they aren't KO already
                     if(enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut)
                     {
-                        enemyMovement.currentStatus = EnemyMovement.Status.KnockedOut;
-                        closestEnemy.GetComponentInChildren<Detection>().DetectionMeter = 0;
-                        UpdateEnemiesList();
+                        enemyMovement.GetKnockedOut();
                 
+                        // Immediately alerts any conscious enemy that sees the knockout
                         if(GetComponent<Player>().detectable)
-                        {
-                            // Immediately alerts any conscious enemy that sees the player knocking out another NPC
-                            foreach(Detection d in enemiesWatching)
-                            {
-                                Debug.Log($"{d.transform.parent.name} saw the melee attack!");
-                                d.DetectionMeter = d.DetectionLimit;
-                            }
-                        }
+                            AlarmNearbyEnemies();
                     }
                 }
             }
 
             cooldownTimer = cooldownInSeconds;
             meleeAttackPlayer.Play();
+        }
+    }
+
+    public void AlarmNearbyEnemies()
+    {
+        if(GetComponent<Player>().detectable)
+        {
+            UpdateEnemiesList();
+
+            // Immediately alerts any conscious enemy that sees the player currently
+            foreach(Detection d in enemiesWatching)
+            {
+                Debug.Log($"{d.transform.parent.name} saw the melee attack!");
+                d.DetectionMeter = d.DetectionLimit;
+            }
         }
     }
 

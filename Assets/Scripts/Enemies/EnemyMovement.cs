@@ -685,4 +685,17 @@ public class EnemyMovement : MonoBehaviour
             taserLoopPlayer.Play();
         }
     }
+
+    /// <summary>
+    /// Causes this enemy to be knocked out and stop moving.
+    /// </summary>
+    public void GetKnockedOut()
+    {
+        if(currentStatus != Status.KnockedOut)
+        {
+            currentStatus = Status.KnockedOut;
+            detection.DetectionMeter = 0;
+            leavingMap = false;
+        }
+    }
 }
