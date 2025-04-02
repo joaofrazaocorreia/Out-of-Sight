@@ -8,6 +8,7 @@ public class PlayerMelee : MonoBehaviour
 {
     [SerializeField] private float attackRange = 4f;
     [SerializeField] private float frontalAngle = 120f;
+    [SerializeField] [Range(0f, 360f)] private float enemyBackDetectionAngle = 100f;
     [SerializeField] private float cooldownInSeconds = 1f;
     [SerializeField] private Transform enemiesParent;
     [SerializeField] private PlayAudio meleeAttackPlayer;
@@ -96,9 +97,11 @@ public class PlayerMelee : MonoBehaviour
                 if(closestEnemy != null)
                 {
                     EnemyMovement enemyMovement = closestEnemy.GetComponent<EnemyMovement>();
+                    float angleDifference = Mathf.Abs(enemyMovement.transform.eulerAngles.y - transform.eulerAngles.y);
                     
-                    // Knocks out the enemy if they aren't KO already
-                    if(enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut)
+                    // Knocks out the enemy if their back is facing the player and they aren't KO already
+                    if((angleDifference <= enemyBackDetectionAngle/2 || angleDifference >= 360 - enemyBackDetectionAngle/2)
+                        && enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut)
                     {
                         enemyMovement.GetKnockedOut();
                 
