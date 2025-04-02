@@ -125,7 +125,7 @@ public class UIManager : MonoBehaviour
         loadingScreen.gameObject.SetActive(true);
         missionBriefingScreen.gameObject.SetActive(true);
         UnlockCursor();
-        StartCoroutine(FadeOutUI(loadingScreen));
+        StartCoroutine(FadeOutUI(loadingScreen, 0.2f));
     }
 
     private void Update()
