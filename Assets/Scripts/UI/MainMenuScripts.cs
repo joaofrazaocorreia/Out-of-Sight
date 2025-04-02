@@ -84,13 +84,13 @@ public class MainMenuScripts : MonoBehaviour
             float textDifference = targetTextSize - buttonText.fontSize;
 
             if(widthDifference != 0)
-                widthDifference = Mathf.Clamp(widthDifference, -deltaTime*50, deltaTime*50);
+                widthDifference = Mathf.Clamp(widthDifference, -deltaTime*100, deltaTime*100);
 
             if(heightDifference != 0)
-                heightDifference = Mathf.Clamp(heightDifference, -deltaTime*30, deltaTime*30);
+                heightDifference = Mathf.Clamp(heightDifference, -deltaTime*60, deltaTime*60);
 
             if(textDifference != 0)
-                textDifference = Mathf.Clamp(textDifference, -deltaTime*30, deltaTime*30);
+                textDifference = Mathf.Clamp(textDifference, -deltaTime*60, deltaTime*60);
 
             uiTransform.sizeDelta += new Vector2(widthDifference, heightDifference);
             buttonText.fontSize += textDifference;
@@ -190,7 +190,7 @@ public class MainMenuScripts : MonoBehaviour
 
     private IEnumerator StartLoadingScene(int scene)
     {
-        StartCoroutine(FadeInUI(loadingScreen, 0.5f));
+        StartCoroutine(FadeInUI(loadingScreen, 0.2f));
 
         while(loadingScreen.alpha < 1f)
         {
