@@ -153,9 +153,9 @@ public class Alarm : MonoBehaviour
             }
 
             // Whenever the alarm is raised starting at the second time, extra guards spawn at the entrance of the level
-            if(currentTier >= 2)
+            if(currentTier >= 1)
             {
-                for(int i = 0; i < (extraGuardsPerTier * (currentTier - 1)); i++)
+                for(int i = 0; i < (extraGuardsPerTier * currentTier); i++)
                 {
                     GameObject newGuard = mapEntrance.SpawnEnemy(guardPrefab, movementTargets);
                     extraGuards.Add(newGuard.GetComponent<EnemyGuard>());

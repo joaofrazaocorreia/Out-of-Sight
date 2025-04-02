@@ -149,7 +149,7 @@ public class EnemyCamera : Enemy, IJammable
     /// </summary>
     public override void BecomeAlarmed()
     {
-        detection.TrackPlayer();
+        if(detection.SeesPlayer) detection.TrackPlayer();
         cameraOperator.BecomeAlarmed();
     }
 

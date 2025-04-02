@@ -120,7 +120,6 @@ public class EnemyMovement : MonoBehaviour
         if(currentStatus != Status.KnockedOut)
         {
             // Sets up all the variables
-            currentStatus = Status.Normal;
             movementTargetIndex = startingTargetIndex - 1;
             moveTimer = 0;
             turnTimer = 0;

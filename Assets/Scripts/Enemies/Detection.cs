@@ -295,6 +295,8 @@ public class Detection : MonoBehaviour
                 allBodies.Add(b);
             }
         }
+
+        seesBody = false;
     }
 
     /// <summary>
