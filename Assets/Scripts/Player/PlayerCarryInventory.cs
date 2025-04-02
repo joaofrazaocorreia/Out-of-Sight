@@ -29,7 +29,7 @@ public class PlayerCarryInventory : MonoBehaviour
             storedCarriable = go;
             storedCarriableType = CarriableType.Bag;
             storedCarriableParent = go.transform.parent;
-            player.status.Add(Player.Status.Doubtful);
+            player.GainStatus(Player.Status.Doubtful);
 
             go.transform.parent = bagCarryPosition;
             go.transform.position = Vector3.zero;
@@ -44,7 +44,7 @@ public class PlayerCarryInventory : MonoBehaviour
             storedCarriable = go;
             storedCarriableType = CarriableType.Body;
             storedCarriableParent = go.transform.parent;
-            player.status.Add(Player.Status.Suspicious);
+            player.GainStatus(Player.Status.Suspicious);
 
             go.transform.parent = bodyCarryPosition;
             go.transform.localPosition = Vector3.zero;
@@ -59,11 +59,11 @@ public class PlayerCarryInventory : MonoBehaviour
             switch(storedCarriableType)
             {
                 case CarriableType.Bag:
-                    player.status.Remove(Player.Status.Doubtful);
+                    player.LoseStatus(Player.Status.Doubtful);
                     break;
 
                 case CarriableType.Body:
-                    player.status.Remove(Player.Status.Suspicious);
+                    player.LoseStatus(Player.Status.Suspicious);
                     break;
 
                 default: break;
