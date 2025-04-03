@@ -10,9 +10,10 @@ public class NPCMoveInteraction : InteractiveObject
 
     private void Update()
     {
-        if(enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
+        if(enabled && enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
         {
-            gameObject.SetActive(false);
+            foreach(InteractiveObject io in GetComponentsInChildren<InteractiveObject>())
+                io.enabled = false;
         }
     }
 
