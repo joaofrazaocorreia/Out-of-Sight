@@ -42,9 +42,9 @@ public class PlayerInventory : MonoBehaviour
         {
             if (itemType == Inventory[i].ItemType)
             {
-                NewIcon = Inventory[i].Icon;
-                UpdatedItemIndex = Inventory.IndexOf(Inventory[i]);
                 Inventory.RemoveAt(i);
+                NewIcon = Inventory.Count > i ? Inventory[i].Icon : emptySlotSprite;
+                UpdatedItemIndex = i;
                 OnInventoryUpdated?.Invoke(this, EventArgs.Empty);
                 break;
             }
