@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Interaction.Equipments
 {
@@ -28,6 +29,8 @@ namespace Interaction.Equipments
         }
         
         private int _currentAmmo;
+
+        public event EventHandler OnTaserShot;
 
         protected override void Start()
         {
@@ -59,11 +62,9 @@ namespace Interaction.Equipments
                         hitenemy.GetKnockedOut();
                     else
                         hitenemy.GetTased();
-                    
-                    FindAnyObjectByType<PlayerMelee>().AlarmNearbyEnemies();
                 }
             }
-            
+            OnTaserShot?.Invoke(this, EventArgs.Empty);
             taserShotPlayer.Play();
         }
 

@@ -40,6 +40,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image[] interactionIcons;
     [SerializeField] private GameObject interactingBar;
     [SerializeField] private RectTransform interactingBarFill;
+    [SerializeField] private GameObject attackUI;
+    [SerializeField] private GameObject CarryingUI;
     [SerializeField] private TextMeshProUGUI objectivesTitle;
     [SerializeField] private Transform objectivesTextParent;
     [SerializeField] private GameObject objectiveTextPrefab;
@@ -66,6 +68,8 @@ public class UIManager : MonoBehaviour
     private Dictionary<RectTransform, (Coroutine, float, float, float)> uiButtonScaleDownCoroutines;
     private Player player;
     private PlayerInput playerInput;
+    private PlayerMelee playerMelee;
+    private PlayerCarryInventory carryInventory;
     private PlayerController playerController;
     private PlayerEquipment playerEquipment;
     private PlayerInteraction playerInteraction;
@@ -103,6 +107,12 @@ public class UIManager : MonoBehaviour
         player.OnStatusChanged += OnStatusChanged;
         player.OnDisguiseChanged += OnDisguiseChanged;
         playerInput = FindAnyObjectByType<PlayerInput>();
+        playerMelee = FindAnyObjectByType<PlayerMelee>();
+        playerMelee.OnAttackAvailable += OnAttackAvailable;
+        playerMelee.OnAttackNotAvailable += OnAttackNotAvailable;
+        carryInventory = FindAnyObjectByType<PlayerCarryInventory>();
+        carryInventory.OnCarryPickup += OnCarryPickup;
+        carryInventory.OnCarryDrop += OnCarryDrop;
         playerController = FindFirstObjectByType<PlayerController>();
         playerController.OnStaminaUpdate += OnStaminaUpdate;
         playerEquipment = FindAnyObjectByType<PlayerEquipment>();
@@ -855,8 +865,17 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void ToggleAttackUI(bool state) => attackUI.SetActive(state);
+    private void ToggleCarryUI(bool state) => CarryingUI.SetActive(state);
+
     private void UpdateStamina(float stamina) => staminaSlider.value = stamina;
     private void OnStaminaUpdate(object sender, EventArgs e) => UpdateStamina(playerController._currentStamina);
+
+    private void OnAttackAvailable(object sender, EventArgs e) => ToggleAttackUI(true);
+    private void OnAttackNotAvailable(object sender, EventArgs e) => ToggleAttackUI(false);
+
+    private void OnCarryPickup(object sender, EventArgs e) => ToggleCarryUI(true);
+    private void OnCarryDrop(object sender, EventArgs e) => ToggleCarryUI(false);
     private void OnEquipmentAdded(object sender, EventArgs e) => UpdateEquipmentIcon(playerEquipment._recentlyAddedEquipment.Icon, Array.IndexOf(playerEquipment.EquipmentObjects, playerEquipment._recentlyAddedEquipment));
 
     private void OnEquipmentChanged(object sender, EventArgs e) => UpdateEquipmentUI();

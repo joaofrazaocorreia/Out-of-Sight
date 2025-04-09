@@ -104,7 +104,8 @@ public class PlayerInteraction : MonoBehaviour
             _tempHitInteractableObjects = _lastHitObject.GetComponentsInParent<InteractiveObject>().ToList();
             for (int i = 0; i < _tempHitInteractableObjects.Count; i++)
             {
-                if (_tempHitInteractableObjects[i].InteractiveType == InteractiveType.Indirect) _tempHitInteractableObjects.Remove(_tempHitInteractableObjects[i]);
+                var interactable = _tempHitInteractableObjects[i];
+                if (interactable.InteractiveType == InteractiveType.Indirect) _tempHitInteractableObjects.Remove(interactable);
             }
             HitInteractables = _tempHitInteractableObjects.ToArray();
             
@@ -271,4 +272,6 @@ public class PlayerInteraction : MonoBehaviour
     {
         _animator.SetTrigger("IsInteracting");
     }
+
+    
 }
