@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerCarryInventory : MonoBehaviour
@@ -12,6 +13,9 @@ public class PlayerCarryInventory : MonoBehaviour
     public bool CarryingBag {get => storedCarriable != null && storedCarriableType == CarriableType.Bag;}
     public bool CarryingBody {get => storedCarriable != null && storedCarriableType == CarriableType.Body;}
     private Player player;
+
+    public event EventHandler OnCarryPickup;
+    public event EventHandler OnCarryDrop;
 
     private void Start()
     {
@@ -34,6 +38,8 @@ public class PlayerCarryInventory : MonoBehaviour
             go.transform.parent = bagCarryPosition;
             go.transform.position = Vector3.zero;
             go.transform.rotation = Quaternion.identity;
+            
+            OnCarryPickup?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -49,6 +55,8 @@ public class PlayerCarryInventory : MonoBehaviour
             go.transform.parent = bodyCarryPosition;
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
+            
+            OnCarryPickup?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -76,6 +84,8 @@ public class PlayerCarryInventory : MonoBehaviour
             storedCarriable = null;
             storedCarriableType = CarriableType.None;
             storedCarriableParent = null;
+            
+            OnCarryDrop?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interaction.Equipments;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,8 @@ public class Detection : MonoBehaviour
 
     private Player player;
     private PlayerInteraction playerInteraction;
+    private PlayerMelee playerMelee;
+    private Taser taser;
     private Enemy selfEnemy;
     private Alarm alarm;
     private float detectionMeter;
@@ -52,6 +55,10 @@ public class Detection : MonoBehaviour
         player = FindAnyObjectByType<Player>();
         playerInteraction = FindAnyObjectByType<PlayerInteraction>();
         playerInteraction.OnSuspiciousAction += OnSuspiciousAction;
+        playerMelee = FindAnyObjectByType<PlayerMelee>();
+        playerMelee.OnKnockout += OnPlayerAttack;
+        taser = FindAnyObjectByType<Taser>();
+        taser.OnTaserShot += OnPlayerAttack;
         selfEnemy = GetComponentInParent<Enemy>();
         alarm = FindAnyObjectByType<Alarm>();
         DetectionMeter = 0;
@@ -413,6 +420,11 @@ public class Detection : MonoBehaviour
     {
         var increase = ((PlayerInteraction)sender).ActiveInteractiveObject.SuspicionIncreaseOnInteraction;
         if (increase > 0f) detectionMeter += increase;
+    }
+
+    private void OnPlayerAttack(object sender, EventArgs e)
+    {
+        if (seesPlayer && player.detectable) detectionMeter = detectionLimit * 2;
     }
 }
 
