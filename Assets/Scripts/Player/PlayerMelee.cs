@@ -83,7 +83,11 @@ public class PlayerMelee : MonoBehaviour
 
     private void GetAttackableNpc()
     {
-        if(playerInteraction.HitInteractables == null) return;
+        if (playerInteraction.HitInteractables == null)
+        {
+            attackableEnemy = null;
+            return;
+        }
         
         for (int i = 0; i < playerInteraction.HitInteractables.Length; i++)
         {
