@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class BodyCarry : InteractiveObject
 {
+    [SerializeField] private float bodyDetectionMultiplier = 5f;
+    public float BodyDetectionMultiplier {get => bodyDetectionMultiplier;}
     private EnemyMovement enemyMovement;
     private PlayerCarryInventory playerCarryInventory;
     private GameObject thisBody;

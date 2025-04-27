@@ -584,6 +584,7 @@ GameObject:
   - component: {fileID: 5692047308626413028}
   - component: {fileID: 2959786210640382223}
   - component: {fileID: 353567301417824275}
+  - component: {fileID: 3310640078657161338}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -850,6 +851,10 @@ MonoBehaviour:
   status: 
   disguise: 0
   detectable: 0
+  normalDetectionMultiplier: 0
+  doubtfulDetectionMultiplier: 0
+  trespassingDetectionMultiplier: 1
+  suspiciousDetectionMultiplier: 2.5
 --- !u!143 &6751482917869485608
 CharacterController:
   m_ObjectHideFlags: 0
@@ -974,6 +979,19 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: -1, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &3310640078657161338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6061762206571335386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 330fb8a6380521f4f8753710a7fa8527, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionMultiplier: 0
 --- !u!1 &6290793974875613221
 GameObject:
   m_ObjectHideFlags: 0

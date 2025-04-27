@@ -15,7 +15,6 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private bool chooseTargetsAsSequence = false;
     [SerializeField] private List<Transform> movementTargets;
     [SerializeField] private int startingTargetIndex;
-
     [SerializeField] private float walkSpeed = 4f;
     [SerializeField] private float runSpeed = 7f;
     [SerializeField] private float turnSpeed = 2.5f;
@@ -78,6 +77,7 @@ public class EnemyMovement : MonoBehaviour
     private Detection detection;
     private BodyDisguise bodyDisguise;
     private BodyCarry bodyCarry;
+    private DetectableObject detectableObject;
     private Animator animator;
     private NavMeshAgent navMeshAgent;
     private Alarm alarm;
@@ -135,11 +135,14 @@ public class EnemyMovement : MonoBehaviour
             detection = GetComponentInChildren<Detection>();
             bodyDisguise = GetComponentInChildren<BodyDisguise>();
             bodyCarry = GetComponentInChildren<BodyCarry>();
+            detectableObject = GetComponentInChildren<DetectableObject>();
             animator = GetComponent<Animator>();
             bodyCarry.ResetNPC();
             bodyDisguise.ResetNPC();
             bodyCarry.enabled = false;
             bodyDisguise.enabled = false;
+            detectableObject.DetectionMultiplier = bodyCarry.BodyDetectionMultiplier;
+            detectableObject.enabled = false;
             navMeshAgent = GetComponent<NavMeshAgent>();
             navMeshAgent.enabled = true;
             alarm = FindAnyObjectByType<Alarm>();
@@ -376,9 +379,12 @@ public class EnemyMovement : MonoBehaviour
                 leavingMap = false;
                 MoveTo(transform.position);
                 RotateTo(transform.eulerAngles.y);
-
                 movementPosTargets = new List<Vector3>{transform.position};
 
+                // Enables the body's detection multiplier
+                detectableObject.enabled = true;
+
+                // Stops animations and sounds
                 taserLoopPlayer.Stop();
                 animator.SetBool("KO", true);
                 animator.applyRootMotion = false;

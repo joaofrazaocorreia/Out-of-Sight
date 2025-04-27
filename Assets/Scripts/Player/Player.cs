@@ -10,6 +10,11 @@ public class Player : MonoBehaviour
     public List<Status> status;
     public Disguise disguise;
     public bool detectable;
+    [SerializeField] private float normalDetectionMultiplier = 0f;
+    [SerializeField] private float doubtfulDetectionMultiplier = 0f;
+    [SerializeField] private float trespassingDetectionMultiplier = 1f;
+    [SerializeField] private float suspiciousDetectionMultiplier = 2.5f;
+    private DetectableObject detectableObject;
     private List<MapArea> currentAreas;
     public event EventHandler OnDisguiseChanged;
     public event EventHandler OnStatusChanged;
@@ -17,6 +22,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         detectable = true;
+        detectableObject = GetComponent<DetectableObject>();
         currentAreas = new List<MapArea>();
 
         GainStatus(Status.Normal);
@@ -51,6 +57,7 @@ public class Player : MonoBehaviour
     public void GainStatus(Status newStatus)
     {
         status.Add(newStatus);
+        UpdateDetectableMultiplier();
         OnStatusChanged?.Invoke(this, EventArgs.Empty);
     }
 
@@ -59,6 +66,7 @@ public class Player : MonoBehaviour
         if (status.Contains(newStatus))
         {
             status.Remove(newStatus);
+            UpdateDetectableMultiplier();
             OnStatusChanged?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -68,17 +76,38 @@ public class Player : MonoBehaviour
         if (!status.Contains(newStatus))
         {
             status.Add(newStatus);
+            UpdateDetectableMultiplier();
             OnStatusChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
     public void LoseStatusCompletely(Status newStatus)
     {
-        while (status.Contains(newStatus))
+        if (status.Contains(newStatus))
         {
-            status.Remove(newStatus);
+            while (status.Contains(newStatus))
+            {
+                status.Remove(newStatus);
+            }
+
+            UpdateDetectableMultiplier();
             OnStatusChanged?.Invoke(this, EventArgs.Empty);
         }
+    }
+
+    private void UpdateDetectableMultiplier()
+    {
+        if(status.Contains(Status.Suspicious))
+            detectableObject.DetectionMultiplier = suspiciousDetectionMultiplier;
+        
+        else if(status.Contains(Status.Trespassing))
+            detectableObject.DetectionMultiplier = trespassingDetectionMultiplier;
+        
+        else if(status.Contains(Status.Doubtful))
+            detectableObject.DetectionMultiplier = doubtfulDetectionMultiplier;
+        
+        else
+            detectableObject.DetectionMultiplier = normalDetectionMultiplier;
     }
 
     public void GainDisguise(Disguise newDisguise)

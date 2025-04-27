@@ -39,11 +39,10 @@ public class Detection : MonoBehaviour
         set => detectionMeter = Mathf.Clamp(value, 0f, detectionLimit);
     }
     public float DetectionLimit {get => detectionLimit;}
-    private bool seesPlayer;
-    public bool SeesPlayer {get => seesPlayer;}
-    private bool seesBody;
-    public bool SeesBody {get => seesBody;}
-    private List<BodyCarry> allBodies;
+    private List<DetectableObject> seenDetectables;
+    public bool SeesPlayer {get => seenDetectables.Contains(player.GetComponent<DetectableObject>());}
+    public bool SeesDetectable {get => seenDetectables.Count() > 0;}
+    private List<DetectableObject> allDetectables;
     private bool tooCloseToPlayer;
     private EnemyCamera enemyCamera;
     private EnemyMovement enemyMovement;
@@ -63,155 +62,148 @@ public class Detection : MonoBehaviour
         alarm = FindAnyObjectByType<Alarm>();
         DetectionMeter = 0;
         selfDetection.SetActive(false);
-        seesPlayer = false;
-        seesBody = false;
+        seenDetectables = new List<DetectableObject>();
         tooCloseToPlayer = false;
         enemyMovement = GetComponentInParent<EnemyMovement>();
         enemyCamera = GetComponentInParent<EnemyCamera>();
         detectionLayers = LayerMask.GetMask("Default", "Player", "Interactables", "Enemies");
 
-        allBodies = new List<BodyCarry>();
+        allDetectables = new List<DetectableObject>();
     }
 
     private void FixedUpdate()
     {
         // If this setting is toggled off, all detections are disabled
         if(player.detectable)
-        { 
-            // Checks if the enemy is either a conscious NPC or an enabled camera
-            if((enemyMovement != null && enemyCamera == null &&
-                enemyMovement.IsConscious) || (enemyCamera != null &&
+        {
+            // Checks if this enemy is either a conscious NPC or an enabled camera
+            if((enemyMovement != null && enemyMovement.IsConscious) || (enemyCamera != null &&
                     enemyMovement == null && !enemyCamera.Jammed && enemyCamera.IsOn))
             {
-                Vector3 distanceToPlayer = player.transform.position - transform.position;
-                float range = Mathf.Min(distanceToPlayer.magnitude, detectionRange);
+                // Checks if it can see any available detectables in the level
+                UpdateAllDetectables();
+                CheckForDetectables(allDetectables);
 
-                // Checks if the player is too close to the NPC
-                tooCloseToPlayer = distanceToPlayer.magnitude <= proximityDetectionRange;
-
-                // Checks if the player is within range of this NPC's detection range
-                if(distanceToPlayer.magnitude <= detectionRange)
-                {
-                    // Checks if the player is within this NPC's field of view
-                    if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distanceToPlayer) <= detectionMaxAngle)
-                    {
-                        // Sends a raycast towards the player and checks if it hits anything
-                        if (Physics.Raycast(transform.position, distanceToPlayer, out RaycastHit hit, range, detectionLayers))
-                        {
-                            // Checks if the raycast hit the player
-                            if (hit.transform.tag == "Player")
-                            {
-                                seesPlayer = true;
-                                Debug.DrawRay(transform.position, distanceToPlayer.normalized * range, Color.red);
-                                TrackPlayer();
-                            }
-
-                            // If the raycast detects an obstacle between the NPC and the player:
-                            else
-                            {
-                                seesPlayer = false;
-                                Debug.DrawRay(transform.position, distanceToPlayer.normalized * range, Color.yellow);
-                            }
-                        }
-
-                        // If the raycast doesn't reach the player:
-                        else
-                        {
-                            seesPlayer = false;
-                            Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
-                        }
-                    }
-                    
-                    // If the player is not within the enemy's field of view:
-                    else
-                    {
-                        seesPlayer = false;
-                        Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
-                    }
-                }
-
-                // If the player is too far away to be detected:
-                else
-                {
-                    seesPlayer = false;
-                    Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
-                }
-
-
-                // Checks all available bodies in the level that haven't been seen already
-                UpdateAllBodies();
-                foreach(BodyCarry b in allBodies)
-                {
-                    if (b != null && (!b.enabled || b.HasBeenDetected))
-                        continue;
-                    
-                    Vector3 distanceToBody = b.transform.position - transform.position;
-                    Vector3 distanceToBodyHorizontal = new Vector3(b.transform.position.x, 0f, b.transform.position.z) - new Vector3(transform.position.x, 0f, transform.position.z);
-                    range = Mathf.Min(distanceToBody.magnitude, detectionRange);
-
-                    // Checks if the body is within range of this NPC's detection range
-                    if(distanceToBody.magnitude <= detectionRange)
-                    {
-                        // Checks if the body is within this NPC's field of view
-                        if(Vector3.Angle(transform.TransformDirection(Vector3.forward), distanceToBodyHorizontal) <= detectionMaxAngle)
-                        {
-                            // Sends a raycast towards the body
-                            Physics.Raycast(transform.position, distanceToBody, out RaycastHit hit, detectionRange, detectionLayers);
-
-                            // Checks if the raycast hit the body
-                            if(hit.collider == b.GetComponent<Collider>())
-                            {
-                                // Checks if the body is enabled and hasn't been seen yet
-                                if(b.enabled && !b.HasBeenDetected)
-                                {
-                                    seesBody = true;
-                                    Debug.DrawRay(transform.position, distanceToBody.normalized * range, Color.red);
-                                    break;
-                                }
-
-                                // If the body is disabled or was already seen:
-                                else
-                                {
-                                    seesBody = false;
-                                    Debug.DrawRay(transform.position, distanceToBody.normalized * range, Color.green);
-                                }
-                            }
-
-                            // If the raycast didn't hit the body, draws different debug rays
-                            else
-                            {
-                                seesBody = false;
-
-                                // If the raycast hit any obstacle other than the body, draws a yellow ray towards the hit
-                                if(hit.transform)
-                                    Debug.DrawRay(transform.position, distanceToBody.normalized * range, Color.yellow);
-
-                                // If the raycast didn't reach the body, draws a white ray forward
-                                else
-                                    Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
-                            }
-                        }
-                        
-                        // If the body is not within the enemy's field of view:
-                        else
-                        {
-                            seesBody = false;
-                            Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
-                        }
-                    }
-
-                    // If the body is too far away to be detected:
-                    else
-                    {
-                        seesBody = false;
-                        Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
-                    }
-                }
-
+                // Updates this enemy's detection meter according to what it is detecting
                 UpdateDetection();
             }
 
+            // Updates the UI to show visual feedback of the detection meter changes
             UpdateSelfDetectionUI();
+        }
+    }
+
+    /// <summary>
+    /// Checks if this enemy can see any detectables a given list, and Detects and Undetects them accordingly.
+    /// </summary>
+    /// <param name="detectablesList">The list of detectables to check.</param>
+    private void CheckForDetectables(List<DetectableObject> detectablesList)
+    {
+        foreach(DetectableObject d in detectablesList)
+        {
+            Vector3 distanceToDetectable = d.transform.position - transform.position;
+            Vector3 distanceToDetectableHorizontal = new Vector3
+                (d.transform.position.x, 0f, d.transform.position.z) - 
+                    new Vector3(transform.position.x, 0f, transform.position.z);
+
+            float range = Mathf.Min(distanceToDetectable.magnitude, detectionRange);
+
+            // Checks if the current detectableObject is the player
+            Player player = d.GetComponent<Player>();
+            if(player != null)
+            {
+                // Checks if the player is too close to the NPC
+                tooCloseToPlayer = distanceToDetectable.magnitude <= proximityDetectionRange;
+            }
+            
+            // Checks if the detectableObject is within range of this NPC's detection range
+            if(distanceToDetectable.magnitude <= detectionRange)
+            {
+                // Checks if the detectableObject is within this NPC's field of view
+                if(Vector3.Angle(transform.TransformDirection(Vector3.forward), 
+                    distanceToDetectableHorizontal) <= detectionMaxAngle)
+                {
+                    // Sends a raycast towards the detectableObject
+                    Physics.Raycast(transform.position, distanceToDetectable,
+                        out RaycastHit hit, detectionRange, detectionLayers);
+
+                    // Checks if the raycast hit the detectableObject
+                    if(hit.collider == d.GetComponent<Collider>())
+                    {
+                        // Checks if the detectableObject is a body
+                        BodyCarry body = d.GetComponent<BodyCarry>();
+
+                        if (body != null)
+                        {
+                            // Detects the body if it hasn't been found
+                            if(body.HasBeenDetected)
+                            {
+                                Detect(d);
+                                Debug.DrawRay(transform.position, distanceToDetectable.normalized * range, Color.red);
+                            }
+
+                            // Doesn't detect the body if it was already found
+                            else
+                            {
+                                Undetect(d);
+                                Debug.DrawRay(transform.position, distanceToDetectable.normalized * range, Color.green);
+                            }
+                        }
+
+                        // Detects the detectableObject if it's not a body
+                        else
+                        {
+                            Detect(d);
+                            Debug.DrawRay(transform.position, distanceToDetectable.normalized * range, Color.red);
+                        }
+                    }
+
+                    // Doesn't detect the detectableObject if the raycast didn't reach it or hit something else
+                    else
+                    {
+                        Undetect(d);
+                        Debug.DrawRay(transform.position, distanceToDetectable.normalized * range, Color.yellow);
+                    }
+                }
+                
+                // Doesn't detect the detectableObject if it's not within the enemy's field of view
+                else
+                {
+                    Undetect(d);
+                    Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
+                }
+            }
+
+            // Doesn't detect the detectableObject if it's too far away to be detected
+            else
+            {
+                Undetect(d);
+                Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Adds a given detectableObject object to the list of detectables currently seen by this NPC.
+    /// </summary>
+    /// <param name="detectableObject">The given detectableObject object to add to the list.</param>
+    private void Detect(DetectableObject detectableObject)
+    {
+        if(!seenDetectables.Contains(detectableObject))
+        {
+            seenDetectables.Add(detectableObject);
+        }
+    }
+
+    /// <summary>
+    /// Removes a given detectableObject object from the list of detectables currently seen by this NPC.
+    /// </summary>
+    /// <param name="detectableObject">The given detectableObject object to remove from the list.</param>
+    private void Undetect(DetectableObject detectableObject)
+    {
+        if(seenDetectables.Contains(detectableObject))
+        {
+            seenDetectables.Remove(detectableObject);
         }
     }
 
@@ -221,29 +213,24 @@ public class Detection : MonoBehaviour
     private void UpdateDetection()
     {
         // Multiple sources of detection stack with each other
-        int sourceMultiplier = 0;
+        float sourceMultiplier = 0;
 
         // Detection increases per status if the enemy sees the player or is too close to them
-        if(seesPlayer || tooCloseToPlayer)
+        if(SeesPlayer || tooCloseToPlayer)
         {
             TrackPlayer();
 
             if(tooCloseToPlayer)
-                sourceMultiplier += 1;
+                sourceMultiplier += 0.5f;
 
-            if(seesPlayer && player.status.Contains(Player.Status.Suspicious))
-                sourceMultiplier += 2;
-
-            if(seesPlayer && player.status.Contains(Player.Status.Trespassing))
-                sourceMultiplier += 1;
-            if(seesPlayer && player.status.Contains(Player.Status.CriticalTrespassing))
+            if(player.status.Contains(Player.Status.CriticalTrespassing))
                 detectionMeter = 10f;
         }
 
-        // Seeing a body increases the multiplier thrice as much
-        if(seesBody)
+        // Seeing detectables increases the detection multiplier for the detectables' respective individual multiplers
+        foreach(DetectableObject d in seenDetectables)
         {
-            sourceMultiplier += 5;
+            sourceMultiplier += d.DetectionMultiplier;
         }
 
         // Increases detection based on the number of sources that increase it
@@ -252,7 +239,7 @@ public class Detection : MonoBehaviour
             float amountToIncrease = Time.deltaTime * baseDetectionRate * globalDetectionMultiplier * sourceMultiplier;
 
             // If the enemy sees the player with the doubtful status, the detection increase is boosted by 25%
-            if((seesPlayer || tooCloseToPlayer) && player.status.Contains(Player.Status.Doubtful))
+            if((SeesPlayer || tooCloseToPlayer) && player.status.Contains(Player.Status.Doubtful))
                 amountToIncrease *= 1.25f;
 
             DetectionMeter += amountToIncrease;
@@ -287,23 +274,25 @@ public class Detection : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates the list of bodies in the level.
+    /// Updates the list of available detectables in the level.
     /// </summary>
-    public void UpdateAllBodies()
+    public void UpdateAllDetectables()
     {
-        BodyCarry[] bodies = FindObjectsByType<BodyCarry>(FindObjectsSortMode.None);
+        List<DetectableObject> detectables = FindObjectsByType<DetectableObject>
+            (FindObjectsSortMode.None).ToList();
+        detectables = detectables.Where(a => a != null && a.enabled).ToList();
 
-        if(allBodies.Count != bodies.Count())
+        if(allDetectables.Count != detectables.Count())
         {
-            allBodies = new List<BodyCarry>();
+            allDetectables = new List<DetectableObject>();
 
-            foreach(BodyCarry b in bodies)
+            foreach(DetectableObject d in detectables)
             {
-                allBodies.Add(b);
+                allDetectables.Add(d);
             }
         }
 
-        seesBody = false;
+        seenDetectables = new List<DetectableObject>();
     }
 
     /// <summary>
@@ -413,7 +402,7 @@ public class Detection : MonoBehaviour
 
     private void OnSuspiciousAction(object sender, EventArgs e)
     {
-        if (seesPlayer && player.detectable) GetActionSuspicion(sender);
+        if (SeesPlayer && player.detectable) GetActionSuspicion(sender);
     }
 
     private void GetActionSuspicion(object sender)
@@ -424,7 +413,7 @@ public class Detection : MonoBehaviour
 
     private void OnPlayerAttack(object sender, EventArgs e)
     {
-        if (seesPlayer && player.detectable) detectionMeter = detectionLimit * 2;
+        if (SeesPlayer && player.detectable) detectionMeter = detectionLimit * 2;
     }
 }
 
