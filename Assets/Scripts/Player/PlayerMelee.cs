@@ -63,8 +63,8 @@ public class PlayerMelee : MonoBehaviour
         if (cooldownTimer <= 0 && attackableEnemy != null && !playerCarryInventory.CarryingBody)
         {
             float angleDifference = Mathf.Abs(attackableEnemy.transform.eulerAngles.y - transform.eulerAngles.y);
-            print("1: " + (angleDifference <= enemyBackDetectionAngle / 2) );
-            print(angleDifference >= 360 - enemyBackDetectionAngle / 2);
+            //print("1: " + (angleDifference <= enemyBackDetectionAngle / 2) );
+            //print(angleDifference >= 360 - enemyBackDetectionAngle / 2);
             
             if ((angleDifference <= enemyBackDetectionAngle / 2 ||
                  angleDifference >= 360 - enemyBackDetectionAngle / 2)
