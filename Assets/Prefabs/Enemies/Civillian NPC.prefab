@@ -626,6 +626,7 @@ GameObject:
   - component: {fileID: 5317051434528590399}
   - component: {fileID: 1810790442000928118}
   - component: {fileID: 7588830322911778905}
+  - component: {fileID: 9096748760383167819}
   m_Layer: 0
   m_Name: Civillian NPC
   m_TagString: Enemy
@@ -782,6 +783,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &9096748760383167819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3013677490251117298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 330fb8a6380521f4f8753710a7fa8527, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionMultiplier: 0
 --- !u!1 &3105906979117010895
 GameObject:
   m_ObjectHideFlags: 0
@@ -1485,6 +1499,7 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 7746998301078923039}
@@ -1521,9 +1536,11 @@ MonoBehaviour:
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 7746998301078923039}
+  bodyDetectionMultiplier: 5
 --- !u!1 &5846338866025556157
 GameObject:
   m_ObjectHideFlags: 0

@@ -706,8 +706,11 @@ MonoBehaviour:
       m_Calls: []
   isInteractionSuspicious: 1
   isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
+  customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 6890903906552338642}
   disguise: 2
@@ -740,10 +743,14 @@ MonoBehaviour:
       m_Calls: []
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
+  suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
+  showRequirementMessage: 1
+  customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 6890903906552338642}
+  bodyDetectionMultiplier: 5
 --- !u!1 &4500793897804244207
 GameObject:
   m_ObjectHideFlags: 0
@@ -1406,6 +1413,7 @@ GameObject:
   - component: {fileID: 152042297698266454}
   - component: {fileID: 389275399878950790}
   - component: {fileID: 9217238189462858706}
+  - component: {fileID: 1627695072888040367}
   m_Layer: 7
   m_Name: Police NPC
   m_TagString: Enemy
@@ -1447,6 +1455,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alarmAudioPlayer: {fileID: 0}
   alarmedTime: 5
+  ignoresAlarm: 0
   playerCatchDistance: 1.5
 --- !u!114 &152042297698266454
 MonoBehaviour:
@@ -1462,7 +1471,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isStatic: 0
   looksAround: 1
+  chooseTargetsAsSequence: 0
   movementTargets: []
+  startingTargetIndex: 0
   walkSpeed: 5
   runSpeed: 15
   turnSpeed: 10
@@ -1530,6 +1541,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1627695072888040367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5892113209513531551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 330fb8a6380521f4f8753710a7fa8527, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionMultiplier: 0
 --- !u!1 &7455494782410400207
 GameObject:
   m_ObjectHideFlags: 0
