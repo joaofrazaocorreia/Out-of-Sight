@@ -568,6 +568,7 @@ GameObject:
   - component: {fileID: 4769681412937880859}
   - component: {fileID: 3270205429668268905}
   - component: {fileID: 4807377426135969676}
+  - component: {fileID: 2281857179487576180}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -760,6 +761,19 @@ MonoBehaviour:
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 7319968640571948815}
   bodyDetectionMultiplier: 5
+--- !u!114 &2281857179487576180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612261365637105052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 330fb8a6380521f4f8753710a7fa8527, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionMultiplier: 0
 --- !u!1 &1633240968880588183
 GameObject:
   m_ObjectHideFlags: 0
@@ -1238,7 +1252,6 @@ GameObject:
   - component: {fileID: 4444592357244671704}
   - component: {fileID: 1810790442000928118}
   - component: {fileID: 7588830322911778905}
-  - component: {fileID: 744300234894145538}
   m_Layer: 0
   m_Name: Worker NPC
   m_TagString: Enemy
@@ -1376,19 +1389,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &744300234894145538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013677490251117298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 330fb8a6380521f4f8753710a7fa8527, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detectionMultiplier: 0
 --- !u!1 &3262675731445291378
 GameObject:
   m_ObjectHideFlags: 0
@@ -1895,7 +1895,7 @@ MonoBehaviour:
   alarmedIcon: {fileID: 5773447793223613095}
   tasedIcon: {fileID: 8815639088117196135}
   tasedFill: {fileID: 6109748577925545662}
-  detectionMaxAngle: 50
+  detectionMaxAngle: 70
   detectionRange: 50
   proximityDetectionRange: 2
   baseDetectionRate: 1

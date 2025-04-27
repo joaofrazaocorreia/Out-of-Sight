@@ -66,7 +66,7 @@ public class Detection : MonoBehaviour
         tooCloseToPlayer = false;
         enemyMovement = GetComponentInParent<EnemyMovement>();
         enemyCamera = GetComponentInParent<EnemyCamera>();
-        detectionLayers = LayerMask.GetMask("Default", "Player", "Interactables", "Enemies");
+        detectionLayers = LayerMask.GetMask("Default", "Player", "Enemies");
 
         allDetectables = new List<DetectableObject>();
     }
@@ -127,16 +127,22 @@ public class Detection : MonoBehaviour
                     Physics.Raycast(transform.position, distanceToDetectable,
                         out RaycastHit hit, detectionRange, detectionLayers);
 
+                    Debug.Log("transform hit: \'" + hit.transform + "\'");
+                    Debug.Log("parent of transform hit: \'" +  hit.transform.parent + "\'");
+                    Debug.Log("collider hit: \'" +  hit.collider + "\'");
+                    Debug.Log("Expected collider: \'" + d.GetComponent<Collider>() + "\'");
+
                     // Checks if the raycast hit the detectableObject
                     if(hit.collider == d.GetComponent<Collider>())
                     {
                         // Checks if the detectableObject is a body
                         BodyCarry body = d.GetComponent<BodyCarry>();
+                        Debug.Log("body component: \'" + body + "\'");
 
                         if (body != null)
                         {
                             // Detects the body if it hasn't been found
-                            if(body.HasBeenDetected)
+                            if(!body.HasBeenDetected)
                             {
                                 Detect(d);
                                 Debug.DrawRay(transform.position, distanceToDetectable.normalized * range, Color.red);
@@ -162,6 +168,7 @@ public class Detection : MonoBehaviour
                     else
                     {
                         Undetect(d);
+                        if(hit.transform) Debug.Log(hit.transform.parent.name);
                         Debug.DrawRay(transform.position, distanceToDetectable.normalized * range, Color.yellow);
                     }
                 }

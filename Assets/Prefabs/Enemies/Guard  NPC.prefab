@@ -1090,6 +1090,7 @@ GameObject:
   - component: {fileID: 3682265763861691209}
   - component: {fileID: 4488690285887377793}
   - component: {fileID: 1869388617638826781}
+  - component: {fileID: 2463826486651183188}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -1283,6 +1284,19 @@ MonoBehaviour:
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 2841766722683801864}
   bodyDetectionMultiplier: 5
+--- !u!114 &2463826486651183188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3797380051543594256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 330fb8a6380521f4f8753710a7fa8527, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionMultiplier: 0
 --- !u!1 &4685686783874219822
 GameObject:
   m_ObjectHideFlags: 0
@@ -1781,7 +1795,6 @@ GameObject:
   - component: {fileID: 7948220983007380138}
   - component: {fileID: 389275399878950790}
   - component: {fileID: 9217238189462858706}
-  - component: {fileID: 72154524419992220}
   m_Layer: 0
   m_Name: Guard  NPC
   m_TagString: Enemy
@@ -1934,19 +1947,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &72154524419992220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5892113209513531551}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 330fb8a6380521f4f8753710a7fa8527, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detectionMultiplier: 0
 --- !u!1 &5987049073048159289
 GameObject:
   m_ObjectHideFlags: 0
