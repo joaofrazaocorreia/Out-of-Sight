@@ -69,6 +69,7 @@ public class Detection : MonoBehaviour
         detectionLayers = LayerMask.GetMask("Default", "Player", "Enemies");
 
         allDetectables = new List<DetectableObject>();
+        globalDetectionMultiplier = 1f;
     }
 
     private void FixedUpdate()
