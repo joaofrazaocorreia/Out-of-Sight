@@ -1,9 +1,10 @@
 using UnityEngine;
+using Enums;
 
 public class BodyDisguise : InteractiveObject
 {
     [Header("Disguise Properties")]
-    [SerializeField] private Player.Disguise disguise;
+    [SerializeField] private Disguise disguise;
 
     private Player player;
     private EnemyMovement enemyMovement;
