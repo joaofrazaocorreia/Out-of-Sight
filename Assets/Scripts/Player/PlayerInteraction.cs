@@ -96,7 +96,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void GetInteractiveObject()
     {
-        if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out _hit, raycastDistance))
+        if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out _hit, raycastDistance, whatIsInteractable))
         {
             if(_lastHitObject == _hit.collider.gameObject) return;
             
