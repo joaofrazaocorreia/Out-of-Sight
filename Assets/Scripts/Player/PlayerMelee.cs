@@ -27,7 +27,7 @@ public class PlayerMelee : MonoBehaviour
     
     private float cooldownTimer;
     
-    private EnemyMovement attackableEnemy;
+    private Enemy attackableEnemy;
     public event EventHandler OnAttackAvailable;
     public event EventHandler OnAttackNotAvailable;
     public event EventHandler OnKnockout;
@@ -68,7 +68,7 @@ public class PlayerMelee : MonoBehaviour
             
             if ((angleDifference <= enemyBackDetectionAngle / 2 ||
                  angleDifference >= 360 - enemyBackDetectionAngle / 2)
-                && attackableEnemy.currentStatus != EnemyMovement.Status.KnockedOut)
+                && attackableEnemy.EnemyStatus != Enemy.Status.KnockedOut)
             {
                 canAttack = true;
                 OnAttackAvailable?.Invoke(this, EventArgs.Empty);
@@ -94,7 +94,7 @@ public class PlayerMelee : MonoBehaviour
             var hit = playerInteraction.HitInteractables[i];
             Enemy enemy;
             if (hit == null) continue;
-            if ((enemy = hit.GetComponentInParent<Enemy>()) != null && !enemy.IsKnockedOut) attackableEnemy = hit.GetComponentInParent<EnemyMovement>();
+            if ((enemy = hit.GetComponentInParent<Enemy>()) != null && !enemy.IsKnockedOut) attackableEnemy = hit.GetComponentInParent<Enemy>();
             return;
         }
     }

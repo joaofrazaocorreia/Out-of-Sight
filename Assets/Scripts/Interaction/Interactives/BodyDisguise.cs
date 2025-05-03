@@ -6,14 +6,14 @@ public class BodyDisguise : InteractiveObject
     [SerializeField] private Player.Disguise disguise;
 
     private Player player;
-    private EnemyMovement enemyMovement;
+    private Enemy enemySelf;
     private bool hasDisguise;
     public bool HasDisguise {get => hasDisguise;}
 
     private void Start()
     {
         player = FindAnyObjectByType<Player>();
-        enemyMovement = GetComponentInParent<EnemyMovement>();
+        enemySelf = GetComponentInParent<Enemy>();
         hasDisguise = true;
         objectName = disguise + " Disguise";
         enabled = false;
@@ -22,7 +22,7 @@ public class BodyDisguise : InteractiveObject
     public override void Interact()
     {
         if(disguise != player.disguise && hasDisguise &&
-            enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
+            enemySelf.EnemyStatus == Enemy.Status.KnockedOut)
         {
             base.Interact();
 

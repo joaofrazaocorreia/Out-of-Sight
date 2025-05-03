@@ -1248,7 +1248,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1762310718866197437}
-  - component: {fileID: 8734180238092878120}
+  - component: {fileID: 2173861201769192526}
   - component: {fileID: 4444592357244671704}
   - component: {fileID: 1810790442000928118}
   - component: {fileID: 7588830322911778905}
@@ -1280,7 +1280,7 @@ Transform:
   - {fileID: 1370654702336497641}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!114 &8734180238092878120
+--- !u!114 &2173861201769192526
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1289,12 +1289,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 3013677490251117298}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bad1667b1a4d1a74a8f5b4385a0de147, type: 3}
+  m_Script: {fileID: 11500000, guid: 932f63b9deab07446a42cbe6fff3fbe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   alarmAudioPlayer: {fileID: 6285718920691931174}
   alarmedTime: 5
   ignoresAlarm: 0
+  type: 1
+  onKnockOut:
+    m_PersistentCalls:
+      m_Calls: []
+  knockoutPlayer: {fileID: 7904041714685882488}
 --- !u!114 &4444592357244671704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1340,8 +1345,6 @@ MonoBehaviour:
   onKnockOut:
     m_PersistentCalls:
       m_Calls: []
-  taserLoopPlayer: {fileID: 2719472879654398134}
-  knockoutPlayer: {fileID: 7904041714685882488}
   footstepPlayer: {fileID: 5926605809366126095}
   footstepInterval: 0.45
   halted: 0

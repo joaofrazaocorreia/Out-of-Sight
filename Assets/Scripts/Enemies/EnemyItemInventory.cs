@@ -46,19 +46,23 @@ public class EnemyItemInventory : MonoBehaviour
     /// <param name="number">The index of the item to drop.</param>
     public void DropItem(int number)
     {
+        GameObject droppedItem;
+
         switch(Mathf.Clamp(number, 1, 2))
         {
-            case 1:
-                Instantiate(itemDrop1.gameObject,
+            default:
+                droppedItem = Instantiate(itemDrop1.gameObject,
                     dropPosition.position, dropPosition.rotation, itemsParent);
                 drop1Model.SetActive(false);
                 break;
             case 2:
-                Instantiate(itemDrop2.gameObject,
+                droppedItem = Instantiate(itemDrop2.gameObject,
                     dropPosition.position, dropPosition.rotation, itemsParent);
                 drop2Model.SetActive(false);
                 break;
         }
+
+        //droppedItem.AddComponent<Rigidbody>();
     }
 
     /// <summary>

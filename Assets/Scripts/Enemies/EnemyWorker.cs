@@ -19,7 +19,7 @@ public class EnemyWorker : Enemy
     private void CheckStatus()
     {
         // ------------ Normal ------------ 
-        if(enemyMovement.currentStatus == EnemyMovement.Status.Normal)
+        if(EnemyStatus == Status.Normal)
         {
             if(detection.DetectionMeter >= detection.DetectionLimit)
             {
@@ -29,14 +29,13 @@ public class EnemyWorker : Enemy
 
 
         // ------------ Fleeing ------------ 
-        else if(enemyMovement.currentStatus == EnemyMovement.Status.Fleeing)
+        else if(EnemyStatus == Status.Fleeing)
         {
             // nothing yet
         }
 
-        // ------------ Tased && Knocked out ------------ 
-        else if(enemyMovement.currentStatus == EnemyMovement.Status.Tased ||
-            enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
+        // ------------ Knocked out ------------ 
+        else if(EnemyStatus == Status.KnockedOut)
         {
             if(enemyItemInventory != null)
                 enemyItemInventory.DropAllItems();
@@ -44,7 +43,7 @@ public class EnemyWorker : Enemy
 
         // ----- If any other enemyMovement.currentStatus is detected, resets it to normal.
         else
-            enemyMovement.currentStatus = EnemyMovement.Status.Normal;
+            EnemyStatus = Status.Normal;
     }
     
 
@@ -53,12 +52,12 @@ public class EnemyWorker : Enemy
     /// </summary>
     public override void BecomeAlarmed()
     {
-        if(enemyMovement.IsConscious)
+        if(IsConscious)
         {
             base.BecomeAlarmed();
 
             if(!ignoresAlarm)
-                enemyMovement.currentStatus = EnemyMovement.Status.Fleeing;
+                EnemyStatus = Status.Fleeing;
         }
     }
 }
