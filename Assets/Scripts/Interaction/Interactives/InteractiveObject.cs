@@ -3,6 +3,8 @@ using Interaction.Equipments;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
+using Enums;
+using UnityEngine.Serialization;
 
 public abstract class InteractiveObject : MonoBehaviour
 {
@@ -25,6 +27,7 @@ public abstract class InteractiveObject : MonoBehaviour
     [Header("Detection Options")]
     [SerializeField] protected bool isInteractionSuspicious;
     [SerializeField] protected bool isSecondInteractionSuspicious;
+    [SerializeField] protected Disguise[] whitelistedDisguises; 
     [SerializeField] protected float suspicionIncreaseOnInteraction = 2.5f;
     [Header("UI Options")]
     [SerializeField] protected string objectName;
@@ -58,6 +61,8 @@ public abstract class InteractiveObject : MonoBehaviour
     
     public bool IsInteractionSuspicious => isInteractionSuspicious;
     public bool IsSecondInteractionSuspicious => isSecondInteractionSuspicious;
+    
+    public Disguise[] WhitelistedDisguises => whitelistedDisguises;
     
     public float SuspicionIncreaseOnInteraction => suspicionIncreaseOnInteraction;
     

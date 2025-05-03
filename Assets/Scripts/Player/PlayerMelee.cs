@@ -94,8 +94,9 @@ public class PlayerMelee : MonoBehaviour
             var hit = playerInteraction.HitInteractables[i];
             Enemy enemy;
             if (hit == null) continue;
-            if ((enemy = hit.GetComponentInParent<Enemy>()) != null && !enemy.IsKnockedOut) attackableEnemy = hit.GetComponentInParent<Enemy>();
-            return;
+            if ((enemy = hit.GetComponentInParent<Enemy>()) == null) return;
+            if (enemy is EnemyCamera) return;
+            if (!enemy.IsKnockedOut) attackableEnemy = hit.GetComponentInParent<Enemy>();
         }
     }
 

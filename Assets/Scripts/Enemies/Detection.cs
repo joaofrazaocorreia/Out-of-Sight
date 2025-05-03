@@ -68,7 +68,8 @@ public class Detection : MonoBehaviour
         enemyMovement = GetComponentInParent<EnemyMovement>();
         enemyCamera = GetComponentInParent<EnemyCamera>();
         detectionLayers = LayerMask.GetMask("Default", "Player", "Enemies");
-
+    
+        globalDetectionMultiplier = 1f;
         allDetectables = new List<DetectableObject>();
         UpdateAllDetectables();
     }
