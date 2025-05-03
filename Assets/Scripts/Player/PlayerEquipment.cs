@@ -13,6 +13,7 @@ public class PlayerEquipment : MonoBehaviour
     public EquipmentObject[] EquipmentObjects => _equipmentObjects;
     
     private int _currentEquipmentNum;
+    private bool suspiciousCheck;
 
     public int CurrentEquipmentNum
     {
@@ -26,6 +27,7 @@ public class PlayerEquipment : MonoBehaviour
             CurrentEquipment.Equipped(true);
             EquipmentChanged();
             OnEquipmentChanged?.Invoke(this, EventArgs.Empty);
+            suspiciousCheck = CurrentEquipment.IsSuspicious;
         }
     }
     
@@ -45,7 +47,7 @@ public class PlayerEquipment : MonoBehaviour
         }
         else
         {
-            if(CurrentEquipment == null) 
+            if(CurrentEquipment == null && EquipmentObjects[index].IsSuspicious) 
                 GetComponent<Player>().GainStatus(Player.Status.Suspicious);
             CurrentEquipmentNum = index;
         }
@@ -87,6 +89,12 @@ public class PlayerEquipment : MonoBehaviour
 
     public void EquipmentUsed()
     {
+        if (CurrentEquipment != null && suspiciousCheck != CurrentEquipment.IsSuspicious)
+        {
+            suspiciousCheck = CurrentEquipment.IsSuspicious;
+            if (suspiciousCheck) GetComponent<Player>().GainStatus(Player.Status.Suspicious);
+            else GetComponent<Player>().LoseStatus(Player.Status.Suspicious);
+        }
         OnEquipmentChanged?.Invoke(this, EventArgs.Empty);
     }
 }
