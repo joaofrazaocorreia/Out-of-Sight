@@ -6,11 +6,11 @@ public abstract class EquipmentObject : MonoBehaviour
 {
     [SerializeField] private EquipmentType equipmentType;
     [SerializeField] private Sprite icon;
-    private GameObject _equipmentModel;
-    private PlayerEquipment _playerEquipment;
+    protected GameObject _equipmentModel;
+    protected PlayerEquipment _playerEquipment;
     public bool CanBeUsed { get; protected set; }
+    public bool IsSuspicious { get; protected set; } = true;
     public Sprite Icon => icon;
-    
     public EquipmentType EquipmentType => equipmentType;
 
     public virtual void Used(InteractiveObject activeInteractiveObject)
@@ -18,7 +18,7 @@ public abstract class EquipmentObject : MonoBehaviour
         _playerEquipment.EquipmentUsed();
     }
     
-    public void Equipped(bool isEquipped) => _equipmentModel.SetActive(isEquipped);
+    public virtual void Equipped(bool isEquipped) => _equipmentModel.SetActive(isEquipped);
 
     protected virtual void Start()
     {
