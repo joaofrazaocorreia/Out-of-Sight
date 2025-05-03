@@ -96,7 +96,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void GetInteractiveObject()
     {
-        if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out _hit, raycastDistance))
+        if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out _hit, raycastDistance, whatIsInteractable))
         {
             if(_lastHitObject == _hit.collider.gameObject) return;
             
@@ -196,9 +196,9 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Interact(InteractiveType interactiveType)
     {
-        _isInteractionSuspicious = ActiveInteractiveObject.IsInteractionSuspicious;
+        _isInteractionSuspicious = ActiveInteractiveObject.IsInteractionSuspicious && !ActiveInteractiveObject.WhitelistedDisguises.Contains(_player.disguise);
 
-        if(_isInteractionSuspicious && _interactionDuration == _activeInteractiveObject.InteractionDuration)
+        if(_isInteractionSuspicious &&  Mathf.Approximately(_interactionDuration, ActiveInteractiveObject.InteractionDuration))
             _player.GainStatus(Player.Status.Suspicious);
 
         _interactionDuration = Mathf.Max(_interactionDuration - Time.deltaTime, 0f);

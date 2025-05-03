@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
 using static Player.Status;
-using static Player.Disguise;
+using static Enums.Disguise;
 
 public class UIManager : MonoBehaviour
 {
@@ -26,6 +26,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI statusText;
     [SerializeField] private GameObject ammoDisplay;
     [SerializeField] private TextMeshProUGUI ammoText;
+    [SerializeField] private Image ammoSprite;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private CanvasGroup restartConfirmationMenu;
     [SerializeField] private CanvasGroup quitConfirmationMenu;
@@ -237,6 +238,13 @@ public class UIManager : MonoBehaviour
         
         else
             ammoDisplay.SetActive((bool)toggle);
+        
+        if(ammoDisplay.activeSelf) UpdateAmmoIcon();
+    }
+
+    private void UpdateAmmoIcon()
+    {
+        ammoSprite.sprite = playerEquipment.CurrentEquipment.Icon;
     }
 
     public void ToggleRestartConfirmation()

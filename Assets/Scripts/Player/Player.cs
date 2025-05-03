@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Enums;
 
 public class Player : MonoBehaviour
 {
     public enum Status {Normal, Doubtful, Trespassing, CriticalTrespassing, Suspicious};
-    public enum Disguise {Civillian, Employee, Guard_Tier1, Guard_Tier2};
 
     public List<Status> status;
     public Disguise disguise;
