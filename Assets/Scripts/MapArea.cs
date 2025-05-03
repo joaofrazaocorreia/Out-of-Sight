@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Enums;
 
 public class MapArea : MonoBehaviour
 {
     [Header("Player Status Properties")]
     [SerializeField] private bool useWhitelist;
-    [SerializeField] private List<Player.Disguise> whitelistedDisguises;
+    [SerializeField] private List<Disguise> whitelistedDisguises;
     [SerializeField] private bool isCriticalArea;
  
     [Header("Events")]
@@ -14,7 +15,7 @@ public class MapArea : MonoBehaviour
     [SerializeField] private UnityEvent onExitArea;
 
     public bool UseWhitelist {get => useWhitelist;}
-    public List<Player.Disguise> WhitelistedDisguises {get => whitelistedDisguises;}
+    public List<Disguise> WhitelistedDisguises {get => whitelistedDisguises;}
     public bool IsCriticalArea {get => isCriticalArea;}
 
     private void Start()

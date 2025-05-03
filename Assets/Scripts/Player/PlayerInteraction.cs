@@ -196,9 +196,9 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Interact(InteractiveType interactiveType)
     {
-        _isInteractionSuspicious = ActiveInteractiveObject.IsInteractionSuspicious;
+        _isInteractionSuspicious = ActiveInteractiveObject.IsInteractionSuspicious && !ActiveInteractiveObject.WhitelistedDisguises.Contains(_player.disguise);
 
-        if(_isInteractionSuspicious && _interactionDuration == _activeInteractiveObject.InteractionDuration)
+        if(_isInteractionSuspicious &&  Mathf.Approximately(_interactionDuration, ActiveInteractiveObject.InteractionDuration))
             _player.GainStatus(Player.Status.Suspicious);
 
         _interactionDuration = Mathf.Max(_interactionDuration - Time.deltaTime, 0f);

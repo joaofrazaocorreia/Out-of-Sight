@@ -54,6 +54,7 @@ public class InteractionSpot : InteractiveObject
         customInteractionMessage = LinkedObject.CustomInteractionMessage;
         onInteractAudioPlayer = linkedObject.OnInteractAudioPlayer;
         whileInteractAudioPlayer = linkedObject.WhileInteractAudioPlayer;
+        whitelistedDisguises = linkedObject.WhitelistedDisguises;
         
         HasRequirement = RequiredItem != ItemType.None || RequiredEquipment != EquipmentType.None;
     }

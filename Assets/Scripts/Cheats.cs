@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Enums;
 
 public class Cheats : MonoBehaviour
 {
@@ -82,28 +83,28 @@ public class Cheats : MonoBehaviour
         {
             Debug.Log("Disguised as Civillian");
             
-            player.GainDisguise(Player.Disguise.Civillian);
+            player.GainDisguise(Disguise.Civillian);
         }
 
         if(playerInput.actions["DisguiseEmployee"].WasPressedThisFrame())
         {
             Debug.Log("Disguised as Employee");
             
-            player.GainDisguise(Player.Disguise.Employee);
+            player.GainDisguise(Disguise.Employee);
         }
 
         if(playerInput.actions["DisguiseGuardT1"].WasPressedThisFrame())
         {
             Debug.Log("Disguised as Security Guard");
             
-            player.GainDisguise(Player.Disguise.Guard_Tier1);
+            player.GainDisguise(Disguise.Guard_Tier1);
         }
 
         if(playerInput.actions["DisguiseGuardT2"].WasPressedThisFrame())
         {
             Debug.Log("Disguised as Elite Guard");
             
-            player.GainDisguise(Player.Disguise.Guard_Tier2);
+            player.GainDisguise(Disguise.Guard_Tier2);
         }
     }
 }

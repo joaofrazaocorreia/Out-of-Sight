@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using UnityEngine.UI;
 using static Player.Status;
-using static Player.Disguise;
+using static Enums.Disguise;
 
 public class UIManager : MonoBehaviour
 {
