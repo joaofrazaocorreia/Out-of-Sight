@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -37,6 +38,7 @@ public class PlayAudio : MonoBehaviour
 	public void Play()
 	{
 		if(_audioSource == null) return;
+		if(rnd == null) Start();
 		ChooseAVariant();
 		_audioSource.Play();
 	}

@@ -31,7 +31,7 @@ public class EnemyGuard : Enemy
     {
         CheckStatus();
 
-        if(IsAlarmed && enemyMovement.IsConscious)
+        if(IsAlarmed && IsConscious)
         {
             alarmedTimer -= Time.deltaTime;
             radioIcon.SetActive(true);
@@ -52,7 +52,7 @@ public class EnemyGuard : Enemy
     private void CheckStatus()
     {
         // ------------ Normal ------------ 
-        if(enemyMovement.currentStatus == EnemyMovement.Status.Normal)
+        if(EnemyStatus == Status.Normal)
         {
             // Becomes alarmed if the detection meter fills up
             if(detection.DetectionMeter >= detection.DetectionLimit)
@@ -62,7 +62,7 @@ public class EnemyGuard : Enemy
         }
 
         // ------------ Chasing ------------ 
-        else if(enemyMovement.currentStatus == EnemyMovement.Status.Chasing)
+        else if(EnemyStatus == Status.Chasing)
         {
             // Becomes alarmed if this enemy sees the player while chasing them
             if(detection.SeesPlayer)
@@ -86,7 +86,7 @@ public class EnemyGuard : Enemy
                 else
                 {
                     prevPlayerPos = Detection.lastPlayerPos;
-                    enemyMovement.currentStatus = EnemyMovement.Status.Searching;
+                    EnemyStatus = Status.Searching;
                 }
             }
 
@@ -108,7 +108,7 @@ public class EnemyGuard : Enemy
         }
 
         // ------------ Searching ------------ 
-        else if(enemyMovement.currentStatus == EnemyMovement.Status.Searching)
+        else if(EnemyStatus == Status.Searching)
         {
             // Becomes alarmed if this enemy (or another) sees the player 
             if(detection.SeesPlayer || Detection.lastPlayerPos != prevPlayerPos)
@@ -121,14 +121,13 @@ public class EnemyGuard : Enemy
             // Goes back to normal after the alarm ends
             else if (!alarm.IsOn)
             {
-                enemyMovement.currentStatus = EnemyMovement.Status.Normal;
+                EnemyStatus = Status.Normal;
             }
             
         }
 
-        // ------------ Tased && Knocked out ------------ 
-        else if(enemyMovement.currentStatus == EnemyMovement.Status.Tased ||
-            enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
+        // ------------ Knocked out ------------ 
+        else if(EnemyStatus == Status.KnockedOut)
         {
             // Drops all items this enemy is carrying
             enemyItemInventory.DropAllItems();
@@ -136,7 +135,7 @@ public class EnemyGuard : Enemy
 
         // ----- If any other enemyMovement.currentStatus is detected, resets it to normal.
         else
-            enemyMovement.currentStatus = EnemyMovement.Status.Normal;
+            EnemyStatus = Status.Normal;
     }
     
 
@@ -145,9 +144,10 @@ public class EnemyGuard : Enemy
     /// </summary>
     public override void BecomeAlarmed()
     {
-        if(enemyMovement == null) Start();
-        if(enemyMovement.IsConscious)
+        if(IsConscious)
         {
+            if(alarm == null) Start();
+
             // On the first time being alarmed, plays the radio loop sound
             if (!alarm.IsOn && !IsAlarmed)
             {
@@ -159,7 +159,7 @@ public class EnemyGuard : Enemy
             // Begins chasing the player unless this enemy specifically ignores the alarm
             if(!ignoresAlarm)
             {
-                enemyMovement.currentStatus = EnemyMovement.Status.Chasing;
+                EnemyStatus = Status.Chasing;
                 aggroTimer = aggroTime;
             }
         }

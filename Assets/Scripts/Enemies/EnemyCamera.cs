@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyCamera : Enemy, IJammable
 {
-    [SerializeField] private EnemyGuard cameraOperator;
+    [SerializeField] private Enemy cameraOperator;
     [SerializeField] private Transform cameraBody;
     [SerializeField] [Range(-90, 90)] private int maxRotationAngle = 45;
     [SerializeField] [Range(-90, 90)] private int minRotationAngle = -45;

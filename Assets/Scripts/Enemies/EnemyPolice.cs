@@ -25,7 +25,7 @@ public class EnemyPolice : Enemy
     private void CheckStatus()
     {
         // ------------ Chasing ------------ 
-        if(enemyMovement.currentStatus == EnemyMovement.Status.Chasing)
+        if(EnemyStatus == Status.Chasing)
         {
             if(detection.SeesPlayer)
             {
@@ -41,9 +41,9 @@ public class EnemyPolice : Enemy
             }
         }
 
-        // ----- If any other enemyMovement.currentStatus is detected, resets it to chasing.
+        // ----- If any other status is detected, resets it to chasing.
         else
-            enemyMovement.currentStatus = EnemyMovement.Status.Chasing;
+            EnemyStatus = Status.Chasing;
     }
     
 
@@ -52,12 +52,11 @@ public class EnemyPolice : Enemy
     /// </summary>
     public override void BecomeAlarmed()
     {
-        if(enemyMovement == null) Start();
-        if(enemyMovement.IsConscious)
+        if(IsConscious)
         {
             base.BecomeAlarmed();
 
-            enemyMovement.currentStatus = EnemyMovement.Status.Chasing;
+            EnemyStatus = Status.Chasing;
         }
     }
 }

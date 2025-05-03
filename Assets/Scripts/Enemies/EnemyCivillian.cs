@@ -19,7 +19,7 @@ public class EnemyCivillian : Enemy
     private void CheckStatus()
     {
         // ------------ Normal ------------ 
-        if(enemyMovement.currentStatus == EnemyMovement.Status.Normal)
+        if(EnemyStatus == Status.Normal)
         {
             if(detection.DetectionMeter >= detection.DetectionLimit)
             {
@@ -29,14 +29,13 @@ public class EnemyCivillian : Enemy
 
 
         // ------------ Fleeing ------------ 
-        else if(enemyMovement.currentStatus == EnemyMovement.Status.Fleeing)
+        else if(EnemyStatus == Status.Fleeing)
         {
             // nothing yet
         }
 
-        // ------------ Tased && Knocked out ------------ 
-        else if(enemyMovement.currentStatus == EnemyMovement.Status.Tased ||
-            enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
+        // ------------ Knocked out ------------ 
+        else if(EnemyStatus == Status.KnockedOut)
         {
             // Drops all items this enemy is carrying
             enemyItemInventory.DropAllItems();
@@ -44,7 +43,7 @@ public class EnemyCivillian : Enemy
 
         // ----- If any other enemyMovement.currentStatus is detected, resets it to normal.
         else
-            enemyMovement.currentStatus = EnemyMovement.Status.Normal;
+            EnemyStatus = Status.Normal;
     }
     
 
@@ -53,11 +52,11 @@ public class EnemyCivillian : Enemy
     /// </summary>
     public override void BecomeAlarmed()
     {
-        if(enemyMovement.IsConscious)
+        if(IsConscious)
         {
             base.BecomeAlarmed();
 
-            enemyMovement.currentStatus = EnemyMovement.Status.Fleeing;
+            EnemyStatus = Status.Fleeing;
         }
     }
 }

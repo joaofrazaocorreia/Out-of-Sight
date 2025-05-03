@@ -8,9 +8,16 @@ public class NPCMoveInteraction : InteractiveObject
     [SerializeField] private string fetchTargetWithTag;
     [SerializeField] private float timeAtTargetLocation = 10f;
 
+    private Enemy enemy;
+
+    private void Start()
+    {
+        enemy = enemyMovement.GetComponent<Enemy>();   
+    }
+
     private void Update()
     {
-        if(enabled && enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut)
+        if(enabled && enemy.EnemyStatus == Enemy.Status.KnockedOut)
         {
             foreach(InteractiveObject io in GetComponentsInChildren<InteractiveObject>())
                 io.enabled = false;

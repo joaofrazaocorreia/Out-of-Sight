@@ -47,6 +47,7 @@ public class Detection : MonoBehaviour
     private EnemyCamera enemyCamera;
     private EnemyMovement enemyMovement;
     private bool isDetectionReset;
+    private float detectablesCount;
 
 
     private void Start()
@@ -69,6 +70,7 @@ public class Detection : MonoBehaviour
         detectionLayers = LayerMask.GetMask("Default", "Player", "Enemies");
 
         allDetectables = new List<DetectableObject>();
+        UpdateAllDetectables();
     }
 
     private void FixedUpdate()
@@ -77,7 +79,7 @@ public class Detection : MonoBehaviour
         if(player.detectable)
         {
             // Checks if this enemy is either a conscious NPC or an enabled camera
-            if((enemyMovement != null && enemyMovement.IsConscious) || (enemyCamera != null &&
+            if((enemyMovement != null && selfEnemy.IsConscious) || (enemyCamera != null &&
                     enemyMovement == null && !enemyCamera.Jammed && enemyCamera.IsOn))
             {
                 // Checks if it can see any available detectables in the level
@@ -127,17 +129,11 @@ public class Detection : MonoBehaviour
                     Physics.Raycast(transform.position, distanceToDetectable,
                         out RaycastHit hit, detectionRange, detectionLayers);
 
-                    Debug.Log("transform hit: \'" + hit.transform + "\'");
-                    Debug.Log("parent of transform hit: \'" +  hit.transform.parent + "\'");
-                    Debug.Log("collider hit: \'" +  hit.collider + "\'");
-                    Debug.Log("Expected collider: \'" + d.GetComponent<Collider>() + "\'");
-
                     // Checks if the raycast hit the detectableObject
                     if(hit.collider == d.GetComponent<Collider>())
                     {
                         // Checks if the detectableObject is a body
                         BodyCarry body = d.GetComponent<BodyCarry>();
-                        Debug.Log("body component: \'" + body + "\'");
 
                         if (body != null)
                         {
@@ -168,7 +164,6 @@ public class Detection : MonoBehaviour
                     else
                     {
                         Undetect(d);
-                        if(hit.transform) Debug.Log(hit.transform.parent.name);
                         Debug.DrawRay(transform.position, distanceToDetectable.normalized * range, Color.yellow);
                     }
                 }
@@ -285,19 +280,9 @@ public class Detection : MonoBehaviour
     /// </summary>
     public void UpdateAllDetectables()
     {
-        List<DetectableObject> detectables = FindObjectsByType<DetectableObject>
+        allDetectables = FindObjectsByType<DetectableObject>
             (FindObjectsSortMode.None).ToList();
-        detectables = detectables.Where(a => a != null && a.enabled).ToList();
-
-        if(allDetectables.Count != detectables.Count())
-        {
-            allDetectables = new List<DetectableObject>();
-
-            foreach(DetectableObject d in detectables)
-            {
-                allDetectables.Add(d);
-            }
-        }
+        allDetectables = allDetectables.Where(a => a != null && a.enabled).ToList();
 
         seenDetectables = new List<DetectableObject>();
     }
@@ -309,10 +294,11 @@ public class Detection : MonoBehaviour
     {
         // The UI checks if the enemy is not knocked out and not a camera
         if(enemyMovement != null && enemyCamera == null &&
-            enemyMovement.currentStatus != EnemyMovement.Status.KnockedOut)
+            selfEnemy.EnemyStatus != Enemy.Status.KnockedOut)
         {
+            /*
             // Enables the tased timer UI when tased
-            if(enemyMovement.currentStatus == EnemyMovement.Status.Tased)
+            if(enemyMovement.EnemyStatus == Enemy.Status.Tased)
             {
                 selfDetection.SetActive(true);
                 tasedIcon.SetActive(true);
@@ -320,10 +306,10 @@ public class Detection : MonoBehaviour
                 detectionIcon.SetActive(false);
 
                 tasedFill.fillAmount = enemyMovement.TasedTimer / enemyMovement.TasedTime;
-            }
+            }*/
 
             // Enables the alarmed icon when alarmed
-            else if(enemyMovement != null && (alarm.IsOn || selfEnemy.IsAlarmed))
+            if(enemyMovement != null && (alarm.IsOn || selfEnemy.IsAlarmed))
             {
                 selfDetection.SetActive(true);
                 tasedIcon.SetActive(false);

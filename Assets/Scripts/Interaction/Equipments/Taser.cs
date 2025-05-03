@@ -54,14 +54,16 @@ namespace Interaction.Equipments
         {
             if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out RaycastHit hit, raycastDistance, raycastMask))
             {
-                var hitenemy = hit.collider.GetComponentInParent<EnemyMovement>();
+                var hitenemy = hit.collider.GetComponentInParent<Enemy>();
             
-                if(hit.collider != null && hitenemy != null && hitenemy.currentStatus != EnemyMovement.Status.KnockedOut)
+                if(hit.collider != null && hitenemy != null && hitenemy.EnemyStatus != Enemy.Status.KnockedOut)
                 {
-                    if(knocksOutTargets)
+                    hitenemy.GetKnockedOut();
+
+                    /*if(knocksOutTargets)
                         hitenemy.GetKnockedOut();
                     else
-                        hitenemy.GetTased();
+                        hitenemy.GetTased();*/
                 }
             }
             OnTaserShot?.Invoke(this, EventArgs.Empty);

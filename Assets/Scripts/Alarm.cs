@@ -10,7 +10,6 @@ public class Alarm : MonoBehaviour
     [SerializeField] private int maxTier = 3;
     [SerializeField] private int extraGuardsPerTier = 3;
     [SerializeField] private int maxGuardsRemainPermanent = 2;
-    [SerializeField] private MapEntrance mapEntrance;
     [SerializeField] private List<Transform> movementTargets;
     [SerializeField] private GameObject guardPrefab;
     [SerializeField] private GameObject policePrefab;
@@ -30,10 +29,9 @@ public class Alarm : MonoBehaviour
     private float alarmTimeLimit;
     private float policeSpawnTimer;
     private List<Enemy> allEnemies;
-    private List<Enemy> enemies;
-    private List<EnemyGuard> nonStaticGuards;
-    private List<EnemyGuard> extraGuards;
-    private List<EnemyPolice> policeGuards;
+    private List<Enemy> nonCameraEnemies;
+    private List<Enemy> extraGuards;
+    private List<Enemy> policeGuards;
 
     private void Start()
     {
@@ -43,11 +41,9 @@ public class Alarm : MonoBehaviour
         alarmTimeLimit = maxDuration;
         policeSpawnTimer = 0f;
         allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
-        enemies = allEnemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
-        extraGuards = new List<EnemyGuard>();
-        policeGuards = new List<EnemyPolice>();
-        nonStaticGuards = FindObjectsByType<EnemyGuard>(FindObjectsSortMode.None).ToList();
-        nonStaticGuards = nonStaticGuards.Where(enemy => !enemy.GetComponent<EnemyMovement>().IsStatic).ToList();
+        nonCameraEnemies = allEnemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
+        extraGuards = new List<Enemy>();
+        policeGuards = new List<Enemy>();
 
         player = FindAnyObjectByType<Player>().transform;
     }
@@ -78,9 +74,10 @@ public class Alarm : MonoBehaviour
                     if(policeSpawnTimer <= 0)
                     {
                         policeSpawnTimer = policeSpawnTime;
-                        GameObject newPolice = mapEntrance.SpawnEnemy(policePrefab, new List<Transform>() {player.transform});
+                        EnemySpawner spawner = FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None).Where(s => s.EnemyType == Enemy.Type.Police).First();
+                        Enemy newPolice = spawner.SpawnEnemy(policePrefab, new List<Transform>() {player.transform});
 
-                        policeGuards.Add(newPolice.GetComponent<EnemyPolice>());
+                        policeGuards.Add(newPolice);
                     }
 
                     else
@@ -99,15 +96,14 @@ public class Alarm : MonoBehaviour
 
                 foreach(Enemy e in allEnemies)
                 {
-                    if(e != null && e.EnemyMovement != null)
-                        e.EnemyMovement.currentStatus = EnemyMovement.Status.Normal;
-
-                    e.Detection.DetectionMeter = 0;
+                    e.EnemyStatus = Enemy.Status.Normal;
+                    e.Detection.DetectionMeter = 0f;
+                    e.AlarmedTimer = 0f;
                 }
       
                 int enemyCount = 0;
-                List<EnemyGuard> enemiesToRemove = new List<EnemyGuard>();
-                foreach(EnemyGuard g in extraGuards)
+                List<Enemy> enemiesToRemove = new List<Enemy>();
+                foreach(Enemy g in extraGuards)
                 {
                     if(++enemyCount > maxGuardsRemainPermanent)
                     {
@@ -119,7 +115,7 @@ public class Alarm : MonoBehaviour
 
                 // Safely removes the guards from the extra guards list after the previous foreach loop ends
                 // (to prevent altering the list while it's being checked by the foreach loop)
-                foreach (EnemyGuard g in enemiesToRemove)
+                foreach (Enemy g in enemiesToRemove)
                 {
                     extraGuards.Remove(g);
                 }
@@ -157,10 +153,11 @@ public class Alarm : MonoBehaviour
             {
                 for(int i = 0; i < (extraGuardsPerTier * currentTier); i++)
                 {
-                    GameObject newGuard = mapEntrance.SpawnEnemy(guardPrefab, movementTargets);
-                    extraGuards.Add(newGuard.GetComponent<EnemyGuard>());
+                    EnemySpawner spawner = FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None).Where(s => s.EnemyType == Enemy.Type.Guard).First();
+                    Enemy newGuard = spawner.SpawnEnemy(guardPrefab, movementTargets);
+                    extraGuards.Add(newGuard);
 
-                    newGuard.GetComponent<EnemyMovement>().currentStatus = EnemyMovement.Status.Chasing;
+                    newGuard.GetComponent<Enemy>().EnemyStatus = Enemy.Status.Chasing;
                 }
             }
             
@@ -169,19 +166,19 @@ public class Alarm : MonoBehaviour
         }
 
         allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
-        enemies = allEnemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
+        nonCameraEnemies = allEnemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
         
         // NPCs become aware of the bodies in the level so they don't raise the alarm again
-        foreach(Enemy e in enemies)
+        foreach(Enemy e in nonCameraEnemies)
         {
-            if(e.GetComponent<EnemyMovement>().currentStatus == EnemyMovement.Status.KnockedOut)
+            if(e.GetComponent<Enemy>().EnemyStatus == Enemy.Status.KnockedOut)
                 e.GetComponentInChildren<BodyCarry>().HasBeenDetected = true;
         }
 
         // Alerts all enemies in the level
         if(alertEnemies)
         {
-            foreach(Enemy e in enemies)
+            foreach(Enemy e in nonCameraEnemies)
             {
                 e.BecomeAlarmed();
             }

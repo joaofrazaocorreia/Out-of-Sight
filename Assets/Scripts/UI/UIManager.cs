@@ -24,7 +24,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI disguiseText;
     [SerializeField] private Image disguiseImage;
     [SerializeField] private TextMeshProUGUI statusText;
-    [SerializeField] private TextMeshProUGUI missionTimer;
     [SerializeField] private GameObject ammoDisplay;
     [SerializeField] private TextMeshProUGUI ammoText;
     [SerializeField] private GameObject pauseMenu;
@@ -728,8 +727,8 @@ public class UIManager : MonoBehaviour
 
         for(int i = 0; i < NPCsParent.childCount; i++)
         {
-            EnemyMovement em = NPCsParent.GetChild(i).GetComponent<EnemyMovement>();
-            if(em == null || em.currentStatus == EnemyMovement.Status.KnockedOut) 
+            Enemy enemy = NPCsParent.GetChild(i).GetComponent<Enemy>();
+            if(enemy == null || enemy.EnemyStatus == Enemy.Status.KnockedOut) 
                 detectionCount--;
         }
         for(int i = 0; i < CamerasParent.childCount; i++)
@@ -758,8 +757,8 @@ public class UIManager : MonoBehaviour
 
             for(int i = 0; i < NPCsParent.childCount; i++)
             {
-                EnemyMovement em = NPCsParent.GetChild(i).GetComponent<EnemyMovement>();
-                if(em != null && em.currentStatus != EnemyMovement.Status.KnockedOut)
+                Enemy enemy = NPCsParent.GetChild(i).GetComponent<Enemy>();
+                if(enemy != null && enemy.EnemyStatus != Enemy.Status.KnockedOut)
                 {
                     Detection d = NPCsParent.GetChild(i).GetComponentInChildren<Detection>();
 

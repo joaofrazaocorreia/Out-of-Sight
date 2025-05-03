@@ -4,7 +4,7 @@ public class BodyCarry : InteractiveObject
 {
     [SerializeField] private float bodyDetectionMultiplier = 5f;
     public float BodyDetectionMultiplier {get => bodyDetectionMultiplier;}
-    private EnemyMovement enemyMovement;
+    private Enemy enemySelf;
     private PlayerCarryInventory playerCarryInventory;
     private GameObject thisBody;
     private bool hasBeenDetected;
@@ -12,7 +12,7 @@ public class BodyCarry : InteractiveObject
 
     private void Start()
     {
-        enemyMovement = GetComponentInParent<EnemyMovement>();
+        enemySelf = GetComponentInParent<Enemy>();
         playerCarryInventory = FindAnyObjectByType<PlayerCarryInventory>();
         thisBody = transform.parent.gameObject;
         hasBeenDetected = false;
@@ -21,7 +21,7 @@ public class BodyCarry : InteractiveObject
 
     public override void Interact()
     {
-        if(enemyMovement.currentStatus == EnemyMovement.Status.KnockedOut && !playerCarryInventory.CarryingBody)
+        if(enemySelf.EnemyStatus == Enemy.Status.KnockedOut && !playerCarryInventory.CarryingBody)
         {
             base.Interact();
 
