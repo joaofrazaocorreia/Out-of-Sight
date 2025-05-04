@@ -4,39 +4,40 @@ using UnityEngine;
 
 public class MovementTarget : MonoBehaviour
 {
-    private Dictionary<Enemy, Transform> currentEnemies;
-    private List<Transform> targetPositions;
+    [SerializeField] private float minStayDuration = 10;
+    [SerializeField] private List<Transform> targetPositions;
+    private Dictionary<EnemyMovement, Transform> currentEnemies;
     public bool Occupied
     {
-        get
-        {
-            if(targetPositions.Count == 1)
-                return false;
-
-            else
-            {
-                return false;
-            }
-        }
+        get => currentEnemies.Count >= targetPositions.Count;
     }
 
     private void Start()
     {
-        currentEnemies = new Dictionary<Enemy, Transform>();
-        if(targetPositions.Count < 0)
+        currentEnemies = new Dictionary<EnemyMovement, Transform>();
+
+        if(targetPositions.Count <= 0)
             targetPositions.Add(Instantiate(new GameObject(), transform.position,
                 transform.rotation, transform).transform);
     }
 
-    public void Occupy(Enemy enemy)
+    public Transform Occupy(EnemyMovement enemy, bool canChooseLastPos = false, float moveTimeMultiplier = 1f)
     {
         Transform targetPos = GetAvailablePos();
-        currentEnemies.Add(enemy, targetPos);
+
+        if(targetPos != null)
+        {
+            currentEnemies.Add(enemy, targetPos);
+            enemy.MoveTo(targetPos.position, canChooseLastPos, moveTimeMultiplier);
+            enemy.RotateTo(targetPos.eulerAngles.y);
+        }
+
+        return targetPos;
     }
 
-    public void Deoccupy(Enemy enemy)
+    public void Deoccupy(EnemyMovement enemy)
     {
-        //currentEnemies.Remove(currentEnemies[enemy]);
+        currentEnemies.Remove(enemy);
     }
 
     private Transform GetAvailablePos()

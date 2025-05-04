@@ -99,7 +99,7 @@ public class EnemySpawner : MonoBehaviour
     /// </summary>
     /// <param name="prefab">The prefab to be spawned.</param>
     /// <returns>The spawned GameObject.</returns>
-    public Enemy SpawnEnemy(GameObject prefab, List<Transform> movementTargets)
+    public Enemy SpawnEnemy(GameObject prefab, List<MovementTarget> movementTargets)
     {
         Debug.Log($"Spawning {prefab.name} by Prefab...");
 
