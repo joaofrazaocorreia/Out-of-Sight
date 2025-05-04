@@ -12,7 +12,8 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private bool isStatic = false;
     [SerializeField] private bool looksAround = true;
     [SerializeField] private bool chooseTargetsAsSequence = false;
-    [SerializeField] private List<Transform> movementTargets;
+    [SerializeField] private Transform movementTargetsParent;
+    [SerializeField] private List<MovementTarget> movementTargets;
     [SerializeField] private int startingTargetIndex;
     [SerializeField] private float walkSpeed = 4f;
     [SerializeField] private float runSpeed = 7f;
@@ -48,14 +49,14 @@ public class EnemyMovement : MonoBehaviour
         {
             if(status != Status.KnockedOut && value == Status.KnockedOut) knockoutPlayer.Play();
             if(status != Status.KnockedOut) status = value;
-            _footstepTimer = Time.time - footstepInterval;
+            footstepTimer = Time.time - footstepInterval;
         }
     }*/
     public float WalkSpeed {get=> walkSpeed;}
     public float RunSpeed {get=> runSpeed;}
     public bool halted = false;
     public bool Halted {get=> halted; set => halted = value;}
-    public List<Transform> MovementTargets {get => movementTargets;}
+    public List<MovementTarget> MovementTargets {get => movementTargets;}
     private List<Vector3> movementPosTargets;
     public List<Vector3> MovementPosTargets {get => movementPosTargets;}
     public bool IsStatic {get => isStatic;}
@@ -95,7 +96,7 @@ public class EnemyMovement : MonoBehaviour
     private bool leavingMap;
     private bool knockedOut;
     public bool LeavingMap {get => leavingMap; set{leavingMap = value;}}
-    private float _footstepTimer;
+    private float footstepTimer;
 
     private void Start()
     {
@@ -152,8 +153,7 @@ public class EnemyMovement : MonoBehaviour
             mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
             leavingMap = false;
             knockedOut = false;
-            //taserLoopPlayer.Stop();
-            _footstepTimer  = Time.time;
+            footstepTimer  = Time.time;
 
             // Forcefully sets the NavMeshAgent to the NPC type if it isn't already one
             if(navMeshAgent.agentTypeID != -1372625422)
@@ -162,7 +162,9 @@ public class EnemyMovement : MonoBehaviour
             // Static enemies use their position as their target
             if(isStatic)
             {
-                movementTargets = new List<Transform>() {transform};
+                MovementTarget selfTargetPos = CreateMovementTarget(transform.position,
+                    transform.rotation, movementTargetsParent);
+                movementTargets = new List<MovementTarget>() {selfTargetPos};
                 movementPosTargets = new List<Vector3>() {spawnPos};
             }
 
@@ -170,8 +172,8 @@ public class EnemyMovement : MonoBehaviour
             else
             {
                 movementPosTargets = new List<Vector3>();
-                foreach(Transform t in movementTargets)
-                    movementPosTargets.Add(t.position);
+                foreach(MovementTarget mt in movementTargets)
+                    movementPosTargets.Add(mt.transform.position);
             }
         }
     }
@@ -186,10 +188,10 @@ public class EnemyMovement : MonoBehaviour
         }
         
         // Plays footsteps when walking and running
-        if(_footstepTimer + footstepInterval * navMeshAgent.speed / walkSpeed <= Time.time && navMeshAgent.velocity.magnitude >= 1)
+        if(footstepTimer + footstepInterval * navMeshAgent.speed / walkSpeed <= Time.time && navMeshAgent.velocity.magnitude >= 1)
         {
             footstepPlayer.Play();
-            _footstepTimer = Time.time;
+            footstepTimer = Time.time;
         }
     }
 
@@ -207,6 +209,8 @@ public class EnemyMovement : MonoBehaviour
     /// </summary>
     public void Patrol()
     {
+        bool remainOnTarget = false;
+
         // Stops this enemy when it's seeing something suspicious
         if(halted)
         {
@@ -240,6 +244,12 @@ public class EnemyMovement : MonoBehaviour
         // Checks if this enemy can move or if it was ordered to move
         if(moveTimer <= 0 && ((!halted && !isStatic) || movingToSetTarget))
         {
+            if(movementTargetIndex >= 0)
+            {
+                // Updates the current movement target to no longer be occupied
+                movementTargets[movementTargetIndex].Deoccupy(this);
+            }
+
             if(chooseTargetsAsSequence)
             {
                 movementTargetIndex++;
@@ -248,27 +258,27 @@ public class EnemyMovement : MonoBehaviour
 
             else
             {
-                // Rolls a random index within the number of available targets and
-                // loops until it gets a value different than the last chosen index
-                movementTargetIndex = Random.Range(0, movementTargets.Count());
+                // Separates the available targets into a new list
+                List<MovementTarget> availableMovementTargets = movementTargets.Where
+                    (mt => (mt.transform.position != lastTargetPos) && (!mt.Occupied)).ToList();
 
-                if(movementTargets[movementTargetIndex] == null)
+                // If there's available targets, loops until one is selected
+                if(availableMovementTargets.Count() > 0)
                 {
-                    Start();
+                    while(movementTargetIndex < 0 || !availableMovementTargets.Contains
+                        (movementTargets[movementTargetIndex]))
+                    {
+                        // Rolls a random index within the number of available targets and
+                        // loops until it gets an available value
+                        movementTargetIndex = Random.Range(0, movementTargets.Count());
+                    }
                 }
 
-                
-                int loop = 0;
-                while(movementTargets[movementTargetIndex].position == lastTargetPos)
+                // If there's no available targets to move, remains on the current movement
+                // target for half the duration
+                else
                 {
-                    movementTargetIndex = Random.Range(0, movementTargets.Count());
-
-                    // If it loops for too long, breaks out of the loop
-                    if (++loop >= 100)
-                    {
-                        movementTargetIndex = 0;
-                        break;
-                    }
+                    remainOnTarget = true;
                 }
             }
 
@@ -276,9 +286,11 @@ public class EnemyMovement : MonoBehaviour
             if(movingToSetTarget)
                 movingToSetTarget = false;
 
-            // Tells the NPC to move towards the chosen index position
-            MoveTo(movementTargets[movementTargetIndex].position);
-            RotateTo(movementTargets[movementTargetIndex].eulerAngles.y);
+            // Tells this NPC to move towards the movement target of the chosen index
+            if(!remainOnTarget)
+                movementTargets[movementTargetIndex].Occupy(this);
+            else
+                movementTargets[movementTargetIndex].Occupy(this, true, 0.5f);
         }
 
         // Static enemies that arent being forced to move will remain in their spawn position
@@ -292,9 +304,9 @@ public class EnemyMovement : MonoBehaviour
     /// Tells this enemy to move to a given position.
     /// </summary>
     /// <param name="destination">The position to move this enemy.</param>
-    public void MoveTo(Vector3 destination)
+    public void MoveTo(Vector3 destination, bool canChooseLastPos = false, float moveTimeMultiplier = 1f)
     {
-        if(destination != null && destination != lastTargetPos && enemySelf.IsConscious)
+        if(destination != null && (destination != lastTargetPos || canChooseLastPos) && enemySelf.IsConscious)
         {
             // Moves to the given destination and registers it as the last chosen
             navMeshAgent.SetDestination(destination);
@@ -304,7 +316,7 @@ public class EnemyMovement : MonoBehaviour
             StopAllCoroutines();
 
             // Resets the patrol movement cooldown
-            moveTimer = Random.Range(minMovementTime, maxMovementTime);
+            moveTimer = Random.Range(minMovementTime, maxMovementTime) * moveTimeMultiplier;
         }
     }
 
@@ -543,7 +555,7 @@ public class EnemyMovement : MonoBehaviour
     /// Sets this enemy's movement targets to a given list.
     /// </summary>
     /// <param name="newMovementTargets">The given list of new movement targets.</param>
-    public void SetMovementTargets(List<Transform> newMovementTargets)
+    public void SetMovementTargets(List<MovementTarget> newMovementTargets)
     {
         if(enemySelf == null) Start();
         
@@ -552,8 +564,8 @@ public class EnemyMovement : MonoBehaviour
             movementTargets = newMovementTargets;
             movementPosTargets = new List<Vector3>();
 
-            foreach(Transform t in movementTargets)
-                movementPosTargets.Add(t.position);
+            foreach(MovementTarget mt in movementTargets)
+                movementPosTargets.Add(mt.transform.position);
         }
     }
 
@@ -586,21 +598,24 @@ public class EnemyMovement : MonoBehaviour
             bodyCarry.enabled = true;
     }
 
-    /*
     /// <summary>
-    /// Causes this enemy to be tased and stop moving.
+    /// Creates a new movement target at a given position with a given rotation and parent.
     /// </summary>
-    public void GetTased()
+    /// <param name="position">The position to spawn the new movement target.</param>
+    /// <param name="rotation">The rotation of the new movement target.</param>
+    /// <param name="parent">The parent object of the movement targets.</param>
+    /// <returns>The created movement target.</returns>
+    public static MovementTarget CreateMovementTarget(Vector3 position,
+        Quaternion rotation, Transform parent)
     {
-        if(enemySelf.EnemyStatus != Enemy.Status.KnockedOut)
-        {
-            currentStatus = Status.Tased;
-            tasedTimer = tasedTime;
-            detection.DetectionMeter = 0;
-            leavingMap = false;
-            taserLoopPlayer.Play();
-        }
-    }*/
+        GameObject newTargetObject = new();
+        newTargetObject.transform.position = position;
+        newTargetObject.transform.rotation = rotation;
+        newTargetObject.transform.parent = parent;
+
+        newTargetObject.AddComponent<MovementTarget>();
+        return newTargetObject.GetComponent<MovementTarget>();
+    }
 
     /// <summary>
     /// When this enemy is knocked out, this code runs only once.
@@ -620,7 +635,6 @@ public class EnemyMovement : MonoBehaviour
             detectableObject.enabled = true;
 
             // Stops animations and sounds
-            //taserLoopPlayer.Stop();
             animator.SetBool("KO", true);
             animator.applyRootMotion = false;
             

@@ -10,7 +10,8 @@ public class Alarm : MonoBehaviour
     [SerializeField] private int maxTier = 3;
     [SerializeField] private int extraGuardsPerTier = 3;
     [SerializeField] private int maxGuardsRemainPermanent = 2;
-    [SerializeField] private List<Transform> movementTargets;
+    [SerializeField] private Transform movementTargetsParent;
+    [SerializeField] private List<MovementTarget> movementTargets;
     [SerializeField] private GameObject guardPrefab;
     [SerializeField] private GameObject policePrefab;
     [SerializeField] private float policeSpawnTime = 10f;
@@ -20,6 +21,7 @@ public class Alarm : MonoBehaviour
     [SerializeField] private MusicPlayer musicPlayer;
 
     private Transform player;
+    private MovementTarget playerTargetPos;
     private int currentTier;
     private bool isOn;
     public bool IsOn {get => isOn; set => isOn = value;}
@@ -46,6 +48,9 @@ public class Alarm : MonoBehaviour
         policeGuards = new List<Enemy>();
 
         player = FindAnyObjectByType<Player>().transform;
+        playerTargetPos = EnemyMovement.CreateMovementTarget(
+            Vector3.zero, Quaternion.Euler(Vector3.zero), player.transform);
+        playerTargetPos.enabled = false;
     }
 
     private void Update()
@@ -75,7 +80,7 @@ public class Alarm : MonoBehaviour
                     {
                         policeSpawnTimer = policeSpawnTime;
                         EnemySpawner spawner = FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None).Where(s => s.EnemyType == Enemy.Type.Police).First();
-                        Enemy newPolice = spawner.SpawnEnemy(policePrefab, new List<Transform>() {player.transform});
+                        Enemy newPolice = spawner.SpawnEnemy(policePrefab, new List<MovementTarget>() {playerTargetPos});
 
                         policeGuards.Add(newPolice);
                     }
@@ -160,6 +165,8 @@ public class Alarm : MonoBehaviour
                     newGuard.GetComponent<Enemy>().EnemyStatus = Enemy.Status.Chasing;
                 }
             }
+
+            if(currentTier == maxTier) playerTargetPos.enabled = true;
             
             alarmLoopPlayer.Play();
             musicPlayer.SwitchTrack();
