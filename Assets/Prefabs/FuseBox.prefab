@@ -169,6 +169,7 @@ MonoBehaviour:
         m_CallState: 2
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
+  whitelistedDisguises: 
   suspicionIncreaseOnInteraction: 2.5
   objectName: 
   customInteractionMessage: 
@@ -177,7 +178,7 @@ MonoBehaviour:
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
   enemyMovement: {fileID: 0}
-  targetLocation: {fileID: 2276278760960514620}
+  targetLocation: {fileID: 8498367216607646249}
   fetchTargetWithTag: 
   timeAtTargetLocation: 2
 --- !u!114 &2625856535423321017
@@ -215,6 +216,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2276278760960514620}
+  - component: {fileID: 8498367216607646249}
   m_Layer: 0
   m_Name: NPC Move Target
   m_TagString: Untagged
@@ -237,6 +239,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1202203330178767493}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &8498367216607646249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5121152768247049863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2861df269754f34d8bfedc3411753a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetPositions: []
 --- !u!1001 &4362269120845471339
 PrefabInstance:
   m_ObjectHideFlags: 0

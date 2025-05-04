@@ -42,15 +42,14 @@ public class Detection : MonoBehaviour
     private List<DetectableObject> seenDetectables;
     public bool SeesPlayer {get => seenDetectables.Contains(player.GetComponent<DetectableObject>());}
     public bool SeesDetectable {get => seenDetectables.Count() > 0;}
-    private List<DetectableObject> allDetectables;
+    private static List<DetectableObject> allDetectables;
     private bool tooCloseToPlayer;
     private EnemyCamera enemyCamera;
     private EnemyMovement enemyMovement;
     private bool isDetectionReset;
-    private float detectablesCount;
 
 
-    private void Start()
+    private void Awake()
     {
         player = FindAnyObjectByType<Player>();
         playerInteraction = FindAnyObjectByType<PlayerInteraction>();
@@ -71,7 +70,6 @@ public class Detection : MonoBehaviour
     
         globalDetectionMultiplier = 1f;
         allDetectables = new List<DetectableObject>();
-        UpdateAllDetectables();
     }
 
     private void FixedUpdate()
@@ -84,8 +82,7 @@ public class Detection : MonoBehaviour
                     enemyMovement == null && !enemyCamera.Jammed && enemyCamera.IsOn))
             {
                 // Checks if it can see any available detectables in the level
-                UpdateAllDetectables();
-                CheckForDetectables(allDetectables);
+                CheckForDetectables(allDetectables.Where(a => a != null && a.enabled).ToList());
 
                 // Updates this enemy's detection meter according to what it is detecting
                 UpdateDetection();
@@ -277,15 +274,23 @@ public class Detection : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates the list of available detectables in the level.
+    /// Registers a new DetectableObject for all enemies.
     /// </summary>
-    public void UpdateAllDetectables()
+    /// <param name="detectableObject"></param>
+    public static void AddDetectable(DetectableObject detectableObject)
     {
-        allDetectables = FindObjectsByType<DetectableObject>
-            (FindObjectsSortMode.None).ToList();
-        allDetectables = allDetectables.Where(a => a != null && a.enabled).ToList();
+        if(!allDetectables.Contains(detectableObject))
+            allDetectables.Add(detectableObject);
+    }
 
-        seenDetectables = new List<DetectableObject>();
+    /// <summary>
+    /// Unregisters a given DetectableObject for all enemies.
+    /// </summary>
+    /// <param name="detectableObject"></param>
+    public static void RemoveDetectable(DetectableObject detectableObject)
+    {
+        if(allDetectables.Contains(detectableObject))
+            allDetectables.Remove(detectableObject);
     }
 
     /// <summary>

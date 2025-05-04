@@ -250,7 +250,8 @@ public class EnemyMovement : MonoBehaviour
             {
                 // Separates the available targets into a new list
                 List<MovementTarget> availableMovementTargets = movementTargets.Where
-                    (mt => (mt.transform.position != lastTargetPos) && (!mt.Occupied)).ToList();
+                    (mt => (mt != null) && (mt.transform.position != lastTargetPos) &&
+                        (!mt.Occupied)).ToList();
 
                 // If there's available targets, loops until one is selected
                 if(availableMovementTargets.Count() > 0)
@@ -267,9 +268,7 @@ public class EnemyMovement : MonoBehaviour
                 // If there's no available targets to move, remains on the current movement
                 // target for half the duration
                 else
-                {
                     remainOnTarget = true;
-                }
             }
 
             // The enemy is only forced to move once
@@ -574,8 +573,11 @@ public class EnemyMovement : MonoBehaviour
             movementTargets = newMovementTargets;
             movementPosTargets = new List<Vector3>();
 
-            foreach(MovementTarget mt in movementTargets)
-                movementPosTargets.Add(mt.transform.position);
+            if(movementTargets.Count() > 0)
+            {
+                foreach(MovementTarget mt in movementTargets)
+                    movementPosTargets.Add(mt.transform.position);
+            }
         }
     }
 
