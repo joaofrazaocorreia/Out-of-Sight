@@ -4,7 +4,7 @@ public class NPCMoveInteraction : InteractiveObject
 {
     [Header("Movement Target")]
     [SerializeField] private EnemyMovement enemyMovement;
-    [SerializeField] private Transform targetLocation;
+    [SerializeField] private MovementTarget targetLocation;
     [SerializeField] private string fetchTargetWithTag;
     [SerializeField] private float timeAtTargetLocation = 10f;
 
@@ -29,11 +29,10 @@ public class NPCMoveInteraction : InteractiveObject
         base.Interact();
 
         if(fetchTargetWithTag != "")
-            targetLocation = GameObject.FindGameObjectWithTag(fetchTargetWithTag).transform;
+            targetLocation = GameObject.FindGameObjectWithTag(fetchTargetWithTag).GetComponent<MovementTarget>();
 
         enemyMovement.MovingToSetTarget = true;
-        enemyMovement.MoveTo(targetLocation.position);
-        enemyMovement.RotateTo(targetLocation.eulerAngles.y);
+        targetLocation.Occupy(enemyMovement);
         enemyMovement.MoveTimer = timeAtTargetLocation;
         enabled = false;
     }

@@ -30,9 +30,6 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float searchRadius = 20f;
     [SerializeField] private float stuckTime = 3f;
     [SerializeField] protected float tasedTime = 5f;
-    [SerializeField] protected UnityEvent onKnockOut;
-    /*[SerializeField] protected PlayAudio taserLoopPlayer;
-    [SerializeField] protected PlayAudio knockoutPlayer;*/
     [SerializeField] protected PlayAudio footstepPlayer;
     [SerializeField] [Range(0.1f, 2f)] private float footstepInterval = 0.45f;
 
@@ -214,8 +211,7 @@ public class EnemyMovement : MonoBehaviour
         // Stops this enemy when it's seeing something suspicious
         if(halted)
         {
-            MoveTo(transform.position);
-            if(!isStatic) RotateTo(null);
+            Halt();
         }
 
         else if(Time.timeScale != 0 && lastTargetRot != null && IsAtDestination
@@ -244,12 +240,6 @@ public class EnemyMovement : MonoBehaviour
         // Checks if this enemy can move or if it was ordered to move
         if(moveTimer <= 0 && ((!halted && !isStatic) || movingToSetTarget))
         {
-            if(movementTargetIndex >= 0)
-            {
-                // Updates the current movement target to no longer be occupied
-                movementTargets[movementTargetIndex].Deoccupy(this);
-            }
-
             if(chooseTargetsAsSequence)
             {
                 movementTargetIndex++;
@@ -333,7 +323,7 @@ public class EnemyMovement : MonoBehaviour
     }
 
     /// <summary>
-    /// Converts a given angle into the range between 0-360 degrees
+    /// Converts a given angle into the range between 0-360 degrees.
     /// </summary>
     private float? AdjustRotationAngle(float? rotation)
     {
@@ -349,7 +339,27 @@ public class EnemyMovement : MonoBehaviour
     }
 
     /// <summary>
-    /// Picks a random position within the NavMesh on a radius around the given position, and then moves to it
+    /// Makes this enemy stop in place.
+    /// </summary>
+    public void Halt()
+    {
+        MoveTo(transform.position);
+        if(!isStatic) RotateTo(null);
+
+        DeoccupyCurrentTarget();
+    }
+
+    /// <summary>
+    /// Updates the current movement target to no longer be occupied.
+    /// </summary>
+    public void DeoccupyCurrentTarget()
+    {
+        if(movementTargetIndex >= 0)
+            movementTargets[movementTargetIndex].Deoccupy(this);
+    }
+
+    /// <summary>
+    /// Picks a random position within the NavMesh on a radius around the given position, and then moves to it.
     /// </summary>
     /// <param name="center">The center of the wandering area.</param>
     /// <param name="radius">The radius of the wandering area.</param>
