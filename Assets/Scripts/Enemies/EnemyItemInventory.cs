@@ -62,7 +62,7 @@ public class EnemyItemInventory : MonoBehaviour
                 break;
         }
 
-        //droppedItem.AddComponent<Rigidbody>();
+        // droppedItem.AddComponent<Rigidbody>(); // currently broken; keycards go through the floor? but not luggage???
     }
 
     /// <summary>
