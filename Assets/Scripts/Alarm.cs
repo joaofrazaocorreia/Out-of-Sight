@@ -10,7 +10,6 @@ public class Alarm : MonoBehaviour
     [SerializeField] private int maxTier = 3;
     [SerializeField] private int extraGuardsPerTier = 3;
     [SerializeField] private int maxGuardsRemainPermanent = 2;
-    [SerializeField] private Transform movementTargetsParent;
     [SerializeField] private List<MovementTarget> movementTargets;
     [SerializeField] private GameObject guardPrefab;
     [SerializeField] private GameObject policePrefab;
