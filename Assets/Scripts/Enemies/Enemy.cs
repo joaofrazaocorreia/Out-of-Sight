@@ -262,9 +262,6 @@ public class Enemy : MonoBehaviour
 
         EnemyMovement.EnableBody();
         EnemyMovement.GetKnockedOut();
-
-        // Drops all items this enemy is carrying
-        enemyItemInventory.DropAllItems();
     }
 
     /// <summary>
@@ -276,6 +273,10 @@ public class Enemy : MonoBehaviour
         {
             EnemyStatus = Status.KnockedOut;
             detection.DetectionMeter = 0;
+
+            // Drops all items this enemy is carrying
+            enemyItemInventory.DropAllItems();
+            
             foreach(Collider c in GetComponentsInChildren<Collider>())
             {
                 c.isTrigger = true;
