@@ -293,13 +293,19 @@ public class Enemy : MonoBehaviour
                     enemyMovement.LookAt(detection.ClosestSuspiciousObject.transform.position);
                 }
             }
+            
+            else if ((player.transform.position - transform.position)
+                .magnitude <= suspectfulInspectRange * 2)
+            {
+                enemyMovement.LookAt(player.transform.position);
+            }
 
             TickBehaviorTimers();
         }
 
         else
         {
-            BecomeCurious();
+            BecomeNormal();
         }
     }
 
