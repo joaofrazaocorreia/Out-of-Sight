@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Alarm : MonoBehaviour
@@ -112,9 +113,6 @@ public class Alarm : MonoBehaviour
                 {
                     e.Detection.DetectionMeter = 0f;
                     e.BecomeNormal(true);
-                    Debug.Log(e.name+" was unalarmed.");
-                    Debug.Log(e.Detection.DetectionMeter);
-                    Debug.Log(e.EnemyStatus);
                 }
       
                 int enemyCount = 0;
@@ -145,10 +143,13 @@ public class Alarm : MonoBehaviour
         // If the alarm is off, spawns a paramedic for each body seen.
         else if(seenBodies.Count() > 0)
         {
+            Debug.Log("seen bodies count: " + seenBodies.Count());
             if(paramedicSpawnTimer <= 0)
             {
                 int index = Random.Range(0, seenBodies.Count());
                 paramedicSpawnTimer = paramedicSpawnTime;
+                Debug.Log("chosen body:");
+                Debug.Log(seenBodies[index]);
 
                 MovementTarget bodyTarget = MovementTarget.CreateMovementTarget
                     (seenBodies[index].transform.position, seenBodies[index].transform.rotation
@@ -223,8 +224,11 @@ public class Alarm : MonoBehaviour
             {
                 BodyCarry body = e.GetComponentInChildren<BodyCarry>();
 
-                body.HasBeenDetected = true;
-                seenBodies.Add(body);
+                if(body)
+                {
+                    body.HasBeenDetected = true;
+                    seenBodies.Add(body);
+                }
             }
         }
 
@@ -240,6 +244,14 @@ public class Alarm : MonoBehaviour
         alarmTimer = AlarmTime;
     }
 
-    public void RegisterEnemy(Enemy enemy) => allEnemies.Add(enemy);
-    public void UnregisterEnemy(Enemy enemy) => allEnemies.Remove(enemy);
+    public void RegisterEnemy(Enemy enemy)
+    {
+        if(!allEnemies.Contains(enemy))
+            allEnemies.Add(enemy);
+    }
+    public void UnregisterEnemy(Enemy enemy)
+    {
+        if(allEnemies.Contains(enemy))
+            allEnemies.Remove(enemy);
+    }
 }
