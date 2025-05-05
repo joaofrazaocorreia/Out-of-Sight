@@ -323,7 +323,7 @@ public class PlayerController : MonoBehaviour
         
         UpdatePosition();
         UpdateStamina();
-        UpdateAnimator();
+        //UpdateAnimator();
     }
 
     private void UpdateAcceleration()
