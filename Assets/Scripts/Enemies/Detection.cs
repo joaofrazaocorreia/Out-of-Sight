@@ -40,10 +40,31 @@ public class Detection : MonoBehaviour
     }
     public float DetectionLimit {get => detectionLimit;}
     private List<DetectableObject> seenDetectables;
+    public DetectableObject ClosestSuspiciousObject
+    {
+        get
+        {
+            DetectableObject closest = null;
+            if(tooCloseToPlayer) closest = player.GetComponent<DetectableObject>();
+
+            foreach(DetectableObject d in seenDetectables)
+            {
+                if((d.DetectionMultiplier != 0) && (closest == null ||
+                    (d.transform.position - transform.position).magnitude < (closest.transform.position
+                        - transform.position).magnitude))
+                {
+                    closest = d;
+                }
+            }
+
+            return closest;
+        }
+    }
     public bool SeesPlayer {get => seenDetectables.Contains(player.GetComponent<DetectableObject>());}
     public bool SeesDetectable {get => seenDetectables.Count() > 0;}
     private static List<DetectableObject> allDetectables;
     private bool tooCloseToPlayer;
+    public bool TooCloseToPlayer {get => tooCloseToPlayer;}
     private EnemyCamera enemyCamera;
     private EnemyMovement enemyMovement;
     private bool isDetectionReset;
@@ -101,6 +122,7 @@ public class Detection : MonoBehaviour
     {
         foreach(DetectableObject d in detectablesList)
         {
+            // Calculates the raw and horizontal distances from this enemy towards the current detectableObject
             Vector3 distanceToDetectable = d.transform.position - transform.position;
             Vector3 distanceToDetectableHorizontal = new Vector3
                 (d.transform.position.x, 0f, d.transform.position.z) - 
@@ -116,61 +138,47 @@ public class Detection : MonoBehaviour
                 tooCloseToPlayer = distanceToDetectable.magnitude <= proximityDetectionRange;
             }
             
-            // Checks if the detectableObject is within range of this NPC's detection range
-            if(distanceToDetectable.magnitude <= detectionRange)
+            // Checks if the detectableObject is within range to be detected by this NPC
+            if(distanceToDetectable.magnitude <= detectionRange ||
+                distanceToDetectableHorizontal.magnitude <= proximityDetectionRange)
             {
-                // Checks if the detectableObject is within this NPC's field of view
-                if(Vector3.Angle(transform.TransformDirection(Vector3.forward), 
-                    distanceToDetectableHorizontal) <= detectionMaxAngle)
+                // Checks if the NPC detects the object by proximity
+                if(distanceToDetectableHorizontal.magnitude <= proximityDetectionRange)
                 {
-                    // Sends a raycast towards the detectableObject
-                    Physics.Raycast(transform.position, distanceToDetectable,
-                        out RaycastHit hit, detectionRange, detectionLayers);
+                    DetectObject(d, distanceToDetectable.normalized * range);
+                }
 
-                    // Checks if the raycast hit the detectableObject
-                    if(hit.collider == d.GetComponent<Collider>())
+                // If not detected by proximity, checks if the object is visible by this NPC
+                else
+                {
+                    // Checks if the detectableObject is within this NPC's field of view
+                    if(Vector3.Angle(transform.TransformDirection(Vector3.forward), 
+                        distanceToDetectableHorizontal) <= detectionMaxAngle)
                     {
-                        // Checks if the detectableObject is a body
-                        BodyCarry body = d.GetComponent<BodyCarry>();
+                        // Sends a raycast towards the detectableObject
+                        Physics.Raycast(transform.position, distanceToDetectable,
+                            out RaycastHit hit, detectionRange, detectionLayers);
 
-                        if (body != null)
+                        // Checks if the raycast hit the detectableObject
+                        if(hit.collider == d.GetComponent<Collider>())
                         {
-                            // Detects the body if it hasn't been found
-                            if(!body.HasBeenDetected)
-                            {
-                                Detect(d);
-                                Debug.DrawRay(transform.position, distanceToDetectable.normalized * range, Color.red);
-                            }
-
-                            // Doesn't detect the body if it was already found
-                            else
-                            {
-                                Undetect(d);
-                                Debug.DrawRay(transform.position, distanceToDetectable.normalized * range, Color.green);
-                            }
+                            DetectObject(d, distanceToDetectable.normalized * range);
                         }
 
-                        // Detects the detectableObject if it's not a body
+                        // Doesn't detect the detectableObject if the raycast didn't reach it or hit something else
                         else
                         {
-                            Detect(d);
-                            Debug.DrawRay(transform.position, distanceToDetectable.normalized * range, Color.red);
+                            Undetect(d);
+                            Debug.DrawRay(transform.position, distanceToDetectable.normalized * range, Color.yellow);
                         }
                     }
-
-                    // Doesn't detect the detectableObject if the raycast didn't reach it or hit something else
+                    
+                    // Doesn't detect the detectableObject if it's not within the enemy's field of view
                     else
                     {
                         Undetect(d);
-                        Debug.DrawRay(transform.position, distanceToDetectable.normalized * range, Color.yellow);
+                        Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
                     }
-                }
-                
-                // Doesn't detect the detectableObject if it's not within the enemy's field of view
-                else
-                {
-                    Undetect(d);
-                    Debug.DrawRay(transform.position, transform.forward * detectionRange, Color.white);
                 }
             }
 
@@ -274,6 +282,41 @@ public class Detection : MonoBehaviour
     }
 
     /// <summary>
+    /// Detects a given DetectableObject unless it's a body that's been detected already.
+    /// </summary>
+    /// <param name="detectableObject">The DetectableObject to detect.</param>
+    /// <param name="raycastRangeDirection">The range and direction of the debug ray.</param>
+    private void DetectObject(DetectableObject detectableObject, Vector3 raycastRangeDirection)
+    {
+        // Checks if the detectableObject is a body
+        BodyCarry body = detectableObject.GetComponent<BodyCarry>();
+
+        if (body != null)
+        {
+            // Detects the body if it hasn't been found
+            if(!body.HasBeenDetected)
+            {
+                Detect(detectableObject);
+                Debug.DrawRay(transform.position, raycastRangeDirection, Color.red);
+            }
+
+            // Doesn't detect the body if it was already found
+            else
+            {
+                Undetect(detectableObject);
+                Debug.DrawRay(transform.position, raycastRangeDirection, Color.green);
+            }
+        }
+
+        // Detects the detectableObject if it's not a body
+        else
+        {
+            Detect(detectableObject);
+            Debug.DrawRay(transform.position, raycastRangeDirection, Color.red);
+        }
+    }
+
+    /// <summary>
     /// Registers a new DetectableObject for all enemies.
     /// </summary>
     /// <param name="detectableObject"></param>
@@ -302,18 +345,6 @@ public class Detection : MonoBehaviour
         if(enemyMovement != null && enemyCamera == null &&
             selfEnemy.EnemyStatus != Enemy.Status.KnockedOut)
         {
-            /*
-            // Enables the tased timer UI when tased
-            if(enemyMovement.EnemyStatus == Enemy.Status.Tased)
-            {
-                selfDetection.SetActive(true);
-                tasedIcon.SetActive(true);
-                alarmedIcon.SetActive(false);
-                detectionIcon.SetActive(false);
-
-                tasedFill.fillAmount = enemyMovement.TasedTimer / enemyMovement.TasedTime;
-            }*/
-
             // Enables the alarmed icon when alarmed
             if(enemyMovement != null && (alarm.IsOn || selfEnemy.IsAlarmed))
             {

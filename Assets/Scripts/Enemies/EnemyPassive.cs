@@ -1,6 +1,4 @@
 
-using UnityEngine;
-
 public class EnemyPassive : Enemy
 {
     public override void BecomeAlarmed()
@@ -13,13 +11,13 @@ public class EnemyPassive : Enemy
         }
     }
 
-    protected override void NormalBehavior()
+    protected override void Update()
     {
         if(detection.DetectionMeter >= detection.DetectionLimit)
         {
             BecomeAlarmed();
         }
 
-        base.NormalBehavior();
+        base.Update();
     }
 }
