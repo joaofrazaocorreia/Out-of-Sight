@@ -6,7 +6,10 @@ public class Enemy : MonoBehaviour
     public enum Type {Civillian, Worker, Guard, Police, Camera};
     public enum Status {Normal, Curious, Suspectful, Fleeing, Searching, Chasing, KnockedOut};
 
-    [SerializeField] private PlayAudio alarmAudioPlayer;
+    [SerializeField] protected PlayAudio alarmAudioPlayer;
+    [SerializeField] [Min(1)] protected float curiousTime = 5f;
+    [SerializeField] [Min(1)] protected float suspectfulTime = 10f;
+    [SerializeField] protected float suspectfulInspectRange = 9f;
     [SerializeField] [Min(1)] protected float alarmedTime = 5f;
     [SerializeField] protected bool ignoresAlarm = false; // If true, this enemy won't change behaviour during alarms.
     [SerializeField] protected Type type;
@@ -34,6 +37,24 @@ public class Enemy : MonoBehaviour
     protected EnemyItemInventory enemyItemInventory;
     public EnemyItemInventory EnemyItemInventory {get=> enemyItemInventory;}
     protected Player player;
+    protected float curiousTimer;
+    public float CuriousTimer {get => curiousTimer; set => curiousTimer = value;}
+    protected float suspectfulTimer;
+    public float SuspectfulTimer {get => suspectfulTimer; set => suspectfulTimer = value;}
+    protected Vector3 SuspicionLookPos
+    {
+        get
+        {
+            if(detection.ClosestSuspiciousObject != null)
+            {
+                return new Vector3(detection.ClosestSuspiciousObject.transform.position.x,
+                    transform.position.y, detection.ClosestSuspiciousObject.transform.position.z);
+            }
+        
+            else 
+                return Vector3.Scale(Vector3.forward * 2, transform.position);
+        }
+    }
     protected float alarmedTimer;
     public float AlarmedTimer {get => alarmedTimer; set => alarmedTimer = value;}
     public bool IgnoresAlarm {get => ignoresAlarm; set => ignoresAlarm = value;}
@@ -50,6 +71,8 @@ public class Enemy : MonoBehaviour
         enemyItemInventory = GetComponent<EnemyItemInventory>();
         player = FindAnyObjectByType<Player>();
 
+        curiousTimer = 0f;
+        suspectfulTimer = 0f;
         alarmedTimer = 0f;
 
         if(detection == null)
@@ -66,6 +89,8 @@ public class Enemy : MonoBehaviour
         
         else
         {
+            CheckDetection();
+
             switch(EnemyStatus)
             {
                 case Status.Normal:
@@ -100,16 +125,61 @@ public class Enemy : MonoBehaviour
     }
 
     /// <summary>
-    /// Alarms this enemy, initiating its alarmed behaviour
+    /// Makes this enemy start acting normal.
+    /// </summary>
+    public virtual void BecomeNormal()
+    {
+        if(IsConscious && !IsAlarmed)
+        {
+            if(EnemyStatus != Status.Normal)
+                Debug.Log($"{name} is now acting normal!");
+
+            curiousTimer = 0f;
+            suspectfulTimer = 0f;
+            alarmedTimer = 0f;
+            EnemyStatus = Status.Normal;
+        }
+    }
+
+    /// <summary>
+    /// Makes this enemy start acting curious.
+    /// </summary>
+    public virtual void BecomeCurious()
+    {
+        if(IsConscious && !IsAlarmed)
+        {
+            if(EnemyStatus != Status.Curious)
+                Debug.Log($"{name} is now acting curious!");
+
+            curiousTimer = curiousTime;
+            EnemyStatus = Status.Curious;
+        }
+    }
+
+    /// <summary>
+    /// Makes this enemy start acting suspectful.
+    /// </summary>
+    public virtual void BecomeSuspectful()
+    {
+        if(IsConscious && !IsAlarmed)
+        {
+            if(EnemyStatus != Status.Suspectful)
+                Debug.Log($"{name} is now acting suspectful!");
+
+            suspectfulTimer = suspectfulTime;
+            EnemyStatus = Status.Suspectful;
+        }
+    }
+
+    /// <summary>
+    /// Alarms this enemy, initiating its alarmed behaviour.
     /// </summary>
     public virtual void BecomeAlarmed()
     {
-        if(detection == null)
-            Start();
-
         if(IsConscious && !IsAlarmed)
         {
             Debug.Log($"{name} was alarmed!");
+
             if(alarmAudioPlayer != null) alarmAudioPlayer.Play();
             alarmedTimer = alarmedTime;
             detection.DetectionMeter = detection.DetectionLimit;
@@ -118,7 +188,7 @@ public class Enemy : MonoBehaviour
 
     /// <summary>
     /// Resets this enemy's variables
-    /// (this is used when respawning enemies at the entrance)
+    /// (This is used when respawning enemies at the entrance).
     /// </summary>
     public void ResetNPC()
     {
@@ -126,38 +196,38 @@ public class Enemy : MonoBehaviour
     }
 
     /// <summary>
+    /// Changes the enemy's status if it's detection meter reaches certain tresholds.
+    /// </summary>
+    protected virtual void CheckDetection()
+    {
+        if(IsConscious && !IsAlarmed)
+        {
+            // At 2 thirds of detection, becomes suspectful of the nearest suspicious object it sees
+            if(detection.DetectionMeter >= detection.DetectionLimit * 0.5f)
+            {
+                BecomeSuspectful();
+            }
+
+            // At 1 third of detection, becomes curious of the nearest suspicious object it sees
+            else if(detection.DetectionMeter > 0 || detection.TooCloseToPlayer)
+            {
+                if(EnemyStatus == Status.Normal || EnemyStatus == Status.Curious)
+                    BecomeCurious();
+
+                else
+                    BecomeSuspectful();
+            }
+        }
+    }
+
+    /// <summary>
     /// How this NPC behaves while its status is Normal.
     /// </summary>
     protected virtual void NormalBehavior()
     {
-        /*
-        // Calculates the direction towards the current most suspicious object
-        Vector3 suspicionLookPos = new Vector3(Detection.suspiciousObjPos.x,
-        transform.position.y, Detection.suspiciousObjPos.z);
-        */
-
-        // At 2 thirds of detection, moves towards the suspicious object to see it better
-        if(detection.DetectionMeter >= detection.DetectionLimit * 2 / 3 &&
-            EnemyStatus == Status.Normal)
-        {
-            enemyMovement.Halted = true;
-            //enemyMovement.Halted = false;
-            //transform.LookAt(suspicionLookPos);
-            //MoveTo(Detection.lastPlayerPos);
-        }
-
-        // At 1 third of detection, stops in place and looks at the suspicious object
-        else if(detection.DetectionMeter >= detection.DetectionLimit * 1 / 3 &&
-            EnemyStatus == Status.Normal)
-        {
-            enemyMovement.Halted = true;
-            //transform.LookAt(suspicionLookPos);
-        }
-
-        else
-            enemyMovement.Halted = false;
-        
         enemyMovement.SetMovementSpeed(enemyMovement.WalkSpeed);
+        enemyMovement.Halted = false;
+
         enemyMovement.Patrol();
     }
 
@@ -166,7 +236,31 @@ public class Enemy : MonoBehaviour
     /// </summary>
     protected virtual void CuriousBehavior()
     {
+        enemyMovement.SetMovementSpeed(enemyMovement.WalkSpeed);
 
+        // Stops and looks at the nearest suspicious object while curious
+        if(curiousTimer > 0f)
+        {
+            enemyMovement.Halt();
+            enemyMovement.Halted = true;
+
+            if(detection.ClosestSuspiciousObject != null)
+                enemyMovement.LookAt(detection.ClosestSuspiciousObject.transform.position);
+
+            else if ((player.transform.position - transform.position)
+                .magnitude <= suspectfulInspectRange * 2)
+            {
+                enemyMovement.LookAt(player.transform.position);
+            }
+
+            TickBehaviorTimers();
+        }
+
+        // Otherwise, goes back to normal
+        else
+        {
+            BecomeNormal();
+        }
     }
 
     /// <summary>
@@ -174,7 +268,39 @@ public class Enemy : MonoBehaviour
     /// </summary>
     protected virtual void SuspectfulBehavior()
     {
-        
+        enemyMovement.SetMovementSpeed(enemyMovement.WalkSpeed);
+
+        if(suspectfulTimer > 0)
+        {
+            if(detection.ClosestSuspiciousObject != null)
+            {
+                // Follows the nearest suspicious object until it's within the minimum range
+                if((detection.ClosestSuspiciousObject.transform.position -
+                    transform.position).magnitude > suspectfulInspectRange)
+                {
+                    enemyMovement.Halted = false;
+                    
+                    enemyMovement.MoveTo(detection.ClosestSuspiciousObject.transform.position);
+                    enemyMovement.RotateTo(null);
+                }
+
+                // Stops moving and looks at the suspicious object
+                else
+                {
+                    enemyMovement.Halt();
+                    enemyMovement.Halted = true;
+
+                    enemyMovement.LookAt(detection.ClosestSuspiciousObject.transform.position);
+                }
+            }
+
+            TickBehaviorTimers();
+        }
+
+        else
+        {
+            BecomeCurious();
+        }
     }
 
     /// <summary>
@@ -257,11 +383,28 @@ public class Enemy : MonoBehaviour
     /// </summary>
     protected virtual void KnockedOutBehavior()
     {
+        enemyMovement.SetMovementSpeed(0f);
+
         if(enemyMovement.LeavingMap)
             enemyMovement.LeavingMap = false;
 
         EnemyMovement.EnableBody();
         EnemyMovement.GetKnockedOut();
+    }
+
+    /// <summary>
+    /// Ticks down any behavior timers that are positive.
+    /// </summary>
+    protected void TickBehaviorTimers()
+    {
+        if(curiousTimer > 0)
+            curiousTimer -= Time.deltaTime;
+
+        if(suspectfulTimer > 0)
+            suspectfulTimer -= Time.deltaTime;
+
+        if(alarmedTimer > 0)
+            alarmedTimer -= Time.deltaTime;
     }
 
     /// <summary>

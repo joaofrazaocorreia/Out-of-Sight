@@ -52,7 +52,16 @@ public class EnemyMovement : MonoBehaviour
     public float WalkSpeed {get=> walkSpeed;}
     public float RunSpeed {get=> runSpeed;}
     public bool halted = false;
-    public bool Halted {get=> halted; set => halted = value;}
+    public bool Halted
+    {
+        get => halted;
+        
+        set
+        {
+            if(value) DeoccupyCurrentTarget();
+            halted = value;
+        }
+    }
     public List<MovementTarget> MovementTargets {get => movementTargets;}
     private List<Vector3> movementPosTargets;
     public List<Vector3> MovementPosTargets {get => movementPosTargets;}
@@ -159,8 +168,8 @@ public class EnemyMovement : MonoBehaviour
             // Static enemies use their position as their target
             if(isStatic)
             {
-                MovementTarget selfTargetPos = CreateMovementTarget(transform.position,
-                    transform.rotation, movementTargetsParent);
+                MovementTarget selfTargetPos = MovementTarget.CreateMovementTarget
+                    (transform.position, transform.rotation, movementTargetsParent);
                 movementTargets = new List<MovementTarget>() {selfTargetPos};
                 movementPosTargets = new List<Vector3>() {spawnPos};
             }
@@ -198,7 +207,8 @@ public class EnemyMovement : MonoBehaviour
     /// <param name="newSpeed">The new speed value for this enemy.</param>
     public void SetMovementSpeed(float newSpeed)
     {
-        navMeshAgent.speed = newSpeed;
+        if(navMeshAgent.speed != newSpeed)
+            navMeshAgent.speed = newSpeed;
     }
 
     /// <summary>
@@ -319,6 +329,17 @@ public class EnemyMovement : MonoBehaviour
         {
             lastTargetRot = AdjustRotationAngle(targetRotation);
         }
+    }
+
+    /// <summary>
+    /// Makes this NPC look at a given position.
+    /// </summary>
+    public void LookAt(Vector3 position)
+    {
+        Vector3 lookPos = new Vector3(position.x,
+            transform.position.y, position.z);
+
+        transform.LookAt(lookPos);
     }
 
     /// <summary>
@@ -608,25 +629,6 @@ public class EnemyMovement : MonoBehaviour
 
         if(!bodyCarry.enabled)
             bodyCarry.enabled = true;
-    }
-
-    /// <summary>
-    /// Creates a new movement target at a given position with a given rotation and parent.
-    /// </summary>
-    /// <param name="position">The position to spawn the new movement target.</param>
-    /// <param name="rotation">The rotation of the new movement target.</param>
-    /// <param name="parent">The parent object of the movement targets.</param>
-    /// <returns>The created movement target.</returns>
-    public static MovementTarget CreateMovementTarget(Vector3 position,
-        Quaternion rotation, Transform parent)
-    {
-        GameObject newTargetObject = new();
-        newTargetObject.transform.position = position;
-        newTargetObject.transform.rotation = rotation;
-        newTargetObject.transform.parent = parent;
-
-        newTargetObject.AddComponent<MovementTarget>();
-        return newTargetObject.GetComponent<MovementTarget>();
     }
 
     /// <summary>
