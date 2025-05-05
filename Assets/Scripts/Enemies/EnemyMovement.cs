@@ -339,7 +339,15 @@ public class EnemyMovement : MonoBehaviour
         Vector3 lookPos = new Vector3(position.x,
             transform.position.y, position.z);
 
-        transform.LookAt(lookPos);
+        if(IsAtDestination || halted)
+        {
+            // Calculates how much the enemy will rotate this frame and updates the rotation
+            Vector3 difference = Vector3.up * Mathf.Clamp(Quaternion.LookRotation
+                (lookPos - transform.position).eulerAngles.y - transform.eulerAngles.y,
+                        -turnSpeed, turnSpeed);
+
+            transform.rotation = Quaternion.Euler(transform.eulerAngles + difference);
+        }
     }
 
     /// <summary>
