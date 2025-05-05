@@ -129,7 +129,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public virtual void BecomeNormal(bool ignoreAlarm = false)
     {
-        if(IsConscious && (!IsAlarmed || ignoreAlarm))
+        if(IsConscious && (!IsAlarmed || ignoreAlarm) && !alarm.IsOn)
         {
             if(EnemyStatus != Status.Normal)
                 Debug.Log($"{name} is now acting normal!");
@@ -146,7 +146,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public virtual void BecomeCurious()
     {
-        if(IsConscious && !IsAlarmed)
+        if(IsConscious && !IsAlarmed && !alarm.IsOn)
         {
             if(EnemyStatus != Status.Curious)
                 Debug.Log($"{name} is now acting curious!");
@@ -161,7 +161,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public virtual void BecomeSuspectful()
     {
-        if(IsConscious && !IsAlarmed)
+        if(IsConscious && !IsAlarmed && !alarm.IsOn)
         {
             if(EnemyStatus != Status.Suspectful)
                 Debug.Log($"{name} is now acting suspectful!");
@@ -200,7 +200,13 @@ public class Enemy : MonoBehaviour
     /// </summary>
     protected virtual void CheckDetection()
     {
-        if(IsConscious && !IsAlarmed)
+        if (IsConscious && alarm.IsOn && (EnemyStatus == Status.Normal ||
+            EnemyStatus == Status.Curious || EnemyStatus == Status.Suspectful))
+        {
+            BecomeAlarmed();
+        }
+        
+        else if(IsConscious && !IsAlarmed)
         {
             // At 2 thirds of detection, becomes suspectful of the nearest suspicious object it sees
             if(detection.DetectionMeter >= detection.DetectionLimit * 0.5f)

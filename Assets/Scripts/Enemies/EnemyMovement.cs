@@ -218,6 +218,9 @@ public class EnemyMovement : MonoBehaviour
     {
         bool remainOnTarget = false;
 
+        if(isStatic)
+            lastTargetRot = spawnRot;
+
         // Stops this enemy when it's seeing something suspicious
         if(halted)
         {
