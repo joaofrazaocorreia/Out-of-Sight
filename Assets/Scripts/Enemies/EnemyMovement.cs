@@ -52,7 +52,16 @@ public class EnemyMovement : MonoBehaviour
     public float WalkSpeed {get=> walkSpeed;}
     public float RunSpeed {get=> runSpeed;}
     public bool halted = false;
-    public bool Halted {get=> halted; set => halted = value;}
+    public bool Halted
+    {
+        get => halted;
+        
+        set
+        {
+            if(value) DeoccupyCurrentTarget();
+            halted = value;
+        }
+    }
     public List<MovementTarget> MovementTargets {get => movementTargets;}
     private List<Vector3> movementPosTargets;
     public List<Vector3> MovementPosTargets {get => movementPosTargets;}
@@ -136,7 +145,7 @@ public class EnemyMovement : MonoBehaviour
             bodyDisguise = GetComponentInChildren<BodyDisguise>();
             bodyCarry = GetComponentInChildren<BodyCarry>();
             detectableObject = GetComponentInChildren<DetectableObject>();
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
             bodyCarry.ResetNPC();
             bodyDisguise.ResetNPC();
             bodyCarry.enabled = false;
@@ -159,8 +168,8 @@ public class EnemyMovement : MonoBehaviour
             // Static enemies use their position as their target
             if(isStatic)
             {
-                MovementTarget selfTargetPos = CreateMovementTarget(transform.position,
-                    transform.rotation, movementTargetsParent);
+                MovementTarget selfTargetPos = MovementTarget.CreateMovementTarget
+                    (transform.position, transform.rotation, movementTargetsParent);
                 movementTargets = new List<MovementTarget>() {selfTargetPos};
                 movementPosTargets = new List<Vector3>() {spawnPos};
             }
@@ -198,7 +207,8 @@ public class EnemyMovement : MonoBehaviour
     /// <param name="newSpeed">The new speed value for this enemy.</param>
     public void SetMovementSpeed(float newSpeed)
     {
-        navMeshAgent.speed = newSpeed;
+        if(navMeshAgent.speed != newSpeed)
+            navMeshAgent.speed = newSpeed;
     }
 
     /// <summary>
@@ -286,6 +296,7 @@ public class EnemyMovement : MonoBehaviour
         else if(isStatic && !movingToSetTarget)
         {
             MoveTo(spawnPos);
+            Idle();
         }
     }
 
@@ -322,6 +333,25 @@ public class EnemyMovement : MonoBehaviour
     }
 
     /// <summary>
+    /// Makes this NPC look at a given position.
+    /// </summary>
+    public void LookAt(Vector3 position)
+    {
+        Vector3 lookPos = new Vector3(position.x,
+            transform.position.y, position.z);
+
+        if(IsAtDestination || halted)
+        {
+            // Calculates how much the enemy will rotate this frame and updates the rotation
+            Vector3 difference = Vector3.up * Mathf.Clamp(Quaternion.LookRotation
+                (lookPos - transform.position).eulerAngles.y - transform.eulerAngles.y,
+                        -turnSpeed, turnSpeed);
+
+            transform.rotation = Quaternion.Euler(transform.eulerAngles + difference);
+        }
+    }
+
+    /// <summary>
     /// Converts a given angle into the range between 0-360 degrees.
     /// </summary>
     private float? AdjustRotationAngle(float? rotation)
@@ -346,6 +376,7 @@ public class EnemyMovement : MonoBehaviour
         if(!isStatic) RotateTo(null);
 
         DeoccupyCurrentTarget();
+        Idle();
     }
 
     /// <summary>
@@ -611,25 +642,6 @@ public class EnemyMovement : MonoBehaviour
     }
 
     /// <summary>
-    /// Creates a new movement target at a given position with a given rotation and parent.
-    /// </summary>
-    /// <param name="position">The position to spawn the new movement target.</param>
-    /// <param name="rotation">The rotation of the new movement target.</param>
-    /// <param name="parent">The parent object of the movement targets.</param>
-    /// <returns>The created movement target.</returns>
-    public static MovementTarget CreateMovementTarget(Vector3 position,
-        Quaternion rotation, Transform parent)
-    {
-        GameObject newTargetObject = new();
-        newTargetObject.transform.position = position;
-        newTargetObject.transform.rotation = rotation;
-        newTargetObject.transform.parent = parent;
-
-        newTargetObject.AddComponent<MovementTarget>();
-        return newTargetObject.GetComponent<MovementTarget>();
-    }
-
-    /// <summary>
     /// When this enemy is knocked out, this code runs only once.
     /// </summary>
     public void GetKnockedOut()
@@ -647,12 +659,27 @@ public class EnemyMovement : MonoBehaviour
             detectableObject.enabled = true;
 
             // Stops animations and sounds
-            animator.SetBool("KO", true);
+            animator.SetTrigger("KO");
             animator.applyRootMotion = false;
             
             // Invokes an event from the inspector when knocked out
             enemySelf.onKnockOut?.Invoke();
             knockedOut = true;
         }
+    }
+
+    public void Run()
+    {
+        animator.SetTrigger("Run");
+    }
+
+    public void Walk()
+    {
+        animator.SetTrigger("Walk");
+    }
+
+    public void Idle()
+    {
+        animator.SetTrigger("Idle");
     }
 }

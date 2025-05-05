@@ -18,11 +18,13 @@ public class MovementTarget : MonoBehaviour
 
         if(targetPositions == null || targetPositions.Count <= 0)
         {
-            targetPositions = new List<Transform>
-            {
-                Instantiate(new GameObject(), transform.position,
-                transform.rotation, transform).transform
-            };
+            GameObject newPosition = new();
+            newPosition.transform.position = transform.position;
+            newPosition.transform.rotation = transform.rotation;
+            newPosition.transform.parent = transform;
+            newPosition.name = "Count Sexulla III the Nickelmeyer";
+
+            targetPositions = new List<Transform> { newPosition.transform };
         }
     }
 
@@ -59,5 +61,25 @@ public class MovementTarget : MonoBehaviour
         }
 
         return availablePos;
+    }
+
+    /// <summary>
+    /// Creates a new movement target at a given position with a given rotation and parent.
+    /// </summary>
+    /// <param name="position">The position to spawn the new movement target.</param>
+    /// <param name="rotation">The rotation of the new movement target.</param>
+    /// <param name="parent">The parent object of the movement targets.</param>
+    /// <returns>The created movement target.</returns>
+    public static MovementTarget CreateMovementTarget(Vector3 position,
+        Quaternion rotation, Transform parent)
+    {
+        GameObject newTargetObject = new();
+        newTargetObject.transform.position = position;
+        newTargetObject.transform.rotation = rotation;
+        newTargetObject.transform.parent = parent;
+
+        newTargetObject.AddComponent<MovementTarget>();
+
+        return newTargetObject.GetComponent<MovementTarget>();
     }
 }
