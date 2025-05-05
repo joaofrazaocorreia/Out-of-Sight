@@ -323,7 +323,7 @@ public class PlayerController : MonoBehaviour
         
         UpdatePosition();
         UpdateStamina();
-        //UpdateAnimator();
+        UpdateAnimator();
     }
 
     private void UpdateAcceleration()
@@ -449,8 +449,8 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateAnimator()
     {
-        _animator.SetBool("IsWalking", _velocity.magnitude > 0.1f);
-        _animator.SetBool("IsRunning", IsRunning == 1);
+        _animator.SetFloat("XMove", _velocity.x / _maxForwardVelocity);
+        _animator.SetFloat("YMove", _velocity.z / _maxStrafeVelocity);
     }
 
     private void OnRun()
