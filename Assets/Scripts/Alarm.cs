@@ -47,7 +47,7 @@ public class Alarm : MonoBehaviour
         policeGuards = new List<Enemy>();
 
         player = FindAnyObjectByType<Player>().transform;
-        playerTargetPos = EnemyMovement.CreateMovementTarget(
+        playerTargetPos = MovementTarget.CreateMovementTarget(
             Vector3.zero, Quaternion.Euler(Vector3.zero), player.transform);
         playerTargetPos.enabled = false;
     }
@@ -100,9 +100,8 @@ public class Alarm : MonoBehaviour
 
                 foreach(Enemy e in allEnemies)
                 {
-                    e.EnemyStatus = Enemy.Status.Normal;
                     e.Detection.DetectionMeter = 0f;
-                    e.AlarmedTimer = 0f;
+                    e.BecomeNormal();
                 }
       
                 int enemyCount = 0;

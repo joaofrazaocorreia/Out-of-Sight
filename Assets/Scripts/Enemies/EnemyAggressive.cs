@@ -14,12 +14,17 @@ public class EnemyAggressive : Enemy
 
     protected override void Update()
     {
+        if(detection.DetectionMeter >= detection.DetectionLimit)
+        {
+            BecomeAlarmed();
+        }
+        
         base.Update();
 
-        TickTimers();
+        RadioTimer();
     }
     
-    protected void TickTimers()
+    protected void RadioTimer()
     {
         if(IsConscious && IsAlarmed && !alarm.IsOn)
         {
@@ -59,16 +64,6 @@ public class EnemyAggressive : Enemy
             }
         }
     }
-
-    protected override void NormalBehavior()
-    {
-        if(detection.DetectionMeter >= detection.DetectionLimit)
-        {
-            BecomeAlarmed();
-        }
-
-        base.NormalBehavior();
-    }
     
     protected override void SearchingBehavior()
     {
@@ -82,7 +77,7 @@ public class EnemyAggressive : Enemy
         // Goes back to normal after the alarm ends
         if (!alarm.IsOn)
         {
-            EnemyStatus = Status.Normal;
+            BecomeNormal();
         }
 
         base.SearchingBehavior();
