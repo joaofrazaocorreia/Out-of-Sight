@@ -15,6 +15,8 @@ public class Alarm : MonoBehaviour
     [SerializeField] private GameObject policePrefab;
     [SerializeField] private float policeSpawnTime = 10f;
     [SerializeField] private int maxPoliceNPCS = 6;
+    [SerializeField] private GameObject paramedicPrefab;
+    [SerializeField] private float paramedicSpawnTime = 2.5f;
     [SerializeField] private PlayAudio alarmLoopPlayer;
     [SerializeField] private PlayAudio alarmEndPlayer;
     [SerializeField] private MusicPlayer musicPlayer;
@@ -29,10 +31,14 @@ public class Alarm : MonoBehaviour
     public float AlarmTimer {get => alarmTimer; set => alarmTimer = value;}
     private float alarmTimeLimit;
     private float policeSpawnTimer;
+    private float paramedicSpawnTimer;
     private List<Enemy> allEnemies;
     private List<Enemy> nonCameraEnemies;
     private List<Enemy> extraGuards;
     private List<Enemy> policeGuards;
+    private List<Enemy> paramedics;
+    private List<BodyCarry> seenBodies;
+    public List<BodyCarry> SeenBodies {get => seenBodies;}
 
     private void Start()
     {
@@ -41,10 +47,13 @@ public class Alarm : MonoBehaviour
         alarmTimer = AlarmTime;
         alarmTimeLimit = maxDuration;
         policeSpawnTimer = 0f;
+        paramedicSpawnTimer = 0f;
         allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
         nonCameraEnemies = allEnemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
         extraGuards = new List<Enemy>();
         policeGuards = new List<Enemy>();
+        paramedics = new List<Enemy>();
+        seenBodies = new List<BodyCarry>();
 
         player = FindAnyObjectByType<Player>().transform;
         playerTargetPos = MovementTarget.CreateMovementTarget(
@@ -78,7 +87,8 @@ public class Alarm : MonoBehaviour
                     if(policeSpawnTimer <= 0)
                     {
                         policeSpawnTimer = policeSpawnTime;
-                        EnemySpawner spawner = FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None).Where(s => s.EnemyType == Enemy.Type.Police).First();
+                        EnemySpawner spawner = FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None)
+                            .Where(s => s.EnemyType == Enemy.Type.Police).First();
                         Enemy newPolice = spawner.SpawnEnemy(policePrefab, new List<MovementTarget>() {playerTargetPos});
 
                         policeGuards.Add(newPolice);
@@ -101,7 +111,10 @@ public class Alarm : MonoBehaviour
                 foreach(Enemy e in allEnemies)
                 {
                     e.Detection.DetectionMeter = 0f;
-                    e.BecomeNormal();
+                    e.BecomeNormal(true);
+                    Debug.Log(e.name+" was unalarmed.");
+                    Debug.Log(e.Detection.DetectionMeter);
+                    Debug.Log(e.EnemyStatus);
                 }
       
                 int enemyCount = 0;
@@ -126,6 +139,35 @@ public class Alarm : MonoBehaviour
                 alarmLoopPlayer.Stop();
                 //alarmEndPlayer.Play();
                 musicPlayer.SwitchTrack();
+            }
+        }
+
+        // If the alarm is off, spawns a paramedic for each body seen.
+        else if(seenBodies.Count() > 0)
+        {
+            if(paramedicSpawnTimer <= 0)
+            {
+                int index = Random.Range(0, seenBodies.Count());
+                paramedicSpawnTimer = paramedicSpawnTime;
+
+                MovementTarget bodyTarget = MovementTarget.CreateMovementTarget
+                    (seenBodies[index].transform.position, seenBodies[index].transform.rotation
+                        * Quaternion.Euler(0f, 180f, 0f), seenBodies[index].transform);
+
+                EnemySpawner spawner = FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None)
+                    .Where(s => s.EnemyType == Enemy.Type.Paramedic).First();
+                    
+                Enemy newParamedic = spawner.SpawnEnemy(paramedicPrefab, new
+                    List<MovementTarget>(){bodyTarget});
+
+                paramedics.Add(newParamedic);
+                (newParamedic as EnemyParamedic).BodyTarget = seenBodies[index];
+                seenBodies.Remove(seenBodies[index]);
+            }
+
+            else
+            {
+                paramedicSpawnTimer -= Time.deltaTime;
             }
         }
     }
@@ -156,7 +198,8 @@ public class Alarm : MonoBehaviour
             {
                 for(int i = 0; i < (extraGuardsPerTier * currentTier); i++)
                 {
-                    EnemySpawner spawner = FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None).Where(s => s.EnemyType == Enemy.Type.Guard).First();
+                    EnemySpawner spawner = FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None)
+                        .Where(s => s.EnemyType == Enemy.Type.Guard).First();
                     Enemy newGuard = spawner.SpawnEnemy(guardPrefab, movementTargets);
                     extraGuards.Add(newGuard);
 
@@ -177,7 +220,12 @@ public class Alarm : MonoBehaviour
         foreach(Enemy e in nonCameraEnemies)
         {
             if(e.GetComponent<Enemy>().EnemyStatus == Enemy.Status.KnockedOut)
-                e.GetComponentInChildren<BodyCarry>().HasBeenDetected = true;
+            {
+                BodyCarry body = e.GetComponentInChildren<BodyCarry>();
+
+                body.HasBeenDetected = true;
+                seenBodies.Add(body);
+            }
         }
 
         // Alerts all enemies in the level
@@ -191,4 +239,7 @@ public class Alarm : MonoBehaviour
 
         alarmTimer = AlarmTime;
     }
+
+    public void RegisterEnemy(Enemy enemy) => allEnemies.Add(enemy);
+    public void UnregisterEnemy(Enemy enemy) => allEnemies.Remove(enemy);
 }

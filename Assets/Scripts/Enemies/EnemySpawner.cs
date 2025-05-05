@@ -69,7 +69,11 @@ public class EnemySpawner : MonoBehaviour
                 }
                 
                 // If this class doesn't respawn the enemies of the given type, deletes them instead
-                else Destroy(e.gameObject);
+                else
+                {
+                    alarm.UnregisterEnemy(e);
+                    Destroy(e.gameObject);
+                }
             }
         }
     }
@@ -81,6 +85,7 @@ public class EnemySpawner : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ScheduleEnemyForQueue(Enemy enemy)
     {
+        alarm.UnregisterEnemy(enemy);
         enemy.gameObject.SetActive(false);
 
         yield return new WaitForEndOfFrame();
@@ -88,7 +93,7 @@ public class EnemySpawner : MonoBehaviour
         enemy.transform.parent = queuedNPCsParent;
         enemies.Remove(enemy);
             
-        if(enemy.IsAlarmed)
+        if(enemy.IsAlarmed && !alarm.IsOn)
             alarm.TriggerAlarm(alarm.IsOn);
 
         UpdateEnemies();
@@ -110,6 +115,7 @@ public class EnemySpawner : MonoBehaviour
         // Spawns the NPC in the navmesh position nearest to this exit's position
         Enemy newNPC = Instantiate(prefab, navHit.position, transform.rotation, parent:enemiesGameObject).GetComponent<Enemy>();
         enemies.Add(newNPC);
+        alarm.RegisterEnemy(newNPC);
 
         numOfSpawnsInQueue--;
         spawnTimer = Random.Range(minSpawnTime, maxSpawnTime);
@@ -142,6 +148,7 @@ public class EnemySpawner : MonoBehaviour
 
         // Registers and sets up the enemy 
         enemies.Add(newNPC);
+        alarm.RegisterEnemy(newNPC);
         newNPC.transform.parent = enemiesGameObject;
         numOfSpawnsInQueue--;
         spawnTimer = Random.Range(minSpawnTime, maxSpawnTime);

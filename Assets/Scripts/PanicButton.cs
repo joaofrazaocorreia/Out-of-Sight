@@ -13,10 +13,10 @@ public class PanicButton : MonoBehaviour
     {
         Enemy nearbyEnemy = other.GetComponentInParent<Enemy>();
 
-        if(nearbyEnemy != null && nearbyEnemy.IsAlarmed)
+        if(nearbyEnemy != null && nearbyEnemy.IsAlarmed && !alarm.IsOn)
         {
             Debug.Log("A panic button was triggered!");
-            alarm.TriggerAlarm(!alarm.IsOn);
+            alarm.TriggerAlarm(true);
         }
     }
 

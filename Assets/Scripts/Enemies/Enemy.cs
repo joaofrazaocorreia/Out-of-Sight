@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class Enemy : MonoBehaviour
 {
-    public enum Type {Civillian, Worker, Guard, Police, Camera};
+    public enum Type {Civillian, Worker, Guard, Police, Camera, Paramedic};
     public enum Status {Normal, Curious, Suspectful, Fleeing, Searching, Chasing, KnockedOut};
 
     [SerializeField] protected PlayAudio alarmAudioPlayer;
@@ -127,9 +127,9 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// Makes this enemy start acting normal.
     /// </summary>
-    public virtual void BecomeNormal()
+    public virtual void BecomeNormal(bool ignoreAlarm = false)
     {
-        if(IsConscious && !IsAlarmed)
+        if(IsConscious && (!IsAlarmed || ignoreAlarm))
         {
             if(EnemyStatus != Status.Normal)
                 Debug.Log($"{name} is now acting normal!");
@@ -293,7 +293,7 @@ public class Enemy : MonoBehaviour
                     enemyMovement.LookAt(detection.ClosestSuspiciousObject.transform.position);
                 }
             }
-            
+
             else if ((player.transform.position - transform.position)
                 .magnitude <= suspectfulInspectRange * 2)
             {
@@ -376,8 +376,8 @@ public class Enemy : MonoBehaviour
         // Checks if the enemy is stuck somewhere and makes it start searching after a while
         if(enemyMovement.StuckCheck())
         {
-            enemyMovement.MoveTo(transform.position);
-            enemyMovement.RotateTo(null);
+            Debug.Log("applying stuck behavior to " + name);
+            enemyMovement.Wander(transform.position, 20f);
             EnemyStatus = Status.Searching;
         }
 

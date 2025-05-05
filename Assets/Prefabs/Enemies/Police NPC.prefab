@@ -715,7 +715,7 @@ MonoBehaviour:
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 6890903906552338642}
-  disguise: 2
+  disguise: 3
 --- !u!114 &5471470156589673495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1469,9 +1469,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alarmAudioPlayer: {fileID: 3254643187488870213}
+  curiousTime: 5
+  suspectfulTime: 10
+  suspectfulInspectRange: 9
   alarmedTime: 5
   ignoresAlarm: 0
-  type: 0
+  type: 3
   onKnockOut:
     m_PersistentCalls:
       m_Calls: []
@@ -1496,6 +1499,7 @@ MonoBehaviour:
   isStatic: 0
   looksAround: 1
   chooseTargetsAsSequence: 0
+  movementTargetsParent: {fileID: 0}
   movementTargets: []
   startingTargetIndex: 0
   walkSpeed: 5
@@ -1513,9 +1517,6 @@ MonoBehaviour:
   searchRadius: 20
   stuckTime: 3
   tasedTime: 5
-  onKnockOut:
-    m_PersistentCalls:
-      m_Calls: []
   footstepPlayer: {fileID: 1392525900952079928}
   footstepInterval: 0.45
   halted: 0
