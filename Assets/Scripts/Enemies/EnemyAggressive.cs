@@ -14,7 +14,7 @@ public class EnemyAggressive : Enemy
 
     protected override void Update()
     {
-        if(detection.DetectionMeter >= detection.DetectionLimit)
+        if(detection.DetectionMeter >= detection.DetectionLimit && !IsAlarmed)
         {
             BecomeAlarmed();
         }
@@ -28,9 +28,9 @@ public class EnemyAggressive : Enemy
     {
         if(IsConscious && IsAlarmed && !alarm.IsOn)
         {
-            alarmedTimer -= Time.deltaTime;
+            TickBehaviorTimers();
             radioIcon.SetActive(true);
-            radioFill.fillAmount = alarmedTimer / alarmedTime;
+            radioFill.fillAmount = 1 - (alarmedTimer / alarmedTime);
 
             if(alarmedTimer <= 0)
             {

@@ -61,7 +61,6 @@ public class Detection : MonoBehaviour
         }
     }
     public bool SeesPlayer {get => seenDetectables.Contains(player.GetComponent<DetectableObject>());}
-    public bool SeesDetectable {get => seenDetectables.Count() > 0;}
     private static List<DetectableObject> allDetectables;
     private bool tooCloseToPlayer;
     public bool TooCloseToPlayer {get => tooCloseToPlayer;}
@@ -90,7 +89,8 @@ public class Detection : MonoBehaviour
         detectionLayers = LayerMask.GetMask("Default", "Player", "Enemies");
     
         globalDetectionMultiplier = 1f;
-        allDetectables = new List<DetectableObject>();
+        if(allDetectables == null)
+            allDetectables = new List<DetectableObject>();
     }
 
     private void FixedUpdate()
@@ -103,7 +103,7 @@ public class Detection : MonoBehaviour
                     enemyMovement == null && !enemyCamera.Jammed && enemyCamera.IsOn))
             {
                 // Checks if it can see any available detectables in the level
-                CheckForDetectables(allDetectables.Where(a => a != null && a.enabled).ToList());
+                CheckForDetectables(allDetectables.Where(d => d != null && d.enabled).ToList());
 
                 // Updates this enemy's detection meter according to what it is detecting
                 UpdateDetection();

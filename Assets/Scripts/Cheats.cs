@@ -48,7 +48,10 @@ public class Cheats : MonoBehaviour
             if(alarm.IsOn)
                 alarm.AlarmTimer = 0f;
             else
+            {
                 alarm.TriggerAlarm(true);
+                alarm.TriggerAlarm(false);
+            }
         }
 
         if(playerInput.actions["ToggleDetection"].WasPressedThisFrame())

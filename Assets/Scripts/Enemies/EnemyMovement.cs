@@ -179,7 +179,7 @@ public class EnemyMovement : MonoBehaviour
             {
                 movementPosTargets = new List<Vector3>();
                 foreach(MovementTarget mt in movementTargets)
-                    movementPosTargets.Add(mt.transform.position);
+                    if(mt) movementPosTargets.Add(mt.transform.position);
             }
         }
     }
@@ -288,7 +288,8 @@ public class EnemyMovement : MonoBehaviour
             // Tells this NPC to move towards the movement target of the chosen index
             if(!remainOnTarget)
                 movementTargets[movementTargetIndex].Occupy(this);
-            else
+
+            else if (movementTargetIndex > 0)
                 movementTargets[movementTargetIndex].Occupy(this, true, 0.5f);
         }
 
@@ -434,13 +435,14 @@ public class EnemyMovement : MonoBehaviour
     /// </summary>
     public bool StuckCheck()
     {
-        if((transform.position - lastSelfPos).magnitude < (navMeshAgent.speed * Time.deltaTime)
-            && enemySelf.IsConscious)
+        if((transform.position - lastSelfPos).magnitude < (walkSpeed * Time.deltaTime)
+            && enemySelf.IsConscious && !isStatic && !IsAtDestination)
         {
             stuckTimer += Time.deltaTime;
 
             if(stuckTimer >= stuckTime)
             {
+                Debug.Log(name + " is stuck!");
                 stuckTimer = 0f;
                 return true;
             }
@@ -629,14 +631,17 @@ public class EnemyMovement : MonoBehaviour
     /// </summary>
     public void EnableBody()
     {
-        if(!bodyDisguise.enabled && bodyDisguise.HasDisguise)
-            bodyDisguise.enabled = true;
-            
-        else if(bodyDisguise.enabled && !bodyDisguise.HasDisguise)
-            bodyDisguise.enabled = false;
+        if(bodyDisguise != null)
+        {
+            if(!bodyDisguise.enabled && bodyDisguise.HasDisguise)
+                bodyDisguise.enabled = true;
+                
+            else if(bodyDisguise.enabled && !bodyDisguise.HasDisguise)
+                bodyDisguise.enabled = false;
 
-        if(!bodyCarry.enabled)
-            bodyCarry.enabled = true;
+            if(!bodyCarry.enabled)
+                bodyCarry.enabled = true;
+        }
     }
 
     /// <summary>
