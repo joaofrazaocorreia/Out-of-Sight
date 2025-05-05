@@ -8,7 +8,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(NavMeshAgent))] 
 public class EnemyMovement : MonoBehaviour
 {
-
+    [SerializeField] private bool debug = false;
     [SerializeField] private bool isStatic = false;
     [SerializeField] private bool looksAround = true;
     [SerializeField] private bool chooseTargetsAsSequence = false;
@@ -181,6 +181,8 @@ public class EnemyMovement : MonoBehaviour
                 foreach(MovementTarget mt in movementTargets)
                     if(mt) movementPosTargets.Add(mt.transform.position);
             }
+
+            UpdateAnimations();
         }
     }
 
@@ -191,6 +193,8 @@ public class EnemyMovement : MonoBehaviour
         if(enemySelf.IsConscious)
         {
             lastSelfPos = transform.position;
+
+            UpdateAnimations();
         }
         
         // Plays footsteps when walking and running
@@ -300,7 +304,6 @@ public class EnemyMovement : MonoBehaviour
         else if(isStatic && !movingToSetTarget)
         {
             MoveTo(spawnPos);
-            Idle();
         }
     }
 
@@ -380,7 +383,6 @@ public class EnemyMovement : MonoBehaviour
         if(!isStatic) RotateTo(null);
 
         DeoccupyCurrentTarget();
-        Idle();
     }
 
     /// <summary>
@@ -676,17 +678,24 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-    public void Run()
+    public void UpdateAnimations()
+    {  
+        if(!halted && !IsAtDestination && navMeshAgent.speed >= RunSpeed) RunAnim();
+        else if(!halted && !IsAtDestination && navMeshAgent.speed >= WalkSpeed) WalkAnim();
+        else IdleAnim();
+    }
+
+    private void RunAnim()
     {
         animator.SetTrigger("Run");
     }
 
-    public void Walk()
+    private void WalkAnim()
     {
         animator.SetTrigger("Walk");
     }
 
-    public void Idle()
+    private void IdleAnim()
     {
         animator.SetTrigger("Idle");
     }
