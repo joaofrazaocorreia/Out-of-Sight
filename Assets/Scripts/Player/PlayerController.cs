@@ -449,8 +449,8 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateAnimator()
     {
-        //_animator.SetBool("IsWalking", _velocity.magnitude > 0.1f);
-        //_animator.SetBool("IsRunning", IsRunning == 1);
+        _animator.SetBool("IsWalking", _velocity.magnitude > 0.1f);
+        _animator.SetBool("IsRunning", IsRunning == 1);
     }
 
     private void OnRun()
