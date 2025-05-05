@@ -183,6 +183,7 @@ public class Enemy : MonoBehaviour
             if(alarmAudioPlayer != null) alarmAudioPlayer.Play();
             alarmedTimer = alarmedTime;
             detection.DetectionMeter = detection.DetectionLimit;
+            enemyMovement.halted = false;
         }
     }
 
