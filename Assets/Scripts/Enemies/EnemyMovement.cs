@@ -145,7 +145,7 @@ public class EnemyMovement : MonoBehaviour
             bodyDisguise = GetComponentInChildren<BodyDisguise>();
             bodyCarry = GetComponentInChildren<BodyCarry>();
             detectableObject = GetComponentInChildren<DetectableObject>();
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
             bodyCarry.ResetNPC();
             bodyDisguise.ResetNPC();
             bodyCarry.enabled = false;
@@ -297,6 +297,7 @@ public class EnemyMovement : MonoBehaviour
         else if(isStatic && !movingToSetTarget)
         {
             MoveTo(spawnPos);
+            Idle();
         }
     }
 
@@ -376,6 +377,7 @@ public class EnemyMovement : MonoBehaviour
         if(!isStatic) RotateTo(null);
 
         DeoccupyCurrentTarget();
+        Idle();
     }
 
     /// <summary>
@@ -662,12 +664,27 @@ public class EnemyMovement : MonoBehaviour
             detectableObject.enabled = true;
 
             // Stops animations and sounds
-            animator.SetBool("KO", true);
+            animator.SetTrigger("KO");
             animator.applyRootMotion = false;
             
             // Invokes an event from the inspector when knocked out
             enemySelf.onKnockOut?.Invoke();
             knockedOut = true;
         }
+    }
+
+    public void Run()
+    {
+        animator.SetTrigger("Run");
+    }
+
+    public void Walk()
+    {
+        animator.SetTrigger("Walk");
+    }
+
+    public void Idle()
+    {
+        animator.SetTrigger("Idle");
     }
 }
