@@ -34,6 +34,7 @@ public class EnemyParamedic : EnemyPassive
                     bodyTarget.transform.rotation = bodyHoldPos.rotation;
 
                     alarm.UnregisterEnemy(bodyTarget.GetComponent<Enemy>());
+                    bodyTarget.GetComponent<EnemyMovement>().ToggleRagdoll(false);
                     bodyTarget = null;
                     
                     enemyMovement.ExitMap();

@@ -8,7 +8,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(NavMeshAgent))] 
 public class EnemyMovement : MonoBehaviour
 {
-    [SerializeField] private bool debug = false;
+    [SerializeField] protected GameObject model;
     [SerializeField] private bool isStatic = false;
     [SerializeField] private bool looksAround = true;
     [SerializeField] private bool chooseTargetsAsSequence = false;
@@ -37,18 +37,6 @@ public class EnemyMovement : MonoBehaviour
     private int movementTargetIndex;
     private bool movingToSetTarget;
     public bool MovingToSetTarget {get => movingToSetTarget; set => movingToSetTarget = value;}
-    /*public bool IsConscious {get => currentStatus != Status.KnockedOut && currentStatus != Status.Tased;}*/
-
-    /*public Status currentStatus
-    { 
-        get => status;
-        set
-        {
-            if(status != Status.KnockedOut && value == Status.KnockedOut) knockoutPlayer.Play();
-            if(status != Status.KnockedOut) status = value;
-            footstepTimer = Time.time - footstepInterval;
-        }
-    }*/
     public float WalkSpeed {get=> walkSpeed;}
     public float RunSpeed {get=> runSpeed;}
     public bool halted = false;
@@ -71,9 +59,6 @@ public class EnemyMovement : MonoBehaviour
     public float MoveTimer { get => moveTimer; set => moveTimer = value;}
     private float turnTimer;
     private float searchTimer;
-    /*private float tasedTimer;
-    public float TasedTimer {get => tasedTimer;}
-    public float TasedTime {get => tasedTime;}*/
     private Vector3 lastTargetPos;
     public Vector3 LastTargetPos {get => lastTargetPos;}
     private float? lastTargetRot;
@@ -103,6 +88,9 @@ public class EnemyMovement : MonoBehaviour
     private bool knockedOut;
     public bool LeavingMap {get => leavingMap; set{leavingMap = value;}}
     private float footstepTimer;
+    private Vector3 modelSpawnPos;
+    private Quaternion modelSpawnRot;
+    private Dictionary<string, (Vector3, Quaternion)> limbsTransforms;
 
     private void Start()
     {
@@ -159,6 +147,15 @@ public class EnemyMovement : MonoBehaviour
             mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
             leavingMap = false;
             knockedOut = false;
+
+            modelSpawnPos = model.transform.localPosition;
+            modelSpawnRot = model.transform.localRotation;
+            limbsTransforms = new Dictionary<string, (Vector3, Quaternion)>();
+            foreach(Rigidbody rb in model.GetComponentsInChildren<Rigidbody>())
+            {
+                limbsTransforms.Add(rb.transform.name, (rb.transform.localPosition,rb.transform.localRotation));
+            }
+            ToggleRagdoll(false);
             footstepTimer  = Time.time;
 
             // Forcefully sets the NavMeshAgent to the NPC type if it isn't already one
@@ -671,6 +668,7 @@ public class EnemyMovement : MonoBehaviour
             // Stops animations and sounds
             animator.SetTrigger("KO");
             animator.applyRootMotion = false;
+            ToggleRagdoll(true);
             
             // Invokes an event from the inspector when knocked out
             enemySelf.onKnockOut?.Invoke();
@@ -698,5 +696,44 @@ public class EnemyMovement : MonoBehaviour
     private void IdleAnim()
     {
         animator.SetTrigger("Idle");
+    }
+
+    /// <summary>
+    /// Turns this enemy's model into a ragdoll.
+    /// </summary>
+    /// <param name="enabled">True to enable ragdoll, False to enable animations.</param>
+    /// <param name="ignoreColliders">Whether the colliders should be ignored
+    /// or not for this operation.</param>
+    public void ToggleRagdoll(bool enabled, bool ignoreColliders = false)
+    {
+        animator.enabled = !enabled;
+
+        if(!enabled)
+        {
+            model.transform.localPosition = modelSpawnPos;
+            model.transform.localRotation = modelSpawnRot;
+        }
+
+        foreach(Rigidbody rb in model.GetComponentsInChildren<Rigidbody>())
+        {
+            rb.isKinematic = !enabled;
+            if(!enabled)
+            {
+                rb.transform.localPosition = limbsTransforms[rb.transform.name].Item1;
+                rb.transform.localRotation = limbsTransforms[rb.transform.name].Item2;
+            }
+        }
+
+        if(!ignoreColliders)
+        {
+            foreach(CapsuleCollider c in model.GetComponentsInChildren<CapsuleCollider>())
+            {
+                c.enabled = enabled;
+            }
+            foreach(BoxCollider c in model.GetComponentsInChildren<BoxCollider>())
+            {
+                c.enabled = enabled;
+            }
+        }
     }
 }

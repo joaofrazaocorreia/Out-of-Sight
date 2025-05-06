@@ -401,6 +401,7 @@ public class Enemy : MonoBehaviour
         if(enemyMovement.LeavingMap)
             enemyMovement.LeavingMap = false;
 
+
         EnemyMovement.EnableBody();
         EnemyMovement.GetKnockedOut();
     }
@@ -433,10 +434,7 @@ public class Enemy : MonoBehaviour
             // Drops all items this enemy is carrying
             enemyItemInventory.DropAllItems();
             
-            foreach(Collider c in GetComponentsInChildren<Collider>())
-            {
-                c.isTrigger = true;
-            }
+            GetComponentInChildren<Collider>().isTrigger = true;
         }
     }
 }
