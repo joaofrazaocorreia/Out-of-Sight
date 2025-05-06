@@ -50,12 +50,13 @@ public class PlayerCarryInventory : MonoBehaviour
             storedCarriable = go;
             storedCarriableType = CarriableType.Body;
             storedCarriableParent = go.transform.parent;
-            player.GainStatus(Player.Status.Suspicious);
 
+            player.GainStatus(Player.Status.Suspicious);
+            
+            go.GetComponentInParent<EnemyMovement>().ToggleRagdoll(false);
             go.transform.parent = bodyCarryPosition;
             go.transform.localPosition = Vector3.zero;
             go.transform.localRotation = Quaternion.identity;
-            go.GetComponent<EnemyMovement>().ToggleRagdoll(false, true);
             
             OnCarryPickup?.Invoke(this, EventArgs.Empty);
         }
@@ -79,9 +80,8 @@ public class PlayerCarryInventory : MonoBehaviour
             }
 
             storedCarriable.transform.parent = storedCarriableParent;
-            storedCarriable.GetComponent<EnemyMovement>().ToggleRagdoll(true);
+            storedCarriable.GetComponentInParent<EnemyMovement>().ToggleRagdoll(true);
             storedCarriable.transform.position += transform.GetChild(0).forward * 0.1f;
-            //storedCarriable.transform.rotation = Quaternion.Euler(0f, transform.eulerAngles.y + 90f, 0f);
 
             storedCarriable = null;
             storedCarriableType = CarriableType.None;

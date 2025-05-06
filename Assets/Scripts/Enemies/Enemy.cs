@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -15,6 +16,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected Type type;
     [SerializeField] public UnityEvent onKnockOut;
     [SerializeField] protected PlayAudio knockoutPlayer;
+    public event EventHandler OnKnockout;
 
     public Type EnemyType {get=> type;}
     protected Status status;
@@ -433,8 +435,8 @@ public class Enemy : MonoBehaviour
 
             // Drops all items this enemy is carrying
             enemyItemInventory.DropAllItems();
-            
-            GetComponentInChildren<Collider>().isTrigger = true;
+
+            OnKnockout?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -753,8 +753,6 @@ public class UIManager : MonoBehaviour
     {
         if(CheckEnemyDetectionsForUpdate())
         {
-            Debug.Log("Detection check returned true: Updating detection list...");
-
             enemyDetections = new List<Detection>();
             detectionArrows = new Dictionary<Detection, GameObject>();
             for(int i = detectionArrowsParent.childCount-1; i >= 0; i--)
