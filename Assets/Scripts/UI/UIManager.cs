@@ -31,6 +31,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CanvasGroup restartConfirmationMenu;
     [SerializeField] private CanvasGroup quitConfirmationMenu;
     [SerializeField] private GameObject settingsMenu;
+    [SerializeField] private Slider sensitivitySlider;
     [SerializeField] private CanvasGroup victoryScreen;
     [SerializeField] private CanvasGroup gameOverScreen;
     [SerializeField] private Image[] equipmentIcons;
@@ -131,6 +132,7 @@ public class UIManager : MonoBehaviour
         deltaTime = Time.fixedDeltaTime * UISpeed;
         primaryInteractionTextOffset = interactionMessages[0].transform.localPosition.x;
         secondaryInteractionTextOffset = interactionMessages[1].transform.localPosition.x;
+        UpdateMouseSensitivity();
 
         loadingScreen.gameObject.SetActive(true);
         missionBriefingScreen.gameObject.SetActive(true);
@@ -867,6 +869,11 @@ public class UIManager : MonoBehaviour
                     kv.Value.SetActive(false);
             }
         }
+    }
+
+    public void UpdateMouseSensitivity()
+    {
+        playerController.UpdateMouseSensitivity(sensitivitySlider.value);
     }
 
     private void ToggleAttackUI(bool state) => attackUI.SetActive(state);
