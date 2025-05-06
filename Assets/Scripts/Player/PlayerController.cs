@@ -22,8 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _bodyCarryVelocityPercent = 50;
     
     [Header("Camera Variables")]
-    [SerializeField] private float verticalLookSensitivity = 2f;
-    [SerializeField] private float horizontalLookSensitivity = 2f;
+    [SerializeField] private float lookSensitivity = 1f;
     [SerializeField] private float _maxHeadUpAngle = 70;
     [SerializeField] private float _minHeadDownAngle = 290;
     [SerializeField] [Range(1f,30f)] private float HeadbobAmount = 5f;
@@ -294,7 +293,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateBodyRotation()
     {
-        float rotation = _lookVector.x * horizontalLookSensitivity;
+        float rotation = _lookVector.x * lookSensitivity * 0.5f;
 
         _horizontalRotationPivot.Rotate(0f, rotation, 0f);
     }
@@ -303,7 +302,7 @@ public class PlayerController : MonoBehaviour
     {
         float rotation = _verticalRotationPivot.localEulerAngles.x;
 
-        rotation -= _lookVector.y * verticalLookSensitivity;
+        rotation -= _lookVector.y * lookSensitivity * 0.5f;
 
         if (rotation < 180)
             rotation = Mathf.Min(rotation, _maxHeadUpAngle);
@@ -451,6 +450,11 @@ public class PlayerController : MonoBehaviour
     {
         _animator.SetFloat("XMove", _velocity.x / _maxForwardVelocity);
         _animator.SetFloat("YMove", _velocity.z / _maxStrafeVelocity);
+    }
+
+    public void UpdateMouseSensitivity(float newSensitivity)
+    {
+        lookSensitivity = newSensitivity;
     }
 
     private void OnRun()
