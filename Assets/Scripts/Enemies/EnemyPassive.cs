@@ -6,8 +6,11 @@ public class EnemyPassive : Enemy
         if(IsConscious)
         {
             base.BecomeAlarmed();
-
-            EnemyStatus = Status.Fleeing;
+            
+            if(!ignoresAlarm)
+            {
+                EnemyStatus = Status.Fleeing;
+            }
         }
     }
 

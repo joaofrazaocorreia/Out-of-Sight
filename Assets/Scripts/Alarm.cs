@@ -27,6 +27,7 @@ public class Alarm : MonoBehaviour
     private int currentTier;
     private bool isOn;
     public bool IsOn {get => isOn; set => isOn = value;}
+    public bool forceDisable;
     private float alarmTimer;
     private float AlarmTime {get => baseDuration + (durationIncreasePerTier * Mathf.Min(currentTier - 1, maxTier));}
     public float AlarmTimer {get => alarmTimer; set => alarmTimer = value;}
@@ -44,6 +45,7 @@ public class Alarm : MonoBehaviour
     {
         currentTier = 0;
         isOn = false;
+        forceDisable = false;
         alarmTimer = AlarmTime;
         alarmTimeLimit = maxDuration;
         policeSpawnTimer = 0f;
@@ -65,7 +67,7 @@ public class Alarm : MonoBehaviour
     {
         if(isOn)
         {
-            if(alarmTimer > 0)
+            if(alarmTimer > 0 && !forceDisable)
             {
                 // Decreases the alarm timer if it's not the maximum alarm tier.
                 if(currentTier < maxTier)
@@ -107,6 +109,7 @@ public class Alarm : MonoBehaviour
             {
                 Debug.Log("Alarm turned off!");
                 isOn = false;
+                forceDisable = false;
 
                 foreach(Enemy e in allEnemies)
                 {

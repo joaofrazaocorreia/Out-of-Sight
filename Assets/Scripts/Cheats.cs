@@ -46,7 +46,7 @@ public class Cheats : MonoBehaviour
             Debug.Log("Toggled Alarm");
             
             if(alarm.IsOn)
-                alarm.AlarmTimer = 0f;
+                alarm.forceDisable = true;
             else
             {
                 alarm.TriggerAlarm(true);
