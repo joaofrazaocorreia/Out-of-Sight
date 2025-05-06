@@ -122,7 +122,6 @@ public class EnemyMovement : MonoBehaviour
             turnTimer = 0;
             searchTimer = 0;
             stuckTimer = 0;
-            //tasedTimer = tasedTime;
             spawnPos = oldSpawnPos;
             spawnRot = oldSpawnRot;
             lastSelfPos = transform.position;
