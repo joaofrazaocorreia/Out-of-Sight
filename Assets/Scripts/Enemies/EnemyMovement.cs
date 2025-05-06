@@ -681,6 +681,13 @@ public class EnemyMovement : MonoBehaviour
         if(!halted && !IsAtDestination && navMeshAgent.speed >= RunSpeed) RunAnim();
         else if(!halted && !IsAtDestination && navMeshAgent.speed >= WalkSpeed) WalkAnim();
         else IdleAnim();
+
+        if(enemySelf.EnemyType == Enemy.Type.Paramedic)
+        {
+            if(!halted && !IsAtDestination && navMeshAgent.speed >= RunSpeed) Debug.Log(name+ " running");
+            else if(!halted && !IsAtDestination && navMeshAgent.speed >= WalkSpeed) Debug.Log(name+ " walking");
+            else  Debug.Log(name+ " idle");
+        }
     }
 
     private void RunAnim()
@@ -702,10 +709,14 @@ public class EnemyMovement : MonoBehaviour
     /// Turns this enemy's model into a ragdoll.
     /// </summary>
     /// <param name="enabled">True to enable ragdoll, False to enable animations.</param>
-    /// <param name="ignoreColliders">Whether the colliders should be ignored
-    /// or not for this operation.</param>
-    public void ToggleRagdoll(bool enabled, bool ignoreColliders = false)
+    public void ToggleRagdoll(bool enabled)
     {
+        if(enabled)
+        {
+            animator.speed = 0f;
+            animator.SetTrigger("Idle");
+        }
+
         animator.enabled = !enabled;
 
         if(!enabled)
@@ -724,16 +735,16 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
-        if(!ignoreColliders)
+        CapsuleCollider interactionCollider = GetComponentInChildren<CapsuleCollider>();
+
+        foreach(CapsuleCollider c in model.GetComponentsInChildren<CapsuleCollider>())
         {
-            foreach(CapsuleCollider c in model.GetComponentsInChildren<CapsuleCollider>())
-            {
+            if(c != interactionCollider)
                 c.enabled = enabled;
-            }
-            foreach(BoxCollider c in model.GetComponentsInChildren<BoxCollider>())
-            {
-                c.enabled = enabled;
-            }
+        }
+        foreach(BoxCollider c in model.GetComponentsInChildren<BoxCollider>())
+        {
+            c.enabled = enabled;
         }
     }
 }

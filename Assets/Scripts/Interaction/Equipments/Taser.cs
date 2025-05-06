@@ -59,11 +59,6 @@ namespace Interaction.Equipments
                 if(hit.collider != null && hitenemy != null && hitenemy.EnemyStatus != Enemy.Status.KnockedOut)
                 {
                     hitenemy.GetKnockedOut();
-
-                    /*if(knocksOutTargets)
-                        hitenemy.GetKnockedOut();
-                    else
-                        hitenemy.GetTased();*/
                 }
             }
             OnTaserShot?.Invoke(this, EventArgs.Empty);

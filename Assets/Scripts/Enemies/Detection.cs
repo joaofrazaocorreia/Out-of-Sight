@@ -91,6 +91,11 @@ public class Detection : MonoBehaviour
         globalDetectionMultiplier = 1f;
         if(allDetectables == null)
             allDetectables = new List<DetectableObject>();
+        
+        foreach(Enemy e in FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList())
+        {
+            e.OnKnockout += OnEnemyKnockout;
+        }
     }
 
     private void FixedUpdate()
@@ -430,6 +435,11 @@ public class Detection : MonoBehaviour
         }
     }
 
+    public bool Sees(DetectableObject detectableObject)
+    {
+        return seenDetectables.Contains(detectableObject);
+    }
+
     private void OnSuspiciousAction(object sender, EventArgs e)
     {
         if (SeesPlayer && player.detectable) GetActionSuspicion(sender);
@@ -443,7 +453,21 @@ public class Detection : MonoBehaviour
 
     private void OnPlayerAttack(object sender, EventArgs e)
     {
-        if (SeesPlayer && player.detectable) detectionMeter = detectionLimit * 2;
+        if (SeesPlayer && player.detectable)
+        {
+            detectionMeter = detectionLimit * 2;
+            Debug.Log("this npc saw the player knocking out someone");
+        }
+    }
+
+    private void OnEnemyKnockout(object sender, EventArgs e)
+    {
+        /*
+        if (Sees(enemy.GetComponent<DetectableObject>) && player.detectable)
+        {
+            detectionMeter = detectionLimit * 2;
+            Debug.Log("this npc saw another get knocked out");
+        }*/
     }
 }
 

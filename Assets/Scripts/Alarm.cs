@@ -39,7 +39,6 @@ public class Alarm : MonoBehaviour
     private List<Enemy> policeGuards;
     private List<Enemy> paramedics;
     private List<BodyCarry> seenBodies;
-    public List<BodyCarry> SeenBodies {get => seenBodies;}
 
     private void Start()
     {
@@ -143,13 +142,10 @@ public class Alarm : MonoBehaviour
         // If the alarm is off, spawns a paramedic for each body seen.
         else if(seenBodies.Count() > 0)
         {
-            Debug.Log("seen bodies count: " + seenBodies.Count());
             if(paramedicSpawnTimer <= 0)
             {
                 int index = Random.Range(0, seenBodies.Count());
                 paramedicSpawnTimer = paramedicSpawnTime;
-                Debug.Log("chosen body:");
-                Debug.Log(seenBodies[index]);
 
                 MovementTarget bodyTarget = MovementTarget.CreateMovementTarget
                     (seenBodies[index].transform.position, seenBodies[index].transform.rotation
@@ -224,7 +220,7 @@ public class Alarm : MonoBehaviour
             {
                 BodyCarry body = e.GetComponentInChildren<BodyCarry>();
 
-                if(body)
+                if(body != null && !body.HasBeenDetected)
                 {
                     body.HasBeenDetected = true;
                     seenBodies.Add(body);
