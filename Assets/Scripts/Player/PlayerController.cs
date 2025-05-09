@@ -35,23 +35,30 @@ public class PlayerController : MonoBehaviour
     
     [Header("Crouch Variables")]
     [SerializeField] private bool isCrouchToggle;
-    private int _isCrouching;
-    private int IsCrouching
+    private int _isCrouched;
+    private int IsCrouched
     {
-        get => _isCrouching;
+        get => _isCrouched;
         set
         {
-            if(value == _isCrouching) return;
-            _isCrouching = value;
+            if(value == _isCrouched) return;
+            _isCrouched = value;
+            if (!_isCrouching) _isCrouching = true;
             OnCrouch();
         }
     }
     [SerializeField] private float crouchSpeedModifier = 0.75f;
+    [SerializeField] private float crouchAnimDuration;
     [SerializeField] private float crouchHeight;
     [SerializeField] private float crouchCenterY;
     private float _crouchCenterYDelta;
     private float _defaultPlayerHeight;
     private float _defaultPlayerCenterY;
+    private bool _isCrouching;
+    private int _animatorCrouchLayer;
+    private float _targetControllerHeight;
+    private float _targetControllerCenterY;
+    private float _targetPlayerHeadPosY;
 
     [Header("Run Variables")] [SerializeField]
     private bool isRunToggle;
@@ -77,7 +84,7 @@ public class PlayerController : MonoBehaviour
     private float speedBoost;
     public float SpeedBoost
     {
-        get => speedBoost * Mathf.Pow(runSpeedModifier, _isRunning * _canRun) * Mathf.Pow(crouchSpeedModifier, _isCrouching);
+        get => speedBoost * Mathf.Pow(runSpeedModifier, _isRunning * _canRun) * Mathf.Pow(crouchSpeedModifier, _isCrouched);
         set 
         {
             speedBoost = value;
@@ -129,9 +136,10 @@ public class PlayerController : MonoBehaviour
         _originalVerticalRotationPivot = _horizontalRotationPivot;
         _defaultPlayerHeight = _controller.height;
         _defaultPlayerCenterY = _controller.center.y;
-        _crouchCenterYDelta = crouchCenterY - _startCamPos.y;
+        _crouchCenterYDelta = crouchCenterY - _startCamPos.y + 0.25f;
         _startCharHeadPos = _charHead.transform.localPosition;
         _currentCharHeadPos = _startCharHeadPos;
+        _animatorCrouchLayer = _animator.GetLayerIndex("Crouch");
         
         if(lockCursorOnStart)
             Cursor.lockState = CursorLockMode.Locked;
@@ -147,7 +155,8 @@ public class PlayerController : MonoBehaviour
         {
             UpdateBodyRotation();
             UpdateHeadRotation();
-            TriggerHeadbob();
+            //TriggerHeadbob();
+            UpdateStateTransitions();
         }
     }
 
@@ -222,24 +231,24 @@ public class PlayerController : MonoBehaviour
     private void DisableCrouch()
     {
         if(isCrouchToggle) return;
-        IsCrouching = 0;
+        IsCrouched = 0;
     }
     
     private void EnableCrouch()
     {
-        IsCrouching = isCrouchToggle ? 1 - IsCrouching : 1;
+        IsCrouched = isCrouchToggle ? 1 - IsCrouched : 1;
     }
 
     private void OnCrouch()
     {
-        switch (IsCrouching)
+        switch (IsCrouched)
         {
             case 1:
             {
-                _controller.height = crouchHeight;
-                _controller.center = new Vector3(_controller.center.x, crouchCenterY, _controller.center.z);
-                _currentCharHeadPos.y += _crouchCenterYDelta; 
-                _charHead.transform.localPosition = new Vector3(_currentCharHeadPos.x, _currentCharHeadPos.y, _currentCharHeadPos.z);
+                _targetControllerHeight = crouchHeight;
+                _targetControllerCenterY = crouchCenterY;
+                _targetPlayerHeadPosY = _startCharHeadPos.y + _crouchCenterYDelta;
+                
                 IsRunning = 0;
                 
                 _player.GainStatus(Player.Status.Doubtful);
@@ -248,10 +257,9 @@ public class PlayerController : MonoBehaviour
             }
             case 0:
             {
-                _controller.height = _defaultPlayerHeight;
-                _controller.center = new Vector3(_controller.center.x, _defaultPlayerCenterY, _controller.center.z);
-                _currentCharHeadPos = _startCharHeadPos;
-                _charHead.transform.localPosition = new Vector3(_currentCharHeadPos.x, _currentCharHeadPos.y, _currentCharHeadPos.z);
+                _targetControllerHeight = _defaultPlayerHeight;
+                _targetControllerCenterY = _defaultPlayerCenterY;
+                _targetPlayerHeadPosY = _startCharHeadPos.y;
 
                 if(_isRunning == 0) _player.LoseStatus(Player.Status.Doubtful);
                 break;
@@ -462,13 +470,13 @@ public class PlayerController : MonoBehaviour
         
         if (IsRunning == 1)
         {
-            IsCrouching = 0;
+            IsCrouched = 0;
 
             _player.GainStatus(Player.Status.Doubtful);
             return;
         }
 
-        if(_isCrouching == 0) _player.LoseStatus(Player.Status.Doubtful);
+        if(_isCrouched == 0) _player.LoseStatus(Player.Status.Doubtful);
     }
 
     private void TriggerHeadbob()
@@ -492,6 +500,23 @@ public class PlayerController : MonoBehaviour
                 (Time.time * HeadbobFrequency / 2) * (HeadbobAmount / 100), HeadbobSmoothness * Time.deltaTime);
 
             _head.transform.localPosition += pos;
+        }
+    }
+
+    private void UpdateStateTransitions()
+    {
+        if (_isCrouching)
+        {
+            var deltaTime = Time.deltaTime / crouchAnimDuration;
+            
+            _controller.height = Mathf.Lerp(_controller.height, _targetControllerHeight, deltaTime);
+            _controller.center = new Vector3(_controller.center.x,
+                Mathf.Lerp(_controller.center.y, _targetControllerCenterY, deltaTime), _controller.center.z);
+            _currentCharHeadPos.y = Mathf.Lerp(_currentCharHeadPos.y, _targetPlayerHeadPosY, deltaTime);
+            _charHead.transform.localPosition = _currentCharHeadPos;
+            
+            _animator.SetLayerWeight(_animatorCrouchLayer, Mathf.Lerp(_animator.GetLayerWeight(_animatorCrouchLayer), _isCrouched, deltaTime));
+            if(Mathf.Approximately(_animator.GetLayerWeight(_animatorCrouchLayer), _isCrouched)) _isCrouching = false;
         }
     }
 }
