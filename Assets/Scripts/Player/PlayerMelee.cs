@@ -6,7 +6,6 @@ public class PlayerMelee : MonoBehaviour
 {
     [SerializeField] [Range(0f, 360f)] private float enemyBackDetectionAngle = 100f;
     [SerializeField] private float cooldownInSeconds = 1f;
-    [SerializeField] private Transform enemiesParent;
     [SerializeField] private PlayAudio meleeAttackPlayer;
 
     private PlayerInput playerInput;
