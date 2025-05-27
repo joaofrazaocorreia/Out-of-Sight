@@ -8,8 +8,8 @@ public class Enemy : MonoBehaviour
     public enum Status {Normal, Curious, Suspectful, Fleeing, Searching, Chasing, KnockedOut};
 
     [SerializeField] protected PlayAudio alarmAudioPlayer;
-    [SerializeField] [Min(1)] protected float curiousTime = 5f;
-    [SerializeField] [Min(1)] protected float suspectfulTime = 10f;
+    [SerializeField] [Min(1)] protected float curiousTime = 1f;
+    [SerializeField] [Min(1)] protected float suspectfulTime = 5f;
     [SerializeField] protected float suspectfulInspectRange = 9f;
     [SerializeField] [Min(1)] protected float alarmedTime = 5f;
     [SerializeField] protected bool ignoresAlarm = false; // If true, this enemy won't change behaviour during alarms.
@@ -212,13 +212,13 @@ public class Enemy : MonoBehaviour
         else if(IsConscious && !IsAlarmed)
         {
             // At 2 thirds of detection, becomes suspectful of the nearest suspicious object it sees
-            if(detection.DetectionMeter >= detection.DetectionLimit * 0.5f)
+            if(detection.DetectionMeter >= detection.DetectionLimit * 2/3)
             {
                 BecomeSuspectful();
             }
 
             // At 1 third of detection, becomes curious of the nearest suspicious object it sees
-            else if(detection.DetectionMeter > 0 || detection.TooCloseToPlayer)
+            else if((detection.DetectionMeter >= detection.DetectionLimit / 5) || detection.TooCloseToPlayer)
             {
                 if(EnemyStatus == Status.Normal || EnemyStatus == Status.Curious)
                     BecomeCurious();

@@ -8,6 +8,8 @@ using UnityEngine.Events;
 [RequireComponent(typeof(NavMeshAgent))] 
 public class EnemyMovement : MonoBehaviour
 {
+    [SerializeField] private bool showDebug = false;
+    public bool ShowDebug { get => showDebug; }
     [SerializeField] protected GameObject model;
     [SerializeField] private bool isStatic = false;
     [SerializeField] private bool looksAround = true;
@@ -32,6 +34,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] protected float tasedTime = 5f;
     [SerializeField] protected PlayAudio footstepPlayer;
     [SerializeField] [Range(0.1f, 2f)] private float footstepInterval = 0.45f;
+    public UnityEvent onChooseNewTarget;
 
     private Enemy enemySelf;
     private int movementTargetIndex;
@@ -253,10 +256,14 @@ public class EnemyMovement : MonoBehaviour
         // Checks if this enemy can move or if it was ordered to move
         if(moveTimer <= 0 && ((!halted && !isStatic) || movingToSetTarget))
         {
-            if(chooseTargetsAsSequence)
+            DeoccupyCurrentTarget();
+            
+            if (chooseTargetsAsSequence)
             {
                 movementTargetIndex++;
-                if(movementTargetIndex >= movementTargets.Count) movementTargetIndex = 0;
+                
+                if (movementTargetIndex >= movementTargets.Count)
+                    movementTargetIndex = 0;
             }
 
             else
@@ -290,7 +297,10 @@ public class EnemyMovement : MonoBehaviour
 
             // Tells this NPC to move towards the movement target of the chosen index
             if(!remainOnTarget)
+            {
                 movementTargets[movementTargetIndex].Occupy(this);
+                onChooseNewTarget?.Invoke();
+            }
 
             else if (movementTargetIndex > 0)
                 movementTargets[movementTargetIndex].Occupy(this, true, 0.5f);
@@ -307,7 +317,7 @@ public class EnemyMovement : MonoBehaviour
     /// Tells this enemy to move to a given position.
     /// </summary>
     /// <param name="destination">The position to move this enemy.</param>
-    public void MoveTo(Vector3 destination, bool canChooseLastPos = false, float moveTimeMultiplier = 1f)
+    public void MoveTo(Vector3 destination, bool canChooseLastPos = false, float minStayTime = 0f, float moveTimeMultiplier = 1f)
     {
         if(destination != null && (destination != lastTargetPos || canChooseLastPos) && enemySelf.IsConscious)
         {
@@ -319,7 +329,7 @@ public class EnemyMovement : MonoBehaviour
             StopAllCoroutines();
 
             // Resets the patrol movement cooldown
-            moveTimer = Random.Range(minMovementTime, maxMovementTime) * moveTimeMultiplier;
+            moveTimer = Mathf.Max(Random.Range(minMovementTime, maxMovementTime), minStayTime) * moveTimeMultiplier;
         }
     }
 

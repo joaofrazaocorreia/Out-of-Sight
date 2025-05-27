@@ -204,6 +204,9 @@ public class UIManager : MonoBehaviour
         UnlockCursor();
         settingsActive = !settingsActive;
 
+        settingsMenu.GetComponent<CanvasGroup>().blocksRaycasts = settingsActive;
+        settingsMenu.GetComponent<CanvasGroup>().interactable = settingsActive;
+
         if(settingsActive)
         {
             MoveUIToPosition(settingsMenu.transform, Vector3.zero);

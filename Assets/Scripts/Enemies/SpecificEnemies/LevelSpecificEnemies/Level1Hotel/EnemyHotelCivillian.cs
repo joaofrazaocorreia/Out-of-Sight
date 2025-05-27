@@ -10,8 +10,9 @@ public class EnemyHotelCivillian : EnemyPassive
     {
         base.Start();
 
-        targetNum = Random.Range(minTargets, maxTargets + 1) + 1;
-        Debug.Log("num of targets: " + targetNum);
+        targetNum = Random.Range(minTargets, maxTargets + 1) + 1; // extra target because the NPC spawn point is a target
+        enemyMovement.onChooseNewTarget.RemoveListener(DecreaseTargetNum); // makes sure it only decreases the targets once
+        enemyMovement.onChooseNewTarget.AddListener(DecreaseTargetNum);
     }
 
     // Patrols through a limited number of random movement targets, then leaves the map
@@ -20,22 +21,15 @@ public class EnemyHotelCivillian : EnemyPassive
         enemyMovement.SetMovementSpeed(enemyMovement.WalkSpeed);
         enemyMovement.Halted = false;
 
-        if(targetNum > 0)
-        {
-            if(enemyMovement.MoveTimer <= Time.deltaTime && ((!enemyMovement.Halted &&
-                !enemyMovement.IsStatic) || enemyMovement.MovingToSetTarget))
-            {
-                targetNum--;
-                Debug.Log("targetNum decreased: "+targetNum);
-            }
-
+        if (targetNum > 0)
             enemyMovement.Patrol();
-        }
 
         else
-        {
             enemyMovement.ExitMap();
-            Debug.Log("leaving map");
-        }
+    }
+
+    private void DecreaseTargetNum()
+    {
+        targetNum--;
     }
 }

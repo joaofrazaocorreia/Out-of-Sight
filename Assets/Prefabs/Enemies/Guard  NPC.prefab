@@ -315,6 +315,7 @@ MonoBehaviour:
   proximityDetectionRange: 2
   baseDetectionRate: 1
   detectionLimit: 5
+  detectionStallTime: 4
   detectionAudioPlayer: {fileID: 649177266297817222}
 --- !u!1 &811235556507330084
 GameObject:
@@ -1674,6 +1675,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f71f3ce5527b824c8dede7862098647, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showDebug: 0
   model: {fileID: 3105307956535654782}
   isStatic: 0
   looksAround: 1
@@ -1682,7 +1684,7 @@ MonoBehaviour:
   movementTargets: []
   startingTargetIndex: 0
   walkSpeed: 5
-  runSpeed: 15
+  runSpeed: 10
   turnSpeed: 2.5
   minMovementTime: 5
   maxMovementTime: 12
@@ -1698,6 +1700,9 @@ MonoBehaviour:
   tasedTime: 5
   footstepPlayer: {fileID: 4004022487290778927}
   footstepInterval: 0.45
+  onChooseNewTarget:
+    m_PersistentCalls:
+      m_Calls: []
   halted: 0
 --- !u!114 &7948220983007380138
 MonoBehaviour:
@@ -1730,9 +1735,9 @@ NavMeshAgent:
   m_AgentTypeID: -1372625422
   m_Radius: 0.5
   m_Speed: 5
-  m_Acceleration: 10
+  m_Acceleration: 60
   avoidancePriority: 50
-  m_AngularSpeed: 200
+  m_AngularSpeed: 600
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1

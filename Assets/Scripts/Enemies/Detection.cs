@@ -19,6 +19,7 @@ public class Detection : MonoBehaviour
     [SerializeField] private float proximityDetectionRange = 0f;
     [SerializeField] [Range(0f, 20f)] private float baseDetectionRate = 1.0f;
     [SerializeField] private float detectionLimit = 5.0f;
+    [SerializeField] private float detectionStallTime = 4.0f;
     [SerializeField] private PlayAudio detectionAudioPlayer;
     
     public static Vector3 lastPlayerPos;
@@ -31,6 +32,7 @@ public class Detection : MonoBehaviour
     private Enemy selfEnemy;
     private Alarm alarm;
     private float detectionMeter;
+    private float detectionStallTimer;
     private LayerMask detectionLayers;
 
     public float DetectionMeter
@@ -81,6 +83,7 @@ public class Detection : MonoBehaviour
         selfEnemy = GetComponentInParent<Enemy>();
         alarm = FindAnyObjectByType<Alarm>();
         DetectionMeter = 0;
+        detectionStallTimer = 0;
         selfDetection.SetActive(false);
         seenDetectables = new List<DetectableObject>();
         tooCloseToPlayer = false;
@@ -233,11 +236,14 @@ public class Detection : MonoBehaviour
         {
             TrackPlayer();
 
-            if(tooCloseToPlayer)
-                sourceMultiplier += 0.5f;
+            //if(tooCloseToPlayer)
+                //sourceMultiplier += 0.0f;
 
             if(player.status.Contains(Player.Status.CriticalTrespassing))
                 detectionMeter = 10f;
+            
+            else if (player.status.Contains(Player.Status.Doubtful))
+                detectionStallTimer = detectionStallTime;
         }
 
         // Seeing detectables increases the detection multiplier for the detectables' respective individual multiplers
@@ -255,13 +261,22 @@ public class Detection : MonoBehaviour
             if((SeesPlayer || tooCloseToPlayer) && player.status.Contains(Player.Status.Doubtful))
                 amountToIncrease *= 1.25f;
 
+            // Increases the detection meter with the calculated amount
             DetectionMeter += amountToIncrease;
+
+            // Resets the timer that stops the enemy's detection from lowering temporarily
+            if(detectionMeter >= detectionLimit / 5)
+                detectionStallTimer = detectionStallTime;
         }
 
         // If there are no sources of detection, the meter is decreased instead
         else if(DetectionMeter < DetectionLimit)
         {
-            DetectionMeter -= Time.deltaTime;
+            if(detectionStallTimer > 0)
+                detectionStallTimer -= Time.deltaTime;
+            
+            else
+                DetectionMeter -= Time.deltaTime;
         }
 
         // Plays audio only when the detection is raised from 0

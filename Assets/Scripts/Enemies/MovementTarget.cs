@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MovementTarget : MonoBehaviour
 {
-    // [SerializeField] private float minStayDuration = 10;
+    [SerializeField] private float minStayDuration = 10;
     [SerializeField] private List<Transform> targetPositions;
     private Dictionary<EnemyMovement, Transform> currentEnemies;
     public bool Occupied
@@ -22,7 +22,7 @@ public class MovementTarget : MonoBehaviour
             newPosition.transform.position = transform.position;
             newPosition.transform.rotation = transform.rotation;
             newPosition.transform.parent = transform;
-            newPosition.name = "Count Sexulla III the Nickelmeyer";
+            newPosition.name = "movement target position";
 
             targetPositions = new List<Transform> { newPosition.transform };
         }
@@ -37,7 +37,7 @@ public class MovementTarget : MonoBehaviour
             enemy.DeoccupyCurrentTarget();
 
             currentEnemies.Add(enemy, targetPos);
-            enemy.MoveTo(targetPos.position, canChooseLastPos, moveTimeMultiplier);
+            enemy.MoveTo(targetPos.position, canChooseLastPos, minStayDuration, moveTimeMultiplier);
             enemy.RotateTo(targetPos.eulerAngles.y);
         }
 
