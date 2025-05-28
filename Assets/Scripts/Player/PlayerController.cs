@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInteraction _playerInteraction;
     private PlayerEquipment _playerEquipment; 
     private PlayerCarryInventory _playerCarryInventory;
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
     private Vector2 _movementVector;
     private Vector3 _lookVector;
     private Transform _horizontalRotationPivot;
@@ -128,7 +128,6 @@ public class PlayerController : MonoBehaviour
         _playerInteraction = GetComponent<PlayerInteraction>();
         _playerEquipment = GetComponent<PlayerEquipment>();
         _playerCarryInventory = GetComponent<PlayerCarryInventory>();
-        _animator = GetComponentInChildren<Animator>();
         _selectedEquipment = new float[9];
         _horizontalRotationPivot = transform;
         _originalHorizontalRotationPivot = _horizontalRotationPivot;
@@ -456,8 +455,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateAnimator()
     {
-        _animator.SetFloat("XMove", _velocity.x / _maxForwardVelocity);
-        _animator.SetFloat("YMove", _velocity.z / _maxStrafeVelocity);
+        _animator.SetFloat("YMove", _velocity.z / _maxForwardVelocity);
     }
 
     public void UpdateMouseSensitivity(float newSensitivity)

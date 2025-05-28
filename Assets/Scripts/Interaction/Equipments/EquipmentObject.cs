@@ -6,6 +6,8 @@ public abstract class EquipmentObject : MonoBehaviour
 {
     [SerializeField] private EquipmentType equipmentType;
     [SerializeField] private Sprite icon;
+    [SerializeField] private string playerAnimationName = "None";
+    public string PlayerAnimationName => playerAnimationName;
     protected GameObject _equipmentModel;
     protected PlayerEquipment _playerEquipment;
     public bool CanBeUsed { get; protected set; }

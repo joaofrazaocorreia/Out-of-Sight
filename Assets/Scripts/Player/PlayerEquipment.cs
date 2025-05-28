@@ -6,6 +6,7 @@ public class PlayerEquipment : MonoBehaviour
 {
     [SerializeField] private GameObject[] equipments;
     [SerializeField] private PlayAudio equipingPlayer;
+    [SerializeField] private Animator animator;
 
     private EquipmentObject[] _equipmentObjects;
     public EquipmentObject _recentlyAddedEquipment {get; private set;}
@@ -25,7 +26,12 @@ public class PlayerEquipment : MonoBehaviour
             _currentEquipmentNum = value;
             CurrentEquipment = EquipmentObjects[_currentEquipmentNum];
             CurrentEquipment.Equipped(true);
-            EquipmentChanged();
+            animator.SetBool("Equipped", true);
+            print("Current Equipment: " + _currentEquipmentNum);
+            if (CurrentEquipment != null)
+            {
+                if(CurrentEquipment.PlayerAnimationName != "None") animator.SetTrigger(CurrentEquipment.PlayerAnimationName);
+            }
             OnEquipmentChanged?.Invoke(this, EventArgs.Empty);
             suspiciousCheck = CurrentEquipment.IsSuspicious;
         }
@@ -62,6 +68,8 @@ public class PlayerEquipment : MonoBehaviour
 
         GetComponent<Player>().LoseStatus(Player.Status.Suspicious);
         OnEquipmentChanged?.Invoke(this, EventArgs.Empty);
+        animator.SetBool("Equipped", false);
+        animator.SetTrigger("Unequip");
     }
 
     public void TryUseEquipment()
