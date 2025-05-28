@@ -152,7 +152,7 @@ public class PlayerController : MonoBehaviour
         {
             UpdateBodyRotation();
             UpdateHeadRotation();
-            //TriggerHeadbob();
+            TriggerHeadbob();
             UpdateStateTransitions();
         }
     }
@@ -485,9 +485,9 @@ public class PlayerController : MonoBehaviour
             Vector3 pos = Vector3.zero;
 
             pos.y = Mathf.Lerp(pos.y, Mathf.Sin
-                (Time.time * HeadbobFrequency) * (HeadbobAmount / 100), HeadbobSmoothness * Time.deltaTime);
+                (Time.time * HeadbobFrequency * (1 + IsRunning / 2f)) * (HeadbobAmount / 100), HeadbobSmoothness * Time.deltaTime);
             pos.x = Mathf.Lerp(pos.x, Mathf.Cos
-                (Time.time * HeadbobFrequency / 2) * (HeadbobAmount / 100), HeadbobSmoothness * Time.deltaTime);
+                (Time.time * HeadbobFrequency / 2 * (1 + IsRunning / 2f)) * (HeadbobAmount / 100), HeadbobSmoothness * Time.deltaTime);
 
             _head.transform.localPosition += pos;
         }
