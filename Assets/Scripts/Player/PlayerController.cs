@@ -112,6 +112,9 @@ public class PlayerController : MonoBehaviour
     private float[] _selectedEquipment;
     private int _resetInteract;
 
+    public event EventHandler ToggleMap;
+    private bool _isPaused;
+
     void Start()
     {
         _controller     = GetComponent<CharacterController>();
@@ -140,10 +143,16 @@ public class PlayerController : MonoBehaviour
         
         if(lockCursorOnStart)
             Cursor.lockState = CursorLockMode.Locked;
+        
+        _playerInput.actions["ToggleMap"].started += ToggleMapOverlay;
     }
 
     private void Update()
     {
+        if (_playerInput.actions["Pause Game"].WasPressedThisFrame()) Pause();
+        
+        if(_isPaused) return;
+        
         CheckHeadActiveCamera();
         GetInputs();
         CheckEquipmentChanged();
@@ -184,6 +193,7 @@ public class PlayerController : MonoBehaviour
         _selectedEquipment[7] = _playerInput.actions["EquipmentHotbar8"].WasPressedThisFrame() ? 1 : 0;
         _selectedEquipment[8] = _playerInput.actions["EquipmentHotbar9"].WasPressedThisFrame() ? 1 : 0;
         */
+
     }
 
     private void CheckEquipmentChanged()
@@ -508,5 +518,16 @@ public class PlayerController : MonoBehaviour
             _crouchTimer = Mathf.Lerp(_crouchTimer, _isCrouched, deltaTime);
             if(Mathf.Approximately(_crouchTimer, _isCrouched)) _isCrouching = false;
         }
+    }
+
+    private void ToggleMapOverlay(InputAction.CallbackContext a)
+    {
+        if(_isPaused) return;
+        ToggleMap?.Invoke(this, null);
+    }
+
+    public void Pause()
+    {
+        _isPaused = !_isPaused;
     }
 }
