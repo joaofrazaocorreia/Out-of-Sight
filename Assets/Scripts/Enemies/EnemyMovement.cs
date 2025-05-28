@@ -42,7 +42,7 @@ public class EnemyMovement : MonoBehaviour
     public bool MovingToSetTarget {get => movingToSetTarget; set => movingToSetTarget = value;}
     public float WalkSpeed {get=> walkSpeed;}
     public float RunSpeed {get=> runSpeed;}
-    public bool halted = false;
+    private bool halted = false;
     public bool Halted
     {
         get => halted;
