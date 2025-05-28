@@ -1105,14 +1105,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1216281145065336690}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.70710677, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: -3.13, z: 0}
+  m_LocalRotation: {x: -0.7746023, y: 0.0000000046638915, z: -0.000000013561133, w: 0.63244873}
+  m_LocalPosition: {x: -0, y: -4.56, z: 0.43}
   m_LocalScale: {x: 435.1233, y: 435.1233, z: 435.1233}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7611590573173625679}
   m_Father: {fileID: 6653767837479100088}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -101.538, y: 0, z: 0}
 --- !u!95 &2116054926330404638
 Animator:
   serializedVersion: 7
@@ -4481,6 +4481,7 @@ MonoBehaviour:
   runSpeedModifier: 2
   staminaRegenSpeed: 0.25
   staminaUsagePerSecond: 0.1
+  _animator: {fileID: 2116054926330404638}
 --- !u!114 &6749328818668131904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4718,6 +4719,7 @@ MonoBehaviour:
   - {fileID: 2494546971780649612}
   - {fileID: 3729048486286965301}
   equipingPlayer: {fileID: 735331792888299706}
+  animator: {fileID: 2116054926330404638}
 --- !u!114 &5692047308626413028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5024,7 +5026,7 @@ Transform:
   m_GameObject: {fileID: 6277241852046083074}
   serializedVersion: 2
   m_LocalRotation: {x: -0.16149981, y: -0, z: 0.00000002235174, w: 0.98687273}
-  m_LocalPosition: {x: 0, y: -1.006, z: 0.28400198}
+  m_LocalPosition: {x: -0, y: -0.478, z: 0.34}
   m_LocalScale: {x: 0.6000001, y: 0.59999996, z: 0.6}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -7467,6 +7469,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1068403057792494529, guid: 6e9d11dff1f5e9840b1f89adc8200ef5, type: 3}
+      propertyPath: playerAnimationName
+      value: Mirror
+      objectReference: {fileID: 0}
     - target: {fileID: 3493573326691086221, guid: 6e9d11dff1f5e9840b1f89adc8200ef5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -7542,6 +7548,10 @@ PrefabInstance:
       propertyPath: raycastOrigin
       value: 
       objectReference: {fileID: 3673382316616536992}
+    - target: {fileID: 1266903571910604881, guid: 22d27bd976447a940a03971551c9b974, type: 3}
+      propertyPath: playerAnimationName
+      value: Aim
+      objectReference: {fileID: 0}
     - target: {fileID: 3493573326691086221, guid: 22d27bd976447a940a03971551c9b974, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
