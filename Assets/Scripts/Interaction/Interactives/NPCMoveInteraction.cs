@@ -32,6 +32,7 @@ public class NPCMoveInteraction : InteractiveObject
             targetLocation = GameObject.FindGameObjectWithTag(fetchTargetWithTag).GetComponent<MovementTarget>();
 
         enemyMovement.MovingToSetTarget = true;
+        Debug.Log($"{enemyMovement.name} is moving to set target ({targetLocation}).");
         targetLocation.Occupy(enemyMovement);
         enemyMovement.MoveTimer = timeAtTargetLocation;
         enabled = false;

@@ -58,6 +58,8 @@ public class EnemyMovement : MonoBehaviour
     public List<Vector3> MovementPosTargets {get => movementPosTargets;}
     public bool IsStatic {get => isStatic;}
 
+    private MovementTarget currentTarget;
+    public MovementTarget CurrentTarget { get => currentTarget; set => currentTarget = value;}
     private float moveTimer;
     public float MoveTimer { get => moveTimer; set => moveTimer = value;}
     private float turnTimer;
@@ -204,13 +206,19 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    public bool IsAtPosition(Transform target) =>
+        (transform.position - target.position).magnitude <= navMeshAgent.stoppingDistance;
+
+    public bool IsAtPosition(Vector3 target) =>
+        (transform.position - target).magnitude <= navMeshAgent.stoppingDistance;
+
     /// <summary>
     /// Changes the movement speed of this enemy.
     /// </summary>
     /// <param name="newSpeed">The new speed value for this enemy.</param>
     public void SetMovementSpeed(float newSpeed)
     {
-        if(navMeshAgent.speed != newSpeed)
+        if (navMeshAgent.speed != newSpeed)
             navMeshAgent.speed = newSpeed;
     }
 
@@ -234,7 +242,8 @@ public class EnemyMovement : MonoBehaviour
             && !IsFacingTarget && (moveTimer > 0 || isStatic))
         {
             // Calculates how much the enemy will rotate this frame and updates the rotation
-            Vector3 difference = Vector3.up * Mathf.Clamp((float)lastTargetRot - transform.eulerAngles.y, -turnSpeed, turnSpeed);
+            Vector3 difference = Vector3.up * Mathf.Clamp((float)lastTargetRot -
+                transform.eulerAngles.y, -turnSpeed, turnSpeed);
             transform.rotation = Quaternion.Euler(transform.eulerAngles + difference);
 
             // Stops rotating once the rotation is reached (static enemies preserve their spawning rotation)
@@ -257,11 +266,18 @@ public class EnemyMovement : MonoBehaviour
         if(moveTimer <= 0 && ((!halted && !isStatic) || movingToSetTarget))
         {
             DeoccupyCurrentTarget();
-            
-            if (chooseTargetsAsSequence)
+
+            // If the enemy is moving to a set target, prevents it from moving to any other target
+            if (movingToSetTarget && currentTarget != null)
+            {
+                currentTarget.Occupy(this);
+                if (!IsAtPosition(currentTarget.transform)) return;
+            }
+
+            else if (chooseTargetsAsSequence)
             {
                 movementTargetIndex++;
-                
+
                 if (movementTargetIndex >= movementTargets.Count)
                     movementTargetIndex = 0;
             }
@@ -274,9 +290,9 @@ public class EnemyMovement : MonoBehaviour
                         (!mt.Occupied)).ToList();
 
                 // If there's available targets, loops until one is selected
-                if(availableMovementTargets.Count() > 0)
+                if (availableMovementTargets.Count() > 0)
                 {
-                    while(movementTargetIndex < 0 || !availableMovementTargets.Contains
+                    while (movementTargetIndex < 0 || !availableMovementTargets.Contains
                         (movementTargets[movementTargetIndex]))
                     {
                         // Rolls a random index within the number of available targets and
@@ -291,19 +307,26 @@ public class EnemyMovement : MonoBehaviour
                     remainOnTarget = true;
             }
 
-            // The enemy is only forced to move once
-            if(movingToSetTarget)
-                movingToSetTarget = false;
-
-            // Tells this NPC to move towards the movement target of the chosen index
-            if(!remainOnTarget)
+            // The enemy is only forced to move until it reaches its target
+            if (movingToSetTarget && currentTarget != null &&
+                IsAtPosition(currentTarget.transform))
             {
-                movementTargets[movementTargetIndex].Occupy(this);
-                onChooseNewTarget?.Invoke();
+                movingToSetTarget = false;
+                Debug.Log($"{name} is no longer moving to set target.");
             }
 
-            else if (movementTargetIndex > 0)
-                movementTargets[movementTargetIndex].Occupy(this, true, 0.5f);
+            // Tells this NPC to move towards the movement target of the chosen index
+            if (movementTargetIndex > 0)
+            {
+                if (!remainOnTarget)
+                {
+                    movementTargets[movementTargetIndex].Occupy(this);
+                    onChooseNewTarget?.Invoke();
+                }
+
+                else
+                    movementTargets[movementTargetIndex].Occupy(this, true, 0.5f);
+            }
         }
 
         // Static enemies that arent being forced to move will remain in their spawn position
@@ -317,6 +340,9 @@ public class EnemyMovement : MonoBehaviour
     /// Tells this enemy to move to a given position.
     /// </summary>
     /// <param name="destination">The position to move this enemy.</param>
+    /// <param name="canChooseLastPos">Whether this enemy can choose the same position it's in.</param>
+    /// <param name="minStayTime">The minimum time this enemy stays at the given position.</param>
+    /// <param name="moveTimeMultiplier">Multiplier for the time spent at the position.</param>
     public void MoveTo(Vector3 destination, bool canChooseLastPos = false, float minStayTime = 0f, float moveTimeMultiplier = 1f)
     {
         if(destination != null && (destination != lastTargetPos || canChooseLastPos) && enemySelf.IsConscious)
@@ -330,6 +356,41 @@ public class EnemyMovement : MonoBehaviour
 
             // Resets the patrol movement cooldown
             moveTimer = Mathf.Max(Random.Range(minMovementTime, maxMovementTime), minStayTime) * moveTimeMultiplier;
+        }
+    }
+
+    /// <summary>
+    /// Picks a random target from a given list and moves to it.
+    /// </summary>
+    /// <param name="targetsList">The list of positions this enemy should pick from.</param>
+    /// <param name="canChooseLastPos">Whether this enemy can choose the same position it's in.</param>
+    public void PickTarget(List<MovementTarget> targetsList, bool forceMovement, bool canChooseLastPos = false)
+    {
+        if (targetsList != null && enemySelf.IsConscious)
+        {
+            int index = -1;
+
+            // Separates the available targets into a new list
+            List<MovementTarget> availableMovementTargets = targetsList.Where
+                (mt => (mt != null) && (mt.transform.position != lastTargetPos || canChooseLastPos) &&
+                    (!mt.Occupied)).ToList();
+
+            // If there's available targets, loops until one is selected
+            if (availableMovementTargets.Count() > 0)
+            {
+                while (index < 0 || !availableMovementTargets.Contains(targetsList[index]))
+                {
+                    // Rolls a random index within the number of available targets and
+                    // loops until it gets an available value
+                    index = Random.Range(0, targetsList.Count());
+                }
+
+                targetsList[index].Occupy(this);
+                
+                if (forceMovement) MovingToSetTarget = true;
+            }
+
+            else currentTarget.Occupy(this, true, 0.5f);
         }
     }
 
@@ -386,7 +447,7 @@ public class EnemyMovement : MonoBehaviour
     public void Halt()
     {
         MoveTo(transform.position);
-        if(!isStatic) RotateTo(null);
+        if (!isStatic) RotateTo(null);
 
         DeoccupyCurrentTarget();
     }
@@ -396,8 +457,11 @@ public class EnemyMovement : MonoBehaviour
     /// </summary>
     public void DeoccupyCurrentTarget()
     {
-        if(movementTargetIndex >= 0)
-            movementTargets[movementTargetIndex].Deoccupy(this);
+        if (currentTarget != null && !movingToSetTarget)
+        {
+            currentTarget.Deoccupy(this);
+            currentTarget = null;
+        }  
     }
 
     /// <summary>

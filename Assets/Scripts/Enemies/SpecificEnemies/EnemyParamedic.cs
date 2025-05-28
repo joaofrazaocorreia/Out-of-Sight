@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class EnemyParamedic : EnemyPassive
 {
+    [Header("Paramedic Variables")]
     [SerializeField] private float bodyGrabDistance = 5f;
     [SerializeField] private float bodyGrabTime = 3f;
     [SerializeField] private Transform bodyHoldPos;

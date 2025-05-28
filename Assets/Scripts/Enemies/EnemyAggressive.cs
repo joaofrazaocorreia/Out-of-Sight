@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class EnemyAggressive : Enemy
 {
+    [Header("Aggressive Enemy Variables")]
     [SerializeField] private float aggroTime = 5f; // How long this enemy stays at the last seen player position before searching around it
     [SerializeField] private float playerCatchDistance = 1.5f;
     [SerializeField] private GameObject radioIcon;

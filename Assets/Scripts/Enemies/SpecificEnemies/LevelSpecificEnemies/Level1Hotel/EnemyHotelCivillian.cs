@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class EnemyHotelCivillian : EnemyPassive
 {
+    [Header("Hotel Civillian Variables")]
     [SerializeField] protected int minTargets = 1;
     [SerializeField] protected int maxTargets = 2;
     protected int targetNum;
@@ -11,7 +12,8 @@ public class EnemyHotelCivillian : EnemyPassive
         base.Start();
 
         targetNum = Random.Range(minTargets, maxTargets + 1) + 1; // extra target because the NPC spawn point is a target
-        enemyMovement.onChooseNewTarget.RemoveListener(DecreaseTargetNum); // makes sure it only decreases the targets once
+
+        enemyMovement.onChooseNewTarget.RemoveListener(DecreaseTargetNum); // makes sure it only has one of these listeners
         enemyMovement.onChooseNewTarget.AddListener(DecreaseTargetNum);
     }
 

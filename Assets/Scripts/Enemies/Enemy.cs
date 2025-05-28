@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,6 +9,7 @@ public class Enemy : MonoBehaviour
     public enum Type {Civillian, Worker, Guard, Police, Camera, Paramedic};
     public enum Status {Normal, Curious, Suspectful, Fleeing, Searching, Chasing, KnockedOut};
 
+    [Header("General Enemy Variables")]
     [SerializeField] protected PlayAudio alarmAudioPlayer;
     [SerializeField] [Min(1)] protected float curiousTime = 1f;
     [SerializeField] [Min(1)] protected float suspectfulTime = 5f;
@@ -16,6 +19,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected Type type;
     [SerializeField] public UnityEvent onKnockOut;
     [SerializeField] protected PlayAudio knockoutPlayer;
+    [SerializeField] protected List<MovementTarget> bathroomTargets;
+    [SerializeField] [Min(0)] protected float minBathroomTimer = 60f;
+    [SerializeField] [Min(0)] protected float maxBathroomTimer = 300f;
     public event EventHandler OnKnockout;
 
     public Type EnemyType {get=> type;}
@@ -39,6 +45,7 @@ public class Enemy : MonoBehaviour
     protected EnemyItemInventory enemyItemInventory;
     public EnemyItemInventory EnemyItemInventory {get=> enemyItemInventory;}
     protected Player player;
+    protected Dictionary<(Action, float, float), float> necessities;
     protected float curiousTimer;
     public float CuriousTimer {get => curiousTimer; set => curiousTimer = value;}
     protected float suspectfulTimer;
@@ -72,16 +79,27 @@ public class Enemy : MonoBehaviour
         enemyMovement = GetComponent<EnemyMovement>();
         enemyItemInventory = GetComponent<EnemyItemInventory>();
         player = FindAnyObjectByType<Player>();
+        necessities = new Dictionary<(Action, float, float), float>();
 
         curiousTimer = 0f;
         suspectfulTimer = 0f;
         alarmedTimer = 0f;
 
-        if(detection == null)
-            detection= GetComponentInChildren<Detection>();
+        if (detection == null)
+            detection = GetComponentInChildren<Detection>();
 
-        if(enemyMovement == null)
-            enemyMovement= GetComponentInChildren<EnemyMovement>();
+        if (enemyMovement == null)
+            enemyMovement = GetComponentInChildren<EnemyMovement>();
+
+        AddNecessity(() =>
+        {
+            if (bathroomTargets.Count > 0)
+            {
+                Debug.Log($"{name} is going to the bathroom!");
+                enemyMovement.PickTarget(bathroomTargets, true, true);
+            }
+        },
+            minBathroomTimer, maxBathroomTimer);
     }
 
     protected virtual void Update()
@@ -91,6 +109,7 @@ public class Enemy : MonoBehaviour
         
         else
         {
+            TickNecessities();
             CheckDetection();
 
             switch(EnemyStatus)
@@ -199,6 +218,48 @@ public class Enemy : MonoBehaviour
     }
 
     /// <summary>
+    /// Adds a new Necessity for this NPC to execute over time.
+    /// </summary>
+    /// <param name="action">The code to execute when the necessity is called.</param>
+    /// <param name="minTimer">The minimum time needed to recall this necessity.</param>
+    /// <param name="maxTimer">The maximum time needed to recall this necessity.</param>
+    public void AddNecessity(Action action, float minTimer, float maxTimer)
+    {
+        float timer = UnityEngine.Random.Range(minTimer, maxTimer);
+
+        necessities.Add((action, minTimer, maxTimer), timer);
+    }
+
+    /// <summary>
+    /// Ticks down the Necessity timers and executes their respective code when their timer hit 0, then resets it.
+    /// </summary>
+    protected void TickNecessities()
+    {
+        // Creates a separate new dictionary to prevent modifying the one read by the foreach loop
+        Dictionary<(Action, float, float), float> updatedNecessities = new Dictionary<(Action, float, float), float>();
+
+        foreach (KeyValuePair<(Action, float, float), float> kv in necessities)
+        {
+            // Ticks down the timer
+            float timer = kv.Value;
+            timer -= Time.deltaTime;
+
+            // Calls the code when the timer hits 0, and resets the timer
+            if (timer <= 0f)
+            {
+                kv.Key.Item1.Invoke();
+                timer = UnityEngine.Random.Range(kv.Key.Item2, kv.Key.Item3);
+            }
+
+            // Updates the timer
+            updatedNecessities.Add(kv.Key, timer);
+        }
+
+        // Updates the list of necessities
+        necessities = updatedNecessities;
+    }
+
+    /// <summary>
     /// Changes the enemy's status if it's detection meter reaches certain tresholds.
     /// </summary>
     protected virtual void CheckDetection()
@@ -208,19 +269,19 @@ public class Enemy : MonoBehaviour
         {
             BecomeAlarmed();
         }
-        
-        else if(IsConscious && !IsAlarmed)
+
+        else if (IsConscious && !IsAlarmed)
         {
             // At 2 thirds of detection, becomes suspectful of the nearest suspicious object it sees
-            if(detection.DetectionMeter >= detection.DetectionLimit * 2/3)
+            if (detection.DetectionMeter >= detection.DetectionLimit * 2 / 3)
             {
                 BecomeSuspectful();
             }
 
             // At 1 third of detection, becomes curious of the nearest suspicious object it sees
-            else if((detection.DetectionMeter >= detection.DetectionLimit / 5) || detection.TooCloseToPlayer)
+            else if ((detection.DetectionMeter >= detection.DetectionLimit / 5) || detection.TooCloseToPlayer)
             {
-                if(EnemyStatus == Status.Normal || EnemyStatus == Status.Curious)
+                if (EnemyStatus == Status.Normal || EnemyStatus == Status.Curious)
                     BecomeCurious();
 
                 else

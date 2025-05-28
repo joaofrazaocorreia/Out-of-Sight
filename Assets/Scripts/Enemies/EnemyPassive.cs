@@ -1,13 +1,34 @@
+using System.Collections.Generic;
+using UnityEngine;
 
 public class EnemyPassive : Enemy
 {
+    [Header("General Enemy Variables")]
+    [SerializeField] protected List<MovementTarget> restingTargets;
+    [SerializeField] [Min(0)] protected float minRestingTimer = 30f;
+    [SerializeField] [Min(0)] protected float maxRestingTimer = 180f;
+
+    protected override void Start()
+    {
+        base.Start();
+
+        AddNecessity(() =>
+        {
+            if (restingTargets.Count > 0)
+            {
+                Debug.Log($"{name} is going to take a break!");
+                enemyMovement.PickTarget(restingTargets, false, true);
+            }
+        },
+            minRestingTimer, maxRestingTimer);
+    }
     public override void BecomeAlarmed()
     {
-        if(IsConscious)
+        if (IsConscious)
         {
             base.BecomeAlarmed();
-            
-            if(!ignoresAlarm)
+
+            if (!ignoresAlarm)
             {
                 EnemyStatus = Status.Fleeing;
             }

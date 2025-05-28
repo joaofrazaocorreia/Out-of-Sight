@@ -30,6 +30,7 @@ public class MovementTarget : MonoBehaviour
 
     public Transform Occupy(EnemyMovement enemy, bool canChooseLastPos = false, float moveTimeMultiplier = 1f)
     {
+        Deoccupy(enemy);
         Transform targetPos = GetAvailablePos();
 
         if(targetPos != null)
@@ -37,6 +38,7 @@ public class MovementTarget : MonoBehaviour
             enemy.DeoccupyCurrentTarget();
 
             currentEnemies.Add(enemy, targetPos);
+            enemy.CurrentTarget = this;
             enemy.MoveTo(targetPos.position, canChooseLastPos, minStayDuration, moveTimeMultiplier);
             enemy.RotateTo(targetPos.eulerAngles.y);
         }
