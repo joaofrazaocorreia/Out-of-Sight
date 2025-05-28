@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
     private float _defaultPlayerHeight;
     private float _defaultPlayerCenterY;
     private bool _isCrouching;
-    private int _animatorCrouchLayer;
+    private float _crouchTimer;
     private float _targetControllerHeight;
     private float _targetControllerCenterY;
     private float _targetPlayerHeadPosY;
@@ -101,7 +101,6 @@ public class PlayerController : MonoBehaviour
     private PlayerInteraction _playerInteraction;
     private PlayerEquipment _playerEquipment; 
     private PlayerCarryInventory _playerCarryInventory;
-    [SerializeField] private Animator _animator;
     private Vector2 _movementVector;
     private Vector3 _lookVector;
     private Transform _horizontalRotationPivot;
@@ -112,6 +111,9 @@ public class PlayerController : MonoBehaviour
     private bool _canLook = true;
     private float[] _selectedEquipment;
     private int _resetInteract;
+
+    public event EventHandler ToggleMap;
+    private bool _isPaused;
 
     void Start()
     {
@@ -138,14 +140,19 @@ public class PlayerController : MonoBehaviour
         _crouchCenterYDelta = crouchCenterY - _startCamPos.y + 0.25f;
         _startCharHeadPos = _charHead.transform.localPosition;
         _currentCharHeadPos = _startCharHeadPos;
-        _animatorCrouchLayer = _animator.GetLayerIndex("Crouch");
         
         if(lockCursorOnStart)
             Cursor.lockState = CursorLockMode.Locked;
+        
+        _playerInput.actions["ToggleMap"].started += ToggleMapOverlay;
     }
 
     private void Update()
     {
+        if (_playerInput.actions["Pause Game"].WasPressedThisFrame()) Pause();
+        
+        if(_isPaused) return;
+        
         CheckHeadActiveCamera();
         GetInputs();
         CheckEquipmentChanged();
@@ -154,7 +161,7 @@ public class PlayerController : MonoBehaviour
         {
             UpdateBodyRotation();
             UpdateHeadRotation();
-            //TriggerHeadbob();
+            TriggerHeadbob();
             UpdateStateTransitions();
         }
     }
@@ -186,6 +193,7 @@ public class PlayerController : MonoBehaviour
         _selectedEquipment[7] = _playerInput.actions["EquipmentHotbar8"].WasPressedThisFrame() ? 1 : 0;
         _selectedEquipment[8] = _playerInput.actions["EquipmentHotbar9"].WasPressedThisFrame() ? 1 : 0;
         */
+
     }
 
     private void CheckEquipmentChanged()
@@ -329,7 +337,6 @@ public class PlayerController : MonoBehaviour
         
         UpdatePosition();
         UpdateStamina();
-        UpdateAnimator();
     }
 
     private void UpdateAcceleration()
@@ -379,7 +386,7 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateVelocity()
     {
-        _velocity += 0.5f * (_acceleration * Time.fixedDeltaTime) * SpeedBoost;
+        _velocity += _acceleration * (0.5f * Time.fixedDeltaTime * SpeedBoost);
 
 
         if (_acceleration.z == 0f || _acceleration.z * _velocity.z < 0f)
@@ -453,11 +460,6 @@ public class PlayerController : MonoBehaviour
         OnStaminaUpdate?.Invoke(this, EventArgs.Empty);
     }
 
-    private void UpdateAnimator()
-    {
-        _animator.SetFloat("YMove", _velocity.z / _maxForwardVelocity);
-    }
-
     public void UpdateMouseSensitivity(float newSensitivity)
     {
         lookSensitivity = newSensitivity;
@@ -493,9 +495,9 @@ public class PlayerController : MonoBehaviour
             Vector3 pos = Vector3.zero;
 
             pos.y = Mathf.Lerp(pos.y, Mathf.Sin
-                (Time.time * HeadbobFrequency) * (HeadbobAmount / 100), HeadbobSmoothness * Time.deltaTime);
+                (Time.time * HeadbobFrequency * (1 + IsRunning / 2f)) * (HeadbobAmount / 100), HeadbobSmoothness * Time.deltaTime);
             pos.x = Mathf.Lerp(pos.x, Mathf.Cos
-                (Time.time * HeadbobFrequency / 2) * (HeadbobAmount / 100), HeadbobSmoothness * Time.deltaTime);
+                (Time.time * HeadbobFrequency / 2 * (1 + IsRunning / 2f)) * (HeadbobAmount / 100), HeadbobSmoothness * Time.deltaTime);
 
             _head.transform.localPosition += pos;
         }
@@ -513,8 +515,19 @@ public class PlayerController : MonoBehaviour
             _currentCharHeadPos.y = Mathf.Lerp(_currentCharHeadPos.y, _targetPlayerHeadPosY, deltaTime);
             _charHead.transform.localPosition = _currentCharHeadPos;
             
-            _animator.SetLayerWeight(_animatorCrouchLayer, Mathf.Lerp(_animator.GetLayerWeight(_animatorCrouchLayer), _isCrouched, deltaTime));
-            if(Mathf.Approximately(_animator.GetLayerWeight(_animatorCrouchLayer), _isCrouched)) _isCrouching = false;
+            _crouchTimer = Mathf.Lerp(_crouchTimer, _isCrouched, deltaTime);
+            if(Mathf.Approximately(_crouchTimer, _isCrouched)) _isCrouching = false;
         }
+    }
+
+    private void ToggleMapOverlay(InputAction.CallbackContext a)
+    {
+        if(_isPaused) return;
+        ToggleMap?.Invoke(this, null);
+    }
+
+    public void Pause()
+    {
+        _isPaused = !_isPaused;
     }
 }

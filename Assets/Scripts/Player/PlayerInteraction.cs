@@ -220,12 +220,10 @@ public class PlayerInteraction : MonoBehaviour
         {
             case InteractiveType.Item:
                 _playerInventory.AddItem(ActiveInteractiveObject.GetComponent<Item>());
-                InteractAnimation();
                 break;
             
             case InteractiveType.DirectItemRequirement:
                 if(ActiveInteractiveObject.ConsumeItemRequirement) _playerInventory.RemoveItem(ActiveInteractiveObject.RequiredItem);
-                InteractAnimation();
                 break;
             
             case InteractiveType.DirectEquipmentRequirement:
@@ -233,7 +231,6 @@ public class PlayerInteraction : MonoBehaviour
                 break;
             
             case InteractiveType.DirectNoRequirement:
-                InteractAnimation();
                 break;
         }
         
@@ -266,11 +263,6 @@ public class PlayerInteraction : MonoBehaviour
     public InteractiveObject GetInteractiveObject(int index)
     {
         return HitInteractables.Length > index ? HitInteractables[index] : null;
-    }
-    
-    private void InteractAnimation()
-    {
-        _animator.SetTrigger("IsInteracting");
     }
 
     

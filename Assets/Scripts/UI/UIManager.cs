@@ -62,6 +62,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Sprite guardTier1DisguiseSprite;
     [SerializeField] private Sprite guardTier2DisguiseSprite;
 
+    [SerializeField] private GameObject mapOverlay;
+
     private static bool gamePaused;
     private bool settingsActive;
     private Dictionary<Transform, Vector3> originalUIPositions;
@@ -116,6 +118,7 @@ public class UIManager : MonoBehaviour
         carryInventory.OnCarryDrop += OnCarryDrop;
         playerController = FindFirstObjectByType<PlayerController>();
         playerController.OnStaminaUpdate += OnStaminaUpdate;
+        playerController.ToggleMap += ToggleMap;
         playerEquipment = FindAnyObjectByType<PlayerEquipment>();
         playerEquipment.OnEquipmentAdded += OnEquipmentAdded;
         playerEquipment.OnEquipmentChanged += OnEquipmentChanged;
@@ -879,6 +882,11 @@ public class UIManager : MonoBehaviour
         playerController.UpdateMouseSensitivity(sensitivitySlider.value);
     }
 
+    private void ToggleMap()
+    {
+        mapOverlay?.SetActive(!mapOverlay.activeSelf);
+    }
+
     private void ToggleAttackUI(bool state) => attackUI.SetActive(state);
     private void ToggleCarryUI(bool state) => CarryingUI.SetActive(state);
 
@@ -909,4 +917,6 @@ public class UIManager : MonoBehaviour
     private void OnStatusChanged(object sender, EventArgs e) => UpdateStatusUI();
     
     private void OnDisguiseChanged(object sender, EventArgs e) => UpdateDisguiseUI();
+    
+    private void ToggleMap(object sender, EventArgs e) => ToggleMap();
 }

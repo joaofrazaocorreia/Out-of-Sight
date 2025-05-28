@@ -62,7 +62,7 @@ public class Detection : MonoBehaviour
             return closest;
         }
     }
-    public bool SeesPlayer {get => seenDetectables.Contains(player.GetComponent<DetectableObject>());}
+    public bool SeesPlayer {get => seenDetectables.Contains(player.GetComponentInChildren<DetectableObject>());}
     private static List<DetectableObject> allDetectables;
     private bool tooCloseToPlayer;
     public bool TooCloseToPlayer {get => tooCloseToPlayer;}
@@ -139,8 +139,9 @@ public class Detection : MonoBehaviour
             float range = Mathf.Min(distanceToDetectable.magnitude, detectionRange);
 
             // Checks if the current detectableObject is the player
-            Player player = d.GetComponentInParent<Player>();
-            if (player != null)
+            bool isPlayer = d.GetComponentInParent<Player>() != null;
+            
+            if (isPlayer)
             {
                 // Checks if the player is too close to the NPC
                 tooCloseToPlayer = distanceToDetectable.magnitude <= proximityDetectionRange;
@@ -167,10 +168,10 @@ public class Detection : MonoBehaviour
                         Physics.Raycast(transform.position, distanceToDetectable,
                             out RaycastHit hit, detectionRange, detectionLayers);
 
-                        // Checks if the raycast hit the detectableObject
+                        // Checks if the raycast hit the collider of the detectableObject
                         if(d.GetComponent<Collider>() == hit.collider ||
                             d.GetComponentsInChildren<Collider>().Contains(hit.collider) ||
-                                (player != null && hit.collider == player.GetComponent<CharacterController>()))
+                                (isPlayer && hit.collider == player.GetComponent<CharacterController>()))
                         {
                             DetectObject(d, distanceToDetectable.normalized * range);
                         }

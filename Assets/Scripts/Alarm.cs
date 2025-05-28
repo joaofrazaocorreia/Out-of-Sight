@@ -116,6 +116,7 @@ public class Alarm : MonoBehaviour
                 {
                     e.Detection.DetectionMeter = 0f;
                     e.BecomeNormal(true);
+                    e.BecomeCurious();
                 }
       
                 int enemyCount = 0;

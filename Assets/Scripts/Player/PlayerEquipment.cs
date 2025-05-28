@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Interaction.Equipments;
 using UnityEngine;
 
@@ -22,16 +24,19 @@ public class PlayerEquipment : MonoBehaviour
 
         private set
         {
-            CurrentEquipment?.Equipped(false);
-            _currentEquipmentNum = value;
-            CurrentEquipment = EquipmentObjects[_currentEquipmentNum];
-            CurrentEquipment.Equipped(true);
-            animator.SetBool("Equipped", true);
-            print("Current Equipment: " + _currentEquipmentNum);
             if (CurrentEquipment != null)
             {
-                if(CurrentEquipment.PlayerAnimationName != "None") animator.SetTrigger(CurrentEquipment.PlayerAnimationName);
+                CurrentEquipment.Equipped(false);
+                animator.SetBool("Equipped", false);
+                animator.SetTrigger("Unequip");
             }
+            
+            _currentEquipmentNum = value;
+            CurrentEquipment = EquipmentObjects[_currentEquipmentNum];
+            StartCoroutine(EquipDelay());
+            
+            if (CurrentEquipment != null && CurrentEquipment.PlayerAnimationName != "None") animator.SetTrigger(CurrentEquipment.PlayerAnimationName);
+            
             OnEquipmentChanged?.Invoke(this, EventArgs.Empty);
             suspiciousCheck = CurrentEquipment.IsSuspicious;
         }
@@ -105,4 +110,11 @@ public class PlayerEquipment : MonoBehaviour
         }
         OnEquipmentChanged?.Invoke(this, EventArgs.Empty);
     }
+
+    private IEnumerator EquipDelay()
+    {
+        yield return new WaitForSeconds(0.1f);
+        animator.SetBool("Equipped", true);
+        CurrentEquipment.Equipped(true);
+    } 
 }
