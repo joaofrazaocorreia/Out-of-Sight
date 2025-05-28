@@ -27,7 +27,6 @@ public class PlayerEquipment : MonoBehaviour
             CurrentEquipment = EquipmentObjects[_currentEquipmentNum];
             CurrentEquipment.Equipped(true);
             animator.SetBool("Equipped", true);
-            print("Current Equipment: " + _currentEquipmentNum);
             if (CurrentEquipment != null)
             {
                 if(CurrentEquipment.PlayerAnimationName != "None") animator.SetTrigger(CurrentEquipment.PlayerAnimationName);
