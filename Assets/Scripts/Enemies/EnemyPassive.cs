@@ -14,7 +14,7 @@ public class EnemyPassive : Enemy
 
         AddNecessity(() =>
         {
-            if (restingTargets.Count > 0)
+            if (restingTargets.Count > 0 && !ignoresAlarm)
             {
                 Debug.Log($"{name} is going to take a break!");
                 enemyMovement.PickTarget(restingTargets, false, true);

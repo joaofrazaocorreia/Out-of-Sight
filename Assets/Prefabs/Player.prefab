@@ -1750,6 +1750,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7113135169296274431}
   - component: {fileID: 1525671067805293937}
+  - component: {fileID: 6746318889587466359}
   m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
@@ -1805,6 +1806,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 110
   m_CollisionDetection: 0
+--- !u!114 &6746318889587466359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051839802640443896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 330fb8a6380521f4f8753710a7fa8527, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionMultiplier: 0
 --- !u!1 &2079872332763066354
 GameObject:
   m_ObjectHideFlags: 0
@@ -4372,7 +4386,6 @@ GameObject:
   - component: {fileID: 5692047308626413028}
   - component: {fileID: 2959786210640382223}
   - component: {fileID: 353567301417824275}
-  - component: {fileID: 3310640078657161338}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -4765,19 +4778,6 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: -1, z: 0}
   m_TimeToStationary: 0.5
---- !u!114 &3310640078657161338
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6061762206571335386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 330fb8a6380521f4f8753710a7fa8527, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detectionMultiplier: 0
 --- !u!1 &6072401458464621491
 GameObject:
   m_ObjectHideFlags: 0

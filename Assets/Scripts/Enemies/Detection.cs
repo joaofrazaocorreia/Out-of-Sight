@@ -139,8 +139,8 @@ public class Detection : MonoBehaviour
             float range = Mathf.Min(distanceToDetectable.magnitude, detectionRange);
 
             // Checks if the current detectableObject is the player
-            Player player = d.GetComponent<Player>();
-            if(player != null)
+            Player player = d.GetComponentInParent<Player>();
+            if (player != null)
             {
                 // Checks if the player is too close to the NPC
                 tooCloseToPlayer = distanceToDetectable.magnitude <= proximityDetectionRange;
@@ -168,7 +168,9 @@ public class Detection : MonoBehaviour
                             out RaycastHit hit, detectionRange, detectionLayers);
 
                         // Checks if the raycast hit the detectableObject
-                        if(hit.collider == d.GetComponent<Collider>())
+                        if(d.GetComponent<Collider>() == hit.collider ||
+                            d.GetComponentsInChildren<Collider>().Contains(hit.collider) ||
+                                (player != null && hit.collider == player.GetComponent<CharacterController>()))
                         {
                             DetectObject(d, distanceToDetectable.normalized * range);
                         }

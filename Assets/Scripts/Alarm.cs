@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Alarm : MonoBehaviour
 {
@@ -110,6 +110,7 @@ public class Alarm : MonoBehaviour
                 Debug.Log("Alarm turned off!");
                 isOn = false;
                 forceDisable = false;
+                player.GetComponent<NavMeshObstacle>().enabled = true;
 
                 foreach(Enemy e in allEnemies)
                 {
@@ -186,6 +187,7 @@ public class Alarm : MonoBehaviour
             isOn = true;
             ++currentTier;
             alarmTimeLimit = maxDuration;
+            player.GetComponent<NavMeshObstacle>().enabled = false;
 
             // Every time the alarm is raised, global detection is raised by 10%
             if(currentTier >= 1)

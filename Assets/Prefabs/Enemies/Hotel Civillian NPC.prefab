@@ -2126,7 +2126,7 @@ GameObject:
   - component: {fileID: 8642130678589586984}
   - component: {fileID: 5014945108586628540}
   - component: {fileID: 766701021548828358}
-  - component: {fileID: 6237686345826277285}
+  - component: {fileID: 3327377899123189745}
   m_Layer: 0
   m_Name: Man dressed in suit
   m_TagString: Untagged
@@ -2256,7 +2256,7 @@ MonoBehaviour:
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 8744662719464826554}
   bodyDetectionMultiplier: 5
---- !u!114 &6237686345826277285
+--- !u!114 &3327377899123189745
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2406,8 +2406,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alarmAudioPlayer: {fileID: 5647173925028843919}
-  curiousTime: 5
-  suspectfulTime: 10
+  curiousTime: 1
+  suspectfulTime: 7
   suspectfulInspectRange: 9
   alarmedTime: 5
   ignoresAlarm: 0
@@ -2416,6 +2416,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   knockoutPlayer: {fileID: 5390307313144780194}
+  bathroomTargets: []
+  minBathroomTimer: 60
+  maxBathroomTimer: 300
+  restingTargets: []
+  minRestingTimer: 30
+  maxRestingTimer: 180
   minTargets: 1
   maxTargets: 2
 --- !u!114 &3655336483381353134
@@ -2459,7 +2465,6 @@ MonoBehaviour:
   onChooseNewTarget:
     m_PersistentCalls:
       m_Calls: []
-  halted: 0
 --- !u!114 &2545551464656826820
 MonoBehaviour:
   m_ObjectHideFlags: 0

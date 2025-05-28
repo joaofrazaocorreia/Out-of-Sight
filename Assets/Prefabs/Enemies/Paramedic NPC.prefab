@@ -1242,8 +1242,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alarmAudioPlayer: {fileID: 3540731324705208224}
-  curiousTime: 5
-  suspectfulTime: 10
+  curiousTime: 1
+  suspectfulTime: 7
   suspectfulInspectRange: 9
   alarmedTime: 5
   ignoresAlarm: 0
@@ -1252,6 +1252,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   knockoutPlayer: {fileID: 3686037551307290225}
+  bathroomTargets: []
+  minBathroomTimer: 60
+  maxBathroomTimer: 300
+  restingTargets: []
+  minRestingTimer: 30
+  maxRestingTimer: 180
   bodyGrabDistance: 2
   bodyGrabTime: 3
   bodyHoldPos: {fileID: 4070381505278253063}
@@ -1295,7 +1301,6 @@ MonoBehaviour:
   onChooseNewTarget:
     m_PersistentCalls:
       m_Calls: []
-  halted: 0
 --- !u!195 &6995730834895485175
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3017,7 +3022,7 @@ PrefabInstance:
       addedObject: {fileID: 1530631538452501569}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: faf870c68e7889a458ad84aa4183494b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7014815650773486242}
+      addedObject: {fileID: 4993374779882387071}
     - targetCorrespondingSourceObject: {fileID: 1082271958561512970, guid: faf870c68e7889a458ad84aa4183494b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4398600674139058163}
@@ -3830,7 +3835,7 @@ MonoBehaviour:
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 3726996574958467225}
   bodyDetectionMultiplier: 5
---- !u!114 &7014815650773486242
+--- !u!114 &4993374779882387071
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
