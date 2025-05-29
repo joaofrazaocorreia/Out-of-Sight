@@ -240,13 +240,16 @@ public class Detection : MonoBehaviour
             TrackPlayer();
 
             //if(tooCloseToPlayer)
-                //sourceMultiplier += 0.0f;
+            //sourceMultiplier += 0.0f;
 
-            if(player.status.Contains(Player.Status.CriticalTrespassing))
+            if (player.status.Contains(Player.Status.CriticalTrespassing))
                 detectionMeter = 10f;
-            
-            else if (player.status.Contains(Player.Status.Doubtful))
-                detectionStallTimer = detectionStallTime;
+
+            else if (player.status.Contains(Player.Status.Doubtful) && SeesPlayer
+                && DetectionMeter >= DetectionLimit / 3f)
+            {
+                detectionStallTimer = detectionStallTime * 0.5f;
+            }
         }
 
         // Seeing detectables increases the detection multiplier for the detectables' respective individual multiplers
