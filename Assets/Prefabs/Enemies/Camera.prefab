@@ -567,7 +567,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.007}
+  m_AnchoredPosition: {x: -0.00579, y: -0.00026}
   m_SizeDelta: {x: 1.5, y: 1.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4591571153402445109
@@ -1098,6 +1098,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc1ee22d6fd8f2409291185b3c7d162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  model: {fileID: 0}
+  maleModels: []
+  femaleModels: []
   alarmAudioPlayer: {fileID: 0}
   curiousTime: 1
   suspectfulTime: 5
@@ -1109,6 +1112,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   knockoutPlayer: {fileID: 0}
+  bathroomTargetsMale: []
+  bathroomTargetsFemale: []
+  startBathroomTimer: 15
+  minBathroomTimer: 60
+  maxBathroomTimer: 300
   cameraOperator: {fileID: 0}
   cameraBody: {fileID: 6593529154393664100}
   maxRotationAngle: 45

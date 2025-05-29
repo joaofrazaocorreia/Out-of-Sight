@@ -7,8 +7,12 @@ public class Enemy : MonoBehaviour
 {
     public enum Type {Civillian, Worker, Guard, Police, Camera, Paramedic};
     public enum Status {Normal, Curious, Suspectful, Fleeing, Searching, Chasing, KnockedOut};
+    public enum Gender {Male, Female, AttackHelicopter};
 
     [Header("General Enemy Variables")]
+    [SerializeField] protected Transform model;
+    [SerializeField] protected List<GameObject> maleModels;
+    [SerializeField] protected List<GameObject> femaleModels;
     [SerializeField] protected PlayAudio alarmAudioPlayer;
     [SerializeField] [Min(1)] protected float curiousTime = 1f;
     [SerializeField] [Min(1)] protected float suspectfulTime = 5f;
@@ -18,7 +22,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected Type type;
     [SerializeField] public UnityEvent onKnockOut;
     [SerializeField] protected PlayAudio knockoutPlayer;
-    [SerializeField] protected List<MovementTarget> bathroomTargets;
+    [SerializeField] protected List<MovementTarget> bathroomTargetsMale;
+    [SerializeField] protected List<MovementTarget> bathroomTargetsFemale;
+    [SerializeField] [Min(0)] protected float startBathroomTimer = 15f;
     [SerializeField] [Min(0)] protected float minBathroomTimer = 60f;
     [SerializeField] [Min(0)] protected float maxBathroomTimer = 300f;
     public event EventHandler OnKnockout;
@@ -68,6 +74,7 @@ public class Enemy : MonoBehaviour
     public bool IgnoresAlarm {get => ignoresAlarm; set => ignoresAlarm = value;}
     public bool IsAlarmed {get => alarmedTimer > 0;}
     public bool IsKnockedOut {get => status == Status.KnockedOut;}
+    protected Gender gender;
 
 
     protected virtual void Start()
@@ -89,16 +96,46 @@ public class Enemy : MonoBehaviour
 
         if (enemyMovement == null)
             enemyMovement = GetComponentInChildren<EnemyMovement>();
+        
+
+        /*
+        while (model.childCount > 0)
+        {
+            model.GetChild(0).gameObject.SetActive(false);
+            Destroy(model.GetChild(0).gameObject);
+        }
+        */
+
+        List<GameObject> modelsToUse = new List<GameObject>();
+
+        switch (UnityEngine.Random.Range(0, 3))
+        {
+            case 0: gender = Gender.Male; modelsToUse = maleModels; break;
+            case 1: gender = Gender.Female; modelsToUse = femaleModels; break;
+            default: gender = Gender.AttackHelicopter; modelsToUse = maleModels; break;
+        }
+
+        //Instantiate(modelsToUse[UnityEngine.Random.Range(0, modelsToUse.Count)], model);
+
 
         AddNecessity(() =>
         {
+            List<MovementTarget> bathroomTargets = new List<MovementTarget>();
+            
+            switch (gender)
+            {
+                case Gender.Male: bathroomTargets = bathroomTargetsMale; break;
+                case Gender.Female: bathroomTargets = bathroomTargetsFemale; break;
+                case Gender.AttackHelicopter: bathroomTargets = bathroomTargetsMale; break;
+            }
+
             if (bathroomTargets.Count > 0 && !ignoresAlarm)
             {
-                Debug.Log($"{name} is going to the bathroom!");
+                Debug.Log($"{name} is going to the {gender} bathroom!");
                 enemyMovement.PickTarget(bathroomTargets, true, true);
             }
         },
-            minBathroomTimer, maxBathroomTimer);
+            startBathroomTimer, minBathroomTimer, maxBathroomTimer);
     }
 
     protected virtual void Update()
@@ -222,9 +259,9 @@ public class Enemy : MonoBehaviour
     /// <param name="action">The code to execute when the necessity is called.</param>
     /// <param name="minTimer">The minimum time needed to recall this necessity.</param>
     /// <param name="maxTimer">The maximum time needed to recall this necessity.</param>
-    public void AddNecessity(Action action, float minTimer, float maxTimer)
+    public void AddNecessity(Action action, float startTimer, float minTimer, float maxTimer)
     {
-        float timer = UnityEngine.Random.Range(minTimer, maxTimer);
+        float timer = UnityEngine.Random.Range(startTimer, maxTimer - startTimer);
 
         necessities.Add((action, minTimer, maxTimer), timer);
     }

@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class EnemyPassive : Enemy
 {
-    [Header("General Enemy Variables")]
+    [Header("Passive Enemy Variables")]
     [SerializeField] protected List<MovementTarget> restingTargets;
+    [SerializeField] [Min(0)] protected float startRestingTimer = 15f;
     [SerializeField] [Min(0)] protected float minRestingTimer = 30f;
     [SerializeField] [Min(0)] protected float maxRestingTimer = 180f;
 
@@ -20,7 +21,7 @@ public class EnemyPassive : Enemy
                 enemyMovement.PickTarget(restingTargets, false, true);
             }
         },
-            minRestingTimer, maxRestingTimer);
+            startRestingTimer, minRestingTimer, maxRestingTimer);
     }
     public override void BecomeAlarmed()
     {
