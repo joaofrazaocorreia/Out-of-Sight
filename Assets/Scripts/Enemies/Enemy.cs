@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -93,7 +92,7 @@ public class Enemy : MonoBehaviour
 
         AddNecessity(() =>
         {
-            if (bathroomTargets.Count > 0)
+            if (bathroomTargets.Count > 0 && !ignoresAlarm)
             {
                 Debug.Log($"{name} is going to the bathroom!");
                 enemyMovement.PickTarget(bathroomTargets, true, true);

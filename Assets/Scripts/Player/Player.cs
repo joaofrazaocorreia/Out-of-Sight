@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         detectable = true;
-        detectableObject = GetComponent<DetectableObject>();
+        detectableObject = GetComponentInChildren<DetectableObject>();
         currentAreas = new List<MapArea>();
 
         GainStatus(Status.Normal);

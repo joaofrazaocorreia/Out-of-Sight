@@ -80,7 +80,7 @@ public class EnemyMovement : MonoBehaviour
     private Animator animator;
     private NavMeshAgent navMeshAgent;
     private Alarm alarm;
-    private bool IsFacingTarget {get=> lastTargetRot != null &&
+    public bool IsFacingTarget {get=> lastTargetRot != null &&
         Mathf.Abs((float)lastTargetRot - transform.eulerAngles.y) <= 1f;}
     public bool IsAtDestination {get => (new Vector3(lastTargetPos.x, 0f, lastTargetPos.z) -
         new Vector3(transform.position.x, 0f, transform.position.z)).magnitude <=
@@ -265,8 +265,6 @@ public class EnemyMovement : MonoBehaviour
         // Checks if this enemy can move or if it was ordered to move
         if(moveTimer <= 0 && ((!halted && !isStatic) || movingToSetTarget))
         {
-            DeoccupyCurrentTarget();
-
             // If the enemy is moving to a set target, prevents it from moving to any other target
             if (movingToSetTarget && currentTarget != null)
             {
@@ -284,16 +282,17 @@ public class EnemyMovement : MonoBehaviour
 
             else
             {
-                // Separates the available targets into a new list
+                float previousIndex = movementTargetIndex;
+
+            // Separates the available targets into a new list
                 List<MovementTarget> availableMovementTargets = movementTargets.Where
-                    (mt => (mt != null) && (mt.transform.position != lastTargetPos) &&
-                        (!mt.Occupied)).ToList();
+                    (mt => (mt != null) && (!mt.Occupied)).ToList();
 
                 // If there's available targets, loops until one is selected
                 if (availableMovementTargets.Count() > 0)
                 {
                     while (movementTargetIndex < 0 || !availableMovementTargets.Contains
-                        (movementTargets[movementTargetIndex]))
+                        (movementTargets[movementTargetIndex]) || movementTargetIndex == previousIndex)
                     {
                         // Rolls a random index within the number of available targets and
                         // loops until it gets an available value
@@ -307,6 +306,8 @@ public class EnemyMovement : MonoBehaviour
                     remainOnTarget = true;
             }
 
+            DeoccupyCurrentTarget();
+
             // The enemy is only forced to move until it reaches its target
             if (movingToSetTarget && currentTarget != null &&
                 IsAtPosition(currentTarget.transform))
@@ -316,7 +317,7 @@ public class EnemyMovement : MonoBehaviour
             }
 
             // Tells this NPC to move towards the movement target of the chosen index
-            if (movementTargetIndex > 0)
+            if (movementTargetIndex >= 0)
             {
                 if (!remainOnTarget)
                 {
@@ -698,6 +699,7 @@ public class EnemyMovement : MonoBehaviour
         {
             Transform chosenNearestExit = CheckNearestExit();
             leavingMap = true;
+            DeoccupyCurrentTarget();
             MoveTo(chosenNearestExit.position);
             RotateTo(chosenNearestExit.eulerAngles.y);
         }

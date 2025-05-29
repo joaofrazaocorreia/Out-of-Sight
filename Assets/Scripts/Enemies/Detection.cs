@@ -62,7 +62,7 @@ public class Detection : MonoBehaviour
             return closest;
         }
     }
-    public bool SeesPlayer {get => seenDetectables.Contains(player.GetComponent<DetectableObject>());}
+    public bool SeesPlayer {get => seenDetectables.Contains(player.GetComponentInChildren<DetectableObject>());}
     private static List<DetectableObject> allDetectables;
     private bool tooCloseToPlayer;
     public bool TooCloseToPlayer {get => tooCloseToPlayer;}
@@ -139,8 +139,9 @@ public class Detection : MonoBehaviour
             float range = Mathf.Min(distanceToDetectable.magnitude, detectionRange);
 
             // Checks if the current detectableObject is the player
-            Player player = d.GetComponent<Player>();
-            if(player != null)
+            bool isPlayer = d.GetComponentInParent<Player>() != null;
+            
+            if (isPlayer)
             {
                 // Checks if the player is too close to the NPC
                 tooCloseToPlayer = distanceToDetectable.magnitude <= proximityDetectionRange;
@@ -167,8 +168,10 @@ public class Detection : MonoBehaviour
                         Physics.Raycast(transform.position, distanceToDetectable,
                             out RaycastHit hit, detectionRange, detectionLayers);
 
-                        // Checks if the raycast hit the detectableObject
-                        if(hit.collider == d.GetComponent<Collider>())
+                        // Checks if the raycast hit the collider of the detectableObject
+                        if(d.GetComponent<Collider>() == hit.collider ||
+                            d.GetComponentsInChildren<Collider>().Contains(hit.collider) ||
+                                (isPlayer && hit.collider == player.GetComponent<CharacterController>()))
                         {
                             DetectObject(d, distanceToDetectable.normalized * range);
                         }
@@ -237,13 +240,16 @@ public class Detection : MonoBehaviour
             TrackPlayer();
 
             //if(tooCloseToPlayer)
-                //sourceMultiplier += 0.0f;
+            //sourceMultiplier += 0.0f;
 
-            if(player.status.Contains(Player.Status.CriticalTrespassing))
+            if (player.status.Contains(Player.Status.CriticalTrespassing))
                 detectionMeter = 10f;
-            
-            else if (player.status.Contains(Player.Status.Doubtful))
-                detectionStallTimer = detectionStallTime;
+
+            else if (player.status.Contains(Player.Status.Doubtful) && SeesPlayer
+                && DetectionMeter >= DetectionLimit / 3f)
+            {
+                detectionStallTimer = detectionStallTime * 0.5f;
+            }
         }
 
         // Seeing detectables increases the detection multiplier for the detectables' respective individual multiplers

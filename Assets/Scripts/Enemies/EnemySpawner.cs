@@ -153,6 +153,7 @@ public class EnemySpawner : MonoBehaviour
         numOfSpawnsInQueue--;
         spawnTimer = Random.Range(minSpawnTime, maxSpawnTime);
 
+        newNPC.name = queuedNPCsParent.GetChild(index).name;
         newNPC.transform.position = navHit.position;
         newNPC.ResetNPC();
         newNPC.EnemyMovement.ResetNPC(queuedNPCsParent.GetChild(index).GetComponent<EnemyMovement>().SpawnPos,

@@ -12,9 +12,7 @@ public class NPCMoveInteraction : InteractiveObject
 
     private void Start()
     {
-        print(enemyMovement);
         enemy = enemyMovement.GetComponent<Enemy>();   
-        print(enemy);
     }
 
     private void Update()

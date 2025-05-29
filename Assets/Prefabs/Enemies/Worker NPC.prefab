@@ -2518,8 +2518,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alarmAudioPlayer: {fileID: 6285718920691931174}
-  curiousTime: 5
-  suspectfulTime: 10
+  curiousTime: 1
+  suspectfulTime: 7
   suspectfulInspectRange: 9
   alarmedTime: 5
   ignoresAlarm: 0
@@ -2528,6 +2528,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   knockoutPlayer: {fileID: 7904041714685882488}
+  bathroomTargets: []
+  minBathroomTimer: 60
+  maxBathroomTimer: 300
+  restingTargets: []
+  minRestingTimer: 30
+  maxRestingTimer: 180
 --- !u!114 &4444592357244671704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2578,7 +2584,6 @@ MonoBehaviour:
   onChooseNewTarget:
     m_PersistentCalls:
       m_Calls: []
-  halted: 0
 --- !u!195 &1810790442000928118
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4302,8 +4307,8 @@ GameObject:
   - component: {fileID: 3522134913425533325}
   - component: {fileID: 5532499598634701442}
   - component: {fileID: 2747075114086503090}
-  - component: {fileID: 1362989231762475078}
-  m_Layer: 8
+  - component: {fileID: 2339980153843689965}
+  m_Layer: 0
   m_Name: Hips
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4323,6 +4328,7 @@ Transform:
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5868874100413993631}
   - {fileID: 3523813701477849377}
   - {fileID: 8060460791953196835}
   - {fileID: 2601699331324023163}
@@ -4376,29 +4382,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &1362989231762475078
-CapsuleCollider:
+--- !u!114 &2339980153843689965
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5463857057804093830}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.003
-  m_Height: 0.017
-  m_Direction: 1
-  m_Center: {x: 0, y: -0.0012, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 330fb8a6380521f4f8753710a7fa8527, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionMultiplier: 0
 --- !u!1 &5479129401187378449
 GameObject:
   m_ObjectHideFlags: 0
@@ -5434,6 +5430,61 @@ Transform:
   - {fileID: 5077220717469606896}
   m_Father: {fileID: 2311675167629431021}
   m_LocalEulerAnglesHint: {x: 0.18441123, y: 0.77996045, z: -0.81402063}
+--- !u!1 &6534180737626226322
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5868874100413993631}
+  - component: {fileID: 6944237103412413072}
+  m_Layer: 8
+  m_Name: Interactible
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5868874100413993631
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6534180737626226322}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3522134913425533325}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &6944237103412413072
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6534180737626226322}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.003
+  m_Height: 0.017
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.0012, z: 0}
 --- !u!1 &6588649718180139541
 GameObject:
   m_ObjectHideFlags: 0
@@ -7235,7 +7286,6 @@ GameObject:
   - component: {fileID: 4844231328386649674}
   - component: {fileID: 8713528707651814710}
   - component: {fileID: 3813583646759441310}
-  - component: {fileID: 559987600431539450}
   m_Layer: 0
   m_Name: Suit female
   m_TagString: Untagged
@@ -7366,19 +7416,6 @@ MonoBehaviour:
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 7319968640571948815}
   bodyDetectionMultiplier: 5
---- !u!114 &559987600431539450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8349284814673938387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 330fb8a6380521f4f8753710a7fa8527, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  detectionMultiplier: 0
 --- !u!1 &8456390557728030118
 GameObject:
   m_ObjectHideFlags: 0
