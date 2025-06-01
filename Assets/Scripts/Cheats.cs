@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Enums;
+using Interaction.Equipments;
 
 public class Cheats : MonoBehaviour
 {
@@ -28,6 +29,17 @@ public class Cheats : MonoBehaviour
 
     private void Update()
     {
+        if(playerInput.actions["GetInfiniteAmmo"].WasPressedThisFrame())
+        {
+            Debug.Log("Enabled Infinite Ammo");
+
+            FindAnyObjectByType<Taser>().MaxAmmo = 9999;
+            FindAnyObjectByType<Taser>().CurrentAmmo = 9999;
+            
+            FindAnyObjectByType<Jammer>().MaxAmmo = 9999;
+            FindAnyObjectByType<Jammer>().CurrentAmmo = 9999;
+        }
+
         if(playerInput.actions["ToggleSpeedBoost"].WasPressedThisFrame())
         {
             Debug.Log("Toggled Speed Boost");

@@ -1199,8 +1199,8 @@ GameObject:
   - component: {fileID: 55710666546887078}
   - component: {fileID: 8066611918213343667}
   - component: {fileID: 6831943548639675651}
+  - component: {fileID: 3026007232557901020}
   - component: {fileID: 6995730834895485175}
-  - component: {fileID: 110660072628067489}
   m_Layer: 0
   m_Name: Paramedic NPC
   m_TagString: Enemy
@@ -1241,7 +1241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95b61e6ae574d9c42af131fec3bc9cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  model: {fileID: 0}
+  model: {fileID: 4076989448379747614}
   maleModels: []
   femaleModels: []
   alarmAudioPlayer: {fileID: 3540731324705208224}
@@ -1261,6 +1261,7 @@ MonoBehaviour:
   minBathroomTimer: 60
   maxBathroomTimer: 300
   restingTargets: []
+  startRestingTimer: 15
   minRestingTimer: 30
   maxRestingTimer: 180
   bodyGrabDistance: 2
@@ -1306,6 +1307,21 @@ MonoBehaviour:
   onChooseNewTarget:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3026007232557901020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5584284565315641867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52fa19a22841f614d987bb9af8fec6f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drops: []
+  dropChances: []
+  itemsParent: {fileID: 0}
 --- !u!195 &6995730834895485175
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1328,26 +1344,6 @@ NavMeshAgent:
   m_BaseOffset: -0.1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &110660072628067489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5584284565315641867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27b15ae1e5c99954696d577116b332a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDrop1: {fileID: 0}
-  drop1Chance: 0
-  drop1Model: {fileID: 0}
-  itemDrop2: {fileID: 0}
-  drop2Chance: 0
-  drop2Model: {fileID: 0}
-  dropPosition: {fileID: 1796810527400988115}
-  itemsParent: {fileID: 0}
 --- !u!1 &5623302106012313712
 GameObject:
   m_ObjectHideFlags: 0
@@ -2060,7 +2056,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1001 &8027593607530857177
+--- !u!1001 &7453095957936330504
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -2068,55 +2064,55 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4076989448379747614}
     m_Modifications:
-    - target: {fileID: 4002837415887711226, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
-      propertyPath: m_Name
-      value: Paramedic
-      objectReference: {fileID: 0}
-    - target: {fileID: 4379539288200671552, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
+    - target: {fileID: 3805037373737297041, guid: 297da84803bc44443b219f36daf649ba, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4379539288200671552, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
+    - target: {fileID: 3805037373737297041, guid: 297da84803bc44443b219f36daf649ba, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4379539288200671552, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
+    - target: {fileID: 3805037373737297041, guid: 297da84803bc44443b219f36daf649ba, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4379539288200671552, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
+    - target: {fileID: 3805037373737297041, guid: 297da84803bc44443b219f36daf649ba, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4379539288200671552, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
+    - target: {fileID: 3805037373737297041, guid: 297da84803bc44443b219f36daf649ba, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4379539288200671552, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
+    - target: {fileID: 3805037373737297041, guid: 297da84803bc44443b219f36daf649ba, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4379539288200671552, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
+    - target: {fileID: 3805037373737297041, guid: 297da84803bc44443b219f36daf649ba, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4379539288200671552, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
+    - target: {fileID: 3805037373737297041, guid: 297da84803bc44443b219f36daf649ba, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4379539288200671552, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
+    - target: {fileID: 3805037373737297041, guid: 297da84803bc44443b219f36daf649ba, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4379539288200671552, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
+    - target: {fileID: 3805037373737297041, guid: 297da84803bc44443b219f36daf649ba, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6112962390699658389, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
+    - target: {fileID: 4577317450680516139, guid: 297da84803bc44443b219f36daf649ba, type: 3}
+      propertyPath: m_Name
+      value: ParamedicMale
+      objectReference: {fileID: 0}
+    - target: {fileID: 6691382007363721540, guid: 297da84803bc44443b219f36daf649ba, type: 3}
       propertyPath: whileInteractAudioPlayer
       value: 
       objectReference: {fileID: 3726996574958467225}
-    - target: {fileID: 8816456651485370008, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
+    - target: {fileID: 8238018369157677897, guid: 297da84803bc44443b219f36daf649ba, type: 3}
       propertyPath: whileInteractAudioPlayer
       value: 
       objectReference: {fileID: 3726996574958467225}
@@ -2124,14 +2120,14 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 297da84803bc44443b219f36daf649ba, type: 3}
 --- !u!4 &6025959365759185817 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 4379539288200671552, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
-  m_PrefabInstance: {fileID: 8027593607530857177}
+  m_CorrespondingSourceObject: {fileID: 3805037373737297041, guid: 297da84803bc44443b219f36daf649ba, type: 3}
+  m_PrefabInstance: {fileID: 7453095957936330504}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6407305816532314403 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 4002837415887711226, guid: 474264f5c0a786f4ca0c862e3e0612f4, type: 3}
-  m_PrefabInstance: {fileID: 8027593607530857177}
+  m_CorrespondingSourceObject: {fileID: 4577317450680516139, guid: 297da84803bc44443b219f36daf649ba, type: 3}
+  m_PrefabInstance: {fileID: 7453095957936330504}
   m_PrefabAsset: {fileID: 0}

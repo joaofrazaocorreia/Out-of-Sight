@@ -89,7 +89,7 @@ public class Detection : MonoBehaviour
         tooCloseToPlayer = false;
         enemyMovement = GetComponentInParent<EnemyMovement>();
         enemyCamera = GetComponentInParent<EnemyCamera>();
-        detectionLayers = LayerMask.GetMask("Default", "Player", "Enemies");
+        detectionLayers = LayerMask.GetMask("Default", "Player", "Enemies", "Body");
     
         globalDetectionMultiplier = 1f;
         if(allDetectables == null)

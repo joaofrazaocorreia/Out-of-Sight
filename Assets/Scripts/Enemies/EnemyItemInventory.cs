@@ -1,68 +1,88 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyItemInventory : MonoBehaviour
 {
-    [SerializeField] private Item itemDrop1;
-    [SerializeField] [Range(0, 100)] private float drop1Chance; 
-    [SerializeField] private GameObject drop1Model;
-    [SerializeField] private Item itemDrop2;
-    [SerializeField] [Range(0, 100)] private float drop2Chance; 
-    [SerializeField] private GameObject drop2Model;
-    [SerializeField] private Transform dropPosition;
-    [SerializeField] private Transform itemsParent;
+    [SerializeField] private List<Transform> dropHeldPositions;
+    [SerializeField] private Transform hiddenHeldPos;
 
-    public bool HasDrop1 {get => drop1Model!= null && drop1Model.activeSelf;}
-    public bool HasDrop2 {get => drop2Model!= null && drop2Model.activeSelf;}
+    private List<GameObject> itemsList;
+    private Transform itemsParent;
+    public Transform ItemsParent { get => itemsParent; set => itemsParent = value; }
 
     private void Start()
     {
-        if(itemDrop1 != null)
-            drop1Model.SetActive(Random.Range(0, 101) <= drop1Chance);
-
-        if(itemDrop2 != null)
-            drop2Model.SetActive(Random.Range(0, 101) <= drop2Chance);
+        if (itemsList == null)
+        {
+            itemsList = new List<GameObject>();
+        }
     }
 
-    /// <summary>
-    /// Forces a specific item to become active on this enemy.
-    /// </summary>
-    /// <param name="number">The index of the item to enable.</param>
-    public void ForceEnableItemDrop(int number)
+    public void SetItemDrops(List<GameObject> drops, List<float> dropChances)
     {
-        switch(Mathf.Clamp(number, 1, 2))
+        itemsList = new List<GameObject>(drops.Count);
+
+        for (int i = 0; i < drops.Count; i++)
         {
-            case 1:
-                drop1Model.SetActive(true);
-                break;
-            case 2:
-                drop2Model.SetActive(true);
-                break;
+            itemsList.Add(null);
+            if (drops[i] == null) continue;
+
+            float chance = i < dropChances.Count ? dropChances[i] : 0f;
+            float roll = Random.Range(0f, 100f);
+
+            GameObject createdItem = CreateVisualHeldItem(drops[i], i);
+
+            if (roll > chance)
+            {
+                createdItem.SetActive(false);
+            }
+            
+            else
+            {
+                itemsList[i] = createdItem;
+            }
         }
+    }
+
+    private GameObject CreateVisualHeldItem(GameObject prefab, int index)
+    {
+        GameObject createdItem;
+
+        if (index < dropHeldPositions.Count)
+        {
+            createdItem = Instantiate(prefab, dropHeldPositions[index].transform.position,
+                dropHeldPositions[index].transform.rotation, dropHeldPositions[index].transform);
+        }
+
+        else
+        {
+            createdItem = Instantiate(prefab, hiddenHeldPos.transform.position,
+                hiddenHeldPos.transform.rotation, hiddenHeldPos.transform);
+
+            createdItem.SetActive(false);
+        }
+
+        createdItem.name = prefab.name;
+        createdItem.GetComponent<Item>().enabled = false;
+
+        return createdItem;
     }
 
     /// <summary>
     /// Causes a specific item to drop from this enemy.
     /// </summary>
-    /// <param name="number">The index of the item to drop.</param>
-    public void DropItem(int number)
+    /// <param name="index">The index of the item to drop.</param>
+    public void DropItem(int index)
     {
-        GameObject droppedItem;
-
-        switch(Mathf.Clamp(number, 1, 2))
+        if (itemsList[index] != null)
         {
-            default:
-                droppedItem = Instantiate(itemDrop1.gameObject,
-                    dropPosition.position, dropPosition.rotation, itemsParent);
-                drop1Model.SetActive(false);
-                break;
-            case 2:
-                droppedItem = Instantiate(itemDrop2.gameObject,
-                    dropPosition.position, dropPosition.rotation, itemsParent);
-                drop2Model.SetActive(false);
-                break;
-        }
+            itemsList[index].SetActive(true);
+            itemsList[index].transform.parent = ItemsParent;
 
-        droppedItem.AddComponent<Rigidbody>(); // currently broken; keycards go through the floor? but not luggage???
+            itemsList[index].GetComponent<Item>().enabled = true;
+            itemsList[index].GetComponent<Collider>().enabled = true;
+            itemsList[index].AddComponent<Rigidbody>();
+        }
     }
 
     /// <summary>
@@ -70,10 +90,10 @@ public class EnemyItemInventory : MonoBehaviour
     /// </summary>
     public void DropAllItems()
     {
-        if(HasDrop1)
-            DropItem(1);
-
-        if(HasDrop2)
-            DropItem(2);
+        for (int i = 0; i < itemsList.Count; i++)
+        {
+            if (itemsList[i] != null)
+                DropItem(i);
+        }
     }
 }

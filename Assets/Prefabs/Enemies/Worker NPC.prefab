@@ -1062,8 +1062,8 @@ GameObject:
   - component: {fileID: 1762310718866197437}
   - component: {fileID: 2173861201769192526}
   - component: {fileID: 4444592357244671704}
+  - component: {fileID: 7645592475028885295}
   - component: {fileID: 1810790442000928118}
-  - component: {fileID: 5256251014867233213}
   m_Layer: 0
   m_Name: Worker NPC
   m_TagString: Enemy
@@ -1104,7 +1104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932f63b9deab07446a42cbe6fff3fbe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  model: {fileID: 0}
+  model: {fileID: 2443837508760897934}
   maleModels: []
   femaleModels: []
   alarmAudioPlayer: {fileID: 6285718920691931174}
@@ -1124,6 +1124,7 @@ MonoBehaviour:
   minBathroomTimer: 60
   maxBathroomTimer: 300
   restingTargets: []
+  startRestingTimer: 15
   minRestingTimer: 30
   maxRestingTimer: 180
 --- !u!114 &4444592357244671704
@@ -1176,6 +1177,21 @@ MonoBehaviour:
   onChooseNewTarget:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7645592475028885295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3013677490251117298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52fa19a22841f614d987bb9af8fec6f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drops: []
+  dropChances: []
+  itemsParent: {fileID: 0}
 --- !u!195 &1810790442000928118
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1198,26 +1214,6 @@ NavMeshAgent:
   m_BaseOffset: -0.1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &5256251014867233213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013677490251117298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27b15ae1e5c99954696d577116b332a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemDrop1: {fileID: 0}
-  drop1Chance: 0
-  drop1Model: {fileID: 0}
-  itemDrop2: {fileID: 0}
-  drop2Chance: 0
-  drop2Model: {fileID: 0}
-  dropPosition: {fileID: 413939709669399697}
-  itemsParent: {fileID: 0}
 --- !u!1 &3262675731445291378
 GameObject:
   m_ObjectHideFlags: 0

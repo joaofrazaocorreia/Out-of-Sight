@@ -14,7 +14,7 @@ public class BodyCarry : InteractiveObject
     {
         enemySelf = GetComponentInParent<Enemy>();
         playerCarryInventory = FindAnyObjectByType<PlayerCarryInventory>();
-        thisBody = transform.parent.parent.gameObject;
+        thisBody = transform.parent.gameObject;
         hasBeenDetected = false;
         enabled = false;
     }

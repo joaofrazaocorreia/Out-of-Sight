@@ -52,7 +52,7 @@ public class PlayerCarryInventory : MonoBehaviour
             storedCarriableParent = go.transform.parent;
 
             player.GainStatus(Player.Status.Suspicious);
-            
+
             go.GetComponentInParent<EnemyMovement>().ToggleRagdoll(false);
             go.transform.parent = bodyCarryPosition;
             go.transform.localPosition = Vector3.zero;

@@ -154,12 +154,7 @@ public class EnemyMovement : MonoBehaviour
 
             modelSpawnPos = model.transform.localPosition;
             modelSpawnRot = model.transform.localRotation;
-            limbsTransforms = new Dictionary<string, (Vector3, Quaternion)>();
-            foreach(Rigidbody rb in model.GetComponentsInChildren<Rigidbody>())
-            {
-                limbsTransforms.Add(rb.transform.name, (rb.transform.localPosition,rb.transform.localRotation));
-            }
-            ToggleRagdoll(false);
+            ResetRagdoll();
             footstepTimer  = Time.time;
 
             // Forcefully sets the NavMeshAgent to the NPC type if it isn't already one
@@ -187,19 +182,36 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    public void ResetAnimator()
+    {
+        animator = GetComponentInChildren<Animator>();
+    }
+
+    public void ResetRagdoll()
+    {
+        limbsTransforms = new Dictionary<string, (Vector3, Quaternion)>();
+        
+        foreach (Rigidbody rb in model.GetComponentsInChildren<Rigidbody>())
+        {
+            limbsTransforms.Add(rb.transform.name, (rb.transform.localPosition, rb.transform.localRotation));
+        }
+
+        ToggleRagdoll(false);
+    }
+
     // Updates this enemy's previous position for StuckCheck(), and plays footsteps when walking
     private void Update()
     {
         // Updates its last position when conscious to check when it's stuck
-        if(enemySelf.IsConscious)
+        if (enemySelf.IsConscious)
         {
             lastSelfPos = transform.position;
 
             UpdateAnimations();
         }
-        
+
         // Plays footsteps when walking and running
-        if(footstepTimer + footstepInterval * navMeshAgent.speed / walkSpeed <= Time.time && navMeshAgent.velocity.magnitude >= 1)
+        if (footstepTimer + footstepInterval * navMeshAgent.speed / walkSpeed <= Time.time && navMeshAgent.velocity.magnitude >= 1)
         {
             footstepPlayer.Play();
             footstepTimer = Time.time;

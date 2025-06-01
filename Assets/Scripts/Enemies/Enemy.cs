@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -47,8 +48,6 @@ public class Enemy : MonoBehaviour
     public Detection Detection {get => detection;}
     protected EnemyMovement enemyMovement;
     public EnemyMovement EnemyMovement {get=> enemyMovement;}
-    protected EnemyItemInventory enemyItemInventory;
-    public EnemyItemInventory EnemyItemInventory {get=> enemyItemInventory;}
     protected Player player;
     protected Dictionary<(Action, float, float), float> necessities;
     protected float curiousTimer;
@@ -83,7 +82,6 @@ public class Enemy : MonoBehaviour
         uiManager = FindAnyObjectByType<UIManager>();
         detection = GetComponent<Detection>();
         enemyMovement = GetComponent<EnemyMovement>();
-        enemyItemInventory = GetComponent<EnemyItemInventory>();
         player = FindAnyObjectByType<Player>();
         necessities = new Dictionary<(Action, float, float), float>();
 
@@ -96,46 +94,84 @@ public class Enemy : MonoBehaviour
 
         if (enemyMovement == null)
             enemyMovement = GetComponentInChildren<EnemyMovement>();
-        
 
-        /*
-        while (model.childCount > 0)
+
+        if (GetComponent<EnemyCamera>() == null)
         {
-            model.GetChild(0).gameObject.SetActive(false);
-            Destroy(model.GetChild(0).gameObject);
-        }
-        */
+            List<GameObject> modelsToUse = new List<GameObject>();
 
-        List<GameObject> modelsToUse = new List<GameObject>();
-
-        switch (UnityEngine.Random.Range(0, 3))
-        {
-            case 0: gender = Gender.Male; modelsToUse = maleModels; break;
-            case 1: gender = Gender.Female; modelsToUse = femaleModels; break;
-            default: gender = Gender.AttackHelicopter; modelsToUse = maleModels; break;
-        }
-
-        //Instantiate(modelsToUse[UnityEngine.Random.Range(0, modelsToUse.Count)], model);
-
-
-        AddNecessity(() =>
-        {
-            List<MovementTarget> bathroomTargets = new List<MovementTarget>();
-            
-            switch (gender)
+            switch (UnityEngine.Random.Range(0, 2))
             {
-                case Gender.Male: bathroomTargets = bathroomTargetsMale; break;
-                case Gender.Female: bathroomTargets = bathroomTargetsFemale; break;
-                case Gender.AttackHelicopter: bathroomTargets = bathroomTargetsMale; break;
+                case 0:
+                    gender = Gender.Male;
+                    modelsToUse = maleModels;
+                    break;
+
+                case 1:
+                    gender = Gender.Female;
+                    modelsToUse = femaleModels;
+                    break;
+
+                default:
+                    gender = Gender.AttackHelicopter;
+                    modelsToUse = maleModels;
+                    break;
             }
 
-            if (bathroomTargets.Count > 0 && !ignoresAlarm)
+            if (maleModels.Count == 0)
             {
-                Debug.Log($"{name} is going to the {gender} bathroom!");
-                enemyMovement.PickTarget(bathroomTargets, true, true);
+                gender = Gender.Female;
+                modelsToUse = femaleModels;
             }
-        },
-            startBathroomTimer, minBathroomTimer, maxBathroomTimer);
+
+            if (femaleModels.Count == 0)
+            {
+                gender = Gender.Male;
+                modelsToUse = maleModels;
+            }
+
+
+            if (modelsToUse.Count > 0)
+            {
+                Queue<Transform> destroyQueue = new Queue<Transform>();
+
+                for (int i = 0; i < model.childCount; i++)
+                {
+                    destroyQueue.Enqueue(model.GetChild(i));
+                    model.GetChild(i).gameObject.SetActive(false);
+                }
+
+                while (destroyQueue.Count > 0)
+                    Destroy(destroyQueue.Dequeue().gameObject);
+
+
+                Instantiate(modelsToUse[UnityEngine.Random.Range(0, modelsToUse.Count)], model);
+            }
+
+            enemyMovement.ResetAnimator();
+            enemyMovement.ResetRagdoll();
+            GetComponent<EnemyDrops>().SetItemDrops();
+
+
+            AddNecessity(() =>
+            {
+                List<MovementTarget> bathroomTargets = new List<MovementTarget>();
+                
+                switch (gender)
+                {
+                    case Gender.Male: bathroomTargets = bathroomTargetsMale; break;
+                    case Gender.Female: bathroomTargets = bathroomTargetsFemale; break;
+                    case Gender.AttackHelicopter: bathroomTargets = bathroomTargetsMale; break;
+                }
+
+                if (bathroomTargets.Count > 0 && !ignoresAlarm)
+                {
+                    Debug.Log($"{name} is going to the {gender} bathroom!");
+                    enemyMovement.PickTarget(bathroomTargets, true, true);
+                }
+            },
+                startBathroomTimer, minBathroomTimer, maxBathroomTimer);
+        }
     }
 
     protected virtual void Update()
@@ -531,7 +567,7 @@ public class Enemy : MonoBehaviour
             detection.DetectionMeter = 0;
 
             // Drops all items this enemy is carrying
-            enemyItemInventory.DropAllItems();
+            GetComponentInChildren<EnemyItemInventory>().DropAllItems();
 
             OnKnockout?.Invoke(this, EventArgs.Empty);
         }
