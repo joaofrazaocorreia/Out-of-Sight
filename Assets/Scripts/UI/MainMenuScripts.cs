@@ -4,6 +4,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenuScripts : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class MainMenuScripts : MonoBehaviour
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject levelSelectMenu;
     [SerializeField] private GameObject settingsMenu;
+    [SerializeField] private Slider sensitivitySlider;
     [SerializeField] private GameObject creditsMenu;
     private Dictionary<Transform,Vector3> originalUIPositions;
     private Dictionary<RectTransform, (Coroutine, float, float, float)> uiButtonScaleUpCoroutines;
@@ -39,6 +41,8 @@ public class MainMenuScripts : MonoBehaviour
             originalUIPositions.Add(
                 transform.GetChild(i), transform.GetChild(i).localPosition);
         }
+        
+        sensitivitySlider.value = PlayerPrefs.GetFloat("Sensitivity", sensitivitySlider.value);
     }
 
     private IEnumerator MoveUI(Transform uiTransform, Vector3 newPos)
@@ -232,5 +236,10 @@ public class MainMenuScripts : MonoBehaviour
     {
         screen.alpha = 1f;
         StartCoroutine(FadeOutUI(screen));
+    }
+    
+    public void UpdateMouseSensitivity()
+    {
+        PlayerPrefs.SetFloat("Sensitivity", sensitivitySlider.value);
     }
 }

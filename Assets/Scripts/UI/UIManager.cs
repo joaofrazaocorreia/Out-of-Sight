@@ -135,12 +135,16 @@ public class UIManager : MonoBehaviour
         deltaTime = Time.fixedDeltaTime * UISpeed;
         primaryInteractionTextOffset = interactionMessages[0].transform.localPosition.x;
         secondaryInteractionTextOffset = interactionMessages[1].transform.localPosition.x;
-        UpdateMouseSensitivity();
 
         loadingScreen.gameObject.SetActive(true);
         missionBriefingScreen.gameObject.SetActive(true);
         UnlockCursor();
         StartCoroutine(FadeOutUI(loadingScreen, 0.2f));
+    }
+
+    private void Start()
+    {
+        sensitivitySlider.value = PlayerPrefs.GetFloat("Sensitivity", sensitivitySlider.value);
     }
 
     private void Update()
@@ -879,7 +883,8 @@ public class UIManager : MonoBehaviour
 
     public void UpdateMouseSensitivity()
     {
-        playerController.UpdateMouseSensitivity(sensitivitySlider.value);
+        PlayerPrefs.SetFloat("Sensitivity", sensitivitySlider.value);
+        playerController.UpdateMouseSensitivity(PlayerPrefs.GetFloat("Sensitivity"));
     }
 
     private void ToggleMap()
