@@ -8,8 +8,6 @@ using UnityEngine.Events;
 [RequireComponent(typeof(NavMeshAgent))] 
 public class EnemyMovement : MonoBehaviour
 {
-    [SerializeField] private bool showDebug = false;
-    public bool ShowDebug { get => showDebug; }
     [SerializeField] protected GameObject model;
     [SerializeField] private bool isStatic = false;
     [SerializeField] private bool looksAround = true;
@@ -31,7 +29,6 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float maxSearchTime = 10f;
     [SerializeField] private float searchRadius = 20f;
     [SerializeField] private float stuckTime = 3f;
-    [SerializeField] protected float tasedTime = 5f;
     [SerializeField] protected PlayAudio footstepPlayer;
     [SerializeField] [Range(0.1f, 2f)] private float footstepInterval = 0.45f;
     public UnityEvent onChooseNewTarget;
@@ -245,7 +242,7 @@ public class EnemyMovement : MonoBehaviour
             lastTargetRot = spawnRot;
 
         // Stops this enemy when it's seeing something suspicious
-        if(halted)
+        if (halted)
         {
             Halt();
         }
@@ -253,22 +250,15 @@ public class EnemyMovement : MonoBehaviour
         else if(Time.timeScale != 0 && lastTargetRot != null && IsAtDestination
             && !IsFacingTarget && (moveTimer > 0 || isStatic))
         {
-            // Calculates how much the enemy will rotate this frame and updates the rotation
-            Vector3 difference = Vector3.up * Mathf.Clamp((float)lastTargetRot -
-                transform.eulerAngles.y, -turnSpeed, turnSpeed);
-            transform.rotation = Quaternion.Euler(transform.eulerAngles + difference);
-
-            // Stops rotating once the rotation is reached (static enemies preserve their spawning rotation)
-            if(IsFacingTarget && !isStatic)
-                RotateTo(null);
+            RotateToCurrentTarget();
         }
 
         // Progressively decreases the movement timer if the agent is at its target
-        else if((IsAtDestination && moveTimer > 0) || (isStatic && !movingToSetTarget && looksAround))
+        else if ((IsAtDestination && moveTimer > 0) || (isStatic && !movingToSetTarget && looksAround))
         {
             moveTimer -= Time.deltaTime;
 
-            if(looksAround)
+            if (looksAround)
             {
                 CheckForTurning();
             }
@@ -356,7 +346,8 @@ public class EnemyMovement : MonoBehaviour
     /// <param name="canChooseLastPos">Whether this enemy can choose the same position it's in.</param>
     /// <param name="minStayTime">The minimum time this enemy stays at the given position.</param>
     /// <param name="moveTimeMultiplier">Multiplier for the time spent at the position.</param>
-    public void MoveTo(Vector3 destination, bool canChooseLastPos = false, float minStayTime = 0f, float moveTimeMultiplier = 1f)
+    public void MoveTo(Vector3 destination, bool canChooseLastPos = false, float minStayTime = 0f,
+        float moveTimeMultiplier = 1f)
     {
         if(destination != null && (destination != lastTargetPos || canChooseLastPos) && enemySelf.IsConscious)
         {
@@ -377,7 +368,8 @@ public class EnemyMovement : MonoBehaviour
     /// </summary>
     /// <param name="targetsList">The list of positions this enemy should pick from.</param>
     /// <param name="canChooseLastPos">Whether this enemy can choose the same position it's in.</param>
-    public void PickTarget(List<MovementTarget> targetsList, bool forceMovement, bool canChooseLastPos = false)
+    public void PickTarget(List<MovementTarget> targetsList, bool forceMovement, bool canChooseLastPos = false,
+        float moveTimeMultiplier = 1f)
     {
         if (targetsList != null && enemySelf.IsConscious)
         {
@@ -398,8 +390,8 @@ public class EnemyMovement : MonoBehaviour
                     index = Random.Range(0, targetsList.Count());
                 }
 
-                targetsList[index].Occupy(this);
-                
+                targetsList[index].Occupy(this, true, moveTimeMultiplier);
+
                 if (forceMovement) MovingToSetTarget = true;
             }
 
@@ -438,15 +430,30 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    public void RotateToCurrentTarget()
+    {
+        if(lastTargetRot != null && IsAtDestination && !IsFacingTarget)
+        {
+            // Calculates how much the enemy will rotate this frame and updates the rotation
+            Vector3 difference = Vector3.up * Mathf.Clamp((float)lastTargetRot -
+                transform.eulerAngles.y, -turnSpeed, turnSpeed);
+            transform.rotation = Quaternion.Euler(transform.eulerAngles + difference);
+
+            // Stops rotating once the rotation is reached (static enemies preserve their spawning rotation)
+            if(IsFacingTarget && !isStatic)
+                RotateTo(null);
+        }
+    }
+
     /// <summary>
     /// Converts a given angle into the range between 0-360 degrees.
     /// </summary>
     private float? AdjustRotationAngle(float? rotation)
     {
-        if(rotation != null)
+        if (rotation != null)
         {
-            while(rotation < 0) rotation += 360f;
-            while(rotation >= 360) rotation -= 360f;
+            while (rotation < 0) rotation += 360f;
+            while (rotation >= 360) rotation -= 360f;
 
             return rotation;
         }
@@ -470,7 +477,7 @@ public class EnemyMovement : MonoBehaviour
     /// </summary>
     public void DeoccupyCurrentTarget()
     {
-        if (currentTarget != null && !movingToSetTarget)
+        if (currentTarget != null && (!movingToSetTarget || knockedOut))
         {
             currentTarget.Deoccupy(this);
             currentTarget = null;
@@ -742,12 +749,15 @@ public class EnemyMovement : MonoBehaviour
     {
         if(!knockedOut)
         {
+            knockedOut = true;
+
             // Stops this enemy
             navMeshAgent.speed = 0f;
             navMeshAgent.enabled = false;
             MoveTo(transform.position);
             RotateTo(transform.eulerAngles.y);
             movementPosTargets = new List<Vector3>{transform.position};
+            DeoccupyCurrentTarget();
 
             // Enables the body's detection multiplier
             detectableObject.enabled = true;
@@ -759,7 +769,6 @@ public class EnemyMovement : MonoBehaviour
             
             // Invokes an event from the inspector when knocked out
             enemySelf.onKnockOut?.Invoke();
-            knockedOut = true;
         }
     }
 
@@ -826,7 +835,7 @@ public class EnemyMovement : MonoBehaviour
 
         foreach(CapsuleCollider c in model.GetComponentsInChildren<CapsuleCollider>())
         {
-            if(c != interactionCollider)
+            if (!c.isTrigger && c != interactionCollider)
                 c.enabled = enabled;
         }
         foreach(BoxCollider c in model.GetComponentsInChildren<BoxCollider>())

@@ -7,12 +7,13 @@ public class MovementTarget : MonoBehaviour
     [SerializeField] private float minStayDuration = 10;
     [SerializeField] private List<Transform> targetPositions;
     private Dictionary<EnemyMovement, Transform> currentEnemies;
+    public Dictionary<EnemyMovement, Transform> CurrentEnemies { get => currentEnemies; }
     public bool Occupied
     {
         get => currentEnemies.Count >= targetPositions.Count;
     }
 
-    private void Start()
+    private void Awake()
     {
         currentEnemies = new Dictionary<EnemyMovement, Transform>();
 
@@ -33,7 +34,7 @@ public class MovementTarget : MonoBehaviour
         Deoccupy(enemy);
         Transform targetPos = GetAvailablePos();
 
-        if(targetPos != null)
+        if (currentEnemies != null && targetPos != null)
         {
             enemy.DeoccupyCurrentTarget();
 
@@ -48,7 +49,7 @@ public class MovementTarget : MonoBehaviour
 
     public void Deoccupy(EnemyMovement enemy)
     {
-        if(currentEnemies.Keys.Contains(enemy))
+        if (currentEnemies != null && currentEnemies.Keys.Contains(enemy))
             currentEnemies.Remove(enemy);
     }
 
@@ -56,10 +57,13 @@ public class MovementTarget : MonoBehaviour
     {
         Transform availablePos = null;
 
-        foreach(Transform t in targetPositions)
+        foreach (Transform t in targetPositions)
         {
-            if(!currentEnemies.Values.Contains(t))
+            if (!currentEnemies.Values.Contains(t))
+            {
                 availablePos = t;
+                break;
+            }
         }
 
         return availablePos;

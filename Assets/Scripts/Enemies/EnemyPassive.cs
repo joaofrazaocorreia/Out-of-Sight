@@ -17,7 +17,7 @@ public class EnemyPassive : Enemy
         {
             if (restingTargets.Count > 0 && !ignoresAlarm)
             {
-                Debug.Log($"{name} is going to take a break!");
+                //Debug.Log($"{name} is going to take a break!");
                 enemyMovement.PickTarget(restingTargets, false, true);
             }
         },
