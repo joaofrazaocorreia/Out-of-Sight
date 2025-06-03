@@ -798,7 +798,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f71f3ce5527b824c8dede7862098647, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showDebug: 0
   model: {fileID: 4105723298412516490}
   isStatic: 0
   looksAround: 0
@@ -821,7 +820,6 @@ MonoBehaviour:
   maxSearchTime: 10
   searchRadius: 20
   stuckTime: 3
-  tasedTime: 5
   footstepPlayer: {fileID: 1290051535601226644}
   footstepInterval: 0.45
   onChooseNewTarget:
@@ -858,7 +856,7 @@ NavMeshAgent:
   m_Acceleration: 60
   avoidancePriority: 50
   m_AngularSpeed: 600
-  m_StoppingDistance: 1.5
+  m_StoppingDistance: 0.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
