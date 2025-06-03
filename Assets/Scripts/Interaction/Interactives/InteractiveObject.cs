@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
 using Enums;
-using UnityEngine.Serialization;
 
 public abstract class InteractiveObject : MonoBehaviour
 {

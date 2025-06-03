@@ -148,8 +148,7 @@ public class Enemy : MonoBehaviour
                 Instantiate(modelsToUse[UnityEngine.Random.Range(0, modelsToUse.Count)], model);
             }
 
-            enemyMovement.ResetAnimator();
-            enemyMovement.ResetRagdoll();
+            enemyMovement.ResetNPC(enemyMovement.SpawnPos, enemyMovement.SpawnRot);
             GetComponent<EnemyDrops>().SetItemDrops();
 
 
@@ -166,7 +165,7 @@ public class Enemy : MonoBehaviour
 
                 if (bathroomTargets.Count > 0 && !ignoresAlarm)
                 {
-                    Debug.Log($"{name} is going to the {gender} bathroom!");
+                    //Debug.Log($"{name} is going to the {gender} bathroom!");
                     enemyMovement.PickTarget(bathroomTargets, true, true);
                 }
             },
@@ -230,6 +229,8 @@ public class Enemy : MonoBehaviour
             curiousTimer = 0f;
             suspectfulTimer = 0f;
             alarmedTimer = 0f;
+            enemyMovement.MoveTimer *= 0.5f;
+            enemyMovement.MoveTimer += 2f;
             EnemyStatus = Status.Normal;
         }
     }

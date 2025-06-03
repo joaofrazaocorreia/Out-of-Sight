@@ -46,7 +46,7 @@ public class EnemySpawner : MonoBehaviour
             {
                 // Respawns an NPC in this exit's position
                 Enemy newNPC = SpawnEnemy();
-                Debug.Log($"Respawned {enemyType} ({newNPC.name})");
+                //Debug.Log($"Respawned {enemyType} ({newNPC.name})");
             }
         }
 
@@ -106,7 +106,7 @@ public class EnemySpawner : MonoBehaviour
     /// <returns>The spawned GameObject.</returns>
     public Enemy SpawnEnemy(GameObject prefab, List<MovementTarget> movementTargets)
     {
-        Debug.Log($"Spawning {prefab.name} by Prefab...");
+        //Debug.Log($"Spawning {prefab.name} by Prefab...");
 
         // Calculates the navHit position in the navmesh to spawn the NPC
         NavMesh.SamplePosition(transform.position, out NavMeshHit navHit,
@@ -133,7 +133,7 @@ public class EnemySpawner : MonoBehaviour
     /// <returns>The spawned GameObject.</returns>
     public Enemy SpawnEnemy()
     {
-        Debug.Log($"Spawning {enemyType} by Type...");
+        //Debug.Log($"Spawning {enemyType} by Type...");
         
         // Chooses a random queued NPC to spawn
         int index = Random.Range(0, queuedNPCsParent.childCount);
