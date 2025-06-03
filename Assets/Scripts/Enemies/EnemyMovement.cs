@@ -756,6 +756,12 @@ public class EnemyMovement : MonoBehaviour
 
         if (!bodyCarry.enabled && !playerCarryInventory.IsCarryingBody(bodyCarry))
             bodyCarry.enabled = true;
+
+        if (bodyCarry.HasBeenDetected)
+        {
+            detectableObject.DetectionMultiplier = 0f;
+            detectableObject.enabled = false;
+        }
     }
 
     /// <summary>
@@ -793,13 +799,6 @@ public class EnemyMovement : MonoBehaviour
         if(!halted && !IsAtDestination && navMeshAgent.speed >= RunSpeed) RunAnim();
         else if(!halted && !IsAtDestination && navMeshAgent.speed >= WalkSpeed) WalkAnim();
         else IdleAnim();
-
-        if(enemySelf.EnemyType == Enemy.Type.Paramedic)
-        {
-            if(!halted && !IsAtDestination && navMeshAgent.speed >= RunSpeed) Debug.Log(name+ " running");
-            else if(!halted && !IsAtDestination && navMeshAgent.speed >= WalkSpeed) Debug.Log(name+ " walking");
-            else  Debug.Log(name+ " idle");
-        }
     }
 
     private void RunAnim()

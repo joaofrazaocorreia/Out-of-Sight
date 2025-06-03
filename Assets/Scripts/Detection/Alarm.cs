@@ -67,7 +67,6 @@ public class Alarm : MonoBehaviour
     {
         if(isOn)
         {
-            Debug.Log(forceDisable);
             if (alarmTimer > 0 && !forceDisable)
             {
                 // Decreases the alarm timer if it's not the maximum alarm tier.
@@ -112,6 +111,8 @@ public class Alarm : MonoBehaviour
                 isOn = false;
                 forceDisable = false;
                 player.GetComponent<NavMeshObstacle>().enabled = true;
+
+                DetectAllBodies();
 
                 foreach (Enemy e in allEnemies)
                 {
@@ -219,21 +220,8 @@ public class Alarm : MonoBehaviour
 
         allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList();
         nonCameraEnemies = allEnemies.Where(e => !e.GetComponent<EnemyCamera>()).ToList();
-        
-        // NPCs become aware of the bodies in the level so they don't raise the alarm again
-        foreach(Enemy e in nonCameraEnemies)
-        {
-            if(e.GetComponent<Enemy>().EnemyStatus == Enemy.Status.KnockedOut)
-            {
-                BodyCarry body = e.GetComponentInChildren<BodyCarry>();
 
-                if(body != null && !body.HasBeenDetected)
-                {
-                    body.HasBeenDetected = true;
-                    seenBodies.Add(body);
-                }
-            }
-        }
+        DetectAllBodies();
 
         // Alerts all enemies in the level
         if(alertEnemies)
@@ -256,5 +244,23 @@ public class Alarm : MonoBehaviour
     {
         if(allEnemies.Contains(enemy))
             allEnemies.Remove(enemy);
+    }
+
+    public void DetectAllBodies()
+    {
+        // NPCs become aware of the bodies in the level so they don't raise the alarm again
+        foreach (Enemy e in nonCameraEnemies)
+        {
+            if (e.EnemyStatus == Enemy.Status.KnockedOut)
+            {
+                BodyCarry body = e.GetComponentInChildren<BodyCarry>();
+
+                if (body != null && !body.HasBeenDetected)
+                {
+                    body.HasBeenDetected = true;
+                    seenBodies.Add(body);
+                }
+            }
+        }
     }
 }

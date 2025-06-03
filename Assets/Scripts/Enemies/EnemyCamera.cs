@@ -71,7 +71,8 @@ public class EnemyCamera : Enemy, IJammable
             }
 
             // Becomes alarmed at max detection and detects the player during alarms
-            else if (detection.DetectionMeter >= detection.DetectionLimit || (detection.SeesPlayer && alarm.IsOn))
+            else if ((!alarm.IsOn && detection.DetectionMeter >= detection.DetectionLimit) ||
+                (detection.SeesPlayer && alarm.IsOn))
             {
                 BecomeAlarmed();
             }
@@ -158,8 +159,11 @@ public class EnemyCamera : Enemy, IJammable
     {
         if (detection.SeesPlayer)
             detection.TrackPlayer();
-            
+
         cameraOperator.BecomeAlarmed();
+
+        if(alarm.IsOn)
+            alarm.TriggerAlarm(false);
     }
 
     /// <summary>

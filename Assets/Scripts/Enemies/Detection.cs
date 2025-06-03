@@ -374,11 +374,11 @@ public class Detection : MonoBehaviour
     private void UpdateSelfDetectionUI()
     {
         // The UI checks if the enemy is not knocked out and not a camera
-        if(enemyMovement != null && enemyCamera == null &&
+        if (enemyMovement != null && enemyCamera == null &&
             selfEnemy.EnemyStatus != Enemy.Status.KnockedOut)
         {
             // Enables the alarmed icon when alarmed
-            if(enemyMovement != null && (alarm.IsOn || selfEnemy.IsAlarmed))
+            if (enemyMovement != null && (alarm.IsOn || selfEnemy.IsAlarmed))
             {
                 selfDetection.SetActive(true);
                 tasedIcon.SetActive(false);
@@ -387,7 +387,7 @@ public class Detection : MonoBehaviour
             }
 
             // Enables the detection meter if it's detecting something
-            else if(DetectionMeter > 0)
+            else if (DetectionMeter > 0)
             {
                 selfDetection.SetActive(true);
                 tasedIcon.SetActive(false);
@@ -413,7 +413,7 @@ public class Detection : MonoBehaviour
         else if (enemyMovement == null && enemyCamera != null)
         {
             // Enables the jammed icon when being jammed
-            if(enemyCamera.Jammed)
+            if (enemyCamera.Jammed)
             {
                 selfDetection.SetActive(true);
                 tasedIcon.SetActive(true);
@@ -424,7 +424,7 @@ public class Detection : MonoBehaviour
             }
 
             // Enables the alarmed icon when the alarm is raised (and the camera is turned on)
-            else if(alarm.IsOn && enemyCamera.IsOn)
+            else if (alarm.IsOn && enemyCamera.IsOn)
             {
                 selfDetection.SetActive(true);
                 tasedIcon.SetActive(false);
@@ -433,7 +433,7 @@ public class Detection : MonoBehaviour
             }
 
             // Shows the detection UI if the camera is detecting something (and turned on)
-            else if(DetectionMeter > 0 && enemyCamera.IsOn)
+            else if (DetectionMeter > 0 && enemyCamera.IsOn)
             {
                 selfDetection.SetActive(true);
                 tasedIcon.SetActive(false);
@@ -480,10 +480,9 @@ public class Detection : MonoBehaviour
 
     private void OnPlayerAttack(object sender, EventArgs e)
     {
-        if (SeesPlayer && player.detectable)
+        if (SeesPlayer && player.detectable && GetComponentInParent<Enemy>().IsConscious)
         {
             detectionMeter = detectionLimit * 2;
-            Debug.Log("this npc saw the player knocking out someone");
         }
     }
 
