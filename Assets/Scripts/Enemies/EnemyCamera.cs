@@ -145,12 +145,20 @@ public class EnemyCamera : Enemy, IJammable
             cameraOperatorStartPos = pos.position;
     }
 
+    public override void BecomeNormal(bool ignoreAlarm = false)
+    {
+        if (!jammed && (!IsAlarmed || ignoreAlarm) && !alarm.IsOn)
+            detection.DetectionMeter = 0f;
+    }
+
     /// <summary>
     /// Tracks the player's position and alarms the camera operator.
     /// </summary>
     public override void BecomeAlarmed()
     {
-        if(detection.SeesPlayer) detection.TrackPlayer();
+        if (detection.SeesPlayer)
+            detection.TrackPlayer();
+            
         cameraOperator.BecomeAlarmed();
     }
 

@@ -67,16 +67,17 @@ public class Alarm : MonoBehaviour
     {
         if(isOn)
         {
-            if(alarmTimer > 0 && !forceDisable)
+            Debug.Log(forceDisable);
+            if (alarmTimer > 0 && !forceDisable)
             {
                 // Decreases the alarm timer if it's not the maximum alarm tier.
-                if(currentTier < maxTier)
+                if (currentTier < maxTier)
                 {
                     alarmTimer -= Time.deltaTime;
                     alarmTimeLimit -= Time.deltaTime;
 
                     // If the alarm is still active after reaching its time limit, the alarm tier is maxxed instantly
-                    if(alarmTimeLimit <= 0)
+                    if (alarmTimeLimit <= 0)
                     {
                         Debug.Log("alarm time limit reached - maxxed out the alarm tier");
                         currentTier = maxTier;
@@ -84,14 +85,14 @@ public class Alarm : MonoBehaviour
                 }
 
                 // If it's the maximum tier, starts generating police NPCs procedurally until the maximum amount is hit.
-                else if(policeGuards.Count < maxPoliceNPCS)
+                else if (policeGuards.Count < maxPoliceNPCS)
                 {
-                    if(policeSpawnTimer <= 0)
+                    if (policeSpawnTimer <= 0)
                     {
                         policeSpawnTimer = policeSpawnTime;
                         EnemySpawner spawner = FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None)
                             .Where(s => s.EnemyType == Enemy.Type.Police).First();
-                        Enemy newPolice = spawner.SpawnEnemy(policePrefab, new List<MovementTarget>() {playerTargetPos});
+                        Enemy newPolice = spawner.SpawnEnemy(policePrefab, new List<MovementTarget>() { playerTargetPos });
 
                         policeGuards.Add(newPolice);
                     }
@@ -112,18 +113,18 @@ public class Alarm : MonoBehaviour
                 forceDisable = false;
                 player.GetComponent<NavMeshObstacle>().enabled = true;
 
-                foreach(Enemy e in allEnemies)
+                foreach (Enemy e in allEnemies)
                 {
                     e.Detection.DetectionMeter = 0f;
                     e.BecomeNormal(true);
                     e.BecomeCurious();
                 }
-      
+
                 int enemyCount = 0;
                 List<Enemy> enemiesToRemove = new List<Enemy>();
-                foreach(Enemy g in extraGuards)
+                foreach (Enemy g in extraGuards)
                 {
-                    if(++enemyCount > maxGuardsRemainPermanent)
+                    if (++enemyCount > maxGuardsRemainPermanent)
                     {
                         enemiesToRemove.Add(g);
 
@@ -137,7 +138,7 @@ public class Alarm : MonoBehaviour
                 {
                     extraGuards.Remove(g);
                 }
-                
+
                 alarmLoopPlayer.Stop();
                 //alarmEndPlayer.Play();
                 musicPlayer.SwitchTrack();

@@ -503,16 +503,16 @@ public class UIManager : MonoBehaviour
                 break;
             }
             
-            case Guard_Tier1:
+            case Guard:
             {
                 newText = "Disguise: Security";
                 newImage = guardTier1DisguiseSprite;
                 break;
             }
             
-            case Guard_Tier2:
+            case Police:
             {
-                newText = "Disguise: Bodyguard";
+                newText = "Disguise: Police";
                 newImage = guardTier2DisguiseSprite;
                 break;
             }

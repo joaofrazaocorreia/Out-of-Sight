@@ -62,7 +62,8 @@ public class Detection : MonoBehaviour
             return closest;
         }
     }
-    public bool SeesPlayer {get => seenDetectables.Contains(player.GetComponentInChildren<DetectableObject>());}
+    private DetectableObject playerDetectable;
+    public bool SeesPlayer { get => seenDetectables.Contains(playerDetectable); }
     private static List<DetectableObject> allDetectables;
     private bool tooCloseToPlayer;
     public bool TooCloseToPlayer {get => tooCloseToPlayer;}
@@ -87,6 +88,7 @@ public class Detection : MonoBehaviour
         selfDetection.SetActive(false);
         seenDetectables = new List<DetectableObject>();
         tooCloseToPlayer = false;
+        playerDetectable = player.GetComponentInChildren<DetectableObject>();
         enemyMovement = GetComponentInParent<EnemyMovement>();
         enemyCamera = GetComponentInParent<EnemyCamera>();
         detectionLayers = LayerMask.GetMask("Default", "Player", "Enemies", "Body");
@@ -240,7 +242,7 @@ public class Detection : MonoBehaviour
             TrackPlayer();
 
             //if(tooCloseToPlayer)
-            //sourceMultiplier += 0.0f;
+                //sourceMultiplier += 0.0f;
 
             if (player.status.Contains(Player.Status.CriticalTrespassing))
                 detectionMeter = 10f;
@@ -255,7 +257,11 @@ public class Detection : MonoBehaviour
         // Seeing detectables increases the detection multiplier for the detectables' respective individual multiplers
         foreach(DetectableObject d in seenDetectables)
         {
-            sourceMultiplier += d.DetectionMultiplier;
+            if (d == playerDetectable && player.disguise != Enums.Disguise.Civillian)
+                sourceMultiplier += d.DetectionMultiplier * 0.70f;
+
+            else
+                sourceMultiplier += d.DetectionMultiplier;
         }
 
         // Increases detection based on the number of sources that increase it

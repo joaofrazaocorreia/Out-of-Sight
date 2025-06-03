@@ -77,11 +77,26 @@ public class EnemyMovement : MonoBehaviour
     private Animator animator;
     private NavMeshAgent navMeshAgent;
     private Alarm alarm;
-    public bool IsFacingTarget {get=> lastTargetRot != null &&
-        Mathf.Abs((float)lastTargetRot - transform.eulerAngles.y) <= 1f;}
-    public bool IsAtDestination {get => (new Vector3(lastTargetPos.x, 0f, lastTargetPos.z) -
-        new Vector3(transform.position.x, 0f, transform.position.z)).magnitude <=
-            (alarm.IsOn ? navMeshAgent.stoppingDistance * 3f : navMeshAgent.stoppingDistance);}
+    private PlayerCarryInventory playerCarryInventory;
+    public bool IsFacingTarget
+    {
+        get => lastTargetRot != null &&
+        Mathf.Abs((float)lastTargetRot - transform.eulerAngles.y) <= 1f;
+    }
+    public bool IsAtDestination
+    {
+        get
+        {
+            float stoppingDistance = navMeshAgent.stoppingDistance;
+
+            if(alarm.IsOn || enemySelf.EnemyStatus != Enemy.Status.Normal)
+                stoppingDistance *= 3.5f;
+
+            return (new Vector3(lastTargetPos.x, 0f, lastTargetPos.z) -
+                new Vector3(transform.position.x, 0f, transform.position.z)).magnitude <=
+                    stoppingDistance;
+        }
+    }
     private float stuckTimer;
     private Vector3 lastSelfPos;
     private List<PanicButton> mapButtons;
@@ -144,6 +159,7 @@ public class EnemyMovement : MonoBehaviour
             navMeshAgent = GetComponent<NavMeshAgent>();
             navMeshAgent.enabled = true;
             alarm = FindAnyObjectByType<Alarm>();
+            playerCarryInventory = FindAnyObjectByType<PlayerCarryInventory>();
             mapButtons = FindObjectsByType<PanicButton>(FindObjectsSortMode.None).ToList();
             mapEntrances = FindObjectsByType<MapEntrance>(FindObjectsSortMode.None).ToList();
             leavingMap = false;
@@ -729,17 +745,17 @@ public class EnemyMovement : MonoBehaviour
     /// </summary>
     public void EnableBody()
     {
-        if(bodyDisguise != null)
+        if (bodyDisguise != null && !playerCarryInventory.IsCarryingBody(bodyDisguise))
         {
-            if(!bodyDisguise.enabled && bodyDisguise.HasDisguise)
+            if (!bodyDisguise.enabled && bodyDisguise.HasDisguise)
                 bodyDisguise.enabled = true;
-                
-            else if(bodyDisguise.enabled && !bodyDisguise.HasDisguise)
-                bodyDisguise.enabled = false;
 
-            if(!bodyCarry.enabled)
-                bodyCarry.enabled = true;
+            else if (bodyDisguise.enabled && !bodyDisguise.HasDisguise)
+                bodyDisguise.enabled = false;
         }
+
+        if (!bodyCarry.enabled && !playerCarryInventory.IsCarryingBody(bodyCarry))
+            bodyCarry.enabled = true;
     }
 
     /// <summary>
