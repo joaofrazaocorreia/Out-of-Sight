@@ -39,15 +39,17 @@ public class EnemyParamedic : EnemyPassive
 
                 if(bodyGrabTimer <= 0)
                 {
+                    Transform body = bodyTarget.GetComponentInParent<Enemy>().transform;
+                    
                     animator.speed = 1f;
                     bodyGrabTimer = bodyGrabTime;
                     
-                    bodyTarget.transform.parent.parent.parent = bodyHoldPos;
-                    bodyTarget.transform.parent.parent.position = bodyHoldPos.position;
-                    bodyTarget.transform.parent.parent.rotation = bodyHoldPos.rotation;
+                    body.parent = bodyHoldPos;
+                    body.position = bodyHoldPos.position;
+                    body.rotation = bodyHoldPos.rotation;
 
                     alarm.UnregisterEnemy(bodyTarget.GetComponent<Enemy>());
-                    bodyTarget.GetComponentInParent<EnemyMovement>().ToggleRagdoll(false);
+                    body.GetComponent<EnemyMovement>().ToggleRagdoll(false);
                     bodyTarget = null;
                     
                     enemyMovement.ExitMap();
