@@ -17,7 +17,7 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private int startingTargetIndex;
     [SerializeField] private float walkSpeed = 4f;
     [SerializeField] private float runSpeed = 7f;
-    [SerializeField] private float turnSpeed = 2.5f;
+    [SerializeField] private float turnSpeed = 270f;
     [SerializeField] private float minMovementTime = 5f;
     [SerializeField] private float maxMovementTime = 12f;
     [SerializeField] private float minTurnTime = 2f;
@@ -449,20 +449,17 @@ public class EnemyMovement : MonoBehaviour
         Vector3 lookPos = new Vector3(position.x,
             transform.position.y, position.z);
 
-        if(IsAtDestination || halted)
+        if (IsAtDestination || halted)
         {
-            // Calculates how much the enemy will rotate this frame and updates the rotation
-            Vector3 difference = Vector3.up * Mathf.Clamp(Quaternion.LookRotation
-                (lookPos - transform.position).eulerAngles.y - transform.eulerAngles.y,
-                        -turnSpeed, turnSpeed);
-
-            transform.rotation = Quaternion.Euler(transform.eulerAngles + difference);
+            Quaternion targetRot = Quaternion.LookRotation((lookPos - transform.position).normalized, Vector3.up);
+            Quaternion newRot = Quaternion.RotateTowards(transform.rotation, targetRot, turnSpeed * Time.deltaTime);
+            transform.rotation = newRot;
         }
     }
 
     public void RotateToCurrentTarget()
     {
-        if(lastTargetRot != null && IsAtDestination && !IsFacingTarget)
+        if(lastTargetPos != null && IsAtDestination && !IsFacingTarget)
         {
             // Calculates how much the enemy will rotate this frame and updates the rotation
             Vector3 difference = Vector3.up * Mathf.Clamp((float)lastTargetRot -
@@ -470,7 +467,7 @@ public class EnemyMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(transform.eulerAngles + difference);
 
             // Stops rotating once the rotation is reached (static enemies preserve their spawning rotation)
-            if(IsFacingTarget && !isStatic)
+            if (IsFacingTarget && !isStatic)
                 RotateTo(null);
         }
     }
