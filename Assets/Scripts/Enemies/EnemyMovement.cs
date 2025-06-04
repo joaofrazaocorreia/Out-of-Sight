@@ -309,12 +309,19 @@ public class EnemyMovement : MonoBehaviour
                 // If there's available targets, loops until one is selected
                 if (availableMovementTargets.Count() > 0)
                 {
+                    int loop = 0;
                     while (movementTargetIndex < 0 || !availableMovementTargets.Contains
                         (movementTargets[movementTargetIndex]) || movementTargetIndex == previousIndex)
                     {
                         // Rolls a random index within the number of available targets and
                         // loops until it gets an available value
                         movementTargetIndex = Random.Range(0, movementTargets.Count());
+
+                        if (++loop >= 100)
+                        {
+                            movementTargetIndex = 0;
+                            break;
+                        }
                     }
                 }
 
@@ -399,11 +406,18 @@ public class EnemyMovement : MonoBehaviour
             // If there's available targets, loops until one is selected
             if (availableMovementTargets.Count() > 0)
             {
+                int loop = 0;
                 while (index < 0 || !availableMovementTargets.Contains(targetsList[index]))
                 {
                     // Rolls a random index within the number of available targets and
                     // loops until it gets an available value
                     index = Random.Range(0, targetsList.Count());
+
+                    if (++loop >= 100)
+                    {
+                        index = 0;
+                        break;
+                    }
                 }
 
                 targetsList[index].Occupy(this, true, moveTimeMultiplier);
