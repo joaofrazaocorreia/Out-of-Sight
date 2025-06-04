@@ -112,14 +112,14 @@ public class Cheats : MonoBehaviour
         {
             Debug.Log("Disguised as Security Guard");
             
-            player.GainDisguise(Disguise.Guard_Tier1);
+            player.GainDisguise(Disguise.Guard);
         }
 
         if(playerInput.actions["DisguiseGuardT2"].WasPressedThisFrame())
         {
-            Debug.Log("Disguised as Elite Guard");
+            Debug.Log("Disguised as Police");
             
-            player.GainDisguise(Disguise.Guard_Tier2);
+            player.GainDisguise(Disguise.Police);
         }
     }
 }

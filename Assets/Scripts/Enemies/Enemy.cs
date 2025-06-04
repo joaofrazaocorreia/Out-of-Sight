@@ -270,11 +270,14 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public virtual void BecomeAlarmed()
     {
-        if(IsConscious && !IsAlarmed)
+        if (IsConscious)
         {
-            Debug.Log($"{name} was alarmed!");
+            if (!IsAlarmed)
+            {
+                Debug.Log($"{name} was alarmed!");
+                if (alarmAudioPlayer != null) alarmAudioPlayer.Play();
+            }
 
-            if(alarmAudioPlayer != null) alarmAudioPlayer.Play();
             alarmedTimer = alarmedTime;
             detection.DetectionMeter = detection.DetectionLimit;
             enemyMovement.Halted = false;

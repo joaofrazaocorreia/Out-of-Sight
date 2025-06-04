@@ -30,8 +30,11 @@ public class EnemyAggressive : Enemy
         if(IsConscious && IsAlarmed && !alarm.IsOn)
         {
             TickBehaviorTimers();
-            radioIcon.SetActive(true);
-            radioFill.fillAmount = 1 - (alarmedTimer / alarmedTime);
+            if (radioIcon != null)
+            {
+                radioIcon.SetActive(true);
+                radioFill.fillAmount = 1 - (alarmedTimer / alarmedTime);
+            }
 
             if(alarmedTimer <= 0)
             {
@@ -40,7 +43,7 @@ public class EnemyAggressive : Enemy
             }
         }
 
-        else
+        else if (radioIcon != null)
             radioIcon.SetActive(false);
     }
     

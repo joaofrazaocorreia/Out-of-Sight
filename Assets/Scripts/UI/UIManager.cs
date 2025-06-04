@@ -503,16 +503,16 @@ public class UIManager : MonoBehaviour
                 break;
             }
             
-            case Guard_Tier1:
+            case Guard:
             {
                 newText = "Disguise: Security";
                 newImage = guardTier1DisguiseSprite;
                 break;
             }
             
-            case Guard_Tier2:
+            case Police:
             {
-                newText = "Disguise: Bodyguard";
+                newText = "Disguise: Police";
                 newImage = guardTier2DisguiseSprite;
                 break;
             }
@@ -839,7 +839,7 @@ public class UIManager : MonoBehaviour
 
     private void UpdateDetectionArrows()
     {
-        if(!alarm.IsOn)
+        if(player.detectable)
         {
             Transform player = playerInput.transform;
             float cameraAngle = player.eulerAngles.y - 90;
@@ -856,7 +856,7 @@ public class UIManager : MonoBehaviour
                     if(direction.z < 0)
                         angle *= -1;
 
-                    detectionArrows[d].SetActive(true);
+                    detectionArrows[d].SetActive(!alarm.IsOn || (alarm.IsOn && d.SeesPlayer));
                     detectionArrows[d].transform.eulerAngles = new Vector3(0, 0, cameraAngle + angle);
 
                     float colorDifference = 1 - (d.DetectionMeter / d.DetectionLimit);

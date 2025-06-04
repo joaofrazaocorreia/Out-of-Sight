@@ -62,7 +62,8 @@ public class Detection : MonoBehaviour
             return closest;
         }
     }
-    public bool SeesPlayer {get => seenDetectables.Contains(player.GetComponentInChildren<DetectableObject>());}
+    private DetectableObject playerDetectable;
+    public bool SeesPlayer { get => seenDetectables.Contains(playerDetectable); }
     private static List<DetectableObject> allDetectables;
     private bool tooCloseToPlayer;
     public bool TooCloseToPlayer {get => tooCloseToPlayer;}
@@ -87,6 +88,7 @@ public class Detection : MonoBehaviour
         selfDetection.SetActive(false);
         seenDetectables = new List<DetectableObject>();
         tooCloseToPlayer = false;
+        playerDetectable = player.GetComponentInChildren<DetectableObject>();
         enemyMovement = GetComponentInParent<EnemyMovement>();
         enemyCamera = GetComponentInParent<EnemyCamera>();
         detectionLayers = LayerMask.GetMask("Default", "Player", "Enemies", "Body");
@@ -240,7 +242,7 @@ public class Detection : MonoBehaviour
             TrackPlayer();
 
             //if(tooCloseToPlayer)
-            //sourceMultiplier += 0.0f;
+                //sourceMultiplier += 0.0f;
 
             if (player.status.Contains(Player.Status.CriticalTrespassing))
                 detectionMeter = 10f;
@@ -255,7 +257,11 @@ public class Detection : MonoBehaviour
         // Seeing detectables increases the detection multiplier for the detectables' respective individual multiplers
         foreach(DetectableObject d in seenDetectables)
         {
-            sourceMultiplier += d.DetectionMultiplier;
+            if (d == playerDetectable && player.disguise != Enums.Disguise.Civillian)
+                sourceMultiplier += d.DetectionMultiplier * 0.70f;
+
+            else
+                sourceMultiplier += d.DetectionMultiplier;
         }
 
         // Increases detection based on the number of sources that increase it
@@ -368,11 +374,11 @@ public class Detection : MonoBehaviour
     private void UpdateSelfDetectionUI()
     {
         // The UI checks if the enemy is not knocked out and not a camera
-        if(enemyMovement != null && enemyCamera == null &&
+        if (enemyMovement != null && enemyCamera == null &&
             selfEnemy.EnemyStatus != Enemy.Status.KnockedOut)
         {
             // Enables the alarmed icon when alarmed
-            if(enemyMovement != null && (alarm.IsOn || selfEnemy.IsAlarmed))
+            if (enemyMovement != null && (alarm.IsOn || selfEnemy.IsAlarmed))
             {
                 selfDetection.SetActive(true);
                 tasedIcon.SetActive(false);
@@ -381,7 +387,7 @@ public class Detection : MonoBehaviour
             }
 
             // Enables the detection meter if it's detecting something
-            else if(DetectionMeter > 0)
+            else if (DetectionMeter > 0)
             {
                 selfDetection.SetActive(true);
                 tasedIcon.SetActive(false);
@@ -407,7 +413,7 @@ public class Detection : MonoBehaviour
         else if (enemyMovement == null && enemyCamera != null)
         {
             // Enables the jammed icon when being jammed
-            if(enemyCamera.Jammed)
+            if (enemyCamera.Jammed)
             {
                 selfDetection.SetActive(true);
                 tasedIcon.SetActive(true);
@@ -418,7 +424,7 @@ public class Detection : MonoBehaviour
             }
 
             // Enables the alarmed icon when the alarm is raised (and the camera is turned on)
-            else if(alarm.IsOn && enemyCamera.IsOn)
+            else if (alarm.IsOn && enemyCamera.IsOn)
             {
                 selfDetection.SetActive(true);
                 tasedIcon.SetActive(false);
@@ -427,7 +433,7 @@ public class Detection : MonoBehaviour
             }
 
             // Shows the detection UI if the camera is detecting something (and turned on)
-            else if(DetectionMeter > 0 && enemyCamera.IsOn)
+            else if (DetectionMeter > 0 && enemyCamera.IsOn)
             {
                 selfDetection.SetActive(true);
                 tasedIcon.SetActive(false);
@@ -474,10 +480,9 @@ public class Detection : MonoBehaviour
 
     private void OnPlayerAttack(object sender, EventArgs e)
     {
-        if (SeesPlayer && player.detectable)
+        if (SeesPlayer && player.detectable && GetComponentInParent<Enemy>().IsConscious)
         {
             detectionMeter = detectionLimit * 2;
-            Debug.Log("this npc saw the player knocking out someone");
         }
     }
 

@@ -52,17 +52,22 @@ namespace Interaction.Equipments
 
         private void Fire()
         {
-            if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out RaycastHit hit, raycastDistance, raycastMask))
+            if (Time.timeScale != 0)
             {
-                var hitenemy = hit.collider.GetComponentInParent<Enemy>();
-            
-                if(hit.collider != null && hitenemy != null && hitenemy.EnemyStatus != Enemy.Status.KnockedOut)
+                if (Physics.Raycast(raycastOrigin.position, raycastOrigin.forward,
+                    out RaycastHit hit, raycastDistance, raycastMask))
                 {
-                    hitenemy.GetKnockedOut();
+                    var hitenemy = hit.collider.GetComponentInParent<Enemy>();
+
+                    if (hit.collider != null && hitenemy != null && hitenemy.EnemyStatus
+                        != Enemy.Status.KnockedOut)
+                    {
+                        hitenemy.GetKnockedOut();
+                    }
                 }
+                OnTaserShot?.Invoke(this, EventArgs.Empty);
+                taserShotPlayer.Play();
             }
-            OnTaserShot?.Invoke(this, EventArgs.Empty);
-            taserShotPlayer.Play();
         }
 
         private void Reload()

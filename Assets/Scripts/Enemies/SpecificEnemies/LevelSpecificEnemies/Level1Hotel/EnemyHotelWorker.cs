@@ -33,19 +33,20 @@ public class EnemyHotelWorker : EnemyPassive
 
         List<MovementTarget> emptyMainTargets = jobTargets.Where(m => !m.Occupied).ToList();
 
-        if (emptyMainTargets.Count > 0 && !jobTargets.Contains(enemyMovement.CurrentTarget))
+        if (!enemyMovement.MovingToSetTarget)
         {
-            enemyMovement.PickTarget(emptyMainTargets, false, true);
-        }
+            if (emptyMainTargets.Count > 0 && !jobTargets.Contains(enemyMovement.CurrentTarget))
+            {
+                enemyMovement.PickTarget(emptyMainTargets, false, true);
+            }
 
-        else if (enemyMovement.MoveTimer <= 0 && jobTargets.Contains(enemyMovement.CurrentTarget))
-        {
-            enemyMovement.CurrentTarget.Occupy(enemyMovement, true);
+            else if (enemyMovement.MoveTimer <= 0 && jobTargets.Contains(enemyMovement.CurrentTarget))
+            {
+                enemyMovement.CurrentTarget.Occupy(enemyMovement, true);
+            }
         }
             
-        
         enemyMovement.Patrol();
-        enemyMovement.RotateToCurrentTarget();
 
         luggageInteractible.enabled = enemyMovement.CurrentTarget == conciergeTarget && enemyMovement.IsAtDestination;
     }
