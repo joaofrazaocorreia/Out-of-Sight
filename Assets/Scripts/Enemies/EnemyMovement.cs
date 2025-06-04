@@ -463,7 +463,7 @@ public class EnemyMovement : MonoBehaviour
         {
             // Calculates how much the enemy will rotate this frame and updates the rotation
             Vector3 difference = Vector3.up * Mathf.Clamp((float)lastTargetRot -
-                transform.eulerAngles.y, -turnSpeed, turnSpeed);
+                transform.eulerAngles.y, -turnSpeed * Time.deltaTime, turnSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Euler(transform.eulerAngles + difference);
 
             // Stops rotating once the rotation is reached (static enemies preserve their spawning rotation)
