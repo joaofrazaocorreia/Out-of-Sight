@@ -163,8 +163,9 @@ public class Detection : MonoBehaviour
                 else
                 {
                     // Checks if the detectableObject is within this NPC's field of view
-                    if(Vector3.Angle(transform.TransformDirection(Vector3.forward), 
-                        distanceToDetectableHorizontal) <= detectionMaxAngle)
+                    if (Vector3.Angle(transform.TransformDirection(Vector3.forward),
+                        distanceToDetectableHorizontal) <= detectionMaxAngle &&
+                            (enemyCamera == null || distanceToDetectableHorizontal.magnitude >= 2f))
                     {
                         // Sends a raycast towards the detectableObject
                         Physics.Raycast(transform.position, distanceToDetectable,
