@@ -160,7 +160,8 @@ public class EnemyCamera : Enemy, IJammable
         if (detection.SeesPlayer)
             detection.TrackPlayer();
 
-        cameraOperator.BecomeAlarmed();
+        if(!cameraOperator.IsAlarmed)
+            cameraOperator.BecomeAlarmed();
 
         if(alarm.IsOn)
             alarm.TriggerAlarm(false);
