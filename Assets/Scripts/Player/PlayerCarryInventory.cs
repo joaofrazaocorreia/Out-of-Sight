@@ -78,7 +78,14 @@ public class PlayerCarryInventory : MonoBehaviour
                 case CarriableType.Body:
                     player.LoseStatus(Player.Status.Suspicious);
 
-                    storedCarriable.GetComponentInParent<EnemyMovement>().ToggleRagdoll(true);
+                    try
+                    {
+                        storedCarriable.GetComponentInParent<EnemyMovement>().ToggleRagdoll(true);
+                    }
+                    catch
+                    {
+                        storedCarriableParent.GetComponentInParent<EnemyMovement>().ToggleRagdoll(true);
+                    }
                     storedCarriable.GetComponentInChildren<BodyCarry>().enabled = true;
                     storedCarriable.GetComponentInChildren<BodyDisguise>().enabled = true;
                     break;
