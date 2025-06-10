@@ -6,7 +6,6 @@ public class BodyCarry : InteractiveObject
     public float BodyDetectionMultiplier {get => bodyDetectionMultiplier;}
     private Enemy enemySelf;
     private PlayerCarryInventory playerCarryInventory;
-    private GameObject thisBody;
     private bool hasBeenDetected;
     public bool HasBeenDetected {get => hasBeenDetected; set{ if(!hasBeenDetected) hasBeenDetected = value;}}
 
@@ -14,7 +13,6 @@ public class BodyCarry : InteractiveObject
     {
         enemySelf = GetComponentInParent<Enemy>();
         playerCarryInventory = FindAnyObjectByType<PlayerCarryInventory>();
-        thisBody = transform.parent.gameObject;
         hasBeenDetected = false;
         enabled = false;
     }
@@ -25,7 +23,7 @@ public class BodyCarry : InteractiveObject
         {
             base.Interact();
 
-            playerCarryInventory.PickUpBody(thisBody);
+            playerCarryInventory.PickUpBody(transform.parent.gameObject);
         }
     }
 
