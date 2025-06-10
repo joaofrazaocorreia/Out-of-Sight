@@ -355,7 +355,7 @@ public class Enemy : MonoBehaviour
             }
 
             // At 1 third of detection, becomes curious of the nearest suspicious object it sees
-            else if ((detection.DetectionMeter >= detection.DetectionLimit / 5) || detection.TooCloseToPlayer)
+            else if ((detection.DetectionMeter >= detection.DetectionLimit / 5) || (detection.TooCloseToPlayer && player.IsMoving))
             {
                 if (EnemyStatus == Status.Normal || EnemyStatus == Status.Curious)
                     BecomeCurious();

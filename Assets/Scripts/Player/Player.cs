@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float suspiciousDetectionMultiplier = 2.5f;
     private DetectableObject detectableObject;
     private List<MapArea> currentAreas;
+    private CharacterController characterController;
+    public bool IsMoving { get => characterController.velocity.magnitude >= 1f; }
     public event EventHandler OnDisguiseChanged;
     public event EventHandler OnStatusChanged;
 
@@ -23,6 +25,7 @@ public class Player : MonoBehaviour
     {
         detectable = true;
         detectableObject = GetComponentInChildren<DetectableObject>();
+        characterController = GetComponentInChildren<CharacterController>();
         currentAreas = new List<MapArea>();
 
         GainStatus(Status.Normal);
