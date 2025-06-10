@@ -80,8 +80,8 @@ public class EnemyItemInventory : MonoBehaviour
             itemsList[index].transform.parent = ItemsParent;
 
             itemsList[index].GetComponent<Item>().enabled = true;
-            itemsList[index].GetComponent<Collider>().enabled = true;
-            itemsList[index].AddComponent<Rigidbody>();
+            itemsList[index].GetComponentInChildren<Collider>().enabled = true;
+            itemsList[index].GetComponentInChildren<Collider>().gameObject.AddComponent<Rigidbody>();
         }
     }
 

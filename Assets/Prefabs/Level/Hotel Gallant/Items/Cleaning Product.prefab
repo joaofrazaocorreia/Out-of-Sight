@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1076808630661229884
+--- !u!1 &830738727104774715
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8711704314379387223}
-  - component: {fileID: 1479505913995119837}
-  - component: {fileID: 4033246219574330423}
-  - component: {fileID: 5167581902479222052}
-  - component: {fileID: 5575052248500188524}
+  - component: {fileID: 57615320106260609}
+  - component: {fileID: 3991151623148853028}
+  - component: {fileID: 1191092187800151022}
+  - component: {fileID: 5005855107913266927}
   m_Layer: 0
-  m_Name: Cleaning Product
+  m_Name: SprayCleaner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8711704314379387223
+--- !u!4 &57615320106260609
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1076808630661229884}
+  m_GameObject: {fileID: 830738727104774715}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.9659267, z: -0, w: -0.25881574}
-  m_LocalPosition: {x: 21.85, y: -0.536, z: 39.85}
-  m_LocalScale: {x: 0.45293653, y: 0.4529365, z: 0.45293653}
-  m_ConstrainProportionsScale: 1
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -0.09, y: -0.01, z: 0.17658533}
+  m_LocalScale: {x: 0.075, y: 0.075, z: 0.075}
+  m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 8711704314379387223}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1479505913995119837
+--- !u!33 &3991151623148853028
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1076808630661229884}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &4033246219574330423
+  m_GameObject: {fileID: 830738727104774715}
+  m_Mesh: {fileID: 1597301545126413053, guid: 03171f8f05f14a1469de47da87ce4585, type: 3}
+--- !u!23 &1191092187800151022
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1076808630661229884}
+  m_GameObject: {fileID: 830738727104774715}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -66,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 36b3d650a82bb4048a8a67494447e408, type: 2}
+  - {fileID: 2100000, guid: 5b826729f4ccadf4ebac5a2be13bb781, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -88,13 +87,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &5167581902479222052
+--- !u!136 &5005855107913266927
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1076808630661229884}
+  m_GameObject: {fileID: 830738727104774715}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -107,10 +106,43 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Radius: 12
+  m_Height: 30
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1076808630661229884
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8711704314379387223}
+  - component: {fileID: 5575052248500188524}
+  m_Layer: 0
+  m_Name: Cleaning Product
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8711704314379387223
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1076808630661229884}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9659267, z: -0, w: -0.25881574}
+  m_LocalPosition: {x: 21.85, y: -0.536, z: 39.85}
+  m_LocalScale: {x: 0.45293653, y: 0.4529365, z: 0.45293653}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 57615320106260609}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5575052248500188524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,9 +172,11 @@ MonoBehaviour:
       m_Calls: []
   isInteractionSuspicious: 0
   isSecondInteractionSuspicious: 0
+  whitelistedDisguises: 
   suspicionIncreaseOnInteraction: 2.5
   objectName: Cleaning Product
   customInteractionMessage: 
+  showRequirementMessage: 1
   customRequirementMessage: 
   onInteractAudioPlayer: {fileID: 0}
   whileInteractAudioPlayer: {fileID: 0}
