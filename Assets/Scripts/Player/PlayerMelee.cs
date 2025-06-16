@@ -95,13 +95,13 @@ public class PlayerMelee : MonoBehaviour
                 playerCarryInventory.DropCarriable();
             }
 
-            else if(canAttack)
+            else if(canAttack && attackableEnemy != null)
             {
                 Debug.Log("Player used Melee attack");
-                if(attackableEnemy is null) return;
                 
                 attackableEnemy.GetKnockedOut();
                 OnKnockout?.Invoke(this, EventArgs.Empty);
+                
                 animator.SetTrigger("Melee");
                 StartCoroutine(CheckDelay());
             }
