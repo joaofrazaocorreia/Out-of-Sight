@@ -86,7 +86,8 @@ public class PlayerMelee : MonoBehaviour
 
     private void CheckForAttack()
     {
-        if(playerInput.actions["Attack"].WasPressedThisFrame() && cooldownTimer <= 0)
+        if(playerInput.actions["Attack"].WasPressedThisFrame() && cooldownTimer <= 0 &&
+            (playerCarryInventory.CarryingBody || canAttack))
         {
             if(playerCarryInventory.CarryingBody)
             {
