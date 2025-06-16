@@ -15,6 +15,8 @@ public class PlayerEquipment : MonoBehaviour
     
     public EquipmentObject[] EquipmentObjects => _equipmentObjects;
     
+    private PlayerMelee _playerMelee;
+    
     private int _currentEquipmentNum;
     private bool suspiciousCheck;
 
@@ -53,7 +55,6 @@ public class PlayerEquipment : MonoBehaviour
         if (index < 0 || index >= equipments.Length) return;
         if (index == CurrentEquipmentNum)
         {
-            CurrentEquipment.Equipped(false);
             Unequip();
         }
         else
@@ -68,6 +69,7 @@ public class PlayerEquipment : MonoBehaviour
 
     private void Unequip()
     {
+        if(CurrentEquipment != null) CurrentEquipment.Equipped(false);
         _currentEquipmentNum = -1;
         CurrentEquipment = null;
 
@@ -81,12 +83,6 @@ public class PlayerEquipment : MonoBehaviour
     {
         if(CurrentEquipment is IFreeUseEquipment equipment && CurrentEquipment.CanBeUsed) equipment.FreeUse(); 
     }
-
-    private void EquipmentChanged()
-    {
-        // Call animator for equipAnimations;
-    }
-
     private void Start()
     {
         _equipmentObjects = new EquipmentObject[equipments.Length];
@@ -96,6 +92,9 @@ public class PlayerEquipment : MonoBehaviour
             _recentlyAddedEquipment = _equipmentObjects[i];
             OnEquipmentAdded?.Invoke(this, EventArgs.Empty);
         }
+
+        _playerMelee = GetComponent<PlayerMelee>();
+        _playerMelee.OnKnockout += OnAttack;
         
         Unequip();
     }
@@ -116,5 +115,7 @@ public class PlayerEquipment : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         animator.SetBool("Equipped", true);
         CurrentEquipment.Equipped(true);
-    } 
+    }
+
+    private void OnAttack(object sender, EventArgs e) => Unequip();
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,7 @@ public class PlayerMelee : MonoBehaviour
     private PlayerInput playerInput;
     private PlayerInteraction playerInteraction;
     private PlayerCarryInventory playerCarryInventory;
+    [SerializeField] private Animator animator;
 
     private bool canAttack;
     
@@ -20,6 +22,8 @@ public class PlayerMelee : MonoBehaviour
     public event EventHandler OnAttackAvailable;
     public event EventHandler OnAttackNotAvailable;
     public event EventHandler OnKnockout;
+
+    public event EventHandler OnAttackEnd;
 
     private void Start()
     {
@@ -98,11 +102,25 @@ public class PlayerMelee : MonoBehaviour
                 
                 attackableEnemy.GetKnockedOut();
                 OnKnockout?.Invoke(this, EventArgs.Empty);
+                animator.SetTrigger("Melee");
+                StartCoroutine(CheckDelay());
             }
 
             cooldownTimer = cooldownInSeconds;
             meleeAttackPlayer.Play();
             attackableEnemy = null;
         }
+    }
+
+    private IEnumerator CheckDelay()
+    {
+        yield return new WaitForSeconds(0.05f);
+        StartCoroutine(OnCompleteAttackAnimation());
+    }
+
+    private IEnumerator OnCompleteAttackAnimation()
+    {
+        yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(1).normalizedTime < 1.0f);
+        OnAttackEnd?.Invoke(this, EventArgs.Empty);
     }
 }

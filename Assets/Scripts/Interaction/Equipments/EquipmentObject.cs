@@ -9,6 +9,7 @@ public abstract class EquipmentObject : MonoBehaviour
     [SerializeField] private string playerAnimationName = "None";
     public string PlayerAnimationName => playerAnimationName;
     protected GameObject _equipmentModel;
+    public GameObject EquipmentModel => _equipmentModel;
     protected PlayerEquipment _playerEquipment;
     public bool CanBeUsed { get; protected set; }
     public bool IsSuspicious { get; protected set; } = true;
