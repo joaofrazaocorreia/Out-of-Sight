@@ -19,6 +19,8 @@ public class PlayerEquipment : MonoBehaviour
     
     private int _currentEquipmentNum;
     private bool suspiciousCheck;
+    
+    private int _storedEquipmentNum = -1;
 
     public int CurrentEquipmentNum
     {
@@ -95,6 +97,7 @@ public class PlayerEquipment : MonoBehaviour
 
         _playerMelee = GetComponent<PlayerMelee>();
         _playerMelee.OnKnockout += OnAttack;
+        _playerMelee.OnAttackEnd += OnAttackEnd;
         
         Unequip();
     }
@@ -117,5 +120,19 @@ public class PlayerEquipment : MonoBehaviour
         CurrentEquipment.Equipped(true);
     }
 
-    private void OnAttack(object sender, EventArgs e) => Unequip();
+    private void OnAttack(object sender, EventArgs e)
+    {
+        if(CurrentEquipment != null) StoreEquipmentWhileAttacking();
+        Unequip();  
+    }
+
+    private void StoreEquipmentWhileAttacking()
+    {
+        _storedEquipmentNum = CurrentEquipmentNum;
+    }
+
+    private void OnAttackEnd(object sender, EventArgs e)
+    {
+        if(_storedEquipmentNum != -1) NewEquipmentSelected(_storedEquipmentNum);
+    }
 }

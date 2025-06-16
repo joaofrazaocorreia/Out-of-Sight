@@ -121,6 +121,7 @@ public class PlayerMelee : MonoBehaviour
     private IEnumerator OnCompleteAttackAnimation()
     {
         yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(1).normalizedTime < 1.0f);
+        yield return new WaitForSeconds(0.25f);
         OnAttackEnd?.Invoke(this, EventArgs.Empty);
     }
 }
