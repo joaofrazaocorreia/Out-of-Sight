@@ -96,7 +96,7 @@ public class PlayerEquipment : MonoBehaviour
         }
 
         _playerMelee = GetComponent<PlayerMelee>();
-        _playerMelee.OnKnockout += OnAttack;
+        _playerMelee.OnKnockout += OnMeleeAttack;
         _playerMelee.OnAttackEnd += OnAttackEnd;
         
         Unequip();
@@ -120,7 +120,7 @@ public class PlayerEquipment : MonoBehaviour
         CurrentEquipment.Equipped(true);
     }
 
-    private void OnAttack(object sender, EventArgs e)
+    private void OnMeleeAttack(object sender, EventArgs e)
     {
         if(CurrentEquipment != null) StoreEquipmentWhileAttacking();
         Unequip();  
