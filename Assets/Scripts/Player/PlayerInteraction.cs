@@ -211,8 +211,7 @@ public class PlayerInteraction : MonoBehaviour
             _interactionAudioPlaying = true;
         }
 
-        if (_playerEquipment.CurrentEquipment.EquipmentType == ActiveInteractiveObject.RequiredEquipment &&
-            _playerEquipment.CurrentEquipment != null)
+        if (_playerEquipment.CurrentEquipment?.EquipmentType == ActiveInteractiveObject?.RequiredEquipment)
         {
             _playerEquipment.Animator.SetBool(_playerEquipment.CurrentEquipment.ContinuousUseAnimation, true);
             _equipmentAnimationLoop = true;
@@ -248,7 +247,7 @@ public class PlayerInteraction : MonoBehaviour
         
         _finishedInteraction = true;
         
-        if (_playerEquipment.CurrentEquipment.EquipmentType == ActiveInteractiveObject.RequiredEquipment &&
+        if (_playerEquipment.CurrentEquipment?.EquipmentType == ActiveInteractiveObject?.RequiredEquipment &&
             _playerEquipment.CurrentEquipment != null)
         {
             _playerEquipment.Animator.SetBool(_playerEquipment.CurrentEquipment.ContinuousUseAnimation, false);
@@ -270,7 +269,7 @@ public class PlayerInteraction : MonoBehaviour
         
             if(ActiveInteractiveObject.WhileInteractAudioPlayer != null) ActiveInteractiveObject.WhileInteractAudioPlayer.Stop();
 
-            if (_playerEquipment.CurrentEquipment.EquipmentType == ActiveInteractiveObject.RequiredEquipment &&
+            if (_playerEquipment.CurrentEquipment?.EquipmentType == ActiveInteractiveObject.RequiredEquipment &&
                 _playerEquipment.CurrentEquipment != null)
             {
                 _playerEquipment.Animator.SetBool(_playerEquipment.CurrentEquipment.ContinuousUseAnimation, false);

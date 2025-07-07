@@ -27,7 +27,7 @@ public class Jammer : EquipmentObject, IHasAmmo
             _currentAmount = value; 
             CanBeUsed = _currentAmount > 0;
             IsSuspicious = _currentAmount > 0;
-            _playerEquipment.EquipmentUsed();
+            _playerEquipment.EquipmentChanged();
             ToggleModel();
         }
     }
