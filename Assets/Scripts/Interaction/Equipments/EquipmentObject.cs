@@ -1,13 +1,18 @@
 using System;
 using Interaction.Equipments;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public abstract class EquipmentObject : MonoBehaviour
 {
     [SerializeField] private EquipmentType equipmentType;
     [SerializeField] private Sprite icon;
-    [SerializeField] private string playerAnimationName = "None";
-    public string PlayerAnimationName => playerAnimationName;
+    [FormerlySerializedAs("playerAnimationName")] [SerializeField] private string equipAnimationName = "None";
+    [FormerlySerializedAs("animationTrigger")] [SerializeField] private string useAnimation = "None";
+    [FormerlySerializedAs("equipmentName")] [SerializeField] private string continuousUseAnimation = "None";
+    public string EquipAnimationName => equipAnimationName;
+    public string UseAnimation => useAnimation;
+    public string ContinuousUseAnimation => continuousUseAnimation;
     protected GameObject _equipmentModel;
     public GameObject EquipmentModel => _equipmentModel;
     protected PlayerEquipment _playerEquipment;

@@ -45,9 +45,8 @@ namespace Interaction.Equipments
             _currentAmmo--;
             Fire();
             CanBeUsed = false;
-            Reload();
             
-            base.Used(null);
+            Reload();
         }
 
         private void Fire()
@@ -67,6 +66,7 @@ namespace Interaction.Equipments
                 }
                 OnTaserShot?.Invoke(this, EventArgs.Empty);
                 taserShotPlayer.Play();
+                base.Used(null);
             }
         }
 

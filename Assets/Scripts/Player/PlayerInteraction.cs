@@ -25,6 +25,7 @@ public class PlayerInteraction : MonoBehaviour
     private bool _interactionReady;
     private bool _startedInteraction;
     private bool _isInteractionSuspicious;
+    private bool _equipmentAnimationLoop;
 
     private RaycastHit _hit;
 
@@ -210,6 +211,14 @@ public class PlayerInteraction : MonoBehaviour
             _interactionAudioPlaying = true;
         }
 
+        if (_playerEquipment.CurrentEquipment.EquipmentType == ActiveInteractiveObject.RequiredEquipment &&
+            _playerEquipment.CurrentEquipment != null)
+        {
+            _playerEquipment.Animator.SetBool(_playerEquipment.CurrentEquipment.ContinuousUseAnimation, true);
+            _equipmentAnimationLoop = true;
+        }
+        
+
         if (_interactionDuration > 0f)
         {
             WhileInteracting?.Invoke(this, EventArgs.Empty);
@@ -235,8 +244,18 @@ public class PlayerInteraction : MonoBehaviour
         }
         
         ActiveInteractiveObject.Interact();
+        if(ActiveInteractiveObject.InteractiveType == InteractiveType.Item) _animator.SetTrigger("Pickup");
+        
         _finishedInteraction = true;
+        
+        if (_playerEquipment.CurrentEquipment.EquipmentType == ActiveInteractiveObject.RequiredEquipment &&
+            _playerEquipment.CurrentEquipment != null)
+        {
+            _playerEquipment.Animator.SetBool(_playerEquipment.CurrentEquipment.ContinuousUseAnimation, false);
+        }
+
         ActiveInteractiveObject = null;
+        _equipmentAnimationLoop = false;
     }
 
     private void StopInteraction()
@@ -250,12 +269,19 @@ public class PlayerInteraction : MonoBehaviour
             }
         
             if(ActiveInteractiveObject.WhileInteractAudioPlayer != null) ActiveInteractiveObject.WhileInteractAudioPlayer.Stop();
+
+            if (_playerEquipment.CurrentEquipment.EquipmentType == ActiveInteractiveObject.RequiredEquipment &&
+                _playerEquipment.CurrentEquipment != null)
+            {
+                _playerEquipment.Animator.SetBool(_playerEquipment.CurrentEquipment.ContinuousUseAnimation, false);
+            }
         }     
         _finishedInteraction = true;
         _interactionReady = false;
         _lastHitObject = null;
         HitInteractables = null;
         _interactionAudioPlaying = false;
+        _equipmentAnimationLoop = false;
         
         OnInteractionStop?.Invoke(this, EventArgs.Empty);
     }
@@ -264,6 +290,4 @@ public class PlayerInteraction : MonoBehaviour
     {
         return HitInteractables.Length > index ? HitInteractables[index] : null;
     }
-
-    
 }

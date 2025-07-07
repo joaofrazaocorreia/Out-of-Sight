@@ -9,6 +9,8 @@ public class PlayerEquipment : MonoBehaviour
     [SerializeField] private GameObject[] equipments;
     [SerializeField] private PlayAudio equipingPlayer;
     [SerializeField] private Animator animator;
+    
+    public Animator Animator => animator;
 
     private EquipmentObject[] _equipmentObjects;
     public EquipmentObject _recentlyAddedEquipment {get; private set;}
@@ -39,9 +41,9 @@ public class PlayerEquipment : MonoBehaviour
             CurrentEquipment = EquipmentObjects[_currentEquipmentNum];
             StartCoroutine(EquipDelay());
             
-            if (CurrentEquipment != null && CurrentEquipment.PlayerAnimationName != "None") animator.SetTrigger(CurrentEquipment.PlayerAnimationName);
+            if (CurrentEquipment != null && CurrentEquipment.EquipAnimationName != "None") animator.SetTrigger(CurrentEquipment.EquipAnimationName);
             
-            OnEquipmentChanged?.Invoke(this, EventArgs.Empty);
+            EquipmentChanged();
             suspiciousCheck = CurrentEquipment.IsSuspicious;
         }
     }
@@ -83,7 +85,11 @@ public class PlayerEquipment : MonoBehaviour
 
     public void TryUseEquipment()
     {
-        if(CurrentEquipment is IFreeUseEquipment equipment && CurrentEquipment.CanBeUsed) equipment.FreeUse(); 
+        if (CurrentEquipment is IFreeUseEquipment equipment && CurrentEquipment.CanBeUsed)
+        {
+            equipment.FreeUse();
+            EquipmentUsed();
+        } 
     }
     private void Start()
     {
@@ -104,13 +110,19 @@ public class PlayerEquipment : MonoBehaviour
 
     public void EquipmentUsed()
     {
-        if (CurrentEquipment != null && suspiciousCheck != CurrentEquipment.IsSuspicious)
-        {
+        if(CurrentEquipment.UseAnimation != "None") animator.SetTrigger(CurrentEquipment.UseAnimation);
+        OnEquipmentChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void EquipmentChanged()
+    {
+       if (CurrentEquipment != null && suspiciousCheck != CurrentEquipment.IsSuspicious) 
+       {
             suspiciousCheck = CurrentEquipment.IsSuspicious;
             if (suspiciousCheck) GetComponent<Player>().GainStatus(Player.Status.Suspicious);
             else GetComponent<Player>().LoseStatus(Player.Status.Suspicious);
-        }
-        OnEquipmentChanged?.Invoke(this, EventArgs.Empty);
+       }
+       OnEquipmentChanged?.Invoke(this, EventArgs.Empty); 
     }
 
     private IEnumerator EquipDelay()
