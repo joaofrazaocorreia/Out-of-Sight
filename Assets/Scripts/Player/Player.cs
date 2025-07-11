@@ -78,9 +78,7 @@ public class Player : MonoBehaviour
     {
         if (!status.Contains(newStatus))
         {
-            status.Add(newStatus);
-            UpdateDetectableMultiplier();
-            OnStatusChanged?.Invoke(this, EventArgs.Empty);
+            GainStatus(newStatus);
         }
     }
 

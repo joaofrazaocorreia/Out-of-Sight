@@ -43,7 +43,7 @@ public class PlayerEquipment : MonoBehaviour
             
             if (CurrentEquipment != null && CurrentEquipment.EquipAnimationName != "None") animator.SetTrigger(CurrentEquipment.EquipAnimationName);
             
-            EquipmentChanged();
+            OnEquipmentChanged?.Invoke(this, EventArgs.Empty);
             suspiciousCheck = CurrentEquipment.IsSuspicious;
         }
     }

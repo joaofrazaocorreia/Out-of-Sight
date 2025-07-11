@@ -224,7 +224,8 @@ public class EnemyMovement : MonoBehaviour
         }
 
         // Plays footsteps when walking and running
-        if (footstepTimer + footstepInterval * navMeshAgent.speed / walkSpeed <= Time.time && navMeshAgent.velocity.magnitude >= 1)
+        if (footstepTimer + footstepInterval * navMeshAgent.speed / walkSpeed <= Time.time &&
+            navMeshAgent.velocity.magnitude >= 1)
         {
             footstepPlayer.Play();
             footstepTimer = Time.time;
@@ -437,7 +438,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if(targetRotation != lastTargetRot && enemySelf.IsConscious)
         {
-            lastTargetRot = AdjustRotationAngle(targetRotation);
+            lastTargetRot = targetRotation;
         }
     }
 
@@ -626,7 +627,7 @@ public class EnemyMovement : MonoBehaviour
             newRot += turnAngle;
 
             // Begins rotating to the chosen angle
-            RotateTo(AdjustRotationAngle(newRot));
+            RotateTo(newRot);
 
 
             // Resets the timer to a faster one when chasing, otherwise uses a random timer.

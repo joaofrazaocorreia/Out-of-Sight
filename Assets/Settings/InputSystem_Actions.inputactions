@@ -283,6 +283,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CheatEnabler",
+                    "type": "Button",
+                    "id": "5523607b-b80a-44ab-8a2e-a735a58494da",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -877,6 +886,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "GetInfiniteAmmo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ef5c6275-47ba-42f8-aa1d-fe494bf19137",
+                    "path": "<Keyboard>/leftAlt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "CheatEnabler",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
