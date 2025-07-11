@@ -81,7 +81,7 @@ public class EnemyMovement : MonoBehaviour
     public bool IsFacingTarget
     {
         get => lastTargetRot != null &&
-        Mathf.Abs((float)lastTargetRot - transform.eulerAngles.y) <= 1f;
+            Mathf.Abs((float)lastTargetRot - transform.eulerAngles.y) <= 1f;
     }
     public bool IsAtDestination
     {
@@ -460,11 +460,24 @@ public class EnemyMovement : MonoBehaviour
 
     public void RotateToCurrentTarget()
     {
-        if(lastTargetPos != null && IsAtDestination && !IsFacingTarget)
+        float rotDifference = (float)lastTargetRot - transform.eulerAngles.y;
+
+        if (rotDifference < 0f)
+        {
+            lastTargetRot += 360f;
+            rotDifference = (float)lastTargetRot - transform.eulerAngles.y;
+        }
+
+        if (rotDifference >= 180f)
+        {
+            lastTargetRot -= 360f;
+            rotDifference = (float)lastTargetRot - transform.eulerAngles.y;
+        }
+
+        if (lastTargetPos != null && IsAtDestination && !IsFacingTarget)
         {
             // Calculates how much the enemy will rotate this frame and updates the rotation
-            Vector3 difference = Vector3.up * Mathf.Clamp((float)lastTargetRot -
-                transform.eulerAngles.y, -turnSpeed * Time.deltaTime, turnSpeed * Time.deltaTime);
+            Vector3 difference = Vector3.up * Mathf.Clamp(rotDifference, -turnSpeed * Time.deltaTime, turnSpeed * Time.deltaTime);
             transform.rotation = Quaternion.Euler(transform.eulerAngles + difference);
 
             // Stops rotating once the rotation is reached (static enemies preserve their spawning rotation)
