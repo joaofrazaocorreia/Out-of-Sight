@@ -19,6 +19,9 @@ public class MainMenuScripts : MonoBehaviour
     [SerializeField] private GameObject settingsMenu;
     [SerializeField] private Slider sensitivitySlider;
     [SerializeField] private GameObject creditsMenu;
+    [SerializeField] private AudioSource uiAudioSource;
+    [SerializeField] private AudioClip[] hoverSounds;
+    [SerializeField] private AudioClip[] clickSounds;
     private Dictionary<Transform,Vector3> originalUIPositions;
     private Dictionary<RectTransform, (Coroutine, float, float, float)> uiButtonScaleUpCoroutines;
     private Dictionary<RectTransform, (Coroutine, float, float, float)> uiButtonScaleDownCoroutines;
@@ -144,12 +147,15 @@ public class MainMenuScripts : MonoBehaviour
                 -UIScaleHeightIncrease, -UIScaleFontIncrease)), uiTransform.sizeDelta.x - UIScaleWidthIncrease,
                     uiTransform.sizeDelta.y - UIScaleHeightIncrease, buttonText.fontSize - UIScaleFontIncrease));
         }
+
+        PlayRandomSound(hoverSounds);
     }
 
     public void QuitGame()
     {
         StopAllCoroutines();
         Application.Quit();
+        PlayRandomSound(clickSounds);
     }
 
     public void OpenLevelSelect()
@@ -158,6 +164,7 @@ public class MainMenuScripts : MonoBehaviour
         MoveUIToPosition(mainMenu.transform, new Vector3(0, 2000, 0));
         MoveUIToPosition(background.transform, new Vector3(0, 2000, 0));
         MoveUIToPosition(levelSelectMenu.transform, new Vector3(0, 0, 0));
+        PlayRandomSound(clickSounds);
     }
 
     public void OpenSettings()
@@ -166,6 +173,7 @@ public class MainMenuScripts : MonoBehaviour
         MoveUIToPosition(mainMenu.transform, new Vector3(3000, 0, 0));
         MoveUIToPosition(background.transform, new Vector3(3000, 0, 0));
         MoveUIToPosition(settingsMenu.transform, new Vector3(0, 0, 0));
+        PlayRandomSound(clickSounds);
     }
 
     public void OpenCredits()
@@ -174,6 +182,7 @@ public class MainMenuScripts : MonoBehaviour
         MoveUIToPosition(mainMenu.transform, new Vector3(-3000, 0, 0));
         MoveUIToPosition(background.transform, new Vector3(-3000, 0, 0));
         MoveUIToPosition(creditsMenu.transform, new Vector3(0, 0, 0));
+        PlayRandomSound(clickSounds);
     }
 
     public void BackToMainMenu()
@@ -190,6 +199,7 @@ public class MainMenuScripts : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(StartLoadingScene(scene));
+        PlayRandomSound(clickSounds);
     }
 
     private IEnumerator StartLoadingScene(int scene)
@@ -242,4 +252,13 @@ public class MainMenuScripts : MonoBehaviour
     {
         PlayerPrefs.SetFloat("Sensitivity", sensitivitySlider.value);
     }
+
+    private void PlayRandomSound(AudioClip[] clips)
+    {
+        if (clips.Length == 0 || uiAudioSource == null) return;
+        int index = Random.Range(0, clips.Length);
+        uiAudioSource.PlayOneShot(clips[index]);
+    }
+
+
 }
