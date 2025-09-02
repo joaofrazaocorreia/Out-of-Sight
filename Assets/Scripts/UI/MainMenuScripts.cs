@@ -19,7 +19,8 @@ public class MainMenuScripts : MonoBehaviour
     [SerializeField] private GameObject settingsMenu;
     [SerializeField] private Slider sensitivitySlider;
     [SerializeField] private GameObject creditsMenu;
-    [SerializeField] private AudioSource uiAudioSource;
+    [SerializeField] private AudioSource hoverAudioSource;
+    [SerializeField] private AudioSource clickAudioSource;
     [SerializeField] private AudioClip[] hoverSounds;
     [SerializeField] private AudioClip[] clickSounds;
     private Dictionary<Transform,Vector3> originalUIPositions;
@@ -125,6 +126,8 @@ public class MainMenuScripts : MonoBehaviour
                 UIScaleHeightIncrease, UIScaleFontIncrease)), uiTransform.sizeDelta.x + UIScaleWidthIncrease,
                     uiTransform.sizeDelta.y + UIScaleHeightIncrease, buttonText.fontSize + UIScaleFontIncrease));
         }
+
+        PlayRandomHoverSound();
     }
 
     public void HoverScaleDownUI(RectTransform uiTransform)
@@ -148,14 +151,13 @@ public class MainMenuScripts : MonoBehaviour
                     uiTransform.sizeDelta.y - UIScaleHeightIncrease, buttonText.fontSize - UIScaleFontIncrease));
         }
 
-        PlayRandomSound(hoverSounds);
     }
 
     public void QuitGame()
     {
         StopAllCoroutines();
         Application.Quit();
-        PlayRandomSound(clickSounds);
+        PlayRandomClickSound();
     }
 
     public void OpenLevelSelect()
@@ -164,7 +166,7 @@ public class MainMenuScripts : MonoBehaviour
         MoveUIToPosition(mainMenu.transform, new Vector3(0, 2000, 0));
         MoveUIToPosition(background.transform, new Vector3(0, 2000, 0));
         MoveUIToPosition(levelSelectMenu.transform, new Vector3(0, 0, 0));
-        PlayRandomSound(clickSounds);
+        PlayRandomClickSound();
     }
 
     public void OpenSettings()
@@ -173,7 +175,7 @@ public class MainMenuScripts : MonoBehaviour
         MoveUIToPosition(mainMenu.transform, new Vector3(3000, 0, 0));
         MoveUIToPosition(background.transform, new Vector3(3000, 0, 0));
         MoveUIToPosition(settingsMenu.transform, new Vector3(0, 0, 0));
-        PlayRandomSound(clickSounds);
+        PlayRandomClickSound();
     }
 
     public void OpenCredits()
@@ -182,7 +184,7 @@ public class MainMenuScripts : MonoBehaviour
         MoveUIToPosition(mainMenu.transform, new Vector3(-3000, 0, 0));
         MoveUIToPosition(background.transform, new Vector3(-3000, 0, 0));
         MoveUIToPosition(creditsMenu.transform, new Vector3(0, 0, 0));
-        PlayRandomSound(clickSounds);
+        PlayRandomClickSound();
     }
 
     public void BackToMainMenu()
@@ -199,7 +201,7 @@ public class MainMenuScripts : MonoBehaviour
     {
         StopAllCoroutines();
         StartCoroutine(StartLoadingScene(scene));
-        PlayRandomSound(clickSounds);
+        PlayRandomClickSound();
     }
 
     private IEnumerator StartLoadingScene(int scene)
@@ -253,11 +255,18 @@ public class MainMenuScripts : MonoBehaviour
         PlayerPrefs.SetFloat("Sensitivity", sensitivitySlider.value);
     }
 
-    private void PlayRandomSound(AudioClip[] clips)
+    private void PlayRandomHoverSound()
     {
-        if (clips.Length == 0 || uiAudioSource == null) return;
-        int index = Random.Range(0, clips.Length);
-        uiAudioSource.PlayOneShot(clips[index]);
+        if (hoverSounds == null || hoverSounds.Length == 0 || hoverAudioSource == null) return;
+        int index = Random.Range(0, hoverSounds.Length);
+        hoverAudioSource.PlayOneShot(hoverSounds[index]);
+    }
+
+    private void PlayRandomClickSound()
+    {
+        if (clickSounds == null || clickSounds.Length == 0 || clickAudioSource == null) return;
+        int index = Random.Range(0, clickSounds.Length);
+        clickAudioSource.PlayOneShot(clickSounds[index]);
     }
 
 
