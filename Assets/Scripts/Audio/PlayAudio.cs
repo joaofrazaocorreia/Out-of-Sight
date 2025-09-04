@@ -24,6 +24,8 @@ public class PlayAudio : MonoBehaviour
 
 	private System.Random rnd;
 
+	public float Pitch { get; private set; }
+
 	private void Start()
 	{
 		rnd = new System.Random();
@@ -52,11 +54,23 @@ public class PlayAudio : MonoBehaviour
 	private void ChooseAVariant()
 	{
 		_audioSource.clip = _audioClip[rnd.Next(0, _audioClip.Length)];
-		_audioSource.pitch = UnityEngine.Random.Range(_minPitchVariation, _maxPitchVariation);
+		Pitch = UnityEngine.Random.Range(_minPitchVariation, _maxPitchVariation);
+		UpdatePitch();
 	}
 
 	private void ApplyLoop()
 	{
 		_audioSource.loop = _isLoop;
+	}
+
+	private void UpdatePitch()
+	{
+		_audioSource.pitch = Pitch;
+	}
+
+	public void SetPitch(float newPitch)
+	{
+		Pitch = newPitch;
+		UpdatePitch();
 	}
 }
