@@ -6,6 +6,9 @@ public class Blinds : InteractiveObject
     [SerializeField] private InteractionSpot interactionSpot;
     private Animator animator;
     private bool closed;
+
+    [SerializeField] private PlayAudio OpenAudioPlayer;
+    [SerializeField] private PlayAudio CloseAudioPlayer;
     
     void Start()
     {
@@ -18,6 +21,16 @@ public class Blinds : InteractiveObject
         closed = !closed;
         animator.SetTrigger(closed ? "Close" : "Open");
         interactionSpot.enabled = false;
+        
+        switch (closed)
+        {
+            case true:
+                if(CloseAudioPlayer != null) CloseAudioPlayer.Play();
+                break;
+            case false:
+                if(OpenAudioPlayer != null) OpenAudioPlayer.Play();
+                break;
+        }
     }
 
     public void AnimationFinished()

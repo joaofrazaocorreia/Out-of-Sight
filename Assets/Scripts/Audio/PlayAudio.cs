@@ -39,6 +39,7 @@ public class PlayAudio : MonoBehaviour
 	{
 		if(_audioSource == null) return;
 		if(rnd == null) Start();
+		if(_audioClip.Length == 0) return;
 		ChooseAVariant();
 		_audioSource.Play();
 	}
