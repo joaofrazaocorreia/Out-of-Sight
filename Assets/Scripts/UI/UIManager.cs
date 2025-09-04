@@ -7,12 +7,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 using static Player.Status;
 using static Enums.Disguise;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Detection Audio")]
+    [SerializeField] private PlayAudio detectionLoop;
+    private float maxDetectionVolume;
+    
+    [Header("UI Settings")]
     [SerializeField] private float startingTimeScale = 0f;
     [SerializeField] [Range(0.001f, 20f)] private float UISpeed = 3f;
     [SerializeField] private float UIScaleWidthIncrease = 50f;
@@ -145,6 +151,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         sensitivitySlider.value = PlayerPrefs.GetFloat("Sensitivity", sensitivitySlider.value);
+        detectionLoop.AudioSource.outputAudioMixerGroup.audioMixer.GetFloat("Volume", out maxDetectionVolume);
     }
 
     private void Update()
@@ -732,6 +739,7 @@ public class UIManager : MonoBehaviour
         {
             detectionIcon.SetActive(false);
             alarmIcon.SetActive(true);
+            detectionLoop.Stop();
         }
 
         else
@@ -823,11 +831,17 @@ public class UIManager : MonoBehaviour
 
                 float colorDifference = 1 - fill;
                 detectionFill.GetComponentInChildren<Image>().color = new Color(1, colorDifference, colorDifference, 1);
+                if (fill < 1)
+                {
+                    if(!detectionLoop.AudioSource.isPlaying) detectionLoop.Play();
+                    detectionLoop.AudioSource.volume = Mathf.Lerp(-80, maxDetectionVolume, fill);
+                }
             }
 
             else
             {
                 ToggleGlobalDetection(false, alarm.IsOn);
+                detectionLoop.Stop();
             }
         }
 

@@ -11,8 +11,8 @@ public class PlayAudio : MonoBehaviour
 	[SerializeField]
 	private AudioMixerGroup _audioMixer;
 
-	[SerializeField]
-	private AudioSource _audioSource;
+	[SerializeField] private AudioSource _audioSource;
+	public AudioSource AudioSource => _audioSource;
 	[SerializeField] private float _minPitchVariation = 0.8f;
 	[SerializeField] private float _maxPitchVariation = 1.2f;
 

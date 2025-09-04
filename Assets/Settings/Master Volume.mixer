@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!244 &-9093002640972565699
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 455b4a014e4988d4680fcf090b00f3ef
+  m_EffectName: Attenuation
+  m_MixLevel: 3084166bfd2720c409d98cb0213b33fa
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &-8878281303060990360
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -582,6 +596,7 @@ AudioMixerController:
     - d1ec3a916b8d1e4469a619e5cd8b80b0
     - 3e10cbfc1f467b846be1bc70efff3092
     - 2ceceddfd53661f4b8f48c8bec06b817
+    - 3b768cefbbd709e4fa85f8d803e73da5
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -638,7 +653,7 @@ AudioMixerSnapshotController:
     1e123488116a9f449b01283c782456e0: 5.3
     8675bde80cf23e148a06185bfc655e44: -0.08374829
     52861839b355868418a9fbf3926e3c2a: -80
-    2bfa586a093ac73418746a89e52dd8be: -10.345207
+    2bfa586a093ac73418746a89e52dd8be: 2.6
     e0dd9f3e523dda84090b5133309065e5: -5.3230715
     4cc6e95e1d7ee5b4f8149fb2afd9ca20: 0
     abf50e8e74f464645bf1d2518deb0e87: 5.1526933
@@ -874,6 +889,25 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!243 &4687487570981350905
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Detection
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 3b768cefbbd709e4fa85f8d803e73da5
+  m_Children: []
+  m_Volume: 981177488628098479b23fdc7915922f
+  m_Pitch: 49cb619a362ec734c926bea0be5fddfd
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -9093002640972565699}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!244 &4791512347151457928
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -901,6 +935,7 @@ AudioMixerGroupController:
   - {fileID: -6824344979479713183}
   - {fileID: -7071199059219419089}
   - {fileID: 7383410452208372215}
+  - {fileID: 4687487570981350905}
   m_Volume: 3125694f83380824593527f072beb32a
   m_Pitch: 9a71208eaf05bad45a37df67f96d8a1e
   m_Send: 00000000000000000000000000000000
