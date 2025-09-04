@@ -8,6 +8,13 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private bool lockCursorOnStart = false;
     
+    [Header("Audio")]
+    [SerializeField] private PlayAudio WalkFootstepsAudio;
+    [SerializeField] private PlayAudio RunFootstepsAudio;
+    [SerializeField] private float WalkStepFrequency;
+    [SerializeField] private float RunStepFrequencyMultiplier;
+    private float StepTimer = 0;
+    
     [Header("Acceleration Variables")]
     [SerializeField] private float _forwardAcceleration = 5;
     [SerializeField] private float _backwardAcceleration = -2;
@@ -163,6 +170,7 @@ public class PlayerController : MonoBehaviour
             UpdateHeadRotation();
             TriggerHeadbob();
             UpdateStateTransitions();
+            UpdateFootsteps();
         }
     }
 
@@ -493,9 +501,10 @@ public class PlayerController : MonoBehaviour
         if(PlayerPrefs.GetInt("Headbob", 1) == 1)
         {
             Vector3 pos = Vector3.zero;
-
-            pos.y = Mathf.Lerp(pos.y, Mathf.Sin
-                (Time.time * HeadbobFrequency * (1 + IsRunning / 2f)) * (HeadbobAmount / 100), HeadbobSmoothness * Time.deltaTime);
+            var temp = Mathf.Sin
+                (Time.time * HeadbobFrequency * (1 + IsRunning / 2f)) * (HeadbobAmount / 100);
+            
+            pos.y = Mathf.Lerp(pos.y, temp, HeadbobSmoothness * Time.deltaTime);
             pos.x = Mathf.Lerp(pos.x, Mathf.Cos
                 (Time.time * HeadbobFrequency / 2 * (1 + IsRunning / 2f)) * (HeadbobAmount / 100), HeadbobSmoothness * Time.deltaTime);
 
@@ -529,5 +538,22 @@ public class PlayerController : MonoBehaviour
     public void Pause()
     {
         _isPaused = !_isPaused;
+    }
+
+    private void UpdateFootsteps()
+    {
+        if (_movementVector == Vector2.zero)
+        {
+            StepTimer = 0;
+            return;
+        }
+        StepTimer += Time.deltaTime;
+        if ((StepTimer >= WalkStepFrequency * (_isRunning == 1 ? RunStepFrequencyMultiplier : 1)))
+        {
+            if(_isRunning == 1) RunFootstepsAudio.Play();
+            else WalkFootstepsAudio.Play();
+            
+            StepTimer = 0;
+        };
     }
 }

@@ -1902,6 +1902,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 380503694975534990}
+  - {fileID: 8170651969613589001}
   - {fileID: 7331733969066887487}
   - {fileID: 2651347833694735518}
   m_Father: {fileID: 2423193230773636509}
@@ -3116,6 +3117,65 @@ Transform:
   - {fileID: 2342928257511401185}
   m_Father: {fileID: 16909954450432561}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5478868565438118444
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8170651969613589001}
+  - component: {fileID: 2514276652288045153}
+  m_Layer: 0
+  m_Name: RunFootstepsPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8170651969613589001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5478868565438118444}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7381168327503530865}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2514276652288045153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5478868565438118444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cbfcf147b14804429dcd92c697598aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audioClip:
+  - {fileID: 8300000, guid: 7a40cf56a07bf7d4395109da1b8fce2a, type: 3}
+  - {fileID: 8300000, guid: bf781d55d41998f4f97b82b7747b461a, type: 3}
+  - {fileID: 8300000, guid: 2b6ccfebd26e9104eac8c964c5680359, type: 3}
+  - {fileID: 8300000, guid: f1e489329e74dbe4cacf50de5c954900, type: 3}
+  - {fileID: 8300000, guid: a43c420a290237049bc6646c70330b0d, type: 3}
+  - {fileID: 8300000, guid: 0905dd45095e93a4eb117f5ad08f4fe4, type: 3}
+  - {fileID: 8300000, guid: 982041a5648bbc941a10f381e5096182, type: 3}
+  - {fileID: 8300000, guid: 2f6466b6101d0d44c88dca0dad00cb31, type: 3}
+  _audioMixer: {fileID: 1947056286166477230, guid: adb35eaba413ea2488cebfeb4d8c2cba, type: 2}
+  _audioSource: {fileID: 9118172450971617157}
+  _minPitchVariation: 0.8
+  _maxPitchVariation: 1.2
+  _isLoop: 0
+  _playOnStart: 0
 --- !u!1 &5520804509627373084
 GameObject:
   m_ObjectHideFlags: 0
@@ -3938,6 +3998,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lockCursorOnStart: 0
+  WalkFootstepsAudio: {fileID: 4106648210885490136}
+  RunFootstepsAudio: {fileID: 2514276652288045153}
+  WalkStepFrequency: 0
+  RunStepFrequencyMultiplier: 0
   _forwardAcceleration: 20
   _backwardAcceleration: -12
   _strafeAcceleration: 20
@@ -5478,7 +5542,7 @@ GameObject:
   - component: {fileID: 380503694975534990}
   - component: {fileID: 4106648210885490136}
   m_Layer: 0
-  m_Name: FootstepsPlayer
+  m_Name: WalkFootstepsPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
