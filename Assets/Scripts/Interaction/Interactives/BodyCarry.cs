@@ -8,12 +8,15 @@ public class BodyCarry : InteractiveObject
     private PlayerCarryInventory playerCarryInventory;
     private bool hasBeenDetected;
     public bool HasBeenDetected {get => hasBeenDetected; set{ if(!hasBeenDetected) hasBeenDetected = value;}}
+    private bool forceDisable;
+    public bool ForceDisable {get => forceDisable; set { forceDisable = value; }}
 
     private void Start()
     {
         enemySelf = GetComponentInParent<Enemy>();
         playerCarryInventory = FindAnyObjectByType<PlayerCarryInventory>();
         hasBeenDetected = false;
+        forceDisable = false;
         enabled = false;
     }
 

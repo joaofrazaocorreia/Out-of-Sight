@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
 {
+    [SerializeField] private GameObject inventoryUI;
     [SerializeField] private GameObject[] equipments;
     [SerializeField] private PlayAudio equipingPlayer;
     [SerializeField] private Animator animator;
@@ -56,7 +57,7 @@ public class PlayerEquipment : MonoBehaviour
 
     public void NewEquipmentSelected(int index)
     {
-        if (index < 0 || index >= equipments.Length) return;
+        if (index < 0 || index >= equipments.Length || !inventoryUI.activeSelf) return;
         if (index == CurrentEquipmentNum)
         {
             Unequip();

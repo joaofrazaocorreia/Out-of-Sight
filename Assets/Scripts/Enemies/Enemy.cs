@@ -21,6 +21,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] [Min(1)] protected float alarmedTime = 5f;
     [SerializeField] protected bool ignoresAlarm = false; // If true, this enemy won't change behaviour during alarms.
     [SerializeField] protected Type type;
+    [SerializeField] public UnityEvent onBecomeAlarmed;
     [SerializeField] public UnityEvent onKnockOut;
     [SerializeField] protected PlayAudio knockoutPlayer;
     [SerializeField] protected List<MovementTarget> bathroomTargetsMale;
@@ -28,6 +29,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] [Min(0)] protected float startBathroomTimer = 15f;
     [SerializeField] [Min(0)] protected float minBathroomTimer = 60f;
     [SerializeField] [Min(0)] protected float maxBathroomTimer = 300f;
+    public event EventHandler OnBecomeAlarmed;
     public event EventHandler OnKnockout;
 
     public Type EnemyType {get=> type;}

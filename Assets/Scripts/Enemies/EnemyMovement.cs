@@ -131,7 +131,7 @@ public class EnemyMovement : MonoBehaviour
         enemySelf = GetComponent<Enemy>();
 
         // Only works on living enemies
-        if(enemySelf.EnemyStatus != Enemy.Status.KnockedOut)
+        if (enemySelf.EnemyStatus != Enemy.Status.KnockedOut)
         {
             // Sets up all the variables
             movementTargetIndex = startingTargetIndex - 1;
@@ -168,27 +168,27 @@ public class EnemyMovement : MonoBehaviour
             modelSpawnPos = model.transform.localPosition;
             modelSpawnRot = model.transform.localRotation;
             ResetRagdoll();
-            footstepTimer  = Time.time;
+            footstepTimer = Time.time;
 
             // Forcefully sets the NavMeshAgent to the NPC type if it isn't already one
-            if(navMeshAgent.agentTypeID != -1372625422)
+            if (navMeshAgent.agentTypeID != -1372625422)
                 navMeshAgent.agentTypeID = -1372625422;
 
             // Static enemies use their position as their target
-            if(isStatic)
+            if (isStatic)
             {
                 MovementTarget selfTargetPos = MovementTarget.CreateMovementTarget
                     (transform.position, transform.rotation, movementTargetsParent);
-                movementTargets = new List<MovementTarget>() {selfTargetPos};
-                movementPosTargets = new List<Vector3>() {spawnPos};
+                movementTargets = new List<MovementTarget>() { selfTargetPos };
+                movementPosTargets = new List<Vector3>() { spawnPos };
             }
 
             // Converts the transform list into Vector3 positions
             else
             {
                 movementPosTargets = new List<Vector3>();
-                foreach(MovementTarget mt in movementTargets)
-                    if(mt) movementPosTargets.Add(mt.transform.position);
+                foreach (MovementTarget mt in movementTargets)
+                    if (mt) movementPosTargets.Add(mt.transform.position);
             }
 
             UpdateAnimations();
@@ -772,15 +772,21 @@ public class EnemyMovement : MonoBehaviour
     {
         if (bodyDisguise != null && !playerCarryInventory.IsCarryingBody(bodyDisguise))
         {
-            if (!bodyDisguise.enabled && bodyDisguise.HasDisguise)
+            if (!bodyDisguise.enabled && bodyDisguise.HasDisguise && !bodyDisguise.ForceDisable)
                 bodyDisguise.enabled = true;
 
-            else if (bodyDisguise.enabled && !bodyDisguise.HasDisguise)
+            else if ((bodyDisguise.enabled && !bodyDisguise.HasDisguise) || bodyDisguise.ForceDisable)
                 bodyDisguise.enabled = false;
         }
 
-        if (!bodyCarry.enabled && !playerCarryInventory.IsCarryingBody(bodyCarry))
-            bodyCarry.enabled = true;
+        if (!playerCarryInventory.IsCarryingBody(bodyCarry))
+        {
+            if(!bodyCarry.enabled && !bodyCarry.ForceDisable)
+                bodyCarry.enabled = true;
+                
+            else if (bodyCarry.enabled && bodyCarry.ForceDisable)
+                bodyCarry.enabled = false;
+        }
 
         if (bodyCarry.HasBeenDetected)
         {

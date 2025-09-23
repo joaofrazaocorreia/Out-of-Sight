@@ -94,8 +94,7 @@ public class Detection : MonoBehaviour
         detectionLayers = LayerMask.GetMask("Default", "Player", "Enemies", "Body");
     
         globalDetectionMultiplier = 1f;
-        if(allDetectables == null)
-            allDetectables = new List<DetectableObject>();
+        allDetectables ??= new List<DetectableObject>();
         
         foreach(Enemy e in FindObjectsByType<Enemy>(FindObjectsSortMode.None).ToList())
         {
@@ -355,7 +354,9 @@ public class Detection : MonoBehaviour
     /// <param name="detectableObject"></param>
     public static void AddDetectable(DetectableObject detectableObject)
     {
-        if(!allDetectables.Contains(detectableObject))
+        allDetectables ??= new List<DetectableObject>();
+
+        if (!allDetectables.Contains(detectableObject))
             allDetectables.Add(detectableObject);
     }
 

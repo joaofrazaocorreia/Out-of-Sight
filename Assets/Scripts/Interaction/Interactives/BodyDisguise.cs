@@ -10,6 +10,8 @@ public class BodyDisguise : InteractiveObject
     private Enemy enemySelf;
     private bool hasDisguise;
     public bool HasDisguise {get => hasDisguise;}
+    private bool forceDisable;
+    public bool ForceDisable {get => forceDisable; set { forceDisable = value; }}
 
     private void Start()
     {
@@ -17,6 +19,7 @@ public class BodyDisguise : InteractiveObject
         enemySelf = GetComponentInParent<Enemy>();
         hasDisguise = true;
         objectName = disguise + " Disguise";
+        forceDisable = false;
         enabled = false;
     }
 
