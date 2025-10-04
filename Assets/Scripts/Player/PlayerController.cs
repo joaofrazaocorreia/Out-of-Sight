@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.Cinemachine;
 using Unity.Mathematics;
 using UnityEngine;
@@ -7,39 +8,39 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private bool lockCursorOnStart = false;
-    
+
     [Header("Audio")]
     [SerializeField] private PlayAudio WalkFootstepsAudio;
     [SerializeField] private PlayAudio RunFootstepsAudio;
     [SerializeField] private float WalkStepFrequency;
     [SerializeField] private float RunStepFrequencyMultiplier;
     private float StepTimer = 0;
-    
+
     [Header("Acceleration Variables")]
     [SerializeField] private float _forwardAcceleration = 5;
     [SerializeField] private float _backwardAcceleration = -2;
     [SerializeField] private float _strafeAcceleration = 5;
     [SerializeField] private float _gravityAcceleration = -10;
-    
+
     [Header("Velocity Variables")]
     [SerializeField] private float _maxForwardVelocity = 5;
     [SerializeField] private float _maxBackwardVelocity = -2;
     [SerializeField] private float _maxStrafeVelocity = 5;
     [SerializeField] private float _maxFallVelocity = -10;
     [SerializeField] private float _bodyCarryVelocityPercent = 50;
-    
+
     [Header("Camera Variables")]
     [SerializeField] private float lookSensitivity = 1f;
     [SerializeField] private float _maxHeadUpAngle = 70;
     [SerializeField] private float _minHeadDownAngle = 290;
-    [SerializeField] [Range(1f,30f)] private float HeadbobAmount = 5f;
-    [SerializeField] [Range(1f,30f)] private float HeadbobSmoothness = 5f;
-    [SerializeField] [Range(1f,30f)] private float HeadbobFrequency = 12f;
+    [SerializeField][Range(1f, 30f)] private float HeadbobAmount = 5f;
+    [SerializeField][Range(1f, 30f)] private float HeadbobSmoothness = 5f;
+    [SerializeField][Range(1f, 30f)] private float HeadbobFrequency = 12f;
     [SerializeField] private GameObject _charHead;
     private Vector3 _startCharHeadPos;
     private Vector3 _currentCharHeadPos;
     private Vector3 _startCamPos;
-    
+
     [Header("Crouch Variables")]
     [SerializeField] private bool isCrouchToggle;
     private int _isCrouched;
@@ -48,7 +49,7 @@ public class PlayerController : MonoBehaviour
         get => _isCrouched;
         set
         {
-            if(value == _isCrouched) return;
+            if (value == _isCrouched) return;
             _isCrouched = value;
             if (!_isCrouching) _isCrouching = true;
             OnCrouch();
@@ -67,7 +68,8 @@ public class PlayerController : MonoBehaviour
     private float _targetControllerCenterY;
     private float _targetPlayerHeadPosY;
 
-    [Header("Run Variables")] [SerializeField]
+    [Header("Run Variables")]
+    [SerializeField]
     private bool isRunToggle;
     private int _isRunning;
     private int IsRunning
@@ -75,38 +77,40 @@ public class PlayerController : MonoBehaviour
         get => _isRunning;
         set
         {
-            if(value == _isRunning) return;
+            if (value == _isRunning) return;
             _isRunning = value;
             OnRun();
         }
     }
     private int _canRun;
     [SerializeField] private float runSpeedModifier = 1.5f;
+    [SerializeField] private bool useStamina = true;
+    public bool UseStamina { get => useStamina; }
     private const float maxStamina = 1;
     public float _currentStamina { get; private set; } = 1;
     public event EventHandler OnStaminaUpdate;
     [SerializeField] private float staminaRegenSpeed = 0.25f;
     [SerializeField] private float staminaUsagePerSecond = 0.1f;
-    
+
     private float speedBoost;
     public float SpeedBoost
     {
         get => speedBoost * Mathf.Pow(runSpeedModifier, _isRunning * _canRun) * Mathf.Pow(crouchSpeedModifier, _isCrouched);
-        set 
+        set
         {
             speedBoost = value;
         }
     }
     private CharacterController _controller;
-    private CinemachineCamera  _head;
+    private CinemachineCamera _head;
     private Vector3 _acceleration;
     private Vector3 _velocity;
     private Vector3 _motion;
-    private float   _sinPI4;
+    private float _sinPI4;
     private Player _player;
     private PlayerInput _playerInput;
     private PlayerInteraction _playerInteraction;
-    private PlayerEquipment _playerEquipment; 
+    private PlayerEquipment _playerEquipment;
     private PlayerCarryInventory _playerCarryInventory;
     private Vector2 _movementVector;
     private Vector3 _lookVector;
@@ -116,6 +120,9 @@ public class PlayerController : MonoBehaviour
     private Transform _originalVerticalRotationPivot;
     private bool _canMove = true;
     private bool _canLook = true;
+    public bool ForceLockMove = false;
+    public bool ForceLockLook = false;
+    private Coroutine forceLookCoroutine;
     private float[] _selectedEquipment;
     private int _resetInteract;
 
@@ -124,14 +131,14 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        _controller     = GetComponent<CharacterController>();
-        _head           = GetComponentInChildren<CinemachineCamera>();
-        _acceleration   = Vector3.zero;
-        _velocity       = Vector3.zero;
-        _motion         = Vector3.zero;
-        _sinPI4         = Mathf.Sin(Mathf.PI / 4);
-        _startCamPos    = _head.transform.localPosition;
-        SpeedBoost      = 1f;
+        _controller = GetComponent<CharacterController>();
+        _head = GetComponentInChildren<CinemachineCamera>();
+        _acceleration = Vector3.zero;
+        _velocity = Vector3.zero;
+        _motion = Vector3.zero;
+        _sinPI4 = Mathf.Sin(Mathf.PI / 4);
+        _startCamPos = _head.transform.localPosition;
+        SpeedBoost = 1f;
         _player = GetComponent<Player>();
         _playerInput = GetComponent<PlayerInput>();
         _playerInteraction = GetComponent<PlayerInteraction>();
@@ -147,19 +154,19 @@ public class PlayerController : MonoBehaviour
         _crouchCenterYDelta = crouchCenterY - _startCamPos.y + 0.25f;
         _startCharHeadPos = _charHead.transform.localPosition;
         _currentCharHeadPos = _startCharHeadPos;
-        
-        if(lockCursorOnStart)
+
+        if (lockCursorOnStart)
             Cursor.lockState = CursorLockMode.Locked;
-        
+
         _playerInput.actions["ToggleMap"].started += ToggleMapOverlay;
     }
 
     private void Update()
     {
         if (_playerInput.actions["Pause Game"].WasPressedThisFrame()) Pause();
-        
-        if(_isPaused) return;
-        
+
+        if (_isPaused) return;
+
         CheckHeadActiveCamera();
         GetInputs();
         CheckEquipmentChanged();
@@ -176,12 +183,12 @@ public class PlayerController : MonoBehaviour
 
     private void CheckHeadActiveCamera()
     {
-        ToggleControls(_head.IsLive, _head.IsLive);
+        ToggleControls(_head.IsLive && !ForceLockMove, _head.IsLive && !ForceLockLook);
     }
-    
+
     private void GetInputs()
     {
-        _lookVector = GetInput(_playerInput.actions["Look"]); 
+        _lookVector = GetInput(_playerInput.actions["Look"]);
         _movementVector = GetInput(_playerInput.actions["Move"]);
         GetInput(_playerInput.actions["Crouch"], EnableCrouch, DisableCrouch, !isCrouchToggle);
         GetInput(_playerInput.actions["Run"], EnableRunning, DisableRun, !isRunToggle);
@@ -189,7 +196,7 @@ public class PlayerController : MonoBehaviour
         GetInput(_playerInput.actions["Interact"], Interact, ResetInteract, true);
         GetInput(_playerInput.actions["InteractSecondary"], InteractSecondary, ResetInteract, true);
         GetInput(_playerInput.actions["UseEquipment"], UseEquipment, false);
-        
+
         _selectedEquipment[0] = _playerInput.actions["EquipmentHotbar1"].WasPressedThisFrame() ? 1 : 0;
         _selectedEquipment[1] = _playerInput.actions["EquipmentHotbar2"].WasPressedThisFrame() ? 1 : 0;
         _selectedEquipment[2] = _playerInput.actions["EquipmentHotbar3"].WasPressedThisFrame() ? 1 : 0;
@@ -209,7 +216,7 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < _selectedEquipment.Length; i++)
         {
             if (!Mathf.Approximately(_selectedEquipment[i], 1)) continue;
-            
+
             _playerEquipment.NewEquipmentSelected(i);
             break;
         }
@@ -217,13 +224,13 @@ public class PlayerController : MonoBehaviour
 
     private void GetInput(InputAction action, Action methodToCall, bool holdInput)
     {
-        if(holdInput ? action.IsPressed() : action.WasPressedThisFrame())  methodToCall?.Invoke();
+        if (holdInput ? action.IsPressed() : action.WasPressedThisFrame()) methodToCall?.Invoke();
     }
 
     private void GetInput(InputAction action, Action methodToCallWhenSuccessfull, Action methodToCallWhenUnsuccessful,
         bool holdInput)
     {
-        if(holdInput ? action.IsPressed() : action.WasPressedThisFrame())  methodToCallWhenSuccessfull?.Invoke();
+        if (holdInput ? action.IsPressed() : action.WasPressedThisFrame()) methodToCallWhenSuccessfull?.Invoke();
         else methodToCallWhenUnsuccessful?.Invoke();
     }
 
@@ -239,16 +246,16 @@ public class PlayerController : MonoBehaviour
 
     private void DisableRun()
     {
-        if(isRunToggle) return;
+        if (isRunToggle) return;
         IsRunning = 0;
     }
 
     private void DisableCrouch()
     {
-        if(isCrouchToggle) return;
+        if (isCrouchToggle) return;
         IsCrouched = 0;
     }
-    
+
     private void EnableCrouch()
     {
         IsCrouched = isCrouchToggle ? 1 - IsCrouched : 1;
@@ -259,26 +266,26 @@ public class PlayerController : MonoBehaviour
         switch (IsCrouched)
         {
             case 1:
-            {
-                _targetControllerHeight = crouchHeight;
-                _targetControllerCenterY = crouchCenterY;
-                _targetPlayerHeadPosY = _startCharHeadPos.y + _crouchCenterYDelta;
-                
-                IsRunning = 0;
-                
-                _player.GainStatus(Player.Status.Doubtful);
-                    
-                break;
-            }
-            case 0:
-            {
-                _targetControllerHeight = _defaultPlayerHeight;
-                _targetControllerCenterY = _defaultPlayerCenterY;
-                _targetPlayerHeadPosY = _startCharHeadPos.y;
+                {
+                    _targetControllerHeight = crouchHeight;
+                    _targetControllerCenterY = crouchCenterY;
+                    _targetPlayerHeadPosY = _startCharHeadPos.y + _crouchCenterYDelta;
 
-                if(_isRunning == 0) _player.LoseStatus(Player.Status.Doubtful);
-                break;
-            }
+                    IsRunning = 0;
+
+                    _player.GainStatus(Player.Status.Doubtful);
+
+                    break;
+                }
+            case 0:
+                {
+                    _targetControllerHeight = _defaultPlayerHeight;
+                    _targetControllerCenterY = _defaultPlayerCenterY;
+                    _targetPlayerHeadPosY = _startCharHeadPos.y;
+
+                    if (_isRunning == 0) _player.LoseStatus(Player.Status.Doubtful);
+                    break;
+                }
         }
     }
 
@@ -286,7 +293,7 @@ public class PlayerController : MonoBehaviour
     {
         _playerInteraction.TryInteraction(true);
     }
-    
+
     private void InteractSecondary()
     {
         _playerInteraction.TryInteraction(false);
@@ -301,7 +308,7 @@ public class PlayerController : MonoBehaviour
         }
         _playerInteraction.ResetInteract();
     }
-    
+
     private void UseEquipment()
     {
         _playerEquipment.TryUseEquipment();
@@ -311,7 +318,7 @@ public class PlayerController : MonoBehaviour
     {
         _canLook = canMoveCamera;
         _canMove = canMovePlayer;
-        if (!canMovePlayer){ _velocity = Vector3.zero;}
+        if (!canMovePlayer) { _velocity = Vector3.zero; }
     }
 
     private void UpdateBodyRotation()
@@ -340,9 +347,9 @@ public class PlayerController : MonoBehaviour
         if (_canMove)
         {
             UpdateAcceleration();
-            UpdateVelocity();  
+            UpdateVelocity();
         }
-        
+
         UpdatePosition();
         UpdateStamina();
     }
@@ -360,7 +367,7 @@ public class PlayerController : MonoBehaviour
 
         if (!_head.enabled || Cursor.lockState != CursorLockMode.Locked || !_canMove)
             forwardAxis = 0f;
-        
+
 
         if (forwardAxis > 0f)
             _acceleration.z = _forwardAcceleration;
@@ -376,7 +383,7 @@ public class PlayerController : MonoBehaviour
     {
         float strafeAxis = _movementVector.x;
 
-        if (!_head.enabled || Cursor.lockState != CursorLockMode.Locked || !_canMove )
+        if (!_head.enabled || Cursor.lockState != CursorLockMode.Locked || !_canMove)
             strafeAxis = 0f;
 
 
@@ -400,9 +407,9 @@ public class PlayerController : MonoBehaviour
         if (_acceleration.z == 0f || _acceleration.z * _velocity.z < 0f)
         {
             if (_velocity.z > 0.5f)
-                _velocity.z -= _velocity.z/5;
+                _velocity.z -= _velocity.z / 5;
             else if (_velocity.z < -0.5f)
-                _velocity.z -= _velocity.z/5;
+                _velocity.z -= _velocity.z / 5;
 
 
             if (_velocity.z < 0.5f && _velocity.z > -0.5f)
@@ -416,15 +423,15 @@ public class PlayerController : MonoBehaviour
         else
             _velocity.z = Mathf.Clamp
                 (_velocity.z, _maxBackwardVelocity * SpeedBoost * _sinPI4, _maxForwardVelocity * SpeedBoost * _sinPI4);
-       
+
 
 
         if (_acceleration.x == 0f || _acceleration.x * _velocity.x < 0f)
         {
             if (_velocity.x > 0.5f)
-                _velocity.x -= _velocity.x/5;
+                _velocity.x -= _velocity.x / 5;
             else if (_velocity.x < -0.5f)
-                _velocity.x -= _velocity.x/5;
+                _velocity.x -= _velocity.x / 5;
 
 
             if (_velocity.x < 0.5f && _velocity.x > -0.5f)
@@ -452,7 +459,7 @@ public class PlayerController : MonoBehaviour
     {
         _motion = _velocity * Time.fixedDeltaTime;
 
-        if(_playerCarryInventory.CarryingBody)
+        if (_playerCarryInventory.CarryingBody)
             _motion *= _bodyCarryVelocityPercent / 100;
 
         _motion = transform.TransformVector(_motion);
@@ -462,10 +469,18 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateStamina()
     {
-        _currentStamina = _isRunning == 1 && _velocity.magnitude > 1f ? _currentStamina -= staminaUsagePerSecond * Time.fixedDeltaTime : _currentStamina += staminaRegenSpeed * Time.fixedDeltaTime;
-        _canRun = _currentStamina > 0f ? 1 : 0;
-        _currentStamina = math.clamp(_currentStamina, 0f, maxStamina);
-        OnStaminaUpdate?.Invoke(this, EventArgs.Empty);
+        if (useStamina)
+        {
+            _currentStamina = _isRunning == 1 && _velocity.magnitude > 1f ? _currentStamina -= staminaUsagePerSecond * Time.fixedDeltaTime : _currentStamina += staminaRegenSpeed * Time.fixedDeltaTime;
+            _canRun = _currentStamina > 0f ? 1 : 0;
+            _currentStamina = math.clamp(_currentStamina, 0f, maxStamina);
+            OnStaminaUpdate?.Invoke(this, EventArgs.Empty);
+        }
+
+        else
+        {
+            _canRun = 1;
+        }
     }
 
     public void UpdateMouseSensitivity(float newSensitivity)
@@ -475,7 +490,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnRun()
     {
-        
+
         if (IsRunning == 1)
         {
             IsCrouched = 0;
@@ -484,26 +499,26 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if(_isCrouched == 0) _player.LoseStatus(Player.Status.Doubtful);
+        if (_isCrouched == 0) _player.LoseStatus(Player.Status.Doubtful);
     }
 
     private void TriggerHeadbob()
     {
         if (_movementVector != Vector2.zero)
             Headbob();
-        
+
         else if (_head.transform.localPosition != _startCamPos)
             _head.transform.localPosition = Vector3.Lerp(_head.transform.localPosition, _startCamPos, HeadbobSmoothness * Time.deltaTime);
     }
 
     private void Headbob()
     {
-        if(PlayerPrefs.GetInt("Headbob", 1) == 1)
+        if (PlayerPrefs.GetInt("Headbob", 1) == 1)
         {
             Vector3 pos = Vector3.zero;
             var temp = Mathf.Sin
                 (Time.time * HeadbobFrequency * (1 + IsRunning / 2f)) * (HeadbobAmount / 100);
-            
+
             pos.y = Mathf.Lerp(pos.y, temp, HeadbobSmoothness * Time.deltaTime);
             pos.x = Mathf.Lerp(pos.x, Mathf.Cos
                 (Time.time * HeadbobFrequency / 2 * (1 + IsRunning / 2f)) * (HeadbobAmount / 100), HeadbobSmoothness * Time.deltaTime);
@@ -517,21 +532,21 @@ public class PlayerController : MonoBehaviour
         if (_isCrouching)
         {
             var deltaTime = Time.deltaTime / crouchAnimDuration;
-            
+
             _controller.height = Mathf.Lerp(_controller.height, _targetControllerHeight, deltaTime);
             _controller.center = new Vector3(_controller.center.x,
                 Mathf.Lerp(_controller.center.y, _targetControllerCenterY, deltaTime), _controller.center.z);
             _currentCharHeadPos.y = Mathf.Lerp(_currentCharHeadPos.y, _targetPlayerHeadPosY, deltaTime);
             _charHead.transform.localPosition = _currentCharHeadPos;
-            
+
             _crouchTimer = Mathf.Lerp(_crouchTimer, _isCrouched, deltaTime);
-            if(Mathf.Approximately(_crouchTimer, _isCrouched)) _isCrouching = false;
+            if (Mathf.Approximately(_crouchTimer, _isCrouched)) _isCrouching = false;
         }
     }
 
     private void ToggleMapOverlay(InputAction.CallbackContext a)
     {
-        if(_isPaused) return;
+        if (_isPaused) return;
         ToggleMap?.Invoke(this, null);
     }
 
@@ -550,10 +565,38 @@ public class PlayerController : MonoBehaviour
         StepTimer += Time.deltaTime;
         if ((StepTimer >= WalkStepFrequency * (_isRunning == 1 ? RunStepFrequencyMultiplier : 1)))
         {
-            if(_isRunning == 1) RunFootstepsAudio.Play();
+            if (_isRunning == 1) RunFootstepsAudio.Play();
             else WalkFootstepsAudio.Play();
-            
+
             StepTimer = 0;
-        };
+        }
+        ;
+    }
+
+    public void ForceLookAtPosition(Transform target)
+    {
+        forceLookCoroutine = StartCoroutine(ForceLookCoroutine(target.position));
+    }
+
+    public void StopForceLook()
+    {
+        if (forceLookCoroutine != null)
+            StopCoroutine(forceLookCoroutine);
+    }
+
+    private IEnumerator ForceLookCoroutine(Vector3 targetPos)
+    {
+        Quaternion targetRotationX = Quaternion.LookRotation(targetPos - _verticalRotationPivot.position);
+        Quaternion targetRotationY = Quaternion.LookRotation(targetPos - _horizontalRotationPivot.position);
+
+        while (true)
+        {
+            Quaternion rotateX = Quaternion.Lerp(_verticalRotationPivot.rotation, targetRotationX, Time.deltaTime * 2);
+            Quaternion rotateY = Quaternion.Lerp(_horizontalRotationPivot.rotation, targetRotationY, Time.deltaTime * 2);
+
+            _verticalRotationPivot.localEulerAngles = new Vector3(rotateX.eulerAngles.x, 0f, 0f);
+            _horizontalRotationPivot.localEulerAngles = new Vector3(0f, rotateY.eulerAngles.y, 0f);
+            yield return null;
+        }
     }
 }

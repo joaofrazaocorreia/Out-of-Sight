@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ public class DialogueBox : MonoBehaviour
     private Coroutine showDialogueCoroutine;
     private Dictionary<char, float> characterCustomWaitTimes;
     private Dictionary<int, Action> onReachSpecificLines;
+    private Dictionary<char, string> allowedFormatting;
 
     private void Start()
     {
@@ -30,6 +32,7 @@ public class DialogueBox : MonoBehaviour
 
         textSpeed = 1;
         SetUpCharacterCustomWaitTimes();
+        SetUpAllowedFormatting();
     }
 
     private void ResetCanvas()
@@ -50,6 +53,14 @@ public class DialogueBox : MonoBehaviour
             {':', 1f},
             {';', 2f},
             {'-', 0.5f},
+        };
+    }
+
+    private void SetUpAllowedFormatting()
+    {
+        allowedFormatting = new Dictionary<char, string>()
+        {
+            {'b', "<b>"},
         };
     }
 
@@ -93,9 +104,11 @@ public class DialogueBox : MonoBehaviour
         // Start displaying each line
         for (int i = 0; i < textStrings.Count; i++)
         {
-            string text = textStrings[i];
+            //string text = textStrings[i];
+            string text = string.Empty;
 
-            dialogueText.text = string.Empty; // resets the text box
+            //dialogueText.text = string.Empty; // resets the text box
+            textBox.text = $"<#FFFFFF00>{textStrings[i]}</color>"; // adds all text to the box but transparent
 
             // If an Action is scheduled for this line, execute it, then remove it to mark as done
             if (onReachSpecificLines != null && onReachSpecificLines.ContainsKey(i))
@@ -104,20 +117,74 @@ public class DialogueBox : MonoBehaviour
                 onReachSpecificLines.Remove(i);
             }
 
-            // Adds each character in the string to the text
-            foreach (char c in text)
-            {
-                textBox.text += c;
+            bool ignoreWaitTime = false;
+            bool ignoreCharacters = false;
+            int ignoredChars = 0;
+            string invisFormatting = string.Empty;
 
-                // Checks for custom wait times for specific characters like punctuation
-                if (characterCustomWaitTimes.ContainsKey(c))
+            // Adds each character in the string to the text
+            //foreach (char c in text)
+            for (int j = 0; j < textStrings[i].Count(); j++)
+            {
+                string fullText = textStrings[i];
+                char c = fullText[j];
+
+                if (c == '<')
                 {
-                    yield return new WaitForSeconds(characterCustomWaitTimes[c] / textSpeed);
+                    ignoreWaitTime = true;
+
+                    if (!(allowedFormatting.ContainsKey(fullText[j + 1]) ||
+                       (fullText[j + 1] == '/' && allowedFormatting.ContainsKey(fullText[j + 2]))))
+                    {
+                        ignoreCharacters = true;
+                    }
+
+                    else if (allowedFormatting.ContainsKey(fullText[j + 1]))
+                    {
+                        invisFormatting = allowedFormatting[fullText[j + 1]];
+                    }
+
+                    else if (fullText[j + 1] == '/' && allowedFormatting.ContainsKey(fullText[j + 2]))
+                    {
+                        invisFormatting = string.Empty;
+                    }
                 }
 
-                else
+                if (c == '>')
                 {
-                    yield return new WaitForSeconds(0.1f / textSpeed);
+                    if (ignoreWaitTime)
+                    {
+                        ignoreWaitTime = false;
+                    }
+
+                    if (ignoreCharacters)
+                    {
+                        ignoreCharacters = false;
+                        ignoredChars++;
+                    }
+                }
+
+                if (ignoreCharacters)
+                    ignoredChars++;
+
+
+                //textBox.text += c;
+                text += c;
+                textBox.text = FormatDialogueText(textStrings[i], text, ignoredChars, invisFormatting);
+
+
+                if (!ignoreWaitTime)
+                {
+                    // Checks for custom wait times for specific characters like punctuation
+                    if (characterCustomWaitTimes.ContainsKey(c))
+                    {
+                        yield return new WaitForSeconds(characterCustomWaitTimes[c] / textSpeed);
+                    }
+
+                    else
+                    {
+                        yield return new WaitForSeconds(0.1f / textSpeed);
+                    }
                 }
             }
 
@@ -131,5 +198,39 @@ public class DialogueBox : MonoBehaviour
             dialogueCanvas.alpha -= Time.deltaTime * 3f;
             yield return new WaitForSeconds(Time.deltaTime);
         }
+    }
+
+    private string FormatDialogueText(string fullText, string visibleText, int ignoredChars, string invisFormatting = "")
+    {
+        string unformattedString = string.Empty;
+        string invisibleText;
+
+        bool ignoring = false;
+        for(int i = 0; i < fullText.Count(); i++)
+        {
+            char c = fullText[i];
+            
+            if (c == '<')
+            {
+                if (!(allowedFormatting.ContainsKey(fullText[i + 1]) ||
+                  (fullText[i + 1] == '/' && allowedFormatting.ContainsKey(fullText[i + 2]))))
+                {
+                    ignoring = true;
+                }
+            }
+            if (ignoring && c == '>')
+            {
+                ignoring = false;
+                continue;
+            }
+
+            if (!ignoring)
+                unformattedString += c;
+        }
+
+        invisibleText = invisFormatting + unformattedString[(visibleText.Count() - ignoredChars)..];
+
+        return $"<#FFFFFF>{visibleText}</color></b>" +
+                   $"<#FFFFFF00>{invisibleText}</color></b>";
     }
 }

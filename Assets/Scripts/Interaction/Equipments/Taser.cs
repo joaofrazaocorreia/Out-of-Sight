@@ -40,9 +40,11 @@ namespace Interaction.Equipments
 
         public void FreeUse()
         {
-            if(_currentAmmo <= 0) return;
+            if(_currentAmmo <= 0 && _currentAmmo != -1) return;
             
-            _currentAmmo--;
+            else if (_currentAmmo != -1)
+                _currentAmmo--;
+            
             Fire();
             CanBeUsed = false;
             
