@@ -26,7 +26,7 @@ public class PlayAudio : MonoBehaviour
 
 	public float Pitch { get; private set; }
 
-	private void Start()
+	private void Awake()
 	{
 		rnd = new System.Random();
 		_audioSource.outputAudioMixerGroup = _audioMixer;
@@ -40,7 +40,7 @@ public class PlayAudio : MonoBehaviour
 	public void Play()
 	{
 		if(_audioSource == null) return;
-		if(rnd == null) Start();
+		if(rnd == null) Awake();
 		if(_audioClip.Length == 0) return;
 		ChooseAVariant();
 		_audioSource.Play();

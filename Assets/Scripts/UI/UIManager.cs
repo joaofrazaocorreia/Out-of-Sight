@@ -576,7 +576,12 @@ public class UIManager : MonoBehaviour
         else
         {
             ToggleAmmoDisplay(true);
-            UpdateAmmoText(ammo.CurrentAmmo + " / " + ammo.MaxAmmo);
+            
+            if (ammo.MaxAmmo == -1)
+                UpdateAmmoText("inf / inf");
+
+            else
+                UpdateAmmoText(ammo.CurrentAmmo + " / " + ammo.MaxAmmo);
         }
     }
 
@@ -933,7 +938,7 @@ public class UIManager : MonoBehaviour
 
     private void OnCarryPickup(object sender, EventArgs e) => ToggleCarryUI(true);
     private void OnCarryDrop(object sender, EventArgs e) => ToggleCarryUI(false);
-    private void OnEquipmentAdded(object sender, EventArgs e) => UpdateEquipmentIcon(playerEquipment._recentlyAddedEquipment.Icon, Array.IndexOf(playerEquipment.EquipmentObjects, playerEquipment._recentlyAddedEquipment));
+    private void OnEquipmentAdded(object sender, EventArgs e) => UpdateEquipmentIcon(playerEquipment._recentlyAddedEquipment.Icon, Array.IndexOf(playerEquipment.EquipmentObjects.ToArray(), playerEquipment._recentlyAddedEquipment));
 
     private void OnEquipmentChanged(object sender, EventArgs e) => UpdateEquipmentUI();
 

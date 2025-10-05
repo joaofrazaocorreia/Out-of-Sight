@@ -5,9 +5,11 @@ using UnityEngine;
 public class TutorialDialogueTriggers : MonoBehaviour
 {
     [SerializeField] private List<GameObject> objectsToEnableDuringDialogue;
+    [SerializeField] private GameObject EquipmentToAdd;
     private TutorialObjectivesUpdater objectivesUpdater;
     private UIManager uiManager;
     private PlayerController playerController;
+    private PlayerEquipment playerEquipment;
     private bool hasShownDialogue;
     private static int bodiesStashed;
 
@@ -16,6 +18,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
         objectivesUpdater = GetComponent<TutorialObjectivesUpdater>();
         uiManager = FindAnyObjectByType<UIManager>();
         playerController = FindAnyObjectByType<PlayerController>();
+        playerEquipment = FindAnyObjectByType<PlayerEquipment>();
 
         hasShownDialogue = false;
     }
@@ -131,6 +134,8 @@ public class TutorialDialogueTriggers : MonoBehaviour
                 {
                     playerController.StopForceLook();
                     uiManager.TogglePlayerControls(false, false, false);
+
+                    playerEquipment.AddEquipment(EquipmentToAdd);
 
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveJamCamera();
@@ -254,6 +259,8 @@ public class TutorialDialogueTriggers : MonoBehaviour
             {1, () =>
                 {
                     uiManager.TogglePlayerControls(false,false,false);
+
+                    playerEquipment.AddEquipment(EquipmentToAdd);
 
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveKnockOutEmployee1();
@@ -482,15 +489,21 @@ public class TutorialDialogueTriggers : MonoBehaviour
         {
             {0, () =>
                 {
-                    uiManager.TogglePlayerControls(false,false,true);
+                    uiManager.TogglePlayerControls(true,true,true);
+                    playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[3].transform);
 
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
+
+                    objectsToEnableDuringDialogue[2].GetComponent<InteractiveObject>().Interact();
                 }
             },
             {1, () =>
                 {
                     uiManager.TogglePlayerControls(false,false,false);
+                    playerController.StopForceLook();
+
+                    playerEquipment.AddEquipment(EquipmentToAdd);
                     
                     EnableAllObjects();
                     
