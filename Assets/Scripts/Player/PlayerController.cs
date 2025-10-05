@@ -504,7 +504,7 @@ public class PlayerController : MonoBehaviour
 
     private void TriggerHeadbob()
     {
-        if (_movementVector != Vector2.zero)
+        if (_movementVector != Vector2.zero && !ForceLockMove)
             Headbob();
 
         else if (_head.transform.localPosition != _startCamPos)
@@ -563,7 +563,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
         StepTimer += Time.deltaTime;
-        if ((StepTimer >= WalkStepFrequency * (_isRunning == 1 ? RunStepFrequencyMultiplier : 1)))
+        if ((StepTimer >= WalkStepFrequency * (_isRunning == 1 ? RunStepFrequencyMultiplier : 1)) && !ForceLockMove)
         {
             if (_isRunning == 1) RunFootstepsAudio.Play();
             else WalkFootstepsAudio.Play();

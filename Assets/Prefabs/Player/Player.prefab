@@ -4025,8 +4025,11 @@ MonoBehaviour:
   crouchCenterY: -1.5
   isRunToggle: 0
   runSpeedModifier: 2
+  useStamina: 1
   staminaRegenSpeed: 0.25
   staminaUsagePerSecond: 0.1
+  ForceLockMove: 0
+  ForceLockLook: 0
 --- !u!114 &6749328818668131904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4233,6 +4236,7 @@ MonoBehaviour:
   raycastOrigin: {fileID: 3673382316616536992}
   _head: {fileID: 2051839802640443896}
   _interactionDuration: 0
+  ForceLockInteraction: 0
 --- !u!114 &4004361906442288972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4258,6 +4262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b95a1bb65518b84299601c41f379576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryUI: {fileID: 0}
   equipments:
   - {fileID: 9204613520076188937}
   - {fileID: 4417400501556301415}
@@ -6060,13 +6065,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9108269747551954331}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.37684503, y: 0.9187617, z: -0.037201133, w: -0.1117184}
-  m_LocalPosition: {x: -1.57, y: -2.74, z: 1.34}
+  m_LocalRotation: {x: 0.3520729, y: 0.91404784, z: -0.13943015, w: 0.14532863}
+  m_LocalPosition: {x: -1.570002, y: -2.7399998, z: 1.3399986}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7113135169296274431}
-  m_LocalEulerAnglesHint: {x: -0.908, y: 193.495, z: 44.496}
+  m_LocalEulerAnglesHint: {x: 20.93, y: 169.669, z: 40.218}
 --- !u!1 &9161485154418785943
 GameObject:
   m_ObjectHideFlags: 0

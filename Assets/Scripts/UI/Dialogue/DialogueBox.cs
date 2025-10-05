@@ -97,7 +97,7 @@ public class DialogueBox : MonoBehaviour
         // Fade in Canvas
         while (dialogueCanvas.alpha < 1)
         {
-            dialogueCanvas.alpha += Time.deltaTime * 3f;
+            dialogueCanvas.alpha += Time.deltaTime * 5f;
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
@@ -195,7 +195,7 @@ public class DialogueBox : MonoBehaviour
         // Fade out Canvas
         while (dialogueCanvas.alpha > 0)
         {
-            dialogueCanvas.alpha -= Time.deltaTime * 3f;
+            dialogueCanvas.alpha -= Time.deltaTime * 5f;
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
