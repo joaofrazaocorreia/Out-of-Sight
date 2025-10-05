@@ -11,6 +11,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
     private PlayerController playerController;
     private PlayerEquipment playerEquipment;
     private bool hasShownDialogue;
+    public bool HasShownDialogue { get => hasShownDialogue;  set { hasShownDialogue = value; }}
     private static int bodiesStashed;
 
     private void Start()
@@ -54,6 +55,16 @@ public class TutorialDialogueTriggers : MonoBehaviour
             DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
+    }
+
+    public void CaughtDialogue()
+    {
+        List<string> dialogueStrings = new List<string>()
+        {
+            "Stop, you've been caught. Let's restart this part.",
+        };
+
+        DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f);
     }
 
     public void FirstDoorDialogue()

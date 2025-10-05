@@ -107,7 +107,9 @@ public class PlayerEquipment : MonoBehaviour
 
     public void AddEquipment(GameObject equipment)
     {
-        equipments.Add(equipment);
+        if(!equipments.Contains(equipment))
+            equipments.Add(equipment);
+            
         RegisterEquipmentObjects();
     }
 

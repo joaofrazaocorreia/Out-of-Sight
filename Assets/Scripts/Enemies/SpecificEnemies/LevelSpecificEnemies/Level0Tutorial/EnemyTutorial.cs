@@ -12,6 +12,7 @@ public class EnemyTutorial : EnemyPassive
             {
                 Debug.Log($"{name} was alarmed!");
                 if (alarmAudioPlayer != null) alarmAudioPlayer.Play();
+                onBecomeAlarmed?.Invoke();
             }
 
             alarmedTimer = 1000000f;

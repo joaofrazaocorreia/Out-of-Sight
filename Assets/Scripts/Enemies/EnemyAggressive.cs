@@ -9,6 +9,7 @@ public class EnemyAggressive : Enemy
     [SerializeField] private GameObject radioIcon;
     [SerializeField] private Image radioFill;
     [SerializeField] private PlayAudio radioSoundPlayer;
+    [SerializeField] private bool usesRadio = true;
 
     private float aggroTimer;
     private Vector3 prevPlayerPos;
@@ -27,7 +28,7 @@ public class EnemyAggressive : Enemy
     
     protected void RadioTimer()
     {
-        if(IsConscious && IsAlarmed && !alarm.IsOn)
+        if(IsConscious && IsAlarmed && !alarm.IsOn && usesRadio)
         {
             TickBehaviorTimers();
             if (radioIcon != null)
