@@ -99,7 +99,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = startingTimeScale;
 
         #if UNITY_EDITOR
-            UISpeed *= 2;
+            UISpeed *= 1;
         #endif
 
         originalUIPositions = new Dictionary<Transform, Vector3>();
@@ -154,7 +154,7 @@ public class UIManager : MonoBehaviour
         loadingScreen.gameObject.SetActive(true);
         missionBriefingScreen.gameObject.SetActive(true);
         UnlockCursor();
-        StartCoroutine(FadeOutUI(loadingScreen, 0.2f));
+        StartCoroutine(FadeOutUI(loadingScreen, UISpeed));
     }
 
     private void Start()
@@ -206,7 +206,7 @@ public class UIManager : MonoBehaviour
             Time.timeScale = 0f;
             UnlockCursor();
 
-            StartCoroutine(FadeInUI(UIBackground));
+            StartCoroutine(FadeInUI(UIBackground, UISpeed));
             MoveUIToPosition(pauseMenu.transform, Vector3.zero);
         }
 
@@ -216,7 +216,7 @@ public class UIManager : MonoBehaviour
             Time.timeScale = 1f;
             LockCursor();
 
-            StartCoroutine(FadeOutUI(UIBackground));
+            StartCoroutine(FadeOutUI(UIBackground, UISpeed));
             ReturnUIToOrigin(pauseMenu.transform);
         }
     }
@@ -287,14 +287,14 @@ public class UIManager : MonoBehaviour
 
     public void Win()
     {
-        StartCoroutine(FadeInUI(victoryScreen));
+        StartCoroutine(FadeInUI(victoryScreen, UISpeed));
         UnlockCursor();
         Time.timeScale = 0f;
     }
 
     public void Lose()
     {
-        StartCoroutine(FadeInUI(gameOverScreen));
+        StartCoroutine(FadeInUI(gameOverScreen, UISpeed));
         UnlockCursor();
         Time.timeScale = 0f;
     }
@@ -309,7 +309,7 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator StartLoadingScene(int scene)
     {
-        StartCoroutine(FadeInUI(loadingScreen));
+        StartCoroutine(FadeInUI(loadingScreen, UISpeed));
 
         while(loadingScreen.alpha < 1f)
         {
@@ -319,12 +319,12 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(scene);
     }
 
-    private IEnumerator MoveUI(Transform uiTransform, Vector3 newPos)
+    private IEnumerator MoveUI(Transform uiTransform, Vector3 newPos, float uiSpeed = 1f)
     {
         while(uiTransform.localPosition != newPos)
         {
             Vector3 difference = newPos - uiTransform.localPosition;
-            float movespeed = deltaTime;
+            float movespeed = deltaTime * uiSpeed;
 
             Vector3 translation = new Vector3(
                 Mathf.Max(difference.x * movespeed, Mathf.Min(movespeed, difference.x)),
@@ -338,27 +338,27 @@ public class UIManager : MonoBehaviour
 
     private void MoveUIToPosition(Transform uiTransform, Vector3 newPos)
     {
-        StartCoroutine(MoveUI(uiTransform, newPos));
+        StartCoroutine(MoveUI(uiTransform, newPos, UISpeed*2));
     }
 
     private void ReturnUIToOrigin(Transform uiTransform)
     {
         if(originalUIPositions.Keys.Contains(uiTransform))
-            StartCoroutine(MoveUI(uiTransform, originalUIPositions[uiTransform]));
+            StartCoroutine(MoveUI(uiTransform, originalUIPositions[uiTransform], UISpeed));
     }
 
     private void FadeToggleScreen(CanvasGroup screen)
     {
         if(screen.alpha > 0.5f)
         {
-            StopCoroutine(FadeInUI(screen));
-            StartCoroutine(FadeOutUI(screen));
+            StopCoroutine(FadeInUI(screen, UISpeed));
+            StartCoroutine(FadeOutUI(screen, UISpeed));
         }
 
         else
         {
-            StopCoroutine(FadeOutUI(screen));
-            StartCoroutine(FadeInUI(screen));
+            StopCoroutine(FadeOutUI(screen, UISpeed));
+            StartCoroutine(FadeInUI(screen, UISpeed));
         }
     }
 
