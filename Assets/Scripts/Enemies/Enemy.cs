@@ -278,6 +278,7 @@ public class Enemy : MonoBehaviour
             {
                 Debug.Log($"{name} was alarmed!");
                 if (alarmAudioPlayer != null) alarmAudioPlayer.Play();
+                onBecomeAlarmed?.Invoke();
             }
 
             alarmedTimer = alarmedTime;

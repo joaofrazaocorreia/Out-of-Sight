@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         MapArea area = other.GetComponent<MapArea>();
-        if(other != null)
+        if(other != null && !currentAreas.Contains(area))
         {
             currentAreas.Add(area);
         }
@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         MapArea area = other.GetComponent<MapArea>();
-        if(other != null)
+        if(other != null && currentAreas.Contains(area))
         {
             currentAreas.Remove(area);
         }

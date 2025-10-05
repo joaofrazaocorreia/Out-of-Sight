@@ -5,13 +5,22 @@ using UnityEngine;
 public class TutorialDialogueTriggers : MonoBehaviour
 {
     [SerializeField] private List<GameObject> objectsToEnableDuringDialogue;
+    [SerializeField] private GameObject EquipmentToAdd;
     private TutorialObjectivesUpdater objectivesUpdater;
+    private UIManager uiManager;
+    private PlayerController playerController;
+    private PlayerEquipment playerEquipment;
     private bool hasShownDialogue;
+    public bool HasShownDialogue { get => hasShownDialogue;  set { hasShownDialogue = value; }}
     private static int bodiesStashed;
 
     private void Start()
     {
         objectivesUpdater = GetComponent<TutorialObjectivesUpdater>();
+        uiManager = FindAnyObjectByType<UIManager>();
+        playerController = FindAnyObjectByType<PlayerController>();
+        playerEquipment = FindAnyObjectByType<PlayerEquipment>();
+
         hasShownDialogue = false;
     }
 
@@ -27,15 +36,13 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Hello, and welcome to our training protocol.",
-            "To determine your aptitude, we'll be guiding you through a short training course, to test your infiltration skills.",
-            "If you manage to complete this course, we'll run you through a full heist simulation. Complete that too, and we'll stay in touch.",
-            "You may begin by heading left and finding the locked door. Your first task is to unlock it. \nGood luck.",
+            "Welcome to our training protocol: a short training course to test your skills.",
+            "You may begin by <b><#FFFF00>heading left</color></b> and finding the <b><#FFFF00>locked door</color></b>. Your first task is to unlock it. \nGood luck.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
-            {3, () =>
+            {1, () =>
                 {
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveFindLockedDoor();
@@ -45,31 +52,53 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
+    }
+
+    public void CaughtDialogue()
+    {
+        List<string> dialogueStrings = new List<string>()
+        {
+            "Stop, you've been caught. Let's restart this part.",
+        };
+
+        DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f);
     }
 
     public void FirstDoorDialogue()
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Most of your objectives will be located behind various obstacles, such as locked doors. To breach them, you must use some tools.",
-            "For this training, you've been given an assortment of tools to help you progress. You can check your inventory in the bottom right.",
-            "Equip your Lockpick by pressing '1', and then interact with the lock on the door to begin unlocking it.",
+            "To breach locked doors, you must use some infiltration equipment, such as a <b><#FFFF00>Lockpick</color></b>.",
+            "For this training, you've been given an assortment of tools to help you progress. You can check your <b><#FFFF00>inventory</color></b> in the <b><#FFFF00>bottom right</color></b>.",
+            "Equip your <b><#FFFF00>Lockpick</color></b> by <b><#FFFF00>pressing '1'</color></b>, and then <b><#FFFF00>interact with the lock</color></b> on the door to begin unlocking it.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
             {0, () =>
                 {
+                    uiManager.TogglePlayerControls(true, true, true);
+                    playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[1].transform);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
                 }
             },
-            { 1, () => EnableAllObjects()},
+            {1, () =>
+                {
+                    uiManager.TogglePlayerControls(true, false, true);
+                    playerController.StopForceLook();
+
+                    EnableAllObjects();
+                }
+            },
             {2, () =>
                 {
+                    uiManager.TogglePlayerControls(false, false, false);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveOpenLockedDoor();
                 }
@@ -78,7 +107,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }
@@ -87,25 +116,38 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Good work, now you've entered a restricted area.",
-            "If you're spotted here, people will start getting suspicious of you, and eventually raise the alarm. We don't want that.",
-            "You can keep track of your current status in the bottom left. If you're Trespassing or Suspicious, you better stay out of sight.",
-            "Trespassing means you're in a restricted area, and Suspicious means you're doing something unusual, like holding a tool or breaching a door.",
-            "Also, notice the Camera in this room, up on the wall next to you. If you don't disable it, you'll be seen Trespassing and raise the alarm.",
-            "Press '2' to equip your Electrical Jammer, which you can use to disable the Camera by interacting with it. Give it a try.",
+            "Good work. You've entered a <b><#FFFF00>restricted area</color></b>, so people will get suspicious if they see you here without permission.",
+            "You can check your <b><#FFFF00>status</color></b> in the <b><#FFFF00>bottom left</color></b>. If you're seen <b><#FFFF00>Trespassing</color></b> or <b><#FF0000>Suspicious</color></b>, someone may try to raise the alarm.",
+            "<b><#FFFF00>Trespassing</color></b> means you're in a restricted area without clearance, and <b><#FF0000>Suspicious</color></b> means you're holding a tool or doing something illegal.",
+            "Remember to <b><#FFFF00>unequip</color></b> your tools by pressing the <b><#FFFF00>same button to equip</color></b> them.",
+            "Also, notice that <b><#FFFF00>Camera</color></b> next to you. If you don't disable it, it'll see you <b><#FFFF00>Trespassing</color></b>, and you'll be caught.",
+            "<b><#FFFF00>Press '2'</color></b> to equip your <b><#FFFF00>Electrical Jammer</color></b>, which you can use to <b><#FFFF00>disable the Camera</color></b> by interacting with it. Give it a try.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
             {0, () =>
                 {
+                    uiManager.TogglePlayerControls(true, false, true);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
                 }
             },
-            {2, () => EnableAllObjects()},
-            {5, () =>
+            {1, () => EnableAllObjects()},
+            {4, () =>
                 {
+                    uiManager.TogglePlayerControls(true, true, true);
+                    playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[1].transform);
+                }
+            },
+            { 5, () =>
+                {
+                    playerController.StopForceLook();
+                    uiManager.TogglePlayerControls(false, false, false);
+
+                    playerEquipment.AddEquipment(EquipmentToAdd);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveJamCamera();
                 }
@@ -114,7 +156,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }
@@ -123,10 +165,9 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Great job. As long as the Camera remains jammed, it won't be able to detect anything.",
-            "You only have a limited amount of Jammers, but if you need, you can retrieve them by interacting with the jammed device again.",
-            "However, removing a Jammer from a device will re-enable it, so you'll have to manage your Jammer placements wisely.",
-            "With the Camera jammed, breach the door ahead and proceed to the next room."
+            "Great job. Jammed devices remain disabled for as long as the Jammer is on them.",
+            "You can also retrieve the Jammers by interacting with them again. Manage your Jammer placements wisely, since you only have a limited amount.",
+            "Proceed to the <b><#FFFF00>next room</color></b> when you're ready."
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
@@ -137,7 +178,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
                         objectivesUpdater.ObjectiveStart();
                 }
             },
-            {3, () =>
+            {2, () =>
                 {
                     EnableAllObjects();
                     
@@ -149,7 +190,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }
@@ -158,22 +199,26 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "There is a guard patrolling nearby. Just like cameras, people will also get alarmed if they see you Trespassing or acting Suspicious.",
-            "Sometimes you can just examine their routines and proceed during an opening, but we'd like to see you perform a knockout.",
-            "To knockout someone, you must sneak up behind them and interact with the person. But don't get too close, or they might notice you.",
-            "Go ahead and try to knock out the guard from behind."
+            "There's a <b><#3030FF>Guard</color></b> patrolling this area. He'll detect you if he sees you acting <b><#FF0000>Suspicious</color></b>, so you must <b><#FFFF00>knock him out</color></b>.",
+            "To <b><#FFFF00>knockout</color></b> someone, you must sneak up <b><#FFFF00>behind them</color></b> and interact with the person. But don't get too close, or they might notice you.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
             {0, () =>
                 {
+                    uiManager.TogglePlayerControls(true, true, true);
+                    playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[0].transform);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
                 }
             },
-            {3, () =>
+            {1, () =>
                 {
+                    uiManager.TogglePlayerControls(false, false, false);
+                    playerController.StopForceLook();
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveKnockOutGuard();
                 }
@@ -182,7 +227,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }
@@ -191,15 +236,16 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Good job, now you can- \nUh oh. Someone walked in and saw the body.",
-            "These situations are unpredictable, so you have to think fast and always be ready.",
-            "Equip your Taser Gun by pressing '3', then fire at the employee to knock them out from a distance.",
+            "Good job, now you can- \nUh oh, someone saw the body. You must <b><#FFFF00>neutralize them</color></b> quickly before they run off.",
+            "Equip your <b><#FFFF00>Taser Gun</color></b> by <b><#FFFF00>pressing '3'</color></b>, then <b><#FFFF00>shoot</color></b> the employee to knock them out from a distance.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
             {0, () =>
                 {
+                    uiManager.TogglePlayerControls(false,false,true);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
 
@@ -221,8 +267,12 @@ public class TutorialDialogueTriggers : MonoBehaviour
                     }
                 }
             },
-            {2, () =>
+            {1, () =>
                 {
+                    uiManager.TogglePlayerControls(false,false,false);
+
+                    playerEquipment.AddEquipment(EquipmentToAdd);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveKnockOutEmployee1();
                 }
@@ -231,7 +281,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }
@@ -240,15 +290,16 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Excellent, you've neutralized the employee before they could run off and raise the alarm.",
-            "Now you should hide those bodies, before anyone else sees them. You can move bodies by carrying them and dropping them elsewhere.",
-            "You can interact with a body to carry it, but remember: you can only carry one body at a time. Grab one of the bodies.",
+            "Excellent, now you should <b><#FFFF00>hide those bodies</color></b> before anyone else sees them.",
+            "<b><#FFFF00>Interact</color></b> with a body to carry it, then move it to the <b><#FFFF00>previous room</color></b>.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
             {0, () =>
                 {
+                    uiManager.TogglePlayerControls(false,false,true);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
 
@@ -270,8 +321,10 @@ public class TutorialDialogueTriggers : MonoBehaviour
                     }
                 }
             },
-            {2, () =>
+            {1, () =>
                 {
+                    uiManager.TogglePlayerControls(false,false,false);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveHideBodies();
 
@@ -290,7 +343,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }
@@ -302,13 +355,13 @@ public class TutorialDialogueTriggers : MonoBehaviour
         {
             dialogueStrings = new List<string>()
             {
-                "Now return to the previous room, and then drop the body there.",
+                "Now return to the <b><#FFFF00>previous room</color></b> to hide the body there.",
             };
 
 
             if (!hasShownDialogue)
             {
-                DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f);
+                DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f);
                 hasShownDialogue = true;
             }
 
@@ -325,12 +378,12 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Good, now drop the body, then repeat the process with the other one.",
+            "Good, now <b><#FFFF00>drop</color></b> the body, then <b><#FFFF00>repeat</color></b> the process with the other one.",
         };
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f);
             hasShownDialogue = true;
             bodiesStashed++;
         }
@@ -340,15 +393,16 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Great work. You can also disguise yourself as people you've knocked out, allowing you to blend into your surroundings.",
-            "Certain disguises give you clearance to restricted areas, and wearing one makes you seem less suspicious.",
-            "Try taking a disguise from either of the bodies by interacting with them."
+            "Great work. Now, to blend into your surroundings, you can take <b><#FFFF00>disguises</color></b> from people you've knocked out.",
+            "<b><#FFFF00>Interact</color></b> with either body and take their <b><#FFFF00>disguise</color></b> for yourself."
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
             {0, () =>
                 {
+                    uiManager.TogglePlayerControls(false,false,true);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
 
@@ -370,8 +424,10 @@ public class TutorialDialogueTriggers : MonoBehaviour
                     }
                 }
             },
-            {2, () =>
+            {1, () =>
                 {
+                    uiManager.TogglePlayerControls(false,false,false);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveTakeDisguise();
 
@@ -390,7 +446,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }
@@ -399,21 +455,24 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Notice how your status changed. Due to your Disguise, you've gained clearance for this area.",
-            "Disguises help you blend in and seem less suspicious, and some of them give you clearance to specific restricted areas.",
-            "Let's continue the training. Proceed to the hall and close the door behind you, so no one else finds the unconscious bodies.",
+            "Notice how your <b><#FFFF00>status</color></b> changed. Due to your Disguise, you've gained clearance for this area, and people will now detect you slower.",
+            "Let's continue. Proceed to <b><#FFFF00>next room</color></b>.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
             {0, () =>
                 {
+                    uiManager.TogglePlayerControls(true,false,true);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
                 }
             },
-            {2, () =>
+            {1, () =>
                 {
+                    uiManager.TogglePlayerControls(false,false,false);
+
                     EnableAllObjects();
                     
                     if(objectivesUpdater != null)
@@ -424,7 +483,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue && enabled)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }
@@ -433,20 +492,30 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "The next room has a Keycard door. You can't use your Lockpick to breach electronic doors, so you'll need to find a suitable keycard.",
-            "But first, let's scout the room ahead. Press '4' to equip your Mirror Stick, and interact with the bottom of the door to peek under it.",
+            "The next room has a <b><#FFFF00>Keycard door</color></b>. You can't use your Lockpick to breach electronic doors, so you'll need to find a matching keycard.",
+            "But first, let's <b><#FFFF00>scout</color></b> the room ahead. <b><#FFFF00>Press '4'</color></b> to equip your <b><#FFFF00>Mirror Stick</color></b>, and interact with the <b><#FFFF00>bottom of the door</color></b> to peek under it.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
             {0, () =>
                 {
+                    uiManager.TogglePlayerControls(true,true,true);
+                    playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[3].transform);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
+
+                    objectsToEnableDuringDialogue[2].GetComponent<InteractiveObject>().Interact();
                 }
             },
             {1, () =>
                 {
+                    uiManager.TogglePlayerControls(false,false,false);
+                    playerController.StopForceLook();
+
+                    playerEquipment.AddEquipment(EquipmentToAdd);
+                    
                     EnableAllObjects();
                     
                     if(objectivesUpdater != null)
@@ -457,7 +526,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }
@@ -466,21 +535,24 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "The Mirror Stick tool allows you to look under doors and scout the rooms before entering them. However, you're suspicious while doing so.",
-            "You should be able to see an employee inside with a keycard. You'll need to lure them out of the room so you can grab it.",
-            "Enter the Storage room and find a way to lure the employee.",
+            "The Mirror Stick is useful for scouting areas ahead of you, but you're suspicious while doing it, so try to be discrete.",
+            "To enter this next room, you'll need that <b><#FFFF00>employee's keycard</color></b>. Enter the <b><#FFFF00>Storage room</color></b> next to you and try to lure them out."
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
             {0, () =>
                 {
+                    uiManager.TogglePlayerControls(false,false,true);
+                    
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
                 }
             },
-            {2, () =>
+            {1, () =>
                 {
+                    uiManager.TogglePlayerControls(false,false,false);
+                    
                     EnableAllObjects();
                     
                     if(objectivesUpdater != null)
@@ -491,7 +563,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }
@@ -500,20 +572,26 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Sometimes, you'll need to use your surroundings to manipulate people and progress your mission.",
-            "See if you can use that phone to lure the employee to your location.",
+            "Sometimes, you'll need to <b><#FFFF00>use your surroundings</color></b> to manipulate people and advance your mission.",
+            "See if you can use that <b><#FFFF00>phone</color></b> to make a <b><#FFFF00>distraction</color></b>, luring the employee to your location.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
             {0, () =>
                 {
+                    uiManager.TogglePlayerControls(true,true,true);
+                    playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[0].transform);
+                    
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveUseDistraction();
                 }
             },
             {1, () =>
                 {
+                    uiManager.TogglePlayerControls(false,false,false);
+                    playerController.StopForceLook();
+                    
                     objectsToEnableDuringDialogue[0].GetComponent<NPCMoveInteraction>().enabled = true;
                 }
             },
@@ -522,7 +600,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }
@@ -531,8 +609,8 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Good job. Now knock them out and grab their keycard.",
-            "If you have trouble getting behind the employee, use the Taser Gun."
+            "Good job. Now <b><#FFFF00>knock them out</color></b> and grab their <b><#FFFF00>keycard</color></b>.",
+            "If you have trouble getting behind the employee, use the <b><#FFFF00>Taser Gun</color></b>."
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
@@ -548,7 +626,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }
@@ -557,7 +635,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Now open the keycard door by interacting with it."
+            "Now open the <b><#FFFF00>keycard door</color></b> by interacting with it."
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
@@ -573,7 +651,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }
@@ -582,10 +660,9 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Excellent job. Your final task is to grab the files ahead of you, and then escape the location.",
-            "In a real mission, these would be considered your \"Main Objective\", which is what we want you to steal.",
-            "Once you've grabbed them, return to the entrance of the course. This protocol will finish as soon as you exit.",
-            "We'll stay in touch.",
+            "Excellent job. Your last task is to grab the <b><#FFFF00>files</color></b> on the table, and then <b><#FFFF00>exit</color></b> the location through the <b><#FFFF00>entrance</color></b>.",
+            "This protocol will finish as soon as you <b><#FFFF00>leave</color></b>. You can sprint by holding <b><#FFFF00>Left Shift</color></b>.",
+            "Good performance, we'll stay in touch.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
@@ -601,7 +678,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Supervisor", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
             hasShownDialogue = true;
         }
     }

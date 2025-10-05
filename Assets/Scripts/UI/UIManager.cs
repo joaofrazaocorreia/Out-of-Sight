@@ -115,25 +115,34 @@ public class UIManager : MonoBehaviour
         player = FindAnyObjectByType<Player>();
         player.OnStatusChanged += OnStatusChanged;
         player.OnDisguiseChanged += OnDisguiseChanged;
+
         playerInput = FindAnyObjectByType<PlayerInput>();
+
         playerMelee = FindAnyObjectByType<PlayerMelee>();
         playerMelee.OnAttackAvailable += OnAttackAvailable;
         playerMelee.OnAttackNotAvailable += OnAttackNotAvailable;
+
         carryInventory = FindAnyObjectByType<PlayerCarryInventory>();
         carryInventory.OnCarryPickup += OnCarryPickup;
         carryInventory.OnCarryDrop += OnCarryDrop;
+
         playerController = FindFirstObjectByType<PlayerController>();
         playerController.OnStaminaUpdate += OnStaminaUpdate;
         playerController.ToggleMap += ToggleMap;
+        staminaSlider.gameObject.SetActive(playerController.UseStamina);
+
         playerEquipment = FindAnyObjectByType<PlayerEquipment>();
         playerEquipment.OnEquipmentAdded += OnEquipmentAdded;
         playerEquipment.OnEquipmentChanged += OnEquipmentChanged;
+
         playerInteraction = FindAnyObjectByType<PlayerInteraction>();
         playerInteraction.WhileInteracting += WhileInteracting;
         playerInteraction.OnInteractionStop += OnInteractionStop;
         playerInteraction.OnHitInteractableChanged += OnHitInteractableChanged;
+
         playerInventory = FindAnyObjectByType<PlayerInventory>();
         playerInventory.OnInventoryUpdated += OnInventoryUpdated;
+        
         objectiveTexts = new Dictionary<string, TextMeshProUGUI>();
         enemyDetections = new List<Detection>();
         detectionArrows = new Dictionary<Detection, GameObject>();
@@ -567,7 +576,12 @@ public class UIManager : MonoBehaviour
         else
         {
             ToggleAmmoDisplay(true);
-            UpdateAmmoText(ammo.CurrentAmmo + " / " + ammo.MaxAmmo);
+            
+            if (ammo.MaxAmmo == -1)
+                UpdateAmmoText("inf / inf");
+
+            else
+                UpdateAmmoText(ammo.CurrentAmmo + " / " + ammo.MaxAmmo);
         }
     }
 
@@ -906,6 +920,13 @@ public class UIManager : MonoBehaviour
         mapOverlay?.SetActive(!mapOverlay.activeSelf);
     }
 
+    public void TogglePlayerControls(bool lockMove = false, bool lockLook = false, bool lockInteract = false)
+    {
+        playerController.ForceLockMove = lockMove;
+        playerController.ForceLockLook = lockLook;
+        playerInteraction.ForceLockInteraction = lockInteract;
+    }
+
     private void ToggleAttackUI(bool state) => attackUI.SetActive(state);
     private void ToggleCarryUI(bool state) => CarryingUI.SetActive(state);
 
@@ -917,7 +938,7 @@ public class UIManager : MonoBehaviour
 
     private void OnCarryPickup(object sender, EventArgs e) => ToggleCarryUI(true);
     private void OnCarryDrop(object sender, EventArgs e) => ToggleCarryUI(false);
-    private void OnEquipmentAdded(object sender, EventArgs e) => UpdateEquipmentIcon(playerEquipment._recentlyAddedEquipment.Icon, Array.IndexOf(playerEquipment.EquipmentObjects, playerEquipment._recentlyAddedEquipment));
+    private void OnEquipmentAdded(object sender, EventArgs e) => UpdateEquipmentIcon(playerEquipment._recentlyAddedEquipment.Icon, Array.IndexOf(playerEquipment.EquipmentObjects.ToArray(), playerEquipment._recentlyAddedEquipment));
 
     private void OnEquipmentChanged(object sender, EventArgs e) => UpdateEquipmentUI();
 

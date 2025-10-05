@@ -27,6 +27,8 @@ public class PlayerInteraction : MonoBehaviour
     private bool _isInteractionSuspicious;
     private bool _equipmentAnimationLoop;
 
+    public bool ForceLockInteraction;
+
     private RaycastHit _hit;
 
     private GameObject _activeObject;
@@ -97,7 +99,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void GetInteractiveObject()
     {
-        if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out _hit, raycastDistance, whatIsInteractable))
+        if (Physics.Raycast(raycastOrigin.position,  raycastOrigin.forward, out _hit, raycastDistance, whatIsInteractable) && !ForceLockInteraction)
         {
             if(_lastHitObject == _hit.collider.gameObject) return;
             

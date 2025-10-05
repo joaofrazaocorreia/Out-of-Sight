@@ -1,22 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Interaction.Equipments;
 using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
 {
     [SerializeField] private GameObject inventoryUI;
-    [SerializeField] private GameObject[] equipments;
+    //[SerializeField] private GameObject[] equipments;
+    [SerializeField] private List<GameObject> equipments;
     [SerializeField] private PlayAudio equipingPlayer;
     [SerializeField] private Animator animator;
     
     public Animator Animator => animator;
 
-    private EquipmentObject[] _equipmentObjects;
+    private List<EquipmentObject> _equipmentObjects;
     public EquipmentObject _recentlyAddedEquipment {get; private set;}
     
-    public EquipmentObject[] EquipmentObjects => _equipmentObjects;
+    public List<EquipmentObject> EquipmentObjects => _equipmentObjects;
     
     private PlayerMelee _playerMelee;
     
@@ -57,7 +59,7 @@ public class PlayerEquipment : MonoBehaviour
 
     public void NewEquipmentSelected(int index)
     {
-        if (index < 0 || index >= equipments.Length || !inventoryUI.activeSelf) return;
+        if (index < 0 || index >= equipments.Count || !inventoryUI.activeSelf) return;
         if (index == CurrentEquipmentNum)
         {
             Unequip();
@@ -94,13 +96,7 @@ public class PlayerEquipment : MonoBehaviour
     }
     private void Start()
     {
-        _equipmentObjects = new EquipmentObject[equipments.Length];
-        for (int i = 0; i < equipments.Length; i++)
-        {
-            _equipmentObjects[i] = equipments[i].GetComponent<EquipmentObject>();
-            _recentlyAddedEquipment = _equipmentObjects[i];
-            OnEquipmentAdded?.Invoke(this, EventArgs.Empty);
-        }
+        RegisterEquipmentObjects();
 
         _playerMelee = GetComponent<PlayerMelee>();
         _playerMelee.OnKnockout += OnMeleeAttack;
@@ -109,9 +105,28 @@ public class PlayerEquipment : MonoBehaviour
         Unequip();
     }
 
+    public void AddEquipment(GameObject equipment)
+    {
+        if(!equipments.Contains(equipment))
+            equipments.Add(equipment);
+            
+        RegisterEquipmentObjects();
+    }
+
+    private void RegisterEquipmentObjects()
+    {
+        _equipmentObjects = new List<EquipmentObject>();
+        for (int i = 0; i < equipments.Count; i++)
+        {
+            _equipmentObjects.Add(equipments[i].GetComponent<EquipmentObject>());
+            _recentlyAddedEquipment = _equipmentObjects[i];
+            OnEquipmentAdded?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
     public void EquipmentUsed()
     {
-        if(CurrentEquipment.UseAnimation != "None") animator.SetTrigger(CurrentEquipment.UseAnimation);
+        if (CurrentEquipment.UseAnimation != "None") animator.SetTrigger(CurrentEquipment.UseAnimation);
         OnEquipmentChanged?.Invoke(this, EventArgs.Empty);
     }
 
