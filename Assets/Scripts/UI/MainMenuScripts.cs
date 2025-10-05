@@ -35,10 +35,10 @@ public class MainMenuScripts : MonoBehaviour
         uiButtonScaleDownCoroutines = new Dictionary<RectTransform, (Coroutine, float, float, float)>();
         
         #if UNITY_EDITOR
-            UISpeed *= 2;
+            UISpeed *= 1;
         #endif
 
-        deltaTime = Time.fixedDeltaTime * UISpeed;
+        deltaTime = Time.deltaTime * UISpeed;
 
         for(int i = 0; i < transform.childCount; i++)
         {
@@ -53,7 +53,7 @@ public class MainMenuScripts : MonoBehaviour
     {
         while(uiTransform.localPosition != newPos)
         {
-            Vector3 difference = newPos - uiTransform.localPosition;;
+            Vector3 difference = newPos - uiTransform.localPosition;
 
             Vector3 translation = new Vector3(
                 Mathf.Max(difference.x * deltaTime, Mathf.Min(deltaTime, difference.x)),
@@ -206,7 +206,7 @@ public class MainMenuScripts : MonoBehaviour
 
     private IEnumerator StartLoadingScene(int scene)
     {
-        StartCoroutine(FadeInUI(loadingScreen, 0.2f));
+        StartCoroutine(FadeInUI(loadingScreen, 3f));
 
         while(loadingScreen.alpha < 1f)
         {

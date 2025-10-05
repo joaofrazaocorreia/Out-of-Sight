@@ -72,7 +72,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
         List<string> dialogueStrings = new List<string>()
         {
             "To breach locked doors, you must use some infiltration equipment, such as a <b><#FFFF00>Lockpick</color></b>.",
-            "For this training, you've been given an assortment of tools to help you progress. You can check your <b><#FFFF00>inventory</color></b> in the <b><#FFFF00>bottom right</color></b>.",
+            "For this training, you'll been given some tools to help you progress. You can check your <b><#FFFF00>inventory</color></b> in the <b><#FFFF00>bottom right</color></b>.",
             "Equip your <b><#FFFF00>Lockpick</color></b> by <b><#FFFF00>pressing '1'</color></b>, and then <b><#FFFF00>interact with the lock</color></b> on the door to begin unlocking it.",
         };
 
@@ -244,7 +244,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
         {
             {0, () =>
                 {
-                    uiManager.TogglePlayerControls(false,false,true);
+                    uiManager.TogglePlayerControls(true,false,true);
 
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
@@ -269,7 +269,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
             },
             {1, () =>
                 {
-                    uiManager.TogglePlayerControls(false,false,false);
+                    uiManager.TogglePlayerControls(true,false,false);
 
                     playerEquipment.AddEquipment(EquipmentToAdd);
 
