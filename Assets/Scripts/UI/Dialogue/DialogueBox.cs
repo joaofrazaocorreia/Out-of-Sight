@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class DialogueBox : MonoBehaviour
@@ -13,12 +14,14 @@ public class DialogueBox : MonoBehaviour
     [SerializeField] private float timeBeforeTextProceed = 1.5f;
 
     public static DialogueBox Instance;
+    private PlayerInput playerInput;
     private CanvasGroup dialogueCanvas;
     private float textSpeed;
     private Coroutine showDialogueCoroutine;
     private Dictionary<char, float> characterCustomWaitTimes;
     private Dictionary<int, Action> onReachSpecificLines;
     private Dictionary<char, string> allowedFormatting;
+    private int skipTextDisplay;
 
     private void Start()
     {
@@ -27,12 +30,15 @@ public class DialogueBox : MonoBehaviour
 
         Instance = this;
 
+        playerInput = FindAnyObjectByType<PlayerInput>();
         dialogueCanvas = GetComponent<CanvasGroup>();
         ResetCanvas();
 
         textSpeed = 1;
         SetUpCharacterCustomWaitTimes();
         SetUpAllowedFormatting();
+
+        skipTextDisplay = -1;
     }
 
     private void ResetCanvas()
@@ -62,6 +68,20 @@ public class DialogueBox : MonoBehaviour
         {
             {'b', "<b>"},
         };
+    }
+
+    private void Update()
+    {
+        if (playerInput.actions["Jump"].WasPressedThisFrame())
+        {
+            if (skipTextDisplay < 0)
+                skipTextDisplay = 0;
+
+            else
+            {
+                skipTextDisplay = 1;
+            }
+        }
     }
 
     public void ShowDialogue(List<string> textStrings, string speaker, float textSpeed = 1f, Dictionary<int, Action> onReachSpecificLinesEvents = null)
@@ -106,6 +126,7 @@ public class DialogueBox : MonoBehaviour
         {
             //string text = textStrings[i];
             string text = string.Empty;
+            skipTextDisplay = -1;
 
             //dialogueText.text = string.Empty; // resets the text box
             textBox.text = $"<#FFFFFF00>{textStrings[i]}</color>"; // adds all text to the box but transparent
@@ -173,7 +194,7 @@ public class DialogueBox : MonoBehaviour
                 textBox.text = FormatDialogueText(textStrings[i], text, ignoredChars, invisFormatting);
 
 
-                if (!ignoreWaitTime)
+                if (!ignoreWaitTime && skipTextDisplay < 0)
                 {
                     // Checks for custom wait times for specific characters like punctuation
                     if (characterCustomWaitTimes.ContainsKey(c))
@@ -188,8 +209,12 @@ public class DialogueBox : MonoBehaviour
                 }
             }
 
-            // Waits before proceeding to next line or fading out
-            yield return new WaitForSeconds(timeBeforeTextProceed);
+            float timer = timeBeforeTextProceed;
+            while (timer > 0 && skipTextDisplay <= 0)
+            {
+                timer -= Time.deltaTime;
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
         }
 
         // Fade out Canvas
