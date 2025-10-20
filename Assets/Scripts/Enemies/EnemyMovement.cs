@@ -37,8 +37,8 @@ public class EnemyMovement : MonoBehaviour
     private int movementTargetIndex;
     private bool movingToSetTarget;
     public bool MovingToSetTarget {get => movingToSetTarget; set => movingToSetTarget = value;}
-    public float WalkSpeed {get=> walkSpeed;}
-    public float RunSpeed {get=> runSpeed;}
+    public float WalkSpeed {get => walkSpeed; set => walkSpeed = value; }
+    public float RunSpeed {get => runSpeed; set => runSpeed = value; }
     private bool halted = false;
     public bool Halted
     {

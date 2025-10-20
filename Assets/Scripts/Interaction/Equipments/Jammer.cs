@@ -24,7 +24,7 @@ public class Jammer : EquipmentObject, IHasAmmo
         get => _currentAmount;
         set
         {
-            _currentAmount = value; 
+            _currentAmount = Mathf.Min(value, MaxAmmo); 
             CanBeUsed = _currentAmount > 0;
             IsSuspicious = _currentAmount > 0;
             _playerEquipment.EquipmentChanged();

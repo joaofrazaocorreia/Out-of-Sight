@@ -421,14 +421,14 @@ public class Enemy : MonoBehaviour
 
         if(suspectfulTimer > 0)
         {
-            if(detection.ClosestSuspiciousObject != null)
+            if (detection.ClosestSuspiciousObject != null)
             {
                 // Follows the nearest suspicious object until it's within the minimum range
-                if((detection.ClosestSuspiciousObject.transform.position -
+                if ((detection.ClosestSuspiciousObject.transform.position -
                     transform.position).magnitude > suspectfulInspectRange)
                 {
                     enemyMovement.Halted = false;
-                    
+
                     enemyMovement.MoveTo(detection.ClosestSuspiciousObject.transform.position);
                     enemyMovement.RotateTo(null);
                 }
@@ -447,6 +447,11 @@ public class Enemy : MonoBehaviour
                 .magnitude <= suspectfulInspectRange * 2)
             {
                 enemyMovement.LookAt(player.transform.position);
+            }
+
+            else
+            {
+                enemyMovement.Halted = false;
             }
 
             TickBehaviorTimers();

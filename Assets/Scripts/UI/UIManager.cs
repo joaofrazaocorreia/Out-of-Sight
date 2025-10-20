@@ -87,7 +87,6 @@ public class UIManager : MonoBehaviour
     private List<Detection> enemyDetections;
     private Dictionary<Detection, GameObject> detectionArrows;
     private Alarm alarm;
-    private float deltaTime;
     private float primaryInteractionTextOffset;
     private float secondaryInteractionTextOffset;
 
@@ -97,10 +96,6 @@ public class UIManager : MonoBehaviour
         gamePaused = false;
         settingsActive = false;
         Time.timeScale = startingTimeScale;
-
-        #if UNITY_EDITOR
-            UISpeed *= 1;
-        #endif
 
         originalUIPositions = new Dictionary<Transform, Vector3>();
         uiButtonScaleUpCoroutines = new Dictionary<RectTransform, (Coroutine, float, float, float)>();
@@ -147,7 +142,6 @@ public class UIManager : MonoBehaviour
         enemyDetections = new List<Detection>();
         detectionArrows = new Dictionary<Detection, GameObject>();
         alarm = FindAnyObjectByType<Alarm>();
-        deltaTime = Time.fixedDeltaTime * UISpeed;
         primaryInteractionTextOffset = interactionMessages[0].transform.localPosition.x;
         secondaryInteractionTextOffset = interactionMessages[1].transform.localPosition.x;
 
@@ -301,9 +295,9 @@ public class UIManager : MonoBehaviour
     
     public void LoadScene(int scene)
     {
+        Time.timeScale = 1f;
         StopAllCoroutines();
         UnlockCursor();
-        Time.timeScale = 1f;
         StartCoroutine(StartLoadingScene(scene));
     }
 
@@ -319,12 +313,12 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(scene);
     }
 
-    private IEnumerator MoveUI(Transform uiTransform, Vector3 newPos, float uiSpeed = 1f)
+    private IEnumerator MoveUI(Transform uiTransform, Vector3 newPos, float speed = 1f)
     {
         while(uiTransform.localPosition != newPos)
         {
             Vector3 difference = newPos - uiTransform.localPosition;
-            float movespeed = deltaTime * uiSpeed;
+            float movespeed = Time.fixedDeltaTime * UISpeed * speed;
 
             Vector3 translation = new Vector3(
                 Mathf.Max(difference.x * movespeed, Mathf.Min(movespeed, difference.x)),
@@ -368,7 +362,7 @@ public class UIManager : MonoBehaviour
 
         while(ui.alpha < 1f)
         {
-            ui.alpha += deltaTime * speed;
+            ui.alpha += Time.fixedDeltaTime * UISpeed * speed;
             yield return null;
         }
     }
@@ -379,7 +373,7 @@ public class UIManager : MonoBehaviour
         
         while(ui.alpha > 0f)
         {
-            ui.alpha -= deltaTime * speed;
+            ui.alpha -= Time.fixedDeltaTime * UISpeed * speed;
             yield return null;
         }
     }
@@ -399,13 +393,13 @@ public class UIManager : MonoBehaviour
             float textDifference = targetTextSize - buttonText.fontSize;
 
             if(widthDifference != 0)
-                widthDifference = Mathf.Clamp(widthDifference, -deltaTime*50, deltaTime*50);
+                widthDifference = Mathf.Clamp(widthDifference, -(Time.fixedDeltaTime * UISpeed) * 50, Time.fixedDeltaTime * UISpeed * 50);
 
             if(heightDifference != 0)
-                heightDifference = Mathf.Clamp(heightDifference, -deltaTime*30, deltaTime*30);
+                heightDifference = Mathf.Clamp(heightDifference, -(Time.fixedDeltaTime * UISpeed) * 30, Time.fixedDeltaTime * UISpeed * 30);
 
             if(textDifference != 0)
-                textDifference = Mathf.Clamp(textDifference, -deltaTime*30, deltaTime*30);
+                textDifference = Mathf.Clamp(textDifference, -(Time.fixedDeltaTime * UISpeed) * 30, Time.fixedDeltaTime * UISpeed * 30);
 
             uiTransform.sizeDelta += new Vector2(widthDifference, heightDifference);
             buttonText.fontSize += textDifference;
@@ -802,9 +796,12 @@ public class UIManager : MonoBehaviour
                 {
                     Detection d = NPCsParent.GetChild(i).GetComponentInChildren<Detection>();
 
-                    enemyDetections.Add(d);
-                    detectionArrows.Add(d, Instantiate(detectionArrowPrefab, detectionArrowsParent));
-                    detectionArrows[d].name = d.transform.parent.name + " Arrow";
+                    if(d)
+                    {
+                        enemyDetections.Add(d);
+                        detectionArrows.Add(d, Instantiate(detectionArrowPrefab, detectionArrowsParent));
+                        detectionArrows[d].name = d.transform.parent.name + " Arrow";
+                    }
                 }
             }
 

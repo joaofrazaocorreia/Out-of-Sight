@@ -4,6 +4,28 @@ using UnityEngine;
 
 public class EnemyTutorial : EnemyPassive
 {
+    protected override void NormalBehavior()
+    {
+        if (enemyMovement.WalkSpeed != 0)
+        {
+            base.NormalBehavior();
+        }
+
+        else
+        {
+            StopMoving();
+        }
+    }
+
+    protected override void SuspectfulBehavior()
+    {
+        if (IsAlarmed)
+            StopMoving();
+
+        else if (enemyMovement.WalkSpeed > 0)
+            base.SuspectfulBehavior();
+    }
+
     public override void BecomeAlarmed()
     {
         if (IsConscious)
@@ -17,7 +39,15 @@ public class EnemyTutorial : EnemyPassive
 
             alarmedTimer = 1000000f;
             detection.DetectionMeter = detection.DetectionLimit;
-            enemyMovement.Halted = true;
+            StopMoving();
         }
+    }
+
+    private void StopMoving()
+    {
+        enemyMovement.SetMovementSpeed(0);
+        enemyMovement.Halt();
+        enemyMovement.Halted = true;
+        enemyMovement.MoveTimer = 0.01f;
     }
 }

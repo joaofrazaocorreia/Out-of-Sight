@@ -26,7 +26,6 @@ public class MainMenuScripts : MonoBehaviour
     private Dictionary<Transform,Vector3> originalUIPositions;
     private Dictionary<RectTransform, (Coroutine, float, float, float)> uiButtonScaleUpCoroutines;
     private Dictionary<RectTransform, (Coroutine, float, float, float)> uiButtonScaleDownCoroutines;
-    private float deltaTime;
 
     private void Start()
     {
@@ -34,11 +33,7 @@ public class MainMenuScripts : MonoBehaviour
         uiButtonScaleUpCoroutines = new Dictionary<RectTransform, (Coroutine, float, float, float)>();
         uiButtonScaleDownCoroutines = new Dictionary<RectTransform, (Coroutine, float, float, float)>();
         
-        #if UNITY_EDITOR
-            UISpeed *= 1;
-        #endif
-
-        deltaTime = Time.deltaTime * UISpeed;
+        Time.timeScale = 1f;
 
         for(int i = 0; i < transform.childCount; i++)
         {
@@ -56,8 +51,8 @@ public class MainMenuScripts : MonoBehaviour
             Vector3 difference = newPos - uiTransform.localPosition;
 
             Vector3 translation = new Vector3(
-                Mathf.Max(difference.x * deltaTime, Mathf.Min(deltaTime, difference.x)),
-                    Mathf.Max(difference.y * deltaTime, Mathf.Min(deltaTime, difference.y)),
+                Mathf.Max(difference.x * (Time.deltaTime * UISpeed), Mathf.Min(Time.deltaTime * UISpeed, difference.x)),
+                    Mathf.Max(difference.y * (Time.deltaTime * UISpeed), Mathf.Min(Time.deltaTime * UISpeed, difference.y)),
                         difference.z);
 
             uiTransform.localPosition += translation;
@@ -92,13 +87,13 @@ public class MainMenuScripts : MonoBehaviour
             float textDifference = targetTextSize - buttonText.fontSize;
 
             if(widthDifference != 0)
-                widthDifference = Mathf.Clamp(widthDifference, -deltaTime*100, deltaTime*100);
+                widthDifference = Mathf.Clamp(widthDifference, -(Time.deltaTime * UISpeed) * 100, Time.deltaTime * UISpeed *100);
 
             if(heightDifference != 0)
-                heightDifference = Mathf.Clamp(heightDifference, -deltaTime*60, deltaTime*60);
+                heightDifference = Mathf.Clamp(heightDifference, -(Time.deltaTime * UISpeed) * 60, Time.deltaTime * UISpeed * 60);
 
             if(textDifference != 0)
-                textDifference = Mathf.Clamp(textDifference, -deltaTime*60, deltaTime*60);
+                textDifference = Mathf.Clamp(textDifference, -(Time.deltaTime * UISpeed) * 60, Time.deltaTime * UISpeed * 60);
 
             uiTransform.sizeDelta += new Vector2(widthDifference, heightDifference);
             buttonText.fontSize += textDifference;
