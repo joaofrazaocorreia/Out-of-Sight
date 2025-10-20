@@ -8,6 +8,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
     [SerializeField] private GameObject EquipmentToAdd;
     private TutorialObjectivesUpdater objectivesUpdater;
     private UIManager uiManager;
+    private CheckpointManager checkpointManager;
     private PlayerController playerController;
     private PlayerEquipment playerEquipment;
     private bool hasShownDialogue;
@@ -18,6 +19,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         objectivesUpdater = GetComponent<TutorialObjectivesUpdater>();
         uiManager = FindAnyObjectByType<UIManager>();
+        checkpointManager = FindAnyObjectByType<CheckpointManager>();
         playerController = FindAnyObjectByType<PlayerController>();
         playerEquipment = FindAnyObjectByType<PlayerEquipment>();
 
@@ -36,7 +38,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Welcome to our training protocol: a short training course to test your skills.",
+            "Welcome to our VR training warehouse: a short training course to test your skills.",
             "You may begin by <b><#FFFF00>heading left</color></b> and finding the <b><#FFFF00>locked door</color></b>. Your first task is to unlock it. \nGood luck.",
         };
 
@@ -64,7 +66,21 @@ public class TutorialDialogueTriggers : MonoBehaviour
             "Stop, you've been caught. Let's restart this part.",
         };
 
-        DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f);
+        Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
+        {
+            {-1, () =>
+                {
+                    uiManager.TogglePlayerControls(true, false, true);
+                }
+            },
+            {1, () =>
+                {
+                    checkpointManager.ReturnToCheckpoint();
+                }
+            },
+        };
+
+        DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
     }
 
     public void FirstDoorDialogue()
@@ -78,13 +94,18 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
+            {-1, () =>
+                {
+                    uiManager.TogglePlayerControls(true, false, true);
+
+                    if(objectivesUpdater != null)
+                        objectivesUpdater.ObjectiveStart();
+                }
+            },
             {0, () =>
                 {
                     uiManager.TogglePlayerControls(true, true, true);
                     playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[1].transform);
-
-                    if(objectivesUpdater != null)
-                        objectivesUpdater.ObjectiveStart();
                 }
             },
             {1, () =>
@@ -126,7 +147,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
-            {0, () =>
+            {-1, () =>
                 {
                     uiManager.TogglePlayerControls(true, false, true);
 
@@ -172,14 +193,18 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
-            {0, () =>
+            {-1, () =>
                 {
+                    uiManager.TogglePlayerControls(false, false, true);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
                 }
             },
             {2, () =>
                 {
+                    uiManager.TogglePlayerControls(false, false, false);
+
                     EnableAllObjects();
                     
                     if(objectivesUpdater != null)
@@ -205,19 +230,26 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
+            {-1, () =>
+                {
+                    uiManager.TogglePlayerControls(true, false, true);
+
+                    if(objectivesUpdater != null)
+                        objectivesUpdater.ObjectiveStart();
+                }
+            },
             {0, () =>
                 {
                     uiManager.TogglePlayerControls(true, true, true);
                     playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[0].transform);
-
-                    if(objectivesUpdater != null)
-                        objectivesUpdater.ObjectiveStart();
                 }
             },
             {1, () =>
                 {
                     uiManager.TogglePlayerControls(false, false, false);
                     playerController.StopForceLook();
+
+                    objectsToEnableDuringDialogue[0].GetComponent<EnemyMovement>().WalkSpeed = 5;
 
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveKnockOutGuard();
@@ -242,13 +274,27 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
-            {0, () =>
+            {-1, () =>
                 {
                     uiManager.TogglePlayerControls(true,false,true);
 
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
 
+                    NPCMoveInteraction employeeTrigger = objectsToEnableDuringDialogue[2].GetComponent<NPCMoveInteraction>();
+
+                    employeeTrigger.Enemy.Detection.gameObject.SetActive(false);
+
+                    employeeTrigger.ActionOnNPCReachTarget = () =>
+                    {
+                        employeeTrigger.Enemy.Detection.gameObject.SetActive(true);
+                    };
+
+                    employeeTrigger.Interact();
+                }
+            },
+            {0, () =>
+                {
                     foreach(GameObject go in objectsToEnableDuringDialogue)
                     {
                         BodyCarry bodyCarry = go.GetComponent<BodyCarry>();
@@ -291,18 +337,21 @@ public class TutorialDialogueTriggers : MonoBehaviour
         List<string> dialogueStrings = new List<string>()
         {
             "Excellent, now you should <b><#FFFF00>hide those bodies</color></b> before anyone else sees them.",
-            "<b><#FFFF00>Interact</color></b> with a body to carry it, then move it to the <b><#FFFF00>previous room</color></b>.",
+            "<b><#FFFF00>Interact</color></b> with a body to carry it, then move it to the <b><#FFFF00>Storage room</color></b> in the hall.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
-            {0, () =>
+            {-1, () =>
                 {
-                    uiManager.TogglePlayerControls(false,false,true);
+                    uiManager.TogglePlayerControls(false, false, true);
 
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
-
+                }
+            },
+            {0, () =>
+                {
                     foreach(GameObject go in objectsToEnableDuringDialogue)
                     {
                         BodyCarry bodyCarry = go.GetComponent<BodyCarry>();
@@ -350,25 +399,20 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
     public void GotBodyDialogue()
     {
-        List<string> dialogueStrings;
-        if (bodiesStashed < 1)
+        if (bodiesStashed < 1 && !hasShownDialogue && !objectsToEnableDuringDialogue[0].activeSelf)
         {
-            dialogueStrings = new List<string>()
+            List<string> dialogueStrings = new List<string>()
             {
-                "Now return to the <b><#FFFF00>previous room</color></b> to hide the body there.",
+                "Now enter the <b><#FFFF00>Storage room</color></b> to hide the body there.",
             };
 
-
-            if (!hasShownDialogue)
-            {
-                DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f);
-                hasShownDialogue = true;
-            }
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f);
+            hasShownDialogue = true;
 
             objectsToEnableDuringDialogue[0].SetActive(true);
         }
 
-        else
+        else if (bodiesStashed > 0)
         {
             objectsToEnableDuringDialogue[1].SetActive(true);
         }
@@ -399,13 +443,16 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
-            {0, () =>
+            {-1, () =>
                 {
-                    uiManager.TogglePlayerControls(false,false,true);
+                    uiManager.TogglePlayerControls(true,false,true);
 
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
-
+                }
+            },
+            {0, () =>
+                {
                     foreach(GameObject go in objectsToEnableDuringDialogue)
                     {
                         BodyCarry bodyCarry = go.GetComponent<BodyCarry>();
@@ -461,7 +508,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
-            {0, () =>
+            {-1, () =>
                 {
                     uiManager.TogglePlayerControls(true,false,true);
 
@@ -488,7 +535,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
         }
     }
 
-    public void ClosedDoorDialogue()
+    public void DisguisedHallDialogue()
     {
         List<string> dialogueStrings = new List<string>()
         {
@@ -498,15 +545,18 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
-            {0, () =>
+            {-1, () =>
                 {
-                    uiManager.TogglePlayerControls(true,true,true);
-                    playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[3].transform);
+                    uiManager.TogglePlayerControls(true, false, true);
 
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
-
-                    objectsToEnableDuringDialogue[2].GetComponent<InteractiveObject>().Interact();
+                }
+            },
+            {0, () =>
+                {
+                    uiManager.TogglePlayerControls(true, true, true);
+                    playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[2].transform);
                 }
             },
             {1, () =>
@@ -536,12 +586,12 @@ public class TutorialDialogueTriggers : MonoBehaviour
         List<string> dialogueStrings = new List<string>()
         {
             "The Mirror Stick is useful for scouting areas ahead of you, but you're suspicious while doing it, so try to be discrete.",
-            "To enter this next room, you'll need that <b><#FFFF00>employee's keycard</color></b>. Enter the <b><#FFFF00>Storage room</color></b> next to you and try to lure them out."
+            "To enter this next room, you'll need that <b><#FFFF00>employee's keycard</color></b>. Enter the <b><#FFFF00>Phone room</color></b> next to you and try to lure them out."
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
-            {0, () =>
+            {-1, () =>
                 {
                     uiManager.TogglePlayerControls(false,false,true);
                     
@@ -568,7 +618,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
         }
     }
 
-    public void StorageDialogue()
+    public void PhoneDialogue()
     {
         List<string> dialogueStrings = new List<string>()
         {
@@ -578,13 +628,18 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
-            {0, () =>
+            {-1, () =>
                 {
-                    uiManager.TogglePlayerControls(true,true,true);
-                    playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[0].transform);
-                    
+                    uiManager.TogglePlayerControls(true, false, true);
+
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveUseDistraction();
+                }
+            },
+            {0, () =>
+                {
+                    uiManager.TogglePlayerControls(true, true, true);
+                    playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[0].transform);
                 }
             },
             {1, () =>

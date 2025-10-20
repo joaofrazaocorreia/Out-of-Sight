@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -8,9 +10,13 @@ public class NPCMoveInteraction : InteractiveObject
     [SerializeField] private EnemyMovement enemyMovement;
     [SerializeField] private MovementTarget targetLocation;
     [SerializeField] private string fetchTargetWithTag;
+    [SerializeField] private float delayBeforeMoving = 0f;
     [SerializeField] private float timeAtTargetLocation = 10f;
 
     private Enemy enemy;
+    public Enemy Enemy { get => enemy; }
+    private Action actionOnNPCReachTarget;
+    public Action ActionOnNPCReachTarget { get => actionOnNPCReachTarget;  set { actionOnNPCReachTarget = value; }}
 
     private void Start()
     {
@@ -43,7 +49,19 @@ public class NPCMoveInteraction : InteractiveObject
     {
         base.Interact();
 
-        if(fetchTargetWithTag != "")
+        StartCoroutine(DistractionMoveCoroutine());
+    }
+    
+    private IEnumerator DistractionMoveCoroutine()
+    {
+        float delay = delayBeforeMoving;
+        while (delay > 0)
+        {
+            delay -= Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+
+        if (fetchTargetWithTag != "")
             targetLocation = GameObject.FindGameObjectWithTag(fetchTargetWithTag).GetComponent<MovementTarget>();
 
         enemyMovement.DeoccupyCurrentTarget();
@@ -53,5 +71,15 @@ public class NPCMoveInteraction : InteractiveObject
         targetLocation.Occupy(enemyMovement);
         enemyMovement.MoveTimer = timeAtTargetLocation;
         enabled = false;
+
+        if(actionOnNPCReachTarget != null)
+        {
+            while (!enemyMovement.IsAtPosition(targetLocation.transform))
+            {
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+
+            actionOnNPCReachTarget();
+        }
     }
 }

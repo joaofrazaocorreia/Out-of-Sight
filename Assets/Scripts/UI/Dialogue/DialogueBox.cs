@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -114,6 +115,12 @@ public class DialogueBox : MonoBehaviour
 
     private IEnumerator StartShowingText(List<string> textStrings, TextMeshProUGUI textBox)
     {
+        if (onReachSpecificLines != null && onReachSpecificLines.ContainsKey(-1))
+        {
+            onReachSpecificLines[-1]();
+            onReachSpecificLines.Remove(-1);
+        }
+
         // Fade in Canvas
         while (dialogueCanvas.alpha < 1)
         {
@@ -214,6 +221,16 @@ public class DialogueBox : MonoBehaviour
             {
                 timer -= Time.deltaTime;
                 yield return new WaitForSeconds(Time.deltaTime);
+            }
+        }
+
+        if (onReachSpecificLines != null)
+        {
+            while(onReachSpecificLines.Keys.Count() > 0)
+            {
+                onReachSpecificLines[onReachSpecificLines.Keys.First()]();
+                onReachSpecificLines.Remove(onReachSpecificLines.Keys.First());
+                yield return null;
             }
         }
 

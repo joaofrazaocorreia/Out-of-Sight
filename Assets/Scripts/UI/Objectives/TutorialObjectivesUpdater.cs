@@ -24,17 +24,17 @@ public class TutorialObjectivesUpdater : ObjectiveUpdater
 
     public void ObjectiveJamCamera()
     {
-        ObjectiveEdit("main1", "- Jam the camera on the wall");
+        ObjectiveEdit("main1", "- Jam the camera on the wall", true);
     }
 
     public void ObjectiveEnterHall2()
     {
-        ObjectiveEdit("main1", "- Proceed to the next room");
+        ObjectiveEdit("main1", "- Proceed to the next room", true);
     }
 
     public void ObjectiveKnockOutGuard()
     {
-        ObjectiveEdit("main1", "- Knock out the Guard");
+        ObjectiveEdit("main1", "- Knock out the Guard", true);
     }
 
     public void ObjectiveKnockOutEmployee1()
@@ -44,7 +44,7 @@ public class TutorialObjectivesUpdater : ObjectiveUpdater
 
     public void ObjectiveHideBodies()
     {
-        ObjectiveEdit("main1", "- Hide the bodies in the previous room");
+        ObjectiveEdit("main1", "- Hide the bodies in the Storage");
     }
 
     public void ObjectiveTakeDisguise()
@@ -64,12 +64,12 @@ public class TutorialObjectivesUpdater : ObjectiveUpdater
 
     public void ObjectiveFindDistraction()
     {
-        ObjectiveEdit("main1", "- Enter the Storage room");
+        ObjectiveEdit("main1", "- Enter the Phone room");
     }
 
     public void ObjectiveUseDistraction()
     {
-        ObjectiveEdit("main1", "- Lure the employee with a distraction");
+        ObjectiveEdit("main1", "- Lure employee with a distraction");
     }
 
     public void ObjectiveKnockOutEmployee2()
