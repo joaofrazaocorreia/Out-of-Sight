@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CanvasGroup))]
+[RequireComponent(typeof(AudioSource))]
 public class DialogueBox : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI speakerText;
@@ -17,6 +17,7 @@ public class DialogueBox : MonoBehaviour
     public static DialogueBox Instance;
     private PlayerInput playerInput;
     private CanvasGroup dialogueCanvas;
+    private AudioSource dialogueAudio;
     private float textSpeed;
     private Coroutine showDialogueCoroutine;
     private Dictionary<char, float> characterCustomWaitTimes;
@@ -33,6 +34,7 @@ public class DialogueBox : MonoBehaviour
 
         playerInput = FindAnyObjectByType<PlayerInput>();
         dialogueCanvas = GetComponent<CanvasGroup>();
+        dialogueAudio = GetComponent<AudioSource>();
         ResetCanvas();
 
         textSpeed = 1;
@@ -57,7 +59,7 @@ public class DialogueBox : MonoBehaviour
             {',', 1f},
             {'!', 2f},
             {'?', 2f},
-            {':', 1f},
+            {':', 2f},
             {';', 2f},
             {'-', 0.5f},
         };
@@ -81,11 +83,12 @@ public class DialogueBox : MonoBehaviour
             else
             {
                 skipTextDisplay = 1;
+                dialogueAudio.Stop();
             }
         }
     }
 
-    public void ShowDialogue(List<string> textStrings, string speaker, float textSpeed = 1f, Dictionary<int, Action> onReachSpecificLinesEvents = null)
+    public void ShowDialogue(List<string> textStrings, string speaker, float textSpeed = 1f, Dictionary<int, Action> onReachSpecificLinesEvents = null, List<AudioClip> lineAudios = null)
     {
         // If interrupting an active coroutine, stop it and execute all scheduled actions
         if (showDialogueCoroutine != null)
@@ -110,10 +113,10 @@ public class DialogueBox : MonoBehaviour
         onReachSpecificLines = onReachSpecificLinesEvents;
 
         // Start displaying dialogue
-        showDialogueCoroutine = StartCoroutine(StartShowingText(textStrings, dialogueText));
+        showDialogueCoroutine = StartCoroutine(StartShowingText(textStrings, dialogueText, lineAudios));
     }
 
-    private IEnumerator StartShowingText(List<string> textStrings, TextMeshProUGUI textBox)
+    private IEnumerator StartShowingText(List<string> textStrings, TextMeshProUGUI textBox, List<AudioClip> lineAudios = null)
     {
         if (onReachSpecificLines != null && onReachSpecificLines.ContainsKey(-1))
         {
@@ -143,6 +146,12 @@ public class DialogueBox : MonoBehaviour
             {
                 onReachSpecificLines[i]();
                 onReachSpecificLines.Remove(i);
+            }
+
+            if(lineAudios != null && lineAudios.Count > i)
+            {
+                dialogueAudio.Stop();
+                dialogueAudio.PlayOneShot(lineAudios[i]);
             }
 
             bool ignoreWaitTime = false;
@@ -217,7 +226,7 @@ public class DialogueBox : MonoBehaviour
             }
 
             float timer = timeBeforeTextProceed;
-            while (timer > 0 && skipTextDisplay <= 0)
+            while ((timer > 0 && skipTextDisplay <= 0) || dialogueAudio.isPlaying)
             {
                 timer -= Time.deltaTime;
                 yield return new WaitForSeconds(Time.deltaTime);

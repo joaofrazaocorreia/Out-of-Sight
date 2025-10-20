@@ -6,6 +6,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 {
     [SerializeField] private List<GameObject> objectsToEnableDuringDialogue;
     [SerializeField] private GameObject EquipmentToAdd;
+    [SerializeField] private List<AudioClip> dialogueAudioClips;
     private TutorialObjectivesUpdater objectivesUpdater;
     private UIManager uiManager;
     private CheckpointManager checkpointManager;
@@ -54,7 +55,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -63,7 +64,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Stop, you've been caught. Let's restart this part.",
+            "Stop, you've been caught. Let's restart this section.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
@@ -80,7 +81,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
             },
         };
 
-        DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+        DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
     }
 
     public void FirstDoorDialogue()
@@ -88,7 +89,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
         List<string> dialogueStrings = new List<string>()
         {
             "To breach locked doors, you must use some infiltration equipment, such as a <b><#FFFF00>Lockpick</color></b>.",
-            "For this training, you'll been given some tools to help you progress. You can check your <b><#FFFF00>inventory</color></b> in the <b><#FFFF00>bottom right</color></b>.",
+            "For this training, you'll be given some tools to help you progress. You can check your <b><#FFFF00>inventory</color></b> in the <b><#FFFF00>bottom right</color></b>.",
             "Equip your <b><#FFFF00>Lockpick</color></b> by <b><#FFFF00>pressing '1'</color></b>, and then <b><#FFFF00>interact with the lock</color></b> on the door to begin unlocking it.",
         };
 
@@ -128,7 +129,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -177,7 +178,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -215,7 +216,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -259,7 +260,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -268,8 +269,8 @@ public class TutorialDialogueTriggers : MonoBehaviour
     {
         List<string> dialogueStrings = new List<string>()
         {
-            "Good job, now you can- \nUh oh, someone saw the body. You must <b><#FFFF00>neutralize them</color></b> quickly before they run off.",
-            "Equip your <b><#FFFF00>Taser Gun</color></b> by <b><#FFFF00>pressing '3'</color></b>, then <b><#FFFF00>shoot</color></b> the employee to knock them out from a distance.",
+            "Good job, now you can- \nOh wait, someone saw the body. You must <b><#FFFF00>neutralize them</color></b> quickly before they run off.",
+            "Equip your <b><#FFFF00>Taser Gun</color></b> by <b><#FFFF00>pressing '3'</color></b>, then <b><#FFFF00>shoot</color></b> the person to knock them out from a distance.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
@@ -327,7 +328,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -392,7 +393,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -406,7 +407,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
                 "Now enter the <b><#FFFF00>Storage room</color></b> to hide the body there.",
             };
 
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, lineAudios:dialogueAudioClips);
             hasShownDialogue = true;
 
             objectsToEnableDuringDialogue[0].SetActive(true);
@@ -427,7 +428,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, lineAudios:dialogueAudioClips);
             hasShownDialogue = true;
             bodiesStashed++;
         }
@@ -493,7 +494,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -503,7 +504,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
         List<string> dialogueStrings = new List<string>()
         {
             "Notice how your <b><#FFFF00>status</color></b> changed. Due to your Disguise, you've gained clearance for this area, and people will now detect you slower.",
-            "Let's continue. Proceed to <b><#FFFF00>next room</color></b>.",
+            "Let's continue. Proceed to the <b><#FFFF00>next room</color></b>.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
@@ -530,7 +531,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue && enabled)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -576,7 +577,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -586,7 +587,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
         List<string> dialogueStrings = new List<string>()
         {
             "The Mirror Stick is useful for scouting areas ahead of you, but you're suspicious while doing it, so try to be discrete.",
-            "To enter this next room, you'll need that <b><#FFFF00>employee's keycard</color></b>. Enter the <b><#FFFF00>Phone room</color></b> next to you and try to lure them out."
+            "To enter this next room, you'll need <b><#FFFF00>that person's keycard</color></b>. Enter the <b><#FFFF00>Phone room</color></b> next to you and try to lure them out."
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
@@ -613,7 +614,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -623,7 +624,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
         List<string> dialogueStrings = new List<string>()
         {
             "Sometimes, you'll need to <b><#FFFF00>use your surroundings</color></b> to manipulate people and advance your mission.",
-            "See if you can use that <b><#FFFF00>phone</color></b> to make a <b><#FFFF00>distraction</color></b>, luring the employee to your location.",
+            "See if you can use that <b><#FFFF00>phone</color></b> to make a <b><#FFFF00>distraction</color></b>, luring the person to your location.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
@@ -655,7 +656,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -665,7 +666,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
         List<string> dialogueStrings = new List<string>()
         {
             "Good job. Now <b><#FFFF00>knock them out</color></b> and grab their <b><#FFFF00>keycard</color></b>.",
-            "If you have trouble getting behind the employee, use the <b><#FFFF00>Taser Gun</color></b>."
+            "If you have trouble getting behind them, use the <b><#FFFF00>Taser Gun</color></b>."
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
@@ -681,7 +682,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -706,7 +707,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
@@ -733,7 +734,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
         }
     }
