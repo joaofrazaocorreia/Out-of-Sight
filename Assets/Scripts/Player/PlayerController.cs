@@ -128,6 +128,7 @@ public class PlayerController : MonoBehaviour
 
     public event EventHandler ToggleMap;
     private bool _isPaused;
+    public bool IsPaused { get => _isPaused; set { _isPaused = value; }}
 
     void Start()
     {
@@ -163,8 +164,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (_playerInput.actions["Pause Game"].WasPressedThisFrame()) Pause();
-
         if (_isPaused) return;
 
         CheckHeadActiveCamera();
@@ -548,11 +547,6 @@ public class PlayerController : MonoBehaviour
     {
         if (_isPaused) return;
         ToggleMap?.Invoke(this, null);
-    }
-
-    public void Pause()
-    {
-        _isPaused = !_isPaused;
     }
 
     private void UpdateFootsteps()

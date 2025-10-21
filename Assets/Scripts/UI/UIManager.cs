@@ -198,6 +198,8 @@ public class UIManager : MonoBehaviour
         else if(gamePaused)
         {
             Time.timeScale = 0f;
+            DialogueBox.Instance.DialogueAudio.Pause();
+            DialogueBox.Instance.NoiseAudio.Pause();
             UnlockCursor();
 
             StartCoroutine(FadeInUI(UIBackground, UISpeed));
@@ -208,11 +210,15 @@ public class UIManager : MonoBehaviour
         else
         {
             Time.timeScale = 1f;
+            DialogueBox.Instance.DialogueAudio.UnPause();
+            DialogueBox.Instance.NoiseAudio.UnPause();
             LockCursor();
 
             StartCoroutine(FadeOutUI(UIBackground, UISpeed));
             ReturnUIToOrigin(pauseMenu.transform);
         }
+
+        playerController.IsPaused = gamePaused;
     }
 
     public void ToggleSettings()
