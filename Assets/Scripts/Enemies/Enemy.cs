@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected Type type;
     [SerializeField] public UnityEvent onBecomeAlarmed;
     [SerializeField] public UnityEvent onKnockOut;
+    [SerializeField] protected PlayAudio bodyFallPlayer;
     [SerializeField] protected PlayAudio knockoutPlayer;
     [SerializeField] protected List<MovementTarget> bathroomTargetsMale;
     [SerializeField] protected List<MovementTarget> bathroomTargetsFemale;
@@ -39,7 +40,12 @@ public class Enemy : MonoBehaviour
         get => status;
         set
         {
-            if(status != Status.KnockedOut && value == Status.KnockedOut) knockoutPlayer.Play();
+            if (status != Status.KnockedOut && value == Status.KnockedOut)
+            {
+                bodyFallPlayer.Play();
+                knockoutPlayer.Play(3.5f);
+            }
+            
             if(status != Status.KnockedOut) status = value;
         }
     }

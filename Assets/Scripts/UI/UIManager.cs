@@ -336,9 +336,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void MoveUIToPosition(Transform uiTransform, Vector3 newPos)
+    public void MoveUIToPosition(Transform uiTransform, Vector3 newPos, float speed = -1)
     {
-        StartCoroutine(MoveUI(uiTransform, newPos, UISpeed*2));
+        if (speed < 0)
+            speed = UISpeed * 2;
+        
+        StartCoroutine(MoveUI(uiTransform, newPos, speed));
     }
 
     private void ReturnUIToOrigin(Transform uiTransform)

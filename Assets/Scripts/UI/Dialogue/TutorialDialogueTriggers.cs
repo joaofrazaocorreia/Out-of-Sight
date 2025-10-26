@@ -35,6 +35,18 @@ public class TutorialDialogueTriggers : MonoBehaviour
         }
     }
 
+    private void SlideInUIElement(int objectIndex, float xValue)
+    {
+        Vector3 originalUIPosition = objectsToEnableDuringDialogue[objectIndex].transform.localPosition;
+        Vector3 outOfScreenUIPosition = new(xValue, objectsToEnableDuringDialogue[objectIndex].transform.localPosition.y,
+                                            objectsToEnableDuringDialogue[objectIndex].transform.localPosition.z);
+
+        objectsToEnableDuringDialogue[objectIndex].transform.localPosition = outOfScreenUIPosition;
+        objectsToEnableDuringDialogue[objectIndex].SetActive(true);
+
+        uiManager.MoveUIToPosition(objectsToEnableDuringDialogue[objectIndex].transform, originalUIPosition, 1f);
+    }
+
     public void IntroDialogue()
     {
         List<string> dialogueStrings = new List<string>()
@@ -114,7 +126,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
                     uiManager.TogglePlayerControls(true, false, true);
                     playerController.StopForceLook();
 
-                    EnableAllObjects();
+                    SlideInUIElement(0, 1500f);
                 }
             },
             {2, () =>
@@ -156,7 +168,11 @@ public class TutorialDialogueTriggers : MonoBehaviour
                         objectivesUpdater.ObjectiveStart();
                 }
             },
-            {1, () => EnableAllObjects()},
+            {1, () =>
+                {
+                    SlideInUIElement(0, -1200f);
+                }
+            },
             {4, () =>
                 {
                     uiManager.TogglePlayerControls(true, true, true);

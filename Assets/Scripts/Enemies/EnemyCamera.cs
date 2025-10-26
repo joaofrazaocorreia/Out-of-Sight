@@ -6,6 +6,7 @@ public class EnemyCamera : Enemy, IJammable
     [Header("Camera Variables")]
     [SerializeField] private Enemy cameraOperator;
     [SerializeField] private Transform cameraBody;
+    [SerializeField] private PlayAudio cameraSFXPlayer;
     [SerializeField] [Range(-90, 90)] private int maxRotationAngle = 45;
     [SerializeField] [Range(-90, 90)] private int minRotationAngle = -45;
     [SerializeField] private float rotationSpeed = 25f;
@@ -122,6 +123,12 @@ public class EnemyCamera : Enemy, IJammable
                 else
                 {
                     rotationIdleTimer -= Time.deltaTime;
+
+                    if(rotationIdleTimer <= 0)
+                    {
+                        cameraSFXPlayer.Play();
+                        cameraSFXPlayer.StretchPitch((maxRotationAngle - minRotationAngle) / rotationSpeed);
+                    }
                 }
             }
         }
