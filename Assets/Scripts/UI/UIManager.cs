@@ -198,6 +198,8 @@ public class UIManager : MonoBehaviour
         else if(gamePaused)
         {
             Time.timeScale = 0f;
+            DialogueBox.Instance.DialogueAudio.Pause();
+            DialogueBox.Instance.NoiseAudio.Pause();
             UnlockCursor();
 
             StartCoroutine(FadeInUI(UIBackground, UISpeed));
@@ -208,11 +210,15 @@ public class UIManager : MonoBehaviour
         else
         {
             Time.timeScale = 1f;
+            DialogueBox.Instance.DialogueAudio.UnPause();
+            DialogueBox.Instance.NoiseAudio.UnPause();
             LockCursor();
 
             StartCoroutine(FadeOutUI(UIBackground, UISpeed));
             ReturnUIToOrigin(pauseMenu.transform);
         }
+
+        playerController.IsPaused = gamePaused;
     }
 
     public void ToggleSettings()
@@ -330,9 +336,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void MoveUIToPosition(Transform uiTransform, Vector3 newPos)
+    public void MoveUIToPosition(Transform uiTransform, Vector3 newPos, float speed = -1)
     {
-        StartCoroutine(MoveUI(uiTransform, newPos, UISpeed*2));
+        if (speed < 0)
+            speed = UISpeed * 2;
+        
+        StartCoroutine(MoveUI(uiTransform, newPos, speed));
     }
 
     private void ReturnUIToOrigin(Transform uiTransform)

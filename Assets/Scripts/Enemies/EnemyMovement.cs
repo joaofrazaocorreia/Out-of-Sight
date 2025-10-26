@@ -30,7 +30,6 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float searchRadius = 20f;
     [SerializeField] private float stuckTime = 3f;
     [SerializeField] protected PlayAudio footstepPlayer;
-    [SerializeField] [Range(0.1f, 2f)] private float footstepInterval = 0.45f;
     public UnityEvent onChooseNewTarget;
 
     private Enemy enemySelf;
@@ -221,14 +220,6 @@ public class EnemyMovement : MonoBehaviour
             lastSelfPos = transform.position;
 
             UpdateAnimations();
-        }
-
-        // Plays footsteps when walking and running
-        if (footstepTimer + footstepInterval * navMeshAgent.speed / walkSpeed <= Time.time &&
-            navMeshAgent.velocity.magnitude >= 1)
-        {
-            footstepPlayer.Play();
-            footstepTimer = Time.time;
         }
     }
 
@@ -845,6 +836,11 @@ public class EnemyMovement : MonoBehaviour
     private void IdleAnim()
     {
         animator.SetTrigger("Idle");
+    }
+
+    public void Footstep()
+    {
+        footstepPlayer.Play(50f);
     }
 
     /// <summary>

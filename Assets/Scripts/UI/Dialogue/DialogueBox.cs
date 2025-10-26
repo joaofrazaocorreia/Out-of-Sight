@@ -3,20 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CanvasGroup))]
+[RequireComponent(typeof(AudioSource))]
 public class DialogueBox : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI speakerText;
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private float timeBeforeTextProceed = 1.5f;
+    [SerializeField] private AudioSource noiseAudio;
+    [SerializeField] private AudioClip dialogueStartSFX;
+    [SerializeField] private AudioClip dialogueLoopSFX;
+    [SerializeField] private AudioClip dialogueEndSFX;
 
     public static DialogueBox Instance;
     private PlayerInput playerInput;
     private CanvasGroup dialogueCanvas;
+    private AudioSource dialogueAudio;
+    public AudioSource DialogueAudio { get => dialogueAudio; }
+    public AudioSource NoiseAudio { get => noiseAudio; }
     private float textSpeed;
     private Coroutine showDialogueCoroutine;
     private Dictionary<char, float> characterCustomWaitTimes;
@@ -33,6 +40,7 @@ public class DialogueBox : MonoBehaviour
 
         playerInput = FindAnyObjectByType<PlayerInput>();
         dialogueCanvas = GetComponent<CanvasGroup>();
+        dialogueAudio = GetComponent<AudioSource>();
         ResetCanvas();
 
         textSpeed = 1;
@@ -57,7 +65,7 @@ public class DialogueBox : MonoBehaviour
             {',', 1f},
             {'!', 2f},
             {'?', 2f},
-            {':', 1f},
+            {':', 2f},
             {';', 2f},
             {'-', 0.5f},
         };
@@ -78,14 +86,15 @@ public class DialogueBox : MonoBehaviour
             if (skipTextDisplay < 0)
                 skipTextDisplay = 0;
 
-            else
+            else if (skipTextDisplay < 1)
             {
                 skipTextDisplay = 1;
+                dialogueAudio.Stop();
             }
         }
     }
 
-    public void ShowDialogue(List<string> textStrings, string speaker, float textSpeed = 1f, Dictionary<int, Action> onReachSpecificLinesEvents = null)
+    public void ShowDialogue(List<string> textStrings, string speaker, float textSpeed = 1f, Dictionary<int, Action> onReachSpecificLinesEvents = null, List<AudioClip> lineAudios = null)
     {
         // If interrupting an active coroutine, stop it and execute all scheduled actions
         if (showDialogueCoroutine != null)
@@ -110,10 +119,10 @@ public class DialogueBox : MonoBehaviour
         onReachSpecificLines = onReachSpecificLinesEvents;
 
         // Start displaying dialogue
-        showDialogueCoroutine = StartCoroutine(StartShowingText(textStrings, dialogueText));
+        showDialogueCoroutine = StartCoroutine(StartShowingText(textStrings, dialogueText, lineAudios));
     }
 
-    private IEnumerator StartShowingText(List<string> textStrings, TextMeshProUGUI textBox)
+    private IEnumerator StartShowingText(List<string> textStrings, TextMeshProUGUI textBox, List<AudioClip> lineAudios = null)
     {
         if (onReachSpecificLines != null && onReachSpecificLines.ContainsKey(-1))
         {
@@ -121,8 +130,15 @@ public class DialogueBox : MonoBehaviour
             onReachSpecificLines.Remove(-1);
         }
 
+        dialogueAudio.Stop();
+        dialogueAudio.PlayOneShot(dialogueStartSFX);
+
+        noiseAudio.clip = dialogueLoopSFX;
+        noiseAudio.loop = true;
+        noiseAudio.Play();
+
         // Fade in Canvas
-        while (dialogueCanvas.alpha < 1)
+        while (dialogueCanvas.alpha < 1 || dialogueAudio.isPlaying)
         {
             dialogueCanvas.alpha += Time.deltaTime * 5f;
             yield return new WaitForSeconds(Time.deltaTime);
@@ -143,6 +159,13 @@ public class DialogueBox : MonoBehaviour
             {
                 onReachSpecificLines[i]();
                 onReachSpecificLines.Remove(i);
+            }
+
+            if(lineAudios != null && lineAudios.Count > i)
+            {
+                dialogueAudio.Stop();
+                dialogueAudio.clip = lineAudios[i];
+                dialogueAudio.Play();
             }
 
             bool ignoreWaitTime = false;
@@ -217,7 +240,7 @@ public class DialogueBox : MonoBehaviour
             }
 
             float timer = timeBeforeTextProceed;
-            while (timer > 0 && skipTextDisplay <= 0)
+            while ((timer > 0 && skipTextDisplay <= 0) || dialogueAudio.isPlaying)
             {
                 timer -= Time.deltaTime;
                 yield return new WaitForSeconds(Time.deltaTime);
@@ -226,13 +249,16 @@ public class DialogueBox : MonoBehaviour
 
         if (onReachSpecificLines != null)
         {
-            while(onReachSpecificLines.Keys.Count() > 0)
+            while (onReachSpecificLines.Keys.Count() > 0)
             {
                 onReachSpecificLines[onReachSpecificLines.Keys.First()]();
                 onReachSpecificLines.Remove(onReachSpecificLines.Keys.First());
                 yield return null;
             }
         }
+
+        noiseAudio.Stop();
+        dialogueAudio.PlayOneShot(dialogueEndSFX);
 
         // Fade out Canvas
         while (dialogueCanvas.alpha > 0)

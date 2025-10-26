@@ -37,12 +37,14 @@ public class PlayAudio : MonoBehaviour
 		}
 	}
 
-	public void Play()
+	public void Play(float volume = -1f)
 	{
 		if(_audioSource == null) return;
 		if(rnd == null) Awake();
-		if(_audioClip.Length == 0) return;
+		if (_audioClip.Length == 0) return;
+		if (volume < 0) volume = _audioSource.volume;
 		ChooseAVariant();
+		_audioSource.volume = volume;
 		_audioSource.Play();
 	}
 
@@ -73,4 +75,11 @@ public class PlayAudio : MonoBehaviour
 		Pitch = newPitch;
 		UpdatePitch();
 	}
+
+	public void StretchPitch(float newClipDuration)
+	{
+		float variation = UnityEngine.Random.Range(_minPitchVariation, _maxPitchVariation);
+		
+		SetPitch((AudioSource.clip.length * variation) / newClipDuration);
+    }
 }
