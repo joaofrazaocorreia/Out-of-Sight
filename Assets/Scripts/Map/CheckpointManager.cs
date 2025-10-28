@@ -95,9 +95,18 @@ public class CheckpointManager : MonoBehaviour
 
     private IEnumerator ReturnToCheckpointCoroutine()
     {
-        uiManager.ToggleLoadingScreen();
+        //uiManager.ToggleLoadingScreen();
+        CameraEffects.Instance.InvertedShake(1.5f, 3, 0.5f);
+        CameraEffects.Instance.ToggleGlitchEffects();
+        CameraEffects.Instance.SetDigitalGlitchIntensity(0.5f);
+        CameraEffects.Instance.SetAnalogGlitchJitter(1f);
+        CameraEffects.Instance.SetAnalogGlitchJump(1f);
+        CameraEffects.Instance.SetAnalogGlitchShake(1f);
+        CameraEffects.Instance.SetAnalogGlitchDrift(1f);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
+        CameraEffects.Instance.SetDigitalGlitchIntensity(1f);
+        yield return new WaitForSeconds(0.5f);
 
         if (currentCheckpoint != null)
         {
@@ -149,7 +158,8 @@ public class CheckpointManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.1f);
 
-            uiManager.ToggleLoadingScreen();
+            //uiManager.ToggleLoadingScreen();
+            CameraEffects.Instance.ToggleGlitchEffects();
             uiManager.TogglePlayerControls(false, false, false);
         }
 

@@ -148,7 +148,7 @@ public class PlayerController : MonoBehaviour
         _selectedEquipment = new float[9];
         _horizontalRotationPivot = transform;
         _originalHorizontalRotationPivot = _horizontalRotationPivot;
-        _verticalRotationPivot = _head.transform.parent.transform;
+        _verticalRotationPivot = _head.transform.parent.parent.transform;
         _originalVerticalRotationPivot = _horizontalRotationPivot;
         _defaultPlayerHeight = _controller.height;
         _defaultPlayerCenterY = _controller.center.y;
