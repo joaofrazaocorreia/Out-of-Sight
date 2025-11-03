@@ -8,6 +8,7 @@ public class PlayerMelee : MonoBehaviour
     [SerializeField] [Range(0f, 360f)] private float enemyBackDetectionAngle = 100f;
     [SerializeField] private float cooldownInSeconds = 1f;
     [SerializeField] private PlayAudio meleeAttackPlayer;
+    [SerializeField] private AudioClip sucessfulAttackSound;
 
     private PlayerInput playerInput;
     private PlayerInteraction playerInteraction;
@@ -102,6 +103,8 @@ public class PlayerMelee : MonoBehaviour
                 
                 attackableEnemy.GetKnockedOut();
                 OnKnockout?.Invoke(this, EventArgs.Empty);
+
+                meleeAttackPlayer.PlayOneShot(sucessfulAttackSound);
                 
                 animator.SetTrigger("Melee");
                 StartCoroutine(CheckDelay());

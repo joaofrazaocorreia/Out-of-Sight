@@ -48,6 +48,17 @@ public class PlayAudio : MonoBehaviour
 		_audioSource.Play();
 	}
 
+	public void PlayOneShot(AudioClip audioClip, float volume = -1f)
+	{
+		if(_audioSource == null) return;
+		if(rnd == null) Awake();
+		if (audioClip == null) return;
+		if (volume < 0) volume = _audioSource.volume;
+		RandomizePitch();
+		_audioSource.volume = volume;
+		_audioSource.PlayOneShot(audioClip);
+	}
+
 	public void Stop()
 	{
 		_audioSource.Stop();
@@ -56,9 +67,14 @@ public class PlayAudio : MonoBehaviour
 	private void ChooseAVariant()
 	{
 		_audioSource.clip = _audioClip[rnd.Next(0, _audioClip.Length)];
-		Pitch = UnityEngine.Random.Range(_minPitchVariation, _maxPitchVariation);
-		UpdatePitch();
+		RandomizePitch();
 	}
+
+	public void RandomizePitch()
+    {
+        Pitch = UnityEngine.Random.Range(_minPitchVariation, _maxPitchVariation);
+		UpdatePitch();
+    }
 
 	private void ApplyLoop()
 	{

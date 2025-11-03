@@ -1241,6 +1241,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model: {fileID: 4076989448379747614}
+  audioPlayers: {fileID: 2615488288817995314}
+  audioSources: {fileID: 1712654008691276213}
   maleModels: []
   femaleModels: []
   alarmAudioPlayer: {fileID: 3540731324705208224}
@@ -1250,10 +1252,15 @@ MonoBehaviour:
   alarmedTime: 5
   ignoresAlarm: 0
   type: 5
+  onBecomeAlarmed:
+    m_PersistentCalls:
+      m_Calls: []
   onKnockOut:
     m_PersistentCalls:
       m_Calls: []
+  bodyFallPlayer: {fileID: 0}
   knockoutPlayer: {fileID: 3686037551307290225}
+  tasedPlayer: {fileID: 0}
   bathroomTargetsMale: []
   bathroomTargetsFemale: []
   startBathroomTimer: 15
@@ -1300,7 +1307,6 @@ MonoBehaviour:
   searchRadius: 20
   stuckTime: 3
   footstepPlayer: {fileID: 1615834399621591945}
-  footstepInterval: 0.45
   onChooseNewTarget:
     m_PersistentCalls:
       m_Calls: []

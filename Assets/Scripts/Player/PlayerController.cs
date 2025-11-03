@@ -400,6 +400,21 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateVelocity()
     {
+        if (Mathf.Abs(_velocity.z) < 2 && _acceleration.z > 0f)
+        {
+            _velocity.z = 2.5f;
+
+            if (_acceleration.z < 0f) _velocity.z *= -1;
+        }
+
+        if (Mathf.Abs(_velocity.x) < 2 && _acceleration.x > 0f)
+        {
+            _velocity.x = 2.5f;
+
+            if (_acceleration.x < 0f) _velocity.x *= -1;
+        }
+
+
         _velocity += _acceleration * (0.5f * Time.fixedDeltaTime * SpeedBoost);
 
 

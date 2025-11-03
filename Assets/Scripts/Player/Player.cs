@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 
     public List<Status> status;
     public Disguise disguise;
+    [SerializeField] private PlayAudio disguisePlayer;
     public bool detectable;
     [SerializeField] private float normalDetectionMultiplier = 0f;
     [SerializeField] private float doubtfulDetectionMultiplier = 0f;
@@ -116,6 +117,8 @@ public class Player : MonoBehaviour
         if (disguise != newDisguise)
         {
             disguise = newDisguise;
+            disguisePlayer.Play();
+            
             OnDisguiseChanged?.Invoke(this, EventArgs.Empty);
         }
     }

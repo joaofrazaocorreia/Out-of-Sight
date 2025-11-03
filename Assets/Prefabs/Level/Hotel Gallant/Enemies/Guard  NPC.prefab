@@ -1063,8 +1063,8 @@ Transform:
   m_GameObject: {fileID: 3559023797484404699}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -58.682293, y: 0, z: 2.5348723}
-  m_LocalScale: {x: 0.5761073, y: 0.5761073, z: 0.5761073}
+  m_LocalPosition: {x: 0, y: 1.3186766, z: 0}
+  m_LocalScale: {x: 0.5761072, y: 0.5761072, z: 0.5761072}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4888398212421229473}
@@ -1072,6 +1072,7 @@ Transform:
   - {fileID: 1997203800817904745}
   - {fileID: 78329207776292277}
   - {fileID: 9195559999641570994}
+  - {fileID: 3004153436719994224}
   - {fileID: 7866409811545967568}
   - {fileID: 4777925615678305821}
   - {fileID: 4835931628618092229}
@@ -1379,8 +1380,8 @@ Transform:
   m_GameObject: {fileID: 5615921995035169170}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
-  m_LocalScale: {x: 0.5761073, y: 0.5761073, z: 0.5761073}
+  m_LocalPosition: {x: 0, y: 1.3186766, z: 0}
+  m_LocalScale: {x: 0.5761072, y: 0.5761072, z: 0.5761072}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2299459723127325288}
@@ -1388,6 +1389,7 @@ Transform:
   - {fileID: 6371385799720184860}
   - {fileID: 2745331126104151411}
   - {fileID: 1939668741290422758}
+  - {fileID: 440938009561031411}
   - {fileID: 8978253081634084766}
   - {fileID: 6669191239206951316}
   - {fileID: 1822775666448921203}
@@ -1533,7 +1535,7 @@ GameObject:
   - component: {fileID: 8978253081634084766}
   - component: {fileID: 3822338328266601047}
   m_Layer: 7
-  m_Name: TaserSource
+  m_Name: TaserLoopSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1569,7 +1571,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1706,6 +1708,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model: {fileID: 3472195906225914153}
+  audioSources: {fileID: 7987615938106837881}
+  audioPlayers: {fileID: 4474152000606208551}
   maleModels: []
   femaleModels: []
   alarmAudioPlayer: {fileID: 1302545744713987011}
@@ -1735,6 +1739,7 @@ MonoBehaviour:
         m_CallState: 2
   bodyFallPlayer: {fileID: 158493164337802602}
   knockoutPlayer: {fileID: 1113092965577765086}
+  tasedPlayer: {fileID: 6356946252741029037}
   bathroomTargetsMale:
   - {fileID: 0}
   - {fileID: 0}
@@ -1980,6 +1985,58 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &6555416133893530793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3004153436719994224}
+  - component: {fileID: 6356946252741029037}
+  m_Layer: 7
+  m_Name: 'TasedPlayer '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3004153436719994224
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6555416133893530793}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4474152000606208551}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6356946252741029037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6555416133893530793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cbfcf147b14804429dcd92c697598aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _audioClip:
+  - {fileID: 8300000, guid: 3f9b44e16f5a283449e454b4dc72a22d, type: 3}
+  _audioMixer: {fileID: -2058766049362133854, guid: adb35eaba413ea2488cebfeb4d8c2cba, type: 2}
+  _audioSource: {fileID: 8476554125235373813}
+  _minPitchVariation: 0.8
+  _maxPitchVariation: 1.2
+  _isLoop: 0
+  _playOnStart: 0
 --- !u!1 &7270844222980486247
 GameObject:
   m_ObjectHideFlags: 0
@@ -2372,7 +2429,7 @@ GameObject:
   - component: {fileID: 7866409811545967568}
   - component: {fileID: 767166599819084711}
   m_Layer: 7
-  m_Name: TaserPlayer
+  m_Name: TaserLoopPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2468,6 +2525,135 @@ AudioSource:
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 15
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!1 &8864126073002055295
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 440938009561031411}
+  - component: {fileID: 8476554125235373813}
+  m_Layer: 7
+  m_Name: TasedSource
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &440938009561031411
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8864126073002055295}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7987615938106837881}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &8476554125235373813
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8864126073002055295}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 3
+  MaxDistance: 40
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0

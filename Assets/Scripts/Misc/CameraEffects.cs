@@ -8,8 +8,14 @@ public class CameraEffects : MonoBehaviour
 {
     public static CameraEffects Instance;
     [SerializeField] private Volume volume;
+    [SerializeField] private float defaultIntensity = 0;
+    [SerializeField] private float defaultJitter = 0;
+    [SerializeField] private float defaultJump = 0;
+    [SerializeField] private float defaultShake = 0;
+    [SerializeField] private float defaultDrift = 0;
 
     private bool glitchEnabled = false;
+    public bool GlitchEnabled { get => glitchEnabled; }
     private AnalogGlitchVolume analogGlitchVolume;
     private DigitalGlitchVolume digitalGlitchVolume;
 
@@ -98,14 +104,29 @@ public class CameraEffects : MonoBehaviour
         digitalGlitchVolume.active = glitchEnabled;
     }
 
+    public void ResetAllEffects()
+    {
+        ResetDigitalGlitchIntensity();
+
+        ResetAnalogGlitchJitter();
+        ResetAnalogGlitchJump();
+        ResetAnalogGlitchShake();
+        ResetAnalogGlitchDrift();
+    }
+
     public void SetDigitalGlitchIntensity(float value)
     {
         digitalGlitchVolume.intensity.value = value;
     }
 
-    public void RandomizeDigitalGlitchIntensity(float value)
+    public void RandomizeDigitalGlitchIntensity()
     {
         digitalGlitchVolume.intensity.value = Random.value;
+    }
+
+    public void ResetDigitalGlitchIntensity()
+    {
+        digitalGlitchVolume.intensity.value = defaultIntensity;
     }
 
     public void SetAnalogGlitchJitter(float value)
@@ -113,38 +134,58 @@ public class CameraEffects : MonoBehaviour
         analogGlitchVolume.scanLineJitter.value = value;
     }
 
-    public void RandomizeAnalogGlitchJitter(float value)
+    public void RandomizeAnalogGlitchJitter()
     {
         analogGlitchVolume.scanLineJitter.value = Random.value;
+    }
+
+    public void ResetAnalogGlitchJitter()
+    {
+        analogGlitchVolume.scanLineJitter.value = defaultJitter;
     }
 
     public void SetAnalogGlitchJump(float value)
     {
-        analogGlitchVolume.scanLineJitter.value = value;
+        analogGlitchVolume.verticalJump.value = value;
     }
 
     public void RandomizeAnalogGlitchJump(float value)
     {
-        analogGlitchVolume.scanLineJitter.value = Random.value;
+        analogGlitchVolume.verticalJump.value = Random.value;
+    }
+
+    public void ResetAnalogGlitchJump()
+    {
+        analogGlitchVolume.verticalJump.value = defaultJump;
     }
 
     public void SetAnalogGlitchShake(float value)
     {
-        analogGlitchVolume.scanLineJitter.value = value;
+        analogGlitchVolume.horizontalShake.value = value;
     }
 
     public void RandomizeAnalogGlitchShake(float value)
     {
-        analogGlitchVolume.scanLineJitter.value = Random.value;
+        analogGlitchVolume.horizontalShake.value = Random.value;
+    }
+
+    public void ResetAnalogGlitchShake()
+    {
+        analogGlitchVolume.horizontalShake.value = defaultShake;
     }
 
     public void SetAnalogGlitchDrift(float value)
     {
-        analogGlitchVolume.scanLineJitter.value = value;
+        analogGlitchVolume.colorDrift.value = value;
     }
 
     public void RandomizeAnalogGlitchDrift(float value)
     {
-        analogGlitchVolume.scanLineJitter.value = Random.value;
+        analogGlitchVolume.colorDrift.value = Random.value;
+    }
+
+    public void ResetAnalogGlitchDrift()
+    {
+        analogGlitchVolume.colorDrift.value = defaultDrift;
     }
 }

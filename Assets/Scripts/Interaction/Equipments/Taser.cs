@@ -11,6 +11,7 @@ namespace Interaction.Equipments
         [SerializeField] private bool knocksOutTargets;
         [SerializeField] private LayerMask raycastMask;
         [SerializeField] private PlayAudio taserShotPlayer;
+        [SerializeField] private AudioClip successfulTaseAudio;
 
         public int MaxAmmo 
         { 
@@ -63,7 +64,7 @@ namespace Interaction.Equipments
                     if (hit.collider != null && hitenemy != null && hitenemy.EnemyStatus
                         != Enemy.Status.KnockedOut)
                     {
-                        hitenemy.GetKnockedOut();
+                        hitenemy.GetTased();
                     }
                 }
                 OnTaserShot?.Invoke(this, EventArgs.Empty);
