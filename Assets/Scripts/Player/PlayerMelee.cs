@@ -8,6 +8,8 @@ public class PlayerMelee : MonoBehaviour
     [SerializeField] [Range(0f, 360f)] private float enemyBackDetectionAngle = 100f;
     [SerializeField] private float cooldownInSeconds = 1f;
     [SerializeField] private PlayAudio meleeAttackPlayer;
+    [SerializeField] private PlayAudio dropBodyPlayer;
+    [SerializeField] private AudioClip sucessfulAttackSound;
 
     private PlayerInput playerInput;
     private PlayerInteraction playerInteraction;
@@ -89,26 +91,34 @@ public class PlayerMelee : MonoBehaviour
         if(playerInput.actions["Attack"].WasPressedThisFrame() && cooldownTimer <= 0 &&
             (playerCarryInventory.CarryingBody || canAttack))
         {
-            if(playerCarryInventory.CarryingBody)
+            if (playerCarryInventory.CarryingBody)
+                dropBodyPlayer.Play();
+            else
+                meleeAttackPlayer.Play();
+
+
+            if (playerCarryInventory.CarryingBody)
             {
                 Debug.Log("Player dropped a body");
 
                 playerCarryInventory.DropCarriable();
             }
 
-            else if(canAttack && attackableEnemy != null)
+            else if (canAttack && attackableEnemy != null)
             {
                 Debug.Log("Player used Melee attack");
-                
+
                 attackableEnemy.GetKnockedOut();
                 OnKnockout?.Invoke(this, EventArgs.Empty);
-                
+
+                meleeAttackPlayer.PlayOneShot(sucessfulAttackSound);
+
                 animator.SetTrigger("Melee");
                 StartCoroutine(CheckDelay());
             }
-
+            
+            
             cooldownTimer = cooldownInSeconds;
-            meleeAttackPlayer.Play();
             attackableEnemy = null;
         }
     }

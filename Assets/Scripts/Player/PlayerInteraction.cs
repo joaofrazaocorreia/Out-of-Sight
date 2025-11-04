@@ -254,6 +254,11 @@ public class PlayerInteraction : MonoBehaviour
         {
             _playerEquipment.Animator.SetBool(_playerEquipment.CurrentEquipment.ContinuousUseAnimation, false);
         }
+        
+        if(_playerEquipment.CurrentEquipment != null && _playerEquipment.CurrentEquipment.UnequipOnUse)
+        {
+            _playerEquipment.NewEquipmentSelected(_playerEquipment.CurrentEquipmentNum);
+        }
 
         ActiveInteractiveObject = null;
         _equipmentAnimationLoop = false;

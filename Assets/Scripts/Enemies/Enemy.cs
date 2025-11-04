@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
 
     [Header("General Enemy Variables")]
     [SerializeField] protected Transform model;
+    [SerializeField] protected Transform audioPlayers;
+    [SerializeField] protected Transform audioSources;
     [SerializeField] protected List<GameObject> maleModels;
     [SerializeField] protected List<GameObject> femaleModels;
     [SerializeField] protected PlayAudio alarmAudioPlayer;
@@ -25,6 +27,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public UnityEvent onKnockOut;
     [SerializeField] protected PlayAudio bodyFallPlayer;
     [SerializeField] protected PlayAudio knockoutPlayer;
+    [SerializeField] protected PlayAudio tasedPlayer;
     [SerializeField] protected List<MovementTarget> bathroomTargetsMale;
     [SerializeField] protected List<MovementTarget> bathroomTargetsFemale;
     [SerializeField] [Min(0)] protected float startBathroomTimer = 15f;
@@ -154,6 +157,16 @@ public class Enemy : MonoBehaviour
 
 
                 Instantiate(modelsToUse[UnityEngine.Random.Range(0, modelsToUse.Count)], model);
+            }
+
+            for (int i = 0; i < model.GetChild(0).childCount; i++)
+            {
+                if(model.GetChild(0).GetChild(i).CompareTag("BodyHips"))
+                {
+                    audioPlayers.parent = model.GetChild(0).GetChild(i);
+                    audioSources.parent = model.GetChild(0).GetChild(i);
+                    break;
+                }
             }
 
             enemyMovement.ResetNPC(enemyMovement.SpawnPos, enemyMovement.SpawnRot);
@@ -579,7 +592,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     public void GetKnockedOut()
     {
-        if(EnemyStatus != Status.KnockedOut)
+        if (EnemyStatus != Status.KnockedOut)
         {
             EnemyStatus = Status.KnockedOut;
             detection.DetectionMeter = 0;
@@ -589,5 +602,12 @@ public class Enemy : MonoBehaviour
 
             OnKnockout?.Invoke(this, EventArgs.Empty);
         }
+    }
+    
+    public void GetTased()
+    {
+        tasedPlayer.Play();
+        
+        GetKnockedOut();
     }
 }

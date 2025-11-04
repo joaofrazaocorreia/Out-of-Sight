@@ -7,9 +7,11 @@ public abstract class EquipmentObject : MonoBehaviour
 {
     [SerializeField] private EquipmentType equipmentType;
     [SerializeField] private Sprite icon;
+    [SerializeField] private bool unequipOnUse;
     [FormerlySerializedAs("playerAnimationName")] [SerializeField] private string equipAnimationName = "None";
     [FormerlySerializedAs("animationTrigger")] [SerializeField] private string useAnimation = "None";
     [FormerlySerializedAs("equipmentName")] [SerializeField] private string continuousUseAnimation = "None";
+    public bool UnequipOnUse { get => unequipOnUse; }
     public string EquipAnimationName => equipAnimationName;
     public string UseAnimation => useAnimation;
     public string ContinuousUseAnimation => continuousUseAnimation;

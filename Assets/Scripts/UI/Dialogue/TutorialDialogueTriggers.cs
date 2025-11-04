@@ -153,7 +153,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
             "Good work. You've entered a <b><#FFFF00>restricted area</color></b>, so people will get suspicious if they see you here without permission.",
             "You can check your <b><#FFFF00>status</color></b> in the <b><#FFFF00>bottom left</color></b>. If you're seen <b><#FFFF00>Trespassing</color></b> or <b><#FF0000>Suspicious</color></b>, someone may try to raise the alarm.",
             "<b><#FFFF00>Trespassing</color></b> means you're in a restricted area without clearance, and <b><#FF0000>Suspicious</color></b> means you're holding a tool or doing something illegal.",
-            "Remember to <b><#FFFF00>unequip</color></b> your tools by pressing the <b><#FFFF00>same button to equip</color></b> them.",
+            //"Remember to <b><#FFFF00>unequip</color></b> your tools by pressing the <b><#FFFF00>same button to equip</color></b> them.",
             "Also, notice that <b><#FFFF00>Camera</color></b> next to you. If you don't disable it, it'll see you <b><#FFFF00>Trespassing</color></b>, and you'll be caught.",
             "<b><#FFFF00>Press '2'</color></b> to equip your <b><#FFFF00>Electrical Jammer</color></b>, which you can use to <b><#FFFF00>disable the Camera</color></b> by interacting with it. Give it a try.",
         };
@@ -173,13 +173,13 @@ public class TutorialDialogueTriggers : MonoBehaviour
                     SlideInUIElement(0, -1200f);
                 }
             },
-            {4, () =>
+            {3, () =>
                 {
                     uiManager.TogglePlayerControls(true, true, true);
                     playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[1].transform);
                 }
             },
-            { 5, () =>
+            {4, () =>
                 {
                     playerController.StopForceLook();
                     uiManager.TogglePlayerControls(false, false, false);
@@ -734,7 +734,6 @@ public class TutorialDialogueTriggers : MonoBehaviour
         {
             "Excellent job. Your last task is to grab the <b><#FFFF00>files</color></b> on the table, and then <b><#FFFF00>exit</color></b> the location through the <b><#FFFF00>entrance</color></b>.",
             "This protocol will finish as soon as you <b><#FFFF00>leave</color></b>. You can sprint by holding <b><#FFFF00>Left Shift</color></b>.",
-            "Good performance, we'll stay in touch.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
@@ -746,6 +745,36 @@ public class TutorialDialogueTriggers : MonoBehaviour
                 }
             },
 
+        };
+
+        if (!hasShownDialogue)
+        {
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
+            hasShownDialogue = true;
+        }
+    }
+
+    public void FinishTraining()
+    {
+        List<string> dialogueStrings = new List<string>()
+        {
+            "Good performance, we'll stay in touch.",
+        };
+
+        Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
+        {
+            {-1, () =>
+                {
+                    uiManager.TogglePlayerControls(true, false, true);
+                }   
+            },
+            {1, () =>
+                {
+                    uiManager.TogglePlayerControls(false, false, false);
+
+                    objectsToEnableDuringDialogue[0].SetActive(true);
+                }
+            },
         };
 
         if (!hasShownDialogue)

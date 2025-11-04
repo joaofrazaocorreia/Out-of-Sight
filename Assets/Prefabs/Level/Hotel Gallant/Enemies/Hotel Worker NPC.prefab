@@ -1364,6 +1364,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model: {fileID: 4419442202125784684}
+  audioPlayers: {fileID: 445147449389209347}
+  audioSources: {fileID: 5805990625715161621}
   maleModels: []
   femaleModels:
   - {fileID: 7563969375684392294, guid: f24a3f991e6aea34396bc82faf8e28b6, type: 3}
@@ -1374,6 +1376,9 @@ MonoBehaviour:
   alarmedTime: 5
   ignoresAlarm: 0
   type: 1
+  onBecomeAlarmed:
+    m_PersistentCalls:
+      m_Calls: []
   onKnockOut:
     m_PersistentCalls:
       m_Calls:
@@ -1389,7 +1394,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  bodyFallPlayer: {fileID: 0}
   knockoutPlayer: {fileID: 9198033672447154811}
+  tasedPlayer: {fileID: 0}
   bathroomTargetsMale: []
   bathroomTargetsFemale: []
   startBathroomTimer: 15
@@ -1442,7 +1449,6 @@ MonoBehaviour:
   searchRadius: 20
   stuckTime: 3
   footstepPlayer: {fileID: 6065674448816859416}
-  footstepInterval: 0.45
   onChooseNewTarget:
     m_PersistentCalls:
       m_Calls: []
@@ -1819,6 +1825,7 @@ MonoBehaviour:
   enemyMovement: {fileID: 0}
   targetLocation: {fileID: 0}
   fetchTargetWithTag: Luggage Room Target
+  delayBeforeMoving: 0
   timeAtTargetLocation: 10
 --- !u!114 &5719718362260597549
 MonoBehaviour:

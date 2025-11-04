@@ -921,6 +921,37 @@ public class UIManager : MonoBehaviour
         playerController.UpdateMouseSensitivity(PlayerPrefs.GetFloat("Sensitivity"));
     }
 
+    public void StartLevelEffects()
+    {
+        StartCoroutine(StartEffectsCoroutine(1f));
+    }
+
+    private IEnumerator StartEffectsCoroutine(float duration)
+    {
+        float elapsed = 0f;
+
+        CameraEffects.Instance.ToggleGlitchEffects();
+        CameraEffects.Instance.Shake(duration);
+        CameraEffects.Instance.PlayGlitchSound();
+
+        while (elapsed < duration)
+        {
+            CameraEffects.Instance.SetDigitalGlitchIntensity(1 - (elapsed / duration));
+            CameraEffects.Instance.SetAnalogGlitchJitter(1 - (elapsed / duration));
+            //CameraEffects.Instance.SetAnalogGlitchJump(1 - (elapsed / duration));
+            CameraEffects.Instance.SetAnalogGlitchShake(1 - (elapsed / duration));
+            CameraEffects.Instance.SetAnalogGlitchDrift(1 - (elapsed / duration));
+
+            elapsed += Time.deltaTime;
+            yield return null;
+
+            if(elapsed >= duration)
+            {
+                CameraEffects.Instance.ResetAllEffects();
+                //CameraEffects.Instance.ToggleGlitchEffects();
+            }
+        }
+    }
     private void ToggleMap()
     {
         mapOverlay?.SetActive(!mapOverlay.activeSelf);
