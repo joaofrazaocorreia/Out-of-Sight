@@ -16,6 +16,7 @@ public class CameraEffects : MonoBehaviour
 
     private bool glitchEnabled = false;
     public bool GlitchEnabled { get => glitchEnabled; }
+    private PlayAudio glitchSFXPlayer;
     private AnalogGlitchVolume analogGlitchVolume;
     private DigitalGlitchVolume digitalGlitchVolume;
 
@@ -28,9 +29,14 @@ public class CameraEffects : MonoBehaviour
 
         Instance = this;
 
-        
+        glitchSFXPlayer = GetComponent<PlayAudio>();
         volume.profile.TryGet<AnalogGlitchVolume>(out analogGlitchVolume);
         volume.profile.TryGet<DigitalGlitchVolume>(out digitalGlitchVolume);
+    }
+    
+    public void PlayGlitchSound()
+    {
+        glitchSFXPlayer.Play();
     }
 
     public void Shake(float duration, float posStrength = 2f, float rotStrength = 0.15f)

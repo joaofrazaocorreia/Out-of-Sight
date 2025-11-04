@@ -95,7 +95,8 @@ public class CheckpointManager : MonoBehaviour
 
     private IEnumerator ReturnToCheckpointCoroutine()
     {
-        CameraEffects.Instance.InvertedShake(1.5f, 3, 0.5f);
+        CameraEffects.Instance.InvertedShake(1f, 3, 0.5f);
+        CameraEffects.Instance.PlayGlitchSound();
 
         if (!CameraEffects.Instance.GlitchEnabled)
             CameraEffects.Instance.ToggleGlitchEffects();
@@ -106,9 +107,9 @@ public class CheckpointManager : MonoBehaviour
         CameraEffects.Instance.SetAnalogGlitchShake(1f);
         CameraEffects.Instance.SetAnalogGlitchDrift(1f);
 
-        yield return new WaitForSeconds(1f);
-        CameraEffects.Instance.SetDigitalGlitchIntensity(1f);
         yield return new WaitForSeconds(0.5f);
+        CameraEffects.Instance.SetDigitalGlitchIntensity(1f);
+        yield return new WaitForSeconds(0.6f);
 
         if (currentCheckpoint != null)
         {

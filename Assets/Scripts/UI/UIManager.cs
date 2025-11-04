@@ -932,6 +932,7 @@ public class UIManager : MonoBehaviour
 
         CameraEffects.Instance.ToggleGlitchEffects();
         CameraEffects.Instance.Shake(duration);
+        CameraEffects.Instance.PlayGlitchSound();
 
         while (elapsed < duration)
         {
