@@ -85,6 +85,9 @@ public class Enemy : MonoBehaviour
     public bool IsAlarmed {get => alarmedTimer > 0;}
     public bool IsKnockedOut {get => status == Status.KnockedOut;}
     protected Gender gender;
+    protected Rigidbody bodyHipsRB;
+    public Rigidbody BodyHipsRB { get => bodyHipsRB; }
+    protected bool knockedOut;
 
 
     protected virtual void Start()
@@ -99,6 +102,7 @@ public class Enemy : MonoBehaviour
         curiousTimer = 0f;
         suspectfulTimer = 0f;
         alarmedTimer = 0f;
+        knockedOut = false;
 
         if (detection == null)
             detection = GetComponentInChildren<Detection>();
@@ -163,6 +167,7 @@ public class Enemy : MonoBehaviour
             {
                 if(model.GetChild(0).GetChild(i).CompareTag("BodyHips"))
                 {
+                    bodyHipsRB = model.GetChild(0).GetChild(i).GetComponent<Rigidbody>();
                     audioPlayers.parent = model.GetChild(0).GetChild(i);
                     audioSources.parent = model.GetChild(0).GetChild(i);
                     break;
@@ -562,14 +567,22 @@ public class Enemy : MonoBehaviour
     /// </summary>
     protected virtual void KnockedOutBehavior()
     {
-        enemyMovement.SetMovementSpeed(0f);
-
-        if(enemyMovement.LeavingMap)
-            enemyMovement.LeavingMap = false;
-
-
         EnemyMovement.EnableBody();
-        EnemyMovement.GetKnockedOut();
+        
+        if(!knockedOut)
+        {
+            enemyMovement.SetMovementSpeed(0f);
+
+            if(enemyMovement.LeavingMap)
+                enemyMovement.LeavingMap = false;
+
+
+            EnemyMovement.GetKnockedOut();
+
+            bodyHipsRB.AddForce(Camera.main.transform.forward * 20f, ForceMode.Impulse);
+
+            knockedOut = true;
+        }
     }
 
     /// <summary>

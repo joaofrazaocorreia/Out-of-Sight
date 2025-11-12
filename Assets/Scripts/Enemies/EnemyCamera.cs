@@ -80,12 +80,12 @@ public class EnemyCamera : Enemy, IJammable
 
 
             // Checks if the camera rotates and rotates it
-            if(canRotate)
+            if (canRotate)
             {
                 float newRotationY;
 
                 // If the camera's detection is above one third, it follows the player
-                if(detection.SeesPlayer && detection.DetectionMeter > detection.DetectionLimit * 1 / 3)
+                if (detection.SeesPlayer && detection.DetectionMeter > detection.DetectionLimit * 1 / 3)
                 {
                     Quaternion targetRotation = cameraBody.rotation;
                     targetRotation = Quaternion.RotateTowards(targetRotation,
@@ -97,17 +97,17 @@ public class EnemyCamera : Enemy, IJammable
                 }
 
                 // Checks if the camera is ready to rotate
-                else if(rotationIdleTimer <= 0)
+                else if (rotationIdleTimer <= 0)
                 {
                     newRotationY = positiveRotationDirection ? cameraBody.localEulerAngles.y +
                         Time.deltaTime * rotationSpeed : cameraBody.localEulerAngles.y - (Time.deltaTime * rotationSpeed);
 
-                    if(newRotationY >= 180f)
+                    if (newRotationY >= 180f)
                         newRotationY -= 360f;
 
-                    newRotationY = Mathf.Clamp(newRotationY, minRotationAngle , maxRotationAngle);
+                    newRotationY = Mathf.Clamp(newRotationY, minRotationAngle, maxRotationAngle);
 
-                    if((positiveRotationDirection && newRotationY >= maxRotationAngle) ||
+                    if ((positiveRotationDirection && newRotationY >= maxRotationAngle) ||
                         (!positiveRotationDirection && newRotationY <= minRotationAngle))
                     {
                         rotationIdleTimer = rotationIdleTime;
@@ -124,13 +124,30 @@ public class EnemyCamera : Enemy, IJammable
                 {
                     rotationIdleTimer -= Time.deltaTime;
 
-                    if(rotationIdleTimer <= 0)
+                    if (rotationIdleTimer <= 0)
                     {
                         cameraSFXPlayer.Play();
                         cameraSFXPlayer.StretchPitch((maxRotationAngle - minRotationAngle) / rotationSpeed);
                     }
                 }
             }
+
+            /*
+            Vector3 distanceToPlayer = player.transform.position - detection.transform.position;
+            if ((Physics.Raycast(transform.position, distanceToPlayer, out RaycastHit hit,
+                 cameraSFXPlayer.AudioSource.maxDistance, LayerMask.GetMask("Default", "Player")) &&
+                 hit.transform.CompareTag("Player")) || distanceToPlayer.magnitude < cameraSFXPlayer.AudioSource.maxDistance/2)
+            {
+                cameraSFXPlayer.AudioSource.volume = 1f;
+                Debug.DrawRay(detection.transform.position, distanceToPlayer, Color.red);
+            }
+
+            else
+            {
+                cameraSFXPlayer.AudioSource.volume = 0.25f;
+                Debug.DrawRay(detection.transform.position, distanceToPlayer, Color.yellow);
+            }
+            */
         }
 
         // Reenables the camera if the camera operator returns to its position

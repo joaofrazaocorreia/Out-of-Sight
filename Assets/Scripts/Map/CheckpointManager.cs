@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,7 +16,7 @@ public class CheckpointManager : MonoBehaviour
     private Dictionary<Enemy, Vector3> enemyPositionsList;
     private Dictionary<EnemyMovement, float> enemySpeedsList;
     private Dictionary<JammingSpot, bool> jammablesStatesList;
-    private TutorialDialogueTriggers dialogueTrigger;
+    private List<GameObject> equipmentsList;
     private UIManager uiManager;
     private Player player;
     private PlayerEquipment playerEquipment;
@@ -24,7 +25,6 @@ public class CheckpointManager : MonoBehaviour
 
     private void Start()
     {
-        dialogueTrigger = GetComponent<TutorialDialogueTriggers>();
         uiManager = FindAnyObjectByType<UIManager>();
         player = FindAnyObjectByType<Player>();
         playerEquipment = player.GetComponent<PlayerEquipment>();
@@ -62,6 +62,12 @@ public class CheckpointManager : MonoBehaviour
         {
             jammablesStatesList.Add(js, js.Jammable.Jammed);
         }
+
+        equipmentsList = new List<GameObject>();
+        foreach (GameObject go in playerEquipment.Equipments)
+        {
+            equipmentsList.Add(go);
+        }
     }
 
     public void UpdateAddJammedSpot(JammingSpot jammedSpot)
@@ -90,26 +96,27 @@ public class CheckpointManager : MonoBehaviour
 
     public void ReturnToCheckpoint()
     {
-        StartCoroutine(ReturnToCheckpointCoroutine());
+        StartCoroutine(ReturnToCheckpointCoroutine(1f));
     }
 
-    private IEnumerator ReturnToCheckpointCoroutine()
+    private IEnumerator ReturnToCheckpointCoroutine(float duration)
     {
-        CameraEffects.Instance.InvertedShake(1f, 3, 0.5f);
+        CameraEffects.Instance.InvertedShake(duration, 5, 0.5f);
         CameraEffects.Instance.PlayGlitchSound();
 
         if (!CameraEffects.Instance.GlitchEnabled)
             CameraEffects.Instance.ToggleGlitchEffects();
-            
-        CameraEffects.Instance.SetDigitalGlitchIntensity(0.5f);
-        CameraEffects.Instance.SetAnalogGlitchJitter(1f);
-        CameraEffects.Instance.SetAnalogGlitchJump(0.3f);
-        CameraEffects.Instance.SetAnalogGlitchShake(1f);
-        CameraEffects.Instance.SetAnalogGlitchDrift(1f);
+        
+        float elapsed = 0f;
 
-        yield return new WaitForSeconds(0.5f);
-        CameraEffects.Instance.SetDigitalGlitchIntensity(1f);
-        yield return new WaitForSeconds(0.6f);
+        while (elapsed < duration)
+        {
+            CameraEffects.Instance.SetAllEffects(elapsed / duration, elapsed / duration, 0.3f,
+                                                 elapsed / duration, elapsed / duration);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
 
         if (currentCheckpoint != null)
         {
@@ -159,10 +166,19 @@ public class CheckpointManager : MonoBehaviour
                     js.Interact();
             }
 
+            playerEquipment.Equipments = new List<GameObject>();
+            foreach (GameObject go in equipmentsList)
+                playerEquipment.AddEquipment(go);
+                
+            for(int i = 0; i < uiManager.EquipmentIcons.Count(); i++)
+            {
+                if (playerEquipment.Equipments.Count() <= i)
+                    uiManager.ResetEquipmentIcon(i);
+            }
+
             yield return new WaitForSeconds(0.1f);
 
             CameraEffects.Instance.ResetAllEffects();
-            //CameraEffects.Instance.ToggleGlitchEffects();
             uiManager.TogglePlayerControls(false, false, false);
         }
 

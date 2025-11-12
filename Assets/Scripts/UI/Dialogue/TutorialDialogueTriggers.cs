@@ -7,6 +7,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
     [SerializeField] private List<GameObject> objectsToEnableDuringDialogue;
     [SerializeField] private GameObject EquipmentToAdd;
     [SerializeField] private List<AudioClip> dialogueAudioClips;
+    [SerializeField] private bool resetBodiesStashed = false;
     private TutorialObjectivesUpdater objectivesUpdater;
     private UIManager uiManager;
     private CheckpointManager checkpointManager;
@@ -25,6 +26,9 @@ public class TutorialDialogueTriggers : MonoBehaviour
         playerEquipment = FindAnyObjectByType<PlayerEquipment>();
 
         hasShownDialogue = false;
+
+        if(resetBodiesStashed)
+            bodiesStashed = 0;
     }
 
     private void EnableAllObjects()
@@ -57,6 +61,18 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
         {
+            {-1, () =>
+                {
+                    if(objectivesUpdater != null)
+                        objectivesUpdater.ObjectiveStart();
+
+                    objectsToEnableDuringDialogue[0].SetActive(true);
+                    objectsToEnableDuringDialogue[0].GetComponent<CanvasGroup>().alpha = 0.75f;
+                    StartCoroutine(uiManager.FadeOutUI(objectsToEnableDuringDialogue[0].GetComponent<CanvasGroup>(), 0.1f));
+
+                    uiManager.StartLevelEffects();
+                }   
+            },
             {1, () =>
                 {
                     if(objectivesUpdater != null)
@@ -170,7 +186,8 @@ public class TutorialDialogueTriggers : MonoBehaviour
             },
             {1, () =>
                 {
-                    SlideInUIElement(0, -1200f);
+                    if(!objectsToEnableDuringDialogue[0].activeSelf)
+                        SlideInUIElement(0, -1200f);
                 }
             },
             {3, () =>
@@ -218,10 +235,13 @@ public class TutorialDialogueTriggers : MonoBehaviour
                         objectivesUpdater.ObjectiveStart();
                 }
             },
-            {2, () =>
+            {1, () =>
                 {
                     uiManager.TogglePlayerControls(false, false, false);
-
+                }
+            },
+            {2, () =>
+                {
                     EnableAllObjects();
                     
                     if(objectivesUpdater != null)
@@ -403,6 +423,8 @@ public class TutorialDialogueTriggers : MonoBehaviour
                             bodyCarry.enabled = true;
                         }
                     }
+
+                    FindAnyObjectByType<PlayerCarryInventory>().EnableBodyDisguiseOnDrop = false;
                 }
             },
         };
@@ -423,15 +445,16 @@ public class TutorialDialogueTriggers : MonoBehaviour
                 "Now enter the <b><#FFFF00>Storage room</color></b> to hide the body there.",
             };
 
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, lineAudios:dialogueAudioClips);
-            hasShownDialogue = true;
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, lineAudios: dialogueAudioClips);
 
             objectsToEnableDuringDialogue[0].SetActive(true);
+            hasShownDialogue = true;
         }
 
-        else if (bodiesStashed > 0)
+        else if (bodiesStashed > 0 && !hasShownDialogue && !objectsToEnableDuringDialogue[1].activeSelf)
         {
             objectsToEnableDuringDialogue[1].SetActive(true);
+            hasShownDialogue = true;
         }
     }
 
@@ -447,6 +470,26 @@ public class TutorialDialogueTriggers : MonoBehaviour
             DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, lineAudios:dialogueAudioClips);
             hasShownDialogue = true;
             bodiesStashed++;
+
+
+            TutorialDialogueTriggers body1Trigger = objectsToEnableDuringDialogue[0].GetComponent<TutorialDialogueTriggers>();
+            TutorialDialogueTriggers body2Trigger = objectsToEnableDuringDialogue[1].GetComponent<TutorialDialogueTriggers>();
+
+            if ((body1Trigger.transform.position - transform.position).magnitude <= 5f &&
+                !body1Trigger.HasShownDialogue && body2Trigger.HasShownDialogue)
+            {
+                body1Trigger.HasShownDialogue = true;
+                body2Trigger.HasShownDialogue = false;
+                Debug.Log("swapped shown dialogues");
+            }
+
+            else if ((body2Trigger.transform.position - transform.position).magnitude <= 5f &&
+                !body2Trigger.HasShownDialogue && body1Trigger.HasShownDialogue)
+            {
+                body2Trigger.HasShownDialogue = true;
+                body1Trigger.HasShownDialogue = false;
+                Debug.Log("swapped shown dialogues");
+            }
         }
     }
 
@@ -462,14 +505,17 @@ public class TutorialDialogueTriggers : MonoBehaviour
         {
             {-1, () =>
                 {
-                    uiManager.TogglePlayerControls(true,false,true);
-
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
+
+                    FindAnyObjectByType<PlayerCarryInventory>().EnableBodyCarryOnDrop = false;
+                    FindAnyObjectByType<PlayerCarryInventory>().EnableBodyDisguiseOnDrop = true;
                 }
             },
             {0, () =>
                 {
+                    uiManager.TogglePlayerControls(true,false,true);
+
                     foreach(GameObject go in objectsToEnableDuringDialogue)
                     {
                         BodyCarry bodyCarry = go.GetComponent<BodyCarry>();
@@ -531,6 +577,8 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
                     if(objectivesUpdater != null)
                         objectivesUpdater.ObjectiveStart();
+
+                    FindAnyObjectByType<PlayerCarryInventory>().EnableBodyCarryOnDrop = true;
                 }
             },
             {1, () =>
@@ -545,7 +593,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
             },
         };
 
-        if (!hasShownDialogue && enabled)
+        if (!hasShownDialogue && enabled && FindAnyObjectByType<Player>().disguise == Enums.Disguise.Civillian)
         {
             DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
@@ -766,13 +814,23 @@ public class TutorialDialogueTriggers : MonoBehaviour
             {-1, () =>
                 {
                     uiManager.TogglePlayerControls(true, false, true);
+
+                    uiManager.EndLevelEffects();
                 }   
+            },
+            {0, () =>
+                {
+                    objectsToEnableDuringDialogue[0].SetActive(true);
+
+                    StartCoroutine(uiManager.StartEffectsCoroutine(1f));
+                    StartCoroutine(uiManager.FadeInUI(objectsToEnableDuringDialogue[0].GetComponent<CanvasGroup>(), 0.5f));
+
+                }
             },
             {1, () =>
                 {
                     uiManager.TogglePlayerControls(false, false, false);
-
-                    objectsToEnableDuringDialogue[0].SetActive(true);
+                    objectsToEnableDuringDialogue[1].SetActive(true);
                 }
             },
         };

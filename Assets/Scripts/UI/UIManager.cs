@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI disguiseText;
     [SerializeField] private Image disguiseImage;
     [SerializeField] private TextMeshProUGUI statusText;
+    [SerializeField] private Sprite emptyInventorySlotSprite;
     [SerializeField] private GameObject ammoDisplay;
     [SerializeField] private TextMeshProUGUI ammoText;
     [SerializeField] private Image ammoSprite;
@@ -70,6 +71,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private GameObject mapOverlay;
 
+    public Image[] EquipmentIcons { get => equipmentIcons; }
+
     private static bool gamePaused;
     private bool settingsActive;
     private Dictionary<Transform, Vector3> originalUIPositions;
@@ -83,7 +86,7 @@ public class UIManager : MonoBehaviour
     private PlayerEquipment playerEquipment;
     private PlayerInteraction playerInteraction;
     private PlayerInventory playerInventory;
-    private Dictionary<string, TextMeshProUGUI> objectiveTexts;
+    private Dictionary<string, ObjectiveText> objectiveTexts;
     private List<Detection> enemyDetections;
     private Dictionary<Detection, GameObject> detectionArrows;
     private Alarm alarm;
@@ -138,7 +141,7 @@ public class UIManager : MonoBehaviour
         playerInventory = FindAnyObjectByType<PlayerInventory>();
         playerInventory.OnInventoryUpdated += OnInventoryUpdated;
         
-        objectiveTexts = new Dictionary<string, TextMeshProUGUI>();
+        objectiveTexts = new Dictionary<string, ObjectiveText>();
         enemyDetections = new List<Detection>();
         detectionArrows = new Dictionary<Detection, GameObject>();
         alarm = FindAnyObjectByType<Alarm>();
@@ -153,7 +156,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        sensitivitySlider.value = PlayerPrefs.GetFloat("Sensitivity", sensitivitySlider.value);
+        sensitivitySlider.value = PlayerPrefs.GetFloat("Sensitivity", sensitivitySlider.value/2f) * 2f;
         detectionLoop.AudioSource.outputAudioMixerGroup.audioMixer.GetFloat("Volume", out maxDetectionVolume);
     }
 
@@ -365,7 +368,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private IEnumerator FadeInUI(CanvasGroup ui, float speed = 1f)
+    public IEnumerator FadeInUI(CanvasGroup ui, float speed = 1f)
     {
         ui.blocksRaycasts = true;
 
@@ -376,7 +379,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private IEnumerator FadeOutUI(CanvasGroup ui, float speed = 1f)
+    public IEnumerator FadeOutUI(CanvasGroup ui, float speed = 1f)
     {
         ui.blocksRaycasts = false;
         
@@ -387,7 +390,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private IEnumerator ScaleUI(RectTransform uiTransform, float widthIncrement, float heightIncrement, float textIncrement)
+    public IEnumerator ScaleUI(RectTransform uiTransform, float widthIncrement, float heightIncrement, float textIncrement, float speed = 1f)
     {
         TextMeshProUGUI buttonText = uiTransform.GetComponentInChildren<TextMeshProUGUI>();
 
@@ -402,13 +405,13 @@ public class UIManager : MonoBehaviour
             float textDifference = targetTextSize - buttonText.fontSize;
 
             if(widthDifference != 0)
-                widthDifference = Mathf.Clamp(widthDifference, -(Time.fixedDeltaTime * UISpeed) * 50, Time.fixedDeltaTime * UISpeed * 50);
+                widthDifference = Mathf.Clamp(widthDifference, -(Time.fixedDeltaTime * UISpeed * speed) * 50, Time.fixedDeltaTime * UISpeed * speed * 50);
 
             if(heightDifference != 0)
-                heightDifference = Mathf.Clamp(heightDifference, -(Time.fixedDeltaTime * UISpeed) * 30, Time.fixedDeltaTime * UISpeed * 30);
+                heightDifference = Mathf.Clamp(heightDifference, -(Time.fixedDeltaTime * UISpeed * speed) * 30, Time.fixedDeltaTime * UISpeed * speed * 30);
 
             if(textDifference != 0)
-                textDifference = Mathf.Clamp(textDifference, -(Time.fixedDeltaTime * UISpeed) * 30, Time.fixedDeltaTime * UISpeed * 30);
+                textDifference = Mathf.Clamp(textDifference, -(Time.fixedDeltaTime * UISpeed * speed) * 30, Time.fixedDeltaTime * UISpeed * speed * 30);
 
             uiTransform.sizeDelta += new Vector2(widthDifference, heightDifference);
             buttonText.fontSize += textDifference;
@@ -433,7 +436,7 @@ public class UIManager : MonoBehaviour
         if(!uiButtonScaleUpCoroutines.Keys.Contains(uiTransform))
         {
             uiButtonScaleUpCoroutines.Add(uiTransform, (StartCoroutine(ScaleUI(uiTransform, UIScaleWidthIncrease,
-                UIScaleHeightIncrease, UIScaleFontIncrease)), uiTransform.sizeDelta.x + UIScaleWidthIncrease,
+                UIScaleHeightIncrease, UIScaleFontIncrease, 3f)), uiTransform.sizeDelta.x + UIScaleWidthIncrease,
                     uiTransform.sizeDelta.y + UIScaleHeightIncrease, buttonText.fontSize + UIScaleFontIncrease));
         }
     }
@@ -455,7 +458,7 @@ public class UIManager : MonoBehaviour
         if(!uiButtonScaleDownCoroutines.Keys.Contains(uiTransform))
         {
             uiButtonScaleDownCoroutines.Add(uiTransform, (StartCoroutine(ScaleUI(uiTransform, -UIScaleWidthIncrease,
-                -UIScaleHeightIncrease, -UIScaleFontIncrease)), uiTransform.sizeDelta.x - UIScaleWidthIncrease,
+                -UIScaleHeightIncrease, -UIScaleFontIncrease, 3f)), uiTransform.sizeDelta.x - UIScaleWidthIncrease,
                     uiTransform.sizeDelta.y -UIScaleHeightIncrease, buttonText.fontSize - UIScaleFontIncrease));
         }
     }
@@ -570,6 +573,12 @@ public class UIManager : MonoBehaviour
     private void UpdateEquipmentIcon(Sprite newIcon, int index)
     {
         if(index < equipmentIcons.Length && equipmentIcons[index] != null) equipmentIcons[index].sprite = newIcon;
+    }
+
+    public void ResetEquipmentIcon(int index)
+    {
+        if(index < equipmentIcons.Length && equipmentIcons[index] != null)
+            equipmentIcons[index].sprite = emptyInventorySlotSprite;
     }
 
     private void UpdateEquipmentUI()
@@ -701,8 +710,7 @@ public class UIManager : MonoBehaviour
     {
         if(objectiveTexts.Keys.Contains(objectiveName))
         {
-            objectiveTexts[objectiveName].text = newText;
-            objectiveTexts[objectiveName].alpha = textOpacity;
+            objectiveTexts[objectiveName].UpdateText(newText, textOpacity);
         }
 
         else
@@ -710,11 +718,10 @@ public class UIManager : MonoBehaviour
             Debug.Log($"Objective edit failed: \"{objectiveName}\"" +
                 " not found. Creating new objective...");
 
-            TextMeshProUGUI newObjective = Instantiate
-                (objectiveTextPrefab, objectivesTextParent).GetComponent<TextMeshProUGUI>();
+            ObjectiveText newObjective = Instantiate
+                (objectiveTextPrefab, objectivesTextParent).GetComponent<ObjectiveText>();
 
-            newObjective.text = newText;
-            newObjective.alpha = textOpacity;
+            newObjective.UpdateText(newText, textOpacity);
 
             objectiveTexts.Add(objectiveName, newObjective);
         }
@@ -917,22 +924,22 @@ public class UIManager : MonoBehaviour
 
     public void UpdateMouseSensitivity()
     {
-        PlayerPrefs.SetFloat("Sensitivity", sensitivitySlider.value);
+        PlayerPrefs.SetFloat("Sensitivity", sensitivitySlider.value / 2f);
         playerController.UpdateMouseSensitivity(PlayerPrefs.GetFloat("Sensitivity"));
     }
 
     public void StartLevelEffects()
     {
+        CameraEffects.Instance.ToggleGlitchEffects();
+        CameraEffects.Instance.Shake(1f);
+        CameraEffects.Instance.PlayGlitchSound();
+
         StartCoroutine(StartEffectsCoroutine(1f));
     }
 
-    private IEnumerator StartEffectsCoroutine(float duration)
+    public IEnumerator StartEffectsCoroutine(float duration)
     {
         float elapsed = 0f;
-
-        CameraEffects.Instance.ToggleGlitchEffects();
-        CameraEffects.Instance.Shake(duration);
-        CameraEffects.Instance.PlayGlitchSound();
 
         while (elapsed < duration)
         {
@@ -949,6 +956,33 @@ public class UIManager : MonoBehaviour
             {
                 CameraEffects.Instance.ResetAllEffects();
                 //CameraEffects.Instance.ToggleGlitchEffects();
+            }
+        }
+    }
+
+    public void EndLevelEffects()
+    {
+        CameraEffects.Instance.InvertedShake(1f);
+        CameraEffects.Instance.PlayGlitchSound();
+
+        StartCoroutine(EndEffectsCoroutine(1f));
+    }
+
+    public IEnumerator EndEffectsCoroutine(float duration)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            CameraEffects.Instance.SetAllEffects(elapsed / duration, elapsed / duration, 0.3f,
+                                                 elapsed / duration, elapsed / duration);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+
+            if(elapsed >= duration)
+            {
+                CameraEffects.Instance.SetAllEffects(1, 1, 0.3f, 1, 1);
             }
         }
     }

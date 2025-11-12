@@ -41,7 +41,7 @@ public class MainMenuScripts : MonoBehaviour
                 transform.GetChild(i), transform.GetChild(i).localPosition);
         }
         
-        sensitivitySlider.value = PlayerPrefs.GetFloat("Sensitivity", sensitivitySlider.value);
+        sensitivitySlider.value = PlayerPrefs.GetFloat("Sensitivity", sensitivitySlider.value / 2f) * 2f;
     }
 
     private IEnumerator MoveUI(Transform uiTransform, Vector3 newPos)
@@ -71,7 +71,7 @@ public class MainMenuScripts : MonoBehaviour
             StartCoroutine(MoveUI(uiTransform, originalUIPositions[uiTransform]));
     }
 
-    private IEnumerator ScaleUI(RectTransform uiTransform, float widthIncrement, float heightIncrement, float textIncrement)
+    private IEnumerator ScaleUI(RectTransform uiTransform, float widthIncrement, float heightIncrement, float textIncrement, float speed = 1f)
     {
         TextMeshProUGUI buttonText = uiTransform.GetComponentInChildren<TextMeshProUGUI>();
 
@@ -87,13 +87,13 @@ public class MainMenuScripts : MonoBehaviour
             float textDifference = targetTextSize - buttonText.fontSize;
 
             if(widthDifference != 0)
-                widthDifference = Mathf.Clamp(widthDifference, -(Time.deltaTime * UISpeed) * 100, Time.deltaTime * UISpeed *100);
+                widthDifference = Mathf.Clamp(widthDifference, -(Time.deltaTime * UISpeed * speed) * 100, Time.deltaTime * UISpeed * speed *100);
 
             if(heightDifference != 0)
-                heightDifference = Mathf.Clamp(heightDifference, -(Time.deltaTime * UISpeed) * 60, Time.deltaTime * UISpeed * 60);
+                heightDifference = Mathf.Clamp(heightDifference, -(Time.deltaTime * UISpeed * speed) * 60, Time.deltaTime * UISpeed * speed * 60);
 
             if(textDifference != 0)
-                textDifference = Mathf.Clamp(textDifference, -(Time.deltaTime * UISpeed) * 60, Time.deltaTime * UISpeed * 60);
+                textDifference = Mathf.Clamp(textDifference, -(Time.deltaTime * UISpeed * speed) * 60, Time.deltaTime * UISpeed * speed * 60);
 
             uiTransform.sizeDelta += new Vector2(widthDifference, heightDifference);
             buttonText.fontSize += textDifference;
@@ -118,7 +118,7 @@ public class MainMenuScripts : MonoBehaviour
         if(!uiButtonScaleUpCoroutines.Keys.Contains(uiTransform))
         {
             uiButtonScaleUpCoroutines.Add(uiTransform, (StartCoroutine(ScaleUI(uiTransform, UIScaleWidthIncrease,
-                UIScaleHeightIncrease, UIScaleFontIncrease)), uiTransform.sizeDelta.x + UIScaleWidthIncrease,
+                UIScaleHeightIncrease, UIScaleFontIncrease, 3f)), uiTransform.sizeDelta.x + UIScaleWidthIncrease,
                     uiTransform.sizeDelta.y + UIScaleHeightIncrease, buttonText.fontSize + UIScaleFontIncrease));
         }
 
@@ -142,7 +142,7 @@ public class MainMenuScripts : MonoBehaviour
         if(!uiButtonScaleDownCoroutines.Keys.Contains(uiTransform))
         {
             uiButtonScaleDownCoroutines.Add(uiTransform, (StartCoroutine(ScaleUI(uiTransform, -UIScaleWidthIncrease,
-                -UIScaleHeightIncrease, -UIScaleFontIncrease)), uiTransform.sizeDelta.x - UIScaleWidthIncrease,
+                -UIScaleHeightIncrease, -UIScaleFontIncrease, 3f)), uiTransform.sizeDelta.x - UIScaleWidthIncrease,
                     uiTransform.sizeDelta.y - UIScaleHeightIncrease, buttonText.fontSize - UIScaleFontIncrease));
         }
 
@@ -247,7 +247,7 @@ public class MainMenuScripts : MonoBehaviour
     
     public void UpdateMouseSensitivity()
     {
-        PlayerPrefs.SetFloat("Sensitivity", sensitivitySlider.value);
+        PlayerPrefs.SetFloat("Sensitivity", sensitivitySlider.value / 2f);
     }
 
     private void PlayRandomHoverSound()
