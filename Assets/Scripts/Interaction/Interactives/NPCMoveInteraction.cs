@@ -54,6 +54,8 @@ public class NPCMoveInteraction : InteractiveObject
     
     private IEnumerator DistractionMoveCoroutine()
     {
+        enabled = false;
+
         float delay = delayBeforeMoving;
         while (delay > 0)
         {
@@ -70,7 +72,6 @@ public class NPCMoveInteraction : InteractiveObject
 
         targetLocation.Occupy(enemyMovement);
         enemyMovement.MoveTimer = timeAtTargetLocation;
-        enabled = false;
 
         if(actionOnNPCReachTarget != null)
         {

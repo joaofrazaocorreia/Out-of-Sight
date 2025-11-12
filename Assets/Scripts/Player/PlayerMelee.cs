@@ -99,15 +99,11 @@ public class PlayerMelee : MonoBehaviour
 
             if (playerCarryInventory.CarryingBody)
             {
-                Debug.Log("Player dropped a body");
-
                 playerCarryInventory.DropCarriable();
             }
 
             else if (canAttack && attackableEnemy != null)
             {
-                Debug.Log("Player used Melee attack");
-
                 attackableEnemy.GetKnockedOut();
                 OnKnockout?.Invoke(this, EventArgs.Empty);
 

@@ -11,8 +11,11 @@ public class PlayerCarryInventory : MonoBehaviour
     public GameObject StoredCarriable { get => storedCarriable; }
     private CarriableType storedCarriableType;
     private Transform storedCarriableParent;
+    public bool Carrying { get => storedCarriable != null; }
     public bool CarryingBag { get => storedCarriable != null && storedCarriableType == CarriableType.Bag; }
     public bool CarryingBody { get => storedCarriable != null && storedCarriableType == CarriableType.Body; }
+    public bool EnableBodyCarryOnDrop = true;
+    public bool EnableBodyDisguiseOnDrop = true;
     private Player player;
 
     public event EventHandler OnCarryPickup;
@@ -86,8 +89,8 @@ public class PlayerCarryInventory : MonoBehaviour
                     {
                         storedCarriableParent.GetComponentInParent<EnemyMovement>().ToggleRagdoll(true);
                     }
-                    storedCarriable.GetComponentInChildren<BodyCarry>().enabled = true;
-                    storedCarriable.GetComponentInChildren<BodyDisguise>().enabled = true;
+                    storedCarriable.GetComponentInChildren<BodyCarry>().enabled = EnableBodyCarryOnDrop;
+                    storedCarriable.GetComponentInChildren<BodyDisguise>().enabled = EnableBodyDisguiseOnDrop;
                     break;
 
                 default: break;

@@ -8,19 +8,20 @@ using UnityEngine;
 public class PlayerEquipment : MonoBehaviour
 {
     [SerializeField] private GameObject inventoryUI;
-    //[SerializeField] private GameObject[] equipments;
     [SerializeField] private List<GameObject> equipments;
     [SerializeField] private PlayAudio equipingPlayer;
     [SerializeField] private Animator animator;
     
+    public List<GameObject> Equipments { get => equipments; set { equipments = value; }}
     public Animator Animator => animator;
 
     private List<EquipmentObject> _equipmentObjects;
     public EquipmentObject _recentlyAddedEquipment {get; private set;}
     
     public List<EquipmentObject> EquipmentObjects => _equipmentObjects;
-    
+
     private PlayerMelee _playerMelee;
+    private PlayerCarryInventory _playerCarryInventory;
     
     private int _currentEquipmentNum;
     private bool suspiciousCheck;
@@ -59,7 +60,7 @@ public class PlayerEquipment : MonoBehaviour
 
     public void NewEquipmentSelected(int index)
     {
-        if (index < 0 || index >= equipments.Count || !inventoryUI.activeSelf) return;
+        if (index < 0 || index >= equipments.Count || _playerCarryInventory.Carrying || !inventoryUI.activeSelf) return;
         if (index == CurrentEquipmentNum)
         {
             Unequip();
@@ -101,8 +102,16 @@ public class PlayerEquipment : MonoBehaviour
         _playerMelee = GetComponent<PlayerMelee>();
         _playerMelee.OnKnockout += OnMeleeAttack;
         _playerMelee.OnAttackEnd += OnAttackEnd;
-        
+
+        _playerCarryInventory = GetComponent<PlayerCarryInventory>();
+
         Unequip();
+    }
+
+    private void Update()
+    {
+        if (_playerCarryInventory.Carrying && CurrentEquipment != null)
+            Unequip();
     }
 
     public void AddEquipment(GameObject equipment)
@@ -113,7 +122,7 @@ public class PlayerEquipment : MonoBehaviour
         RegisterEquipmentObjects();
     }
 
-    private void RegisterEquipmentObjects()
+    public void RegisterEquipmentObjects()
     {
         _equipmentObjects = new List<EquipmentObject>();
         for (int i = 0; i < equipments.Count; i++)

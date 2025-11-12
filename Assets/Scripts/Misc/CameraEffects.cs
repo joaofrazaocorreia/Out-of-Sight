@@ -120,6 +120,16 @@ public class CameraEffects : MonoBehaviour
         ResetAnalogGlitchDrift();
     }
 
+    public void SetAllEffects(float intensity, float jitter, float jump, float shake, float drift)
+    {
+        SetDigitalGlitchIntensity(intensity);
+
+        SetAnalogGlitchJitter(jitter);
+        SetAnalogGlitchJump(jump);
+        SetAnalogGlitchShake(shake);
+        SetAnalogGlitchDrift(drift);
+    }
+
     public void SetDigitalGlitchIntensity(float value)
     {
         digitalGlitchVolume.intensity.value = value;

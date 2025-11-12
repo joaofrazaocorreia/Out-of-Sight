@@ -1161,8 +1161,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 3
-  MaxDistance: 20
+  MinDistance: 2
+  MaxDistance: 15
   Pan2D: 0
   rolloffMode: 1
   BypassEffects: 0
@@ -1287,6 +1287,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   model: {fileID: 0}
+  audioPlayers: {fileID: 0}
+  audioSources: {fileID: 0}
   maleModels: []
   femaleModels: []
   alarmAudioPlayer: {fileID: 0}
@@ -1304,6 +1306,7 @@ MonoBehaviour:
       m_Calls: []
   bodyFallPlayer: {fileID: 0}
   knockoutPlayer: {fileID: 0}
+  tasedPlayer: {fileID: 0}
   bathroomTargetsMale: []
   bathroomTargetsFemale: []
   startBathroomTimer: 15
