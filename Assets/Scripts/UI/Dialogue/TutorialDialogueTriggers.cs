@@ -262,7 +262,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
         List<string> dialogueStrings = new List<string>()
         {
             "There's a <b><#3030FF>Guard</color></b> patrolling this area. He'll detect you if he sees you acting <b><#FF0000>Suspicious</color></b>, so you must <b><#FFFF00>knock him out</color></b>.",
-            "To <b><#FFFF00>knockout</color></b> someone, you must sneak up <b><#FFFF00>behind them</color></b> and interact with the person. But don't get too close, or they might notice you.",
+            "To <b><#FFFF00>knockout</color></b> someone, you must <b><#FFFF00>interact</color></b> with them <b><#FFFF00>from behind</color></b>. But <b><#FFFF00>don't get too close</color></b>, or they'll notice it and observe you for a while.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
@@ -781,7 +781,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
         List<string> dialogueStrings = new List<string>()
         {
             "Excellent job. Your last task is to grab the <b><#FFFF00>files</color></b> on the table, and then <b><#FFFF00>exit</color></b> the location through the <b><#FFFF00>entrance</color></b>.",
-            "This protocol will finish as soon as you <b><#FFFF00>leave</color></b>. You can sprint by holding <b><#FFFF00>Left Shift</color></b>.",
+            "This protocol will finish as soon as you <b><#FFFF00>leave</color></b>. You can sprint by holding <b><#FFFF00>Left Shift</color></b>, but note that it also makes <b><#FFFF00>you get detected faster</color></b>.",
         };
 
         Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
