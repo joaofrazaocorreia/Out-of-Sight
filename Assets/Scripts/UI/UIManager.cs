@@ -489,9 +489,9 @@ public class UIManager : MonoBehaviour
         
         else if(status.Contains(Doubtful))
             UpdateStatusText("Doubtful", new Color(0.75f, 0.75f, 0.3f));
-
+        
         else
-            UpdateStatusText("Concealed", Color.white);
+            UpdateStatusText(player.IsConcealed ? "Concealed" : "Neutral", Color.white);
         
     }
 

@@ -5,7 +5,7 @@ using Enums;
 
 public class Player : MonoBehaviour
 {
-    public enum Status {Normal, Doubtful, Trespassing, CriticalTrespassing, Suspicious};
+    public enum Status { Neutral, Doubtful, Trespassing, CriticalTrespassing, Suspicious };
 
     public List<Status> status;
     public Disguise disguise;
@@ -22,6 +22,20 @@ public class Player : MonoBehaviour
     public event EventHandler OnDisguiseChanged;
     public event EventHandler OnStatusChanged;
 
+    public bool IsConcealed
+    {
+        get
+        {
+            foreach (MapArea a in currentAreas)
+            {
+                if (a != null && a.UseWhitelist && a.WhitelistedDisguises.Contains(disguise))
+                    return true;
+            }
+
+            return false;
+        }
+    }
+
     private void Start()
     {
         detectable = true;
@@ -29,7 +43,7 @@ public class Player : MonoBehaviour
         characterController = GetComponentInChildren<CharacterController>();
         currentAreas = new List<MapArea>();
 
-        GainStatus(Status.Normal);
+        GainStatus(Status.Neutral);
 
         // Calls the disguise change event to update the UI
         OnDisguiseChanged?.Invoke(this, EventArgs.Empty);
@@ -43,18 +57,24 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         MapArea area = other.GetComponent<MapArea>();
-        if(other != null && !currentAreas.Contains(area))
+        if (other != null && !currentAreas.Contains(area))
         {
             currentAreas.Add(area);
+
+            CheckAreaStatus();
+            OnStatusChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
         MapArea area = other.GetComponent<MapArea>();
-        if(other != null && currentAreas.Contains(area))
+        if (other != null && currentAreas.Contains(area))
         {
             currentAreas.Remove(area);
+            
+            CheckAreaStatus();
+            OnStatusChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -99,15 +119,15 @@ public class Player : MonoBehaviour
 
     private void UpdateDetectableMultiplier()
     {
-        if(status.Contains(Status.Suspicious))
+        if (status.Contains(Status.Suspicious))
             detectableObject.DetectionMultiplier = suspiciousDetectionMultiplier;
-        
-        else if(status.Contains(Status.Trespassing))
+
+        else if (status.Contains(Status.Trespassing))
             detectableObject.DetectionMultiplier = trespassingDetectionMultiplier;
-        
-        else if(status.Contains(Status.Doubtful))
+
+        else if (status.Contains(Status.Doubtful))
             detectableObject.DetectionMultiplier = doubtfulDetectionMultiplier;
-        
+
         else
             detectableObject.DetectionMultiplier = normalDetectionMultiplier;
     }
@@ -118,7 +138,7 @@ public class Player : MonoBehaviour
         {
             disguise = newDisguise;
             disguisePlayer.Play();
-            
+
             OnDisguiseChanged?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -127,10 +147,10 @@ public class Player : MonoBehaviour
     {
         LoseStatusCompletely(Status.Trespassing);
         LoseStatusCompletely(Status.CriticalTrespassing);
-        
-        foreach(MapArea a in currentAreas)
+
+        foreach (MapArea a in currentAreas)
         {
-            if(a != null && a.UseWhitelist && !a.WhitelistedDisguises.Contains(disguise))
+            if (a != null && a.UseWhitelist && !a.WhitelistedDisguises.Contains(disguise))
                 GainStatusIfNew(a.IsCriticalArea ? Status.CriticalTrespassing : Status.Trespassing);
         }
     }
