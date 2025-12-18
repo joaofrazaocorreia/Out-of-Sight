@@ -172,55 +172,106 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
     public void CameraRoomDialogue()
     {
-        List<string> dialogueStrings = new List<string>()
+        List<string> dialogueStrings;
+        List<AudioClip> dialogueAudios;
+        Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>() {};
+
+        switch(dialogueCount)
         {
-            "Good work. You've entered a <b><#FFFF00>restricted area</color></b>, so people will get suspicious if they see you here without permission.",
-            "You can check your <b><#FFFF00>status</color></b> in the <b><#FFFF00>bottom left</color></b>. If you're seen <b><#FFFF00>Trespassing</color></b> or <b><#FF0000>Suspicious</color></b>, someone may try to raise the alarm.",
-            "<b><#FFFF00>Trespassing</color></b> means you're in a restricted area without clearance, and <b><#FF0000>Suspicious</color></b> means you're holding a tool or doing something illegal.",
-            //"Remember to <b><#FFFF00>unequip</color></b> your tools by pressing the <b><#FFFF00>same button to equip</color></b> them.",
-            "Also, notice that <b><#FFFF00>Camera</color></b> next to you. If you don't disable it, it'll see you <b><#FFFF00>Trespassing</color></b>, and you'll be caught.",
-            "<b><#FFFF00>Press '2'</color></b> to equip your <b><#FFFF00>Electrical Jammer</color></b>, which you can use to <b><#FFFF00>disable the Camera</color></b> by interacting with it. Give it a try.",
-        };
-
-        Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>()
-        {
-            {-1, () =>
+            case 0:
+            {
+                dialogueStrings = new List<string>()
                 {
-                    uiManager.TogglePlayerControls(true, false, true);
+                    "Good work. You've entered a <b><#FFFF00>restricted area</color></b>, so people will get suspicious if they see you here without permission.",
+                    "You can check your <b><#FFFF00>status</color></b> in the <b><#FFFF00>bottom left</color></b>. If you're seen <b><#FFFF00>Trespassing</color></b> or <b><#FF0000>Suspicious</color></b>, someone may try to raise the alarm.",
+                    "<b><#FFFF00>Trespassing</color></b> means you're in a restricted area without clearance, and <b><#FF0000>Suspicious</color></b> means you're holding a tool or doing something illegal.",
+                    //"Remember to <b><#FFFF00>unequip</color></b> your tools by pressing the <b><#FFFF00>same button to equip</color></b> them.",
+                    "Also, notice that <b><#FFFF00>Camera</color></b> next to you. If you don't disable it, it'll see you <b><#FFFF00>Trespassing</color></b>, and you'll be caught.",
+                    "<b><#FFFF00>Press '2'</color></b> to equip your <b><#FFFF00>Electrical Jammer</color></b>, which you can use to <b><#FFFF00>disable the Camera</color></b> by interacting with it. Give it a try.",
+                };
 
-                    if(objectivesUpdater != null)
-                        objectivesUpdater.ObjectiveStart();
-                }
-            },
-            {1, () =>
-                {
-                    if(!objectsToEnableDuringDialogue[0].activeSelf)
-                        SlideInUIElement(0, -1200f);
-                }
-            },
-            {3, () =>
-                {
-                    uiManager.TogglePlayerControls(true, true, true);
-                    playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[1].transform);
-                }
-            },
-            {4, () =>
-                {
-                    playerController.StopForceLook();
-                    uiManager.TogglePlayerControls(false, false, false);
+                dialogueAudios = dialogueAudioClips;
 
-                    playerEquipment.AddEquipment(EquipmentToAdd);
+                actionsInDialogue = new Dictionary<int, Action>()
+                {
+                    {-1, () =>
+                        {
+                            uiManager.TogglePlayerControls(true, false, true);
 
-                    if(objectivesUpdater != null)
-                        objectivesUpdater.ObjectiveJamCamera();
-                }
-            },
-        };
+                            if(objectivesUpdater != null)
+                                objectivesUpdater.ObjectiveStart();
+                        }
+                    },
+                    {1, () =>
+                        {
+                            if(!objectsToEnableDuringDialogue[0].activeSelf)
+                                SlideInUIElement(0, -1200f);
+                        }
+                    },
+                    {3, () =>
+                        {
+                            uiManager.TogglePlayerControls(true, true, true);
+                            playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[1].transform);
+                        }
+                    },
+                    {4, () =>
+                        {
+                            playerController.StopForceLook();
+                            uiManager.TogglePlayerControls(false, false, false);
+
+                            playerEquipment.AddEquipment(EquipmentToAdd);
+
+                            if(objectivesUpdater != null)
+                                objectivesUpdater.ObjectiveJamCamera();
+                        }
+                    },
+                };
+
+                break;
+            }
+
+            default:
+            {
+                dialogueStrings = new List<string>()
+                {
+                    "<b><#FFFF00>Press '2'</color></b> to equip your <b><#FFFF00>Electrical Jammer</color></b>, which you can use to <b><#FFFF00>disable the Camera</color></b> by interacting with it. Give it a try.",
+                };
+
+                dialogueAudios = new List<AudioClip>()
+                {
+                    dialogueAudioClips[4],
+                };
+
+                actionsInDialogue = new Dictionary<int, Action>()
+                {
+                    {-1, () =>
+                        {
+                            uiManager.TogglePlayerControls(true, true, true);
+                            playerController.ForceLookAtPosition(objectsToEnableDuringDialogue[1].transform);
+                        }
+                    },
+                    {1, () =>
+                        {
+                            playerController.StopForceLook();
+                            uiManager.TogglePlayerControls(false, false, false);
+
+                            playerEquipment.AddEquipment(EquipmentToAdd);
+
+                            if(objectivesUpdater != null)
+                                objectivesUpdater.ObjectiveJamCamera();
+                        }
+                    },
+                };
+
+                break;
+            }
+        }
 
         if (!hasShownDialogue)
         {
-            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudios);
             hasShownDialogue = true;
+            dialogueCount++;
         }
     }
 
