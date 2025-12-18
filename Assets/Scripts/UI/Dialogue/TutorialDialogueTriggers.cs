@@ -16,6 +16,7 @@ public class TutorialDialogueTriggers : MonoBehaviour
     private bool hasShownDialogue;
     public bool HasShownDialogue { get => hasShownDialogue;  set { hasShownDialogue = value; }}
     private static int bodiesStashed;
+    private int dialogueCount;
 
     private void Start()
     {
@@ -26,9 +27,16 @@ public class TutorialDialogueTriggers : MonoBehaviour
         playerEquipment = FindAnyObjectByType<PlayerEquipment>();
 
         hasShownDialogue = false;
+        dialogueCount = 0;
 
         if(resetBodiesStashed)
             bodiesStashed = 0;
+    }
+
+    public void ResetDialogue()
+    {
+        if(HasShownDialogue)
+            HasShownDialogue = false;
     }
 
     private void EnableAllObjects()
@@ -213,6 +221,104 @@ public class TutorialDialogueTriggers : MonoBehaviour
         {
             DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
+        }
+    }
+
+    public void WrongDirectionCameraDialogue()
+    {
+        List<string> dialogueStrings;
+        List<AudioClip> dialogueAudios;
+        Dictionary<int, Action> actionsInDialogue = new Dictionary<int, Action>() {};
+
+        switch(dialogueCount)
+        {
+            case 0:
+            {
+                dialogueStrings = new List<string>()
+                {
+                    "Where are you going? Are you giving up already?",
+                    "You have to <b><#FFFF00>disable the Camera</color></b> with your <b><#FFFF00>Electrical Jammer</color></b>."
+                };
+
+                dialogueAudios = new List<AudioClip>()
+                {
+                    dialogueAudioClips[0], 
+                    dialogueAudioClips[1],
+                };
+
+                break;
+            }
+
+            case 1:
+            {
+                dialogueStrings = new List<string>()
+                {
+                    "Seriously, what are you doing?",
+                    "Just return to the room and <b><#FFFF00>disable the Camera</color></b>."
+                };
+
+                dialogueAudios = new List<AudioClip>()
+                {
+                    dialogueAudioClips[2], 
+                    dialogueAudioClips[3],
+                };
+
+                break;
+            }
+
+            case 2:
+            {
+                dialogueStrings = new List<string>()
+                {
+                    "Hey, come check this out. This guy must be crazy."
+                };
+
+                dialogueAudios = new List<AudioClip>()
+                {
+                    dialogueAudioClips[4],
+                };
+
+                break;
+            }
+
+            case 3:
+            {
+                dialogueStrings = new List<string>()
+                {
+                    "See? He keeps doing that.",
+                    "I don't know! I told him to <b><#FFFF00>disable the Camera</color></b>, but he keeps doing this.",
+                };
+
+                dialogueAudios = new List<AudioClip>()
+                {
+                    dialogueAudioClips[5],
+                    dialogueAudioClips[6],
+                };
+
+                break;
+            }
+
+            default:
+            {
+                dialogueStrings = new List<string>()
+                {
+                    "Mate. Just <b><#FFFF00>disable the Camera</color></b>. It's not that hard."
+                };
+
+                dialogueAudios = new List<AudioClip>()
+                {
+                    dialogueAudioClips[7], 
+                };
+
+                break;
+            }
+        };
+
+        if (!hasShownDialogue)
+        {
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudios);
+            hasShownDialogue = true;
+            dialogueCount++;
         }
     }
 
@@ -438,6 +544,9 @@ public class TutorialDialogueTriggers : MonoBehaviour
 
     public void GotBodyDialogue()
     {
+        objectsToEnableDuringDialogue[2].SetActive(true);
+        objectsToEnableDuringDialogue[3].SetActive(true);
+
         if (bodiesStashed < 1 && !hasShownDialogue && !objectsToEnableDuringDialogue[0].activeSelf)
         {
             List<string> dialogueStrings = new List<string>()
@@ -558,6 +667,85 @@ public class TutorialDialogueTriggers : MonoBehaviour
         {
             DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, actionsInDialogue, dialogueAudioClips);
             hasShownDialogue = true;
+        }
+    }
+
+    public void WrongStashDialogue()
+    {
+        List<string> dialogueStrings;
+        List<AudioClip> dialogueAudios;
+
+        switch(dialogueCount)
+        {
+            case 0:
+            {
+                dialogueStrings = new List<string>()
+                {
+                    "You shouldn't hide bodies here. If you leave them in an open room, someone may find them and <b><#FFFF00>raise the alarm</color></b>.",
+                    "It's safer to store them in the <b><#FFFF00>Storage room</color></b> in the hall, near where the <b><#3030FF>Guard</color></b> was patrolling."
+                };
+
+                dialogueAudios = new List<AudioClip>()
+                {
+                    dialogueAudioClips[0], 
+                    dialogueAudioClips[1],
+                };
+
+                break;
+            }
+            case 1:
+            {
+                dialogueStrings = new List<string>()
+                {
+                    "Again, you shouldn't hide the bodies here.",
+                    "Drop them in the <b><#FFFF00>Storage room</color></b> in the hall, near where the <b><#3030FF>Guard</color></b> was patrolling."
+                };
+
+                dialogueAudios = new List<AudioClip>()
+                {
+                    dialogueAudioClips[2], 
+                    dialogueAudioClips[3],
+                };
+
+                break;
+            }
+            case 2:
+            {
+                dialogueStrings = new List<string>()
+                {
+                    "Now you're just doing it on purpose. Very mature.",
+                    "Should I remind you that this session is recorded? The <b><#FF0000>Boss</color></b> is going to see this."
+                };
+
+                dialogueAudios = new List<AudioClip>()
+                {
+                    dialogueAudioClips[4], 
+                    dialogueAudioClips[5],
+                };
+
+                break;
+            }
+            default:
+            {
+                dialogueStrings = new List<string>()
+                {
+                    "Stop wasting our time. Drop the bodies in the <b><#FFFF00>Storage room</color></b> in the hall."
+                };
+
+                dialogueAudios = new List<AudioClip>()
+                {
+                    dialogueAudioClips[6],
+                };
+
+                break;
+            }
+        }
+
+        if (!hasShownDialogue)
+        {
+            DialogueBox.Instance.ShowDialogue(dialogueStrings, "Handler", 3f, lineAudios:dialogueAudios);
+            hasShownDialogue = true;
+            dialogueCount++;
         }
     }
 
